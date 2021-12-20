@@ -1,0 +1,194 @@
+import { ref } from "vue";
+import { state } from "./useAuth";
+
+const API_URL = import.meta.env.VITE_API_URL;
+
+export function useGet(endpoint) {
+  const data = ref(null);
+  const loading = ref(false);
+  const error = ref(null);
+
+  const get = async () => {
+    loading.value = true;
+    data.value = null;
+    error.value = null;
+    try {
+      const res = await fetch(`${API_URL}/${endpoint}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + state.token,
+        },
+      });
+      const jsonRes = await res.json();
+      if (jsonRes.error) {
+        error.value = jsonRes.error;
+      } else {
+        data.value = jsonRes;
+      }
+    } catch (err) {
+      error.value = err;
+    } finally {
+      loading.value = false;
+    }
+  };
+
+  return {
+    data,
+    loading,
+    error,
+    get,
+  };
+}
+
+export function usePatch(endpoint) {
+  const data = ref(null);
+  const loading = ref(false);
+  const error = ref(null);
+
+  const patch = async (body) => {
+    loading.value = true;
+    data.value = null;
+    error.value = null;
+    try {
+      const res = await fetch(`${API_URL}/${endpoint}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + state.token,
+        },
+        body: JSON.stringify(body),
+      });
+      if (!res.ok) {
+        error.value = await res.json();
+      } else {
+        data.value = await res.json();
+      }
+    } catch (err) {
+      error.value = err;
+    } finally {
+      loading.value = false;
+    }
+  };
+
+  return {
+    data,
+    loading,
+    error,
+    patch,
+  };
+}
+
+export function usePut(endpoint) {
+  const data = ref(null);
+  const loading = ref(false);
+  const error = ref(null);
+
+  const put = async (body) => {
+    loading.value = true;
+    data.value = null;
+    error.value = null;
+    try {
+      const res = await fetch(`${API_URL}/${endpoint}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + state.token,
+        },
+        body: JSON.stringify(body),
+      });
+      if (!res.ok) {
+        error.value = await res.json();
+      } else {
+        data.value = await res.json();
+      }
+    } catch (err) {
+      error.value = err;
+    } finally {
+      loading.value = false;
+    }
+  };
+
+  return {
+    data,
+    loading,
+    error,
+    put,
+  };
+}
+
+export function usePost(endpoint) {
+  const data = ref(null);
+  const loading = ref(false);
+  const error = ref(null);
+
+  const post = async (body) => {
+    loading.value = true;
+    data.value = null;
+    error.value = null;
+    try {
+      const res = await fetch(`${API_URL}/${endpoint}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + state.token,
+        },
+        body: JSON.stringify(body),
+      });
+      if (!res.ok) {
+        error.value = await res.json();
+      } else {
+        data.value = await res.json();
+      }
+    } catch (err) {
+      error.value = err;
+    } finally {
+      loading.value = false;
+    }
+  };
+
+  return {
+    data,
+    loading,
+    error,
+    post,
+  };
+}
+
+export function useDelete(endpoint) {
+  const data = ref(null);
+  const loading = ref(false);
+  const error = ref(null);
+
+  const remove = async (body) => {
+    loading.value = true;
+    data.value = null;
+    error.value = null;
+    try {
+      const res = await fetch(`${API_URL}/${endpoint}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + state.token,
+        },
+        body: JSON.stringify(body),
+      });
+      if (!res.ok) {
+        error.value = await res.json();
+      } else {
+        data.value = await res.json();
+      }
+    } catch (err) {
+      error.value = err;
+    } finally {
+      loading.value = false;
+    }
+  };
+
+  return {
+    data,
+    loading,
+    error,
+    remove,
+  };
+}

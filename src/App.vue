@@ -1,8 +1,10 @@
-<script setup></script>
+<script setup>
+import Testing from "@/components/Testing.vue";
+</script>
 
-<template>Hello</template>
+<template><Testing /></template>
 
-<style>
+<style lang="scss">
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
