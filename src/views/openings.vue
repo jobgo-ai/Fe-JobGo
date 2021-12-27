@@ -1,4 +1,4 @@
-<template>signin</template>
+<template>Openings</template>
 
 <script setup>
 console.log("hello script setup");

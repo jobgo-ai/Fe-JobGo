@@ -28,15 +28,15 @@ router.beforeEach(async (to, from, next) => {
 
   // Going to private route, with no user
   if (!to.meta.public && !user.value) {
-    next({ name: "login" });
+    next({ name: "signin" });
     // going to unauthed route with logged in user
-  } else if ((to.name == "login" || to.name == "signup") && user?.value)
-    next({ name: "home" });
+  } else if ((to.name == "signin" || to.name == "signup") && user?.value)
+    next({ name: "openings" });
   else if (
     to.meta.super &&
     !user.value.user.organization?.slug === "hireproof"
   ) {
-    next({ name: "home" });
+    next({ name: "openings" });
   }
   // finally
   else next();

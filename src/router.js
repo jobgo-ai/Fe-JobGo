@@ -1,14 +1,19 @@
 import { createRouter, createWebHistory } from "vue-router";
 
-import ForgotPassword from "@/views/forgot-password.vue";
-import NotFound from "@/views/not-found.vue";
-import Signin from "@/views/signin.vue";
-import Signup from "@/views/signup.vue";
+// Public
+import ForgotPassword from "@/views/public/forgot-password.vue";
+import NotFound from "@/views/public/not-found.vue";
+import Signin from "@/views/public/signin.vue";
+import Signup from "@/views/public/signup.vue";
+
+// Private
+import Openings from "@/views/openings.vue";
 
 const routes = [
   {
-    path: "/",
-    children: [],
+    path: "/openings",
+    name: "openings",
+    component: Openings,
   },
   { path: "/:pathMatch(.*)*", name: "NotFound", component: NotFound },
   {
