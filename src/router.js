@@ -7,13 +7,34 @@ import Signin from "@/views/public/signin.vue";
 import Signup from "@/views/public/signup.vue";
 
 // Private
-import Openings from "@/views/openings.vue";
+import Layout from "@/views/dashboard/layout.vue";
+import Openings from "@/views/dashboard/openings/openings.vue";
+import OpeningsList from "@/views/dashboard/openings/openings-list.vue";
+import OpeningCandidateDetails from "@/views/dashboard/openings/opening-candidate-details.vue";
 
 const routes = [
   {
-    path: "/openings",
-    name: "openings",
-    component: Openings,
+    path: "/",
+    component: Layout,
+    children: [
+      {
+        path: "/openings",
+        name: "openings",
+        component: Openings,
+        children: [
+          {
+            path: ":openingRef",
+            name: "openings-list",
+            component: OpeningsList,
+          },
+          {
+            path: ":openingRef/candidates/:candidateRef",
+            name: "opening-candidate-details",
+            component: OpeningCandidateDetails,
+          },
+        ],
+      },
+    ],
   },
   { path: "/:pathMatch(.*)*", name: "NotFound", component: NotFound },
   {

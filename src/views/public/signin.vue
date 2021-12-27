@@ -1,17 +1,17 @@
 <template>
   <div>
     signin
-    <Input v-model="username" label="username" />
-    <Input v-model="password" label="username" type="password" />
-    <Button @handleClick="onSubmit" label="Signin"></Button>
+    <hp-input v-model="username" label="username" />
+    <hp-input v-model="password" label="username" type="password" />
+    <hp-button @handleClick="onSubmit" label="Signin"></hp-button>
   </div>
 </template>
 
 <script setup>
 import { ref } from "vue";
 import { useRouter } from "vue-router";
-import Input from "@/components/input.vue";
-import Button from "@/components/button.vue";
+import HpInput from "@/components/hp-input.vue";
+import HpButton from "@/components/hp-button.vue";
 import useAuth from "@/hooks/useAuth";
 import { usePost } from "@/hooks/useHttp";
 
