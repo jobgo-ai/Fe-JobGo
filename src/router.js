@@ -10,6 +10,7 @@ import Signup from "@/views/public/signup.vue";
 import Layout from "@/views/dashboard/layout.vue";
 import Openings from "@/views/dashboard/openings/openings.vue";
 import OpeningsList from "@/views/dashboard/openings/openings-list.vue";
+import OpeningsNew from "@/views/dashboard/openings/opening-new.vue";
 import OpeningCandidateDetails from "@/views/dashboard/openings/opening-candidate-details.vue";
 
 const routes = [
@@ -33,6 +34,11 @@ const routes = [
             component: OpeningCandidateDetails,
           },
         ],
+      },
+      {
+        path: "new-opening",
+        name: "openings-new",
+        component: OpeningsNew,
       },
     ],
   },

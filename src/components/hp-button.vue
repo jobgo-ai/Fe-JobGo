@@ -12,6 +12,7 @@
 const props = defineProps({
   label: String,
   type: String,
+  to: String,
 });
 
 const emit = defineEmits(["handleClick"]);

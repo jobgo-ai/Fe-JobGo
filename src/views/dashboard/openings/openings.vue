@@ -1,5 +1,6 @@
 <template>
   <div>
+    <router-link to="/new-opening">New Opening</router-link>
     <div v-if="candidates.length > 0">
       Candidate List
       <div
@@ -30,6 +31,12 @@ const router = useRouter();
 const openings = ref([]);
 const candidates = ref([]);
 
+const fetchCandidates = async () => {
+  const getCandidates = useGet(`roles/${route.params.openingRef}/candidates`);
+  await getCandidates.get();
+  candidates.value = getCandidates.data.value?.candidates;
+};
+
 onMounted(async () => {
   const getRoles = useGet("roles");
   getRoles.get();
@@ -38,18 +45,16 @@ onMounted(async () => {
   if (!route.params.openingRef) {
     router.push(`/openings/${getRoles.data.value.roles[0].reference}`);
   } else {
-    const getCandidates = useGet(`roles/${route.params.openingRef}/candidates`);
-    await getCandidates.get();
-    candidates.value = getCandidates.data.value?.candidates;
+    await fetchCandidates();
   }
 });
 
 watch(
   () => route.params.openingRef,
   async () => {
-    const getCandidates = useGet(`roles/${route.params.openingRef}/candidates`);
-    await getCandidates.get();
-    candidates.value = getCandidates.data.value?.candidates;
+    if (route.params.openingRef) {
+      await fetchCandidates();
+    }
   }
 );
 </script>
