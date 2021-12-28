@@ -1,24 +1,9 @@
 <template>
   <div class="openings">
-    <div
-      class="candidate-list"
-      :class="{ 'candidate-list--left': isCandidateDetailsOpen }"
-    >
-      <div v-if="candidates.length > 0">
-        Candidate List
-        <div
-          @click="
-            router.push(
-              `/openings/${route.params.openingRef}/candidates/${candidate.reference}`
-            )
-          "
-          :key="candidate.reference"
-          v-for="candidate in candidates"
-        >
-          {{ candidate.name }}
-        </div>
-      </div>
-    </div>
+    <candidate-list
+      :isCandidateDetailsOpen="isCandidateDetailsOpen"
+      :candidates="candidates"
+    />
     <div class="view" :class="{ 'view--left': isCandidateDetailsOpen }">
       <router-view :openings="openings"></router-view>
     </div>
@@ -30,6 +15,8 @@ import { ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { onMounted } from "vue";
 import { useGet } from "@/hooks/useHttp.js";
+
+import CandidateList from "@/views/dashboard/openings/candidate-list.vue";
 
 const route = useRoute();
 const router = useRouter();
@@ -78,20 +65,6 @@ watch(
 .openings {
   display: flex;
   width: 100%;
-}
-.candidate-list {
-  padding: 10px;
-  background-color: green;
-  position: absolute;
-  height: 100%;
-  transition: all 0.15s ease-in-out;
-  transform: translateX(0);
-  right: 0;
-  width: 194px;
-  &--left {
-    right: 100%;
-    transform: translateX(100%);
-  }
 }
 
 .view {
