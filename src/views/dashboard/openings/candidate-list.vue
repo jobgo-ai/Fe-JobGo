@@ -34,10 +34,13 @@
 <script setup>
 import HpModal from "@/components/hp-modal.vue";
 import HpButton from "@/components/hp-button.vue";
+import { usePost } from "@/hooks/useHttp";
 import { ref } from "vue";
 import { useRouter, useRoute } from "vue-router";
+
 const router = useRouter();
 const route = useRoute();
+
 defineProps({
   candidates: {
     type: Array,
@@ -50,6 +53,19 @@ defineProps({
 });
 
 const isAddCandidateModalOpen = ref(false);
+
+// Create candidate
+const postCandidate = usePost("candidates");
+const onSubmit = async (values) => {
+  const payload = {
+    candidate: {
+      ...values,
+      roles: values.roles ? [values.roles] : [],
+    },
+  };
+  await postCandidate.post(payload);
+  router.push(`/candidates/${postCandidate.data.value.candidate.reference}`);
+};
 </script>
 
 <style lang="scss" scoped>
