@@ -1,26 +1,40 @@
 <template>
-  <div
-    class="candidate-list"
-    :class="{ 'candidate-list--left': isCandidateDetailsOpen }"
-  >
-    <div v-if="candidates.length > 0">
-      Candidate List
-      <div
-        @click="
-          router.push(
-            `/openings/${route.params.openingRef}/candidates/${candidate.reference}`
-          )
-        "
-        :key="candidate.reference"
-        v-for="candidate in candidates"
-      >
-        {{ candidate.name }}
-      </div>
+  <div>
+    <hp-modal
+      :isOpen="isAddCandidateModalOpen"
+      @close="isAddCandidateModalOpen = false"
+      >Im a modal</hp-modal
+    >
+    <div
+      class="candidate-list"
+      :class="{ 'candidate-list--left': isCandidateDetailsOpen }"
+    >
+      <hp-button
+        @handleClick="isAddCandidateModalOpen = true"
+        label="add candidate"
+      ></hp-button>
+      <ol v-if="candidates.length > 0">
+        Candidate List
+        <li
+          @click="
+            router.push(
+              `/openings/${route.params.openingRef}/candidates/${candidate.reference}`
+            )
+          "
+          :key="candidate.reference"
+          v-for="candidate in candidates"
+        >
+          {{ candidate.name }}
+        </li>
+      </ol>
     </div>
   </div>
 </template>
 
 <script setup>
+import HpModal from "@/components/hp-modal.vue";
+import HpButton from "@/components/hp-button.vue";
+import { ref } from "vue";
 import { useRouter, useRoute } from "vue-router";
 const router = useRouter();
 const route = useRoute();
@@ -34,6 +48,8 @@ defineProps({
     default: false,
   },
 });
+
+const isAddCandidateModalOpen = ref(false);
 </script>
 
 <style lang="scss" scoped>
