@@ -1,5 +1,6 @@
 <template>
   Openings list:
+  <router-link to="/new-opening">New Opening</router-link>
   <ol v-if="openings.length > 0">
     <li
       @click="router.push(`/openings/${opening.reference}`)"
