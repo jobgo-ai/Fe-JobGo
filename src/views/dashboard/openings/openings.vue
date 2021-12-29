@@ -1,7 +1,7 @@
 <template>
   <div class="openings">
     <candidate-list
-      v-if="selectedOpening"
+      v-if="isCandidateListOpen"
       :isCandidateDetailsOpen="isCandidateDetailsOpen"
       :candidates="candidates"
       :opening="selectedOpening"
@@ -26,6 +26,7 @@ const selectedOpening = ref({});
 const openings = ref([]);
 const candidates = ref([]);
 const isCandidateDetailsOpen = ref(false);
+const isCandidateListOpen = ref(!route.path.includes("compare"));
 
 const fetchCandidates = async () => {
   const getCandidates = useGet(`roles/${route.params.openingRef}/candidates`);
@@ -62,6 +63,7 @@ onMounted(async () => {
 watch(
   () => route.path,
   async () => {
+    isCandidateListOpen.value = !route.path.includes("compare");
     isCandidateDetailsOpen.value = route.path.includes("/candidates");
   }
 );
