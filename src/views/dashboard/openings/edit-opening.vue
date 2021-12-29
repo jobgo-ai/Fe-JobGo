@@ -1,5 +1,8 @@
 <template>
   <div>
+    <hp-breadcrumbs
+      :crumbs="[{ label: 'Crumb1' }, { label: 'crumb2' }]"
+    ></hp-breadcrumbs>
     <div>edit Opening</div>
     <hp-input></hp-input>
     <hp-button label="Add interview"></hp-button>
@@ -21,6 +24,7 @@
 </template>
 
 <script setup>
+import HpBreadcrumbs from "@/components/hp-breadcrumbs.vue";
 import HpInput from "@/components/hp-input.vue";
 import HpButton from "@/components/hp-button.vue";
 import { useGet } from "@/hooks/useHttp";

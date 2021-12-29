@@ -1,5 +1,6 @@
 <template>
   <div>
+    <hp-breadcrumbs></hp-breadcrumbs>
     <div>Add interviews</div>
     <router-link
       :to="`/openings/${route.params.openingRef}/edit/create-interview`"
@@ -14,6 +15,7 @@
 </template>
 
 <script setup>
+import HpBreadcrumbs from "@/components/hp-breadcrumbs.vue";
 import { useGet } from "@/hooks/useHttp";
 import { onMounted, ref } from "vue";
 import { useRoute } from "vue-router";

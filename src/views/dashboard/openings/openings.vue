@@ -89,10 +89,12 @@ watch(
 .openings {
   display: flex;
   width: 100%;
+  flex-direction: column;
 }
 
 .view {
   display: flex;
+  flex-direction: column;
   &--left {
     margin-left: 240px;
   }
