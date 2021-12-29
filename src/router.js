@@ -8,6 +8,7 @@ import Signup from "@/views/public/signup.vue";
 
 // Private
 import Layout from "@/views/dashboard/layout.vue";
+import Settings from "@/views/dashboard/settings/settings.vue";
 import Openings from "@/views/dashboard/openings/openings.vue";
 import OpeningsList from "@/views/dashboard/openings/openings-list.vue";
 import NewOpening from "@/views/dashboard/openings/new-opening.vue";
@@ -84,6 +85,11 @@ const routes = [
         meta: {
           breadcrumbs: true,
         },
+      },
+      {
+        path: "settings",
+        name: "settings",
+        component: Settings,
       },
     ],
   },

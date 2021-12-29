@@ -16,10 +16,9 @@
 const props = defineProps({
   crumbs: {
     type: Array,
-    default: false,
+    default: [],
   },
 });
-console.log(props);
 </script>
 
 <style lang="scss" scoped>
