@@ -26,7 +26,9 @@ const selectedOpening = ref({});
 const openings = ref([]);
 const candidates = ref([]);
 const isCandidateDetailsOpen = ref(false);
-const isCandidateListOpen = ref(!route.path.includes("compare"));
+const isCandidateListOpen = ref(
+  !route.path.includes("compare") && !route.path.includes("edit")
+);
 
 const fetchCandidates = async () => {
   const getCandidates = useGet(`roles/${route.params.openingRef}/candidates`);
@@ -63,7 +65,8 @@ onMounted(async () => {
 watch(
   () => route.path,
   async () => {
-    isCandidateListOpen.value = !route.path.includes("compare");
+    isCandidateListOpen.value =
+      !route.path.includes("compare") && !route.path.includes("edit");
     isCandidateDetailsOpen.value = route.path.includes("/candidates");
   }
 );
