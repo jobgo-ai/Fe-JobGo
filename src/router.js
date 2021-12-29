@@ -12,6 +12,8 @@ import Openings from "@/views/dashboard/openings/openings.vue";
 import OpeningsList from "@/views/dashboard/openings/openings-list.vue";
 import NewOpening from "@/views/dashboard/openings/new-opening.vue";
 import CandidateDetails from "@/views/dashboard/openings/candidate-details.vue";
+import EditOpening from "@/views/dashboard/openings/edit-opening.vue";
+import CompareCandidates from "@/views/dashboard/openings/compare-candidates.vue";
 
 const routes = [
   {
@@ -37,6 +39,22 @@ const routes = [
             component: CandidateDetails,
             meta: {
               breadcrumbs: false,
+            },
+          },
+          {
+            path: ":openingRef/edit",
+            name: "edit-opening",
+            component: EditOpening,
+            meta: {
+              breadcrumbs: true,
+            },
+          },
+          {
+            path: ":openingRef/compare",
+            name: "compare-candidates",
+            component: CompareCandidates,
+            meta: {
+              breadcrumbs: true,
             },
           },
         ],

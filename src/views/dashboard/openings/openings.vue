@@ -1,8 +1,10 @@
 <template>
   <div class="openings">
     <candidate-list
+      v-if="selectedOpening"
       :isCandidateDetailsOpen="isCandidateDetailsOpen"
       :candidates="candidates"
+      :opening="selectedOpening"
     />
     <div class="view" :class="{ 'view--left': isCandidateDetailsOpen }">
       <router-view :openings="openings"></router-view>
@@ -20,7 +22,7 @@ import CandidateList from "@/views/dashboard/openings/candidate-list.vue";
 
 const route = useRoute();
 const router = useRouter();
-
+const selectedOpening = ref({});
 const openings = ref([]);
 const candidates = ref([]);
 const isCandidateDetailsOpen = ref(false);
@@ -36,7 +38,19 @@ onMounted(async () => {
   getRoles.get();
   await getRoles.get();
   openings.value = getRoles.data.value.roles;
+  // Checks for openingRef in route params
+  if (route.params.openingRef) {
+    // Sets selected opening to openingRef in route params
+    selectedOpening.value = openings.value.find(
+      (opening) => opening.reference === route.params.openingRef
+    );
+  } else {
+    // Takes first opening
+    selectedOpening.value = openings.value[0];
+  }
+  // Checks to see if candidate detail page is open
   isCandidateDetailsOpen.value = route.path.includes("/candidates");
+  // If we have a selected opening, fetch candidates else navigate to openings with first opening
   if (!route.params.openingRef) {
     router.push(`/openings/${getRoles.data.value.roles[0].reference}`);
   } else {
@@ -44,6 +58,7 @@ onMounted(async () => {
   }
 });
 
+// Watches for route changes to deal with candidate details page
 watch(
   () => route.path,
   async () => {
@@ -51,10 +66,14 @@ watch(
   }
 );
 
+// Watch and change selected opening
 watch(
   () => route.params.openingRef,
   async () => {
     if (route.params.openingRef) {
+      selectedOpening.value = openings.value.find(
+        (opening) => opening.reference === route.params.openingRef
+      );
       await fetchCandidates();
     }
   }

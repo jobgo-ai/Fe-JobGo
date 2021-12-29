@@ -13,6 +13,10 @@
         @handleClick="isAddCandidateModalOpen = true"
         label="add candidate"
       ></hp-button>
+      <router-link :to="`openings/${opening.reference}/compare`"
+        >Compare results</router-link
+      >
+      <router-link :to="`openings/${opening.reference}/edit`">Edit</router-link>
       <ol v-if="candidates.length > 0">
         Candidate List
         <li
@@ -41,7 +45,7 @@ import { useRouter, useRoute } from "vue-router";
 const router = useRouter();
 const route = useRoute();
 
-defineProps({
+const props = defineProps({
   candidates: {
     type: Array,
     default: [],
@@ -50,7 +54,12 @@ defineProps({
     type: Boolean,
     default: false,
   },
+  opening: {
+    type: Object,
+    default: [],
+  },
 });
+console.log(props.opening);
 
 const isAddCandidateModalOpen = ref(false);
 
