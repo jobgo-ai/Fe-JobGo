@@ -13,6 +13,8 @@ import OpeningsList from "@/views/dashboard/openings/openings-list.vue";
 import NewOpening from "@/views/dashboard/openings/new-opening.vue";
 import CandidateDetails from "@/views/dashboard/openings/candidate-details.vue";
 import EditOpening from "@/views/dashboard/openings/edit-opening.vue";
+import AddInterview from "@/views/dashboard/openings/add-interview.vue";
+import CreateInterview from "@/views/dashboard/openings/create-interview.vue";
 import CompareCandidates from "@/views/dashboard/openings/compare-candidates.vue";
 
 const routes = [
@@ -45,6 +47,22 @@ const routes = [
             path: ":openingRef/edit",
             name: "edit-opening",
             component: EditOpening,
+            meta: {
+              breadcrumbs: true,
+            },
+          },
+          {
+            path: ":openingRef/edit/add-interview",
+            name: "add-interview",
+            component: AddInterview,
+            meta: {
+              breadcrumbs: true,
+            },
+          },
+          {
+            path: ":openingRef/edit/create-interview",
+            name: "create-interview",
+            component: CreateInterview,
             meta: {
               breadcrumbs: true,
             },

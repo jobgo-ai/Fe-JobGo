@@ -1,7 +1,7 @@
 <template>
   <div>new Opening</div>
   <hp-input></hp-input>
-  <hp-button label="Click me add candidate"></hp-button>
+  <hp-button label="Add interview"></hp-button>
 </template>
 
 <script setup>
