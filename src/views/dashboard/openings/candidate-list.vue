@@ -13,10 +13,12 @@
         @handleClick="isAddCandidateModalOpen = true"
         label="add candidate"
       ></hp-button>
-      <router-link :to="`openings/${opening.reference}/compare`"
+      <router-link :to="`/openings/${opening.reference}/compare`"
         >Compare results</router-link
       >
-      <router-link :to="`openings/${opening.reference}/edit`">Edit</router-link>
+      <router-link :to="`/openings/${opening.reference}/edit`"
+        >Edit</router-link
+      >
       <ol v-if="candidates.length > 0">
         Candidate List
         <li
@@ -59,7 +61,6 @@ const props = defineProps({
     default: [],
   },
 });
-console.log(props.opening);
 
 const isAddCandidateModalOpen = ref(false);
 
