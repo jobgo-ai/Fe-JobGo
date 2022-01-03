@@ -8,14 +8,18 @@
 </template>
 
 <script setup>
+// Vendor
 import { useRouter } from "vue-router";
+import * as yup from "yup";
+import { useForm } from "vee-validate";
+
+//Components
 import HpInput from "@/components/form/hp-input.vue";
 import HpButton from "@/components/hp-button.vue";
 import useAuth from "@/hooks/useAuth";
-import { usePost } from "@/hooks/useHttp";
 
-import * as yup from "yup";
-import { useForm } from "vee-validate";
+//Hooks
+import { usePost } from "@/hooks/useHttp";
 
 const schema = yup.object().shape({
   email: yup

@@ -9,13 +9,17 @@ import Signup from "@/views/public/signup.vue";
 // Private
 import Layout from "@/views/dashboard/layout.vue";
 import Settings from "@/views/dashboard/settings/settings.vue";
+
+//Openings
 import Openings from "@/views/dashboard/openings/openings.vue";
 import OpeningsList from "@/views/dashboard/openings/openings-list.vue";
 import CandidateDetails from "@/views/dashboard/openings/candidate-details.vue";
-import EditOpening from "@/views/dashboard/openings/edit-opening.vue";
-import AddInterview from "@/views/dashboard/openings/add-interview.vue";
-import CreateInterview from "@/views/dashboard/openings/create-interview.vue";
-import CompareCandidates from "@/views/dashboard/openings/compare-candidates.vue";
+
+//Opening
+import EditOpening from "@/views/dashboard/opening/edit-opening.vue";
+import AddInterview from "@/views/dashboard/opening/add-interview.vue";
+import CreateInterview from "@/views/dashboard/opening/create-interview.vue";
+import CompareCandidates from "@/views/dashboard/opening/compare-candidates.vue";
 
 const routes = [
   {
@@ -43,8 +47,15 @@ const routes = [
               breadcrumbs: false,
             },
           },
+        ],
+      },
+      {
+        name: "opening",
+        path: "opening/:openingRef",
+        component: Layout,
+        children: [
           {
-            path: ":openingRef/edit",
+            path: "edit",
             name: "edit-opening",
             component: EditOpening,
             meta: {
@@ -52,7 +63,7 @@ const routes = [
             },
           },
           {
-            path: ":openingRef/edit/add-interview",
+            path: "edit/add-interview",
             name: "add-interview",
             component: AddInterview,
             meta: {
@@ -60,7 +71,7 @@ const routes = [
             },
           },
           {
-            path: ":openingRef/edit/create-interview",
+            path: "edit/create-interview",
             name: "create-interview",
             component: CreateInterview,
             meta: {
@@ -68,7 +79,7 @@ const routes = [
             },
           },
           {
-            path: ":openingRef/compare",
+            path: "compare",
             name: "compare-candidates",
             component: CompareCandidates,
             meta: {

@@ -19,7 +19,7 @@
         </li>
       </ol>
       <router-link
-        :to="`/openings/${route.params.openingRef}/edit/add-interview`"
+        :to="`/opening/${route.params.openingRef}/edit/add-interview`"
         >Add interview</router-link
       >
     </div>

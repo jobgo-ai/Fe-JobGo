@@ -3,7 +3,7 @@
     <hp-breadcrumbs></hp-breadcrumbs>
     <div>Add interviews</div>
     <router-link
-      :to="`/openings/${route.params.openingRef}/edit/create-interview`"
+      :to="`/opening/${route.params.openingRef}/edit/create-interview`"
       >From scratch</router-link
     >
     <ol>

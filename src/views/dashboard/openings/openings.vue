@@ -13,7 +13,7 @@
 </template>
 
 <script setup>
-import { ref, watch, computed } from "vue";
+import { ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { onMounted } from "vue";
 import { useGet } from "@/hooks/useHttp.js";
@@ -36,11 +36,15 @@ const fetchCandidates = async () => {
   candidates.value = getCandidates.data.value?.candidates;
 };
 
-onMounted(async () => {
+const fetchRoles = async () => {
   const getRoles = useGet("roles");
   getRoles.get();
   await getRoles.get();
   openings.value = getRoles.data.value.roles;
+};
+
+onMounted(async () => {
+  await fetchRoles();
   // Checks for openingRef in route params
   if (route.params.openingRef) {
     // Sets selected opening to openingRef in route params
@@ -54,11 +58,11 @@ onMounted(async () => {
   // Checks to see if candidate detail page is open
   isCandidateDetailsOpen.value = route.path.includes("/candidates");
   // If we have a selected opening, fetch candidates else navigate to openings with first opening
-  if (!getRoles.data.value.roles[0]) {
+  if (!openings.value[0]) {
     return;
   }
   if (!route.params.openingRef) {
-    router.push(`/openings/${getRoles.data.value.roles[0].reference}`);
+    router.push(`/openings/${openings.value[0].reference}`);
   } else {
     await fetchCandidates();
   }
@@ -85,6 +89,7 @@ watch(
       await fetchCandidates();
     } else {
       if (route.path.includes("openings")) {
+        await fetchRoles();
         router.push(`/openings/${openings.value[0].reference}`);
       }
     }

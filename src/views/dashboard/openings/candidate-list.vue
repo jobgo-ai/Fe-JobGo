@@ -14,18 +14,16 @@
         @handleClick="isAddCandidateModalOpen = true"
         label="add candidate"
       ></hp-button>
-      <router-link :to="`/openings/${opening.reference}/compare`"
+      <router-link :to="`/opening/${opening.reference}/compare`"
         >Compare results</router-link
       >
-      <router-link :to="`/openings/${opening.reference}/edit`"
-        >Edit</router-link
-      >
+      <router-link :to="`/opening/${opening.reference}/edit`">Edit</router-link>
       <ol v-if="candidates.length > 0">
         Candidate List
         <li
           @click="
             router.push(
-              `/openings/${route.params.openingRef}/candidates/${candidate.reference}`
+              `/opening/${route.params.openingRef}/candidates/${candidate.reference}`
             )
           "
           :key="candidate.reference"
