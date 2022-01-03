@@ -19,6 +19,6 @@
 [context.branch-deploy]
   command = "vite build --mode development"
 
-  [context.beta]
-  command = "vite build --mode beta"
+[context.beta]
+command = "vite build --mode beta"
 
