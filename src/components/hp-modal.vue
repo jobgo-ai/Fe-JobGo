@@ -1,5 +1,5 @@
 <template>
-  <div v-if="isOpen" @click="$emit('close')">
+  <div v-if="isOpen">
     <slot></slot>
   </div>
 </template>

@@ -11,7 +11,6 @@ import Layout from "@/views/dashboard/layout.vue";
 import Settings from "@/views/dashboard/settings/settings.vue";
 import Openings from "@/views/dashboard/openings/openings.vue";
 import OpeningsList from "@/views/dashboard/openings/openings-list.vue";
-import NewOpening from "@/views/dashboard/openings/new-opening.vue";
 import CandidateDetails from "@/views/dashboard/openings/candidate-details.vue";
 import EditOpening from "@/views/dashboard/openings/edit-opening.vue";
 import AddInterview from "@/views/dashboard/openings/add-interview.vue";
@@ -77,14 +76,6 @@ const routes = [
             },
           },
         ],
-      },
-      {
-        path: "new-opening",
-        name: "new-opening",
-        component: NewOpening,
-        meta: {
-          breadcrumbs: true,
-        },
       },
       {
         path: "settings",

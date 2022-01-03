@@ -1,5 +1,16 @@
 <template>
-  <router-link to="/new-opening">New opening</router-link>
+  <hp-modal
+    :isOpen="isAddNewOpeningModalOpen"
+    @close="isAddNewOpeningModalOpen = false"
+  >
+    <h3></h3>
+    <form @submit.prevent="onSubmit">
+      <hp-input name="name"></hp-input>
+      <hp-input name="description"></hp-input>
+      <hp-button type="submit" label="Save"></hp-button>
+    </form>
+  </hp-modal>
+  <div @click="isAddNewOpeningModalOpen = true">New opening</div>
   Openings list:
   <ol v-if="openings.length > 0">
     <li
@@ -13,9 +24,19 @@
 </template>
 
 <script setup>
+//Vendor
+import { ref } from "vue";
 import { useRouter } from "vue-router";
+import { useForm } from "vee-validate";
+import * as yup from "yup";
 
-const router = useRouter();
+//Components
+import HpModal from "@/components/hp-modal.vue";
+import HpInput from "@/components/form/hp-input.vue";
+import HpButton from "@/components/hp-button.vue";
+
+//Hooks
+import { usePost } from "@/hooks/useHttp";
 
 const props = defineProps({
   openings: {
@@ -23,4 +44,25 @@ const props = defineProps({
     default: [],
   },
 });
+
+const schema = yup.object({
+  name: yup.string().required("Job title is required"),
+  description: yup.string(),
+});
+
+const { handleSubmit } = useForm({
+  validationSchema: schema,
+  initialValues: { title: "", description: "" },
+});
+
+const router = useRouter();
+const postRole = usePost("roles");
+const onSubmit = handleSubmit(async (values) => {
+  await postRole.post({ role: { ...values, templates: [] } });
+  if (postRole.data.value) {
+    router.push(`/openings/${postRole.data.value.role.reference}/edit`);
+  }
+});
+
+const isAddNewOpeningModalOpen = ref(false);
 </script>

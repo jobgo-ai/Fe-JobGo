@@ -1,10 +1,10 @@
 <template>
   <div>
-    <hp-breadcrumbs :crumbs="[{ label: 'New Opening' }]">
-      <div>Context Save</div></hp-breadcrumbs
+    <form
+      :isOpen="isAddCandidateModalOpen"
+      @close="isAddCandidateModalOpen = false"
+      @submit.prevent="onSubmit"
     >
-    <div>new Opening</div>
-    <form @submit.prevent="onSubmit">
       <hp-input name="name"></hp-input>
       <hp-input name="description"></hp-input>
       <hp-button type="submit" label="Save"></hp-button>
