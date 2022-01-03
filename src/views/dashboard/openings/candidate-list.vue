@@ -3,8 +3,14 @@
     <hp-modal
       :isOpen="isAddCandidateModalOpen"
       @close="isAddCandidateModalOpen = false"
-      >Im a modal</hp-modal
     >
+      <h3>Add candidate</h3>
+      <form @submit.prevent="onSubmit">
+        <hp-input name="name"></hp-input>
+        <hp-input name="email"></hp-input>
+        <hp-button type="submit" label="Create candidate"></hp-button>
+      </form>
+    </hp-modal>
     <div
       class="candidate-list"
       :class="{ 'candidate-list--left': isCandidateDetailsOpen }"
@@ -37,14 +43,21 @@
 </template>
 
 <script setup>
-import HpModal from "@/components/hp-modal.vue";
-import HpButton from "@/components/hp-button.vue";
-import { usePost } from "@/hooks/useHttp";
+//Vendor
 import { ref } from "vue";
 import { useRouter, useRoute } from "vue-router";
+import { useForm } from "vee-validate";
+import * as yup from "yup";
 
-const router = useRouter();
-const route = useRoute();
+//Components
+import HpModal from "@/components/hp-modal.vue";
+import HpInput from "@/components/form/hp-input.vue";
+import HpButton from "@/components/hp-button.vue";
+
+// Hooks
+import { usePost } from "@/hooks/useHttp";
+
+const emit = defineEmits(["updateCandidateList"]);
 
 const props = defineProps({
   candidates: {
@@ -61,20 +74,34 @@ const props = defineProps({
   },
 });
 
+const router = useRouter();
+const route = useRoute();
+
 const isAddCandidateModalOpen = ref(false);
+
+const schema = yup.object({
+  name: yup.string().required("Name is required"),
+  email: yup.string(),
+});
+
+const { handleSubmit } = useForm({
+  validationSchema: schema,
+  initialValues: { name: "", email: "" },
+});
 
 // Create candidate
 const postCandidate = usePost("candidates");
-const onSubmit = async (values) => {
+const onSubmit = handleSubmit(async (values) => {
   const payload = {
     candidate: {
       ...values,
-      roles: values.roles ? [values.roles] : [],
+      roles: [props.opening.reference],
     },
   };
   await postCandidate.post(payload);
-  router.push(`/candidates/${postCandidate.data.value.candidate.reference}`);
-};
+
+  emit("updateCandidateList");
+});
 </script>
 
 <style lang="scss" scoped>

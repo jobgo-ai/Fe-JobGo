@@ -5,6 +5,7 @@
       :isCandidateDetailsOpen="isCandidateDetailsOpen"
       :candidates="candidates"
       :opening="selectedOpening"
+      @updateCandidateList="fetchCandidates"
     />
     <div class="view" :class="{ 'view--left': isCandidateDetailsOpen }">
       <router-view :openings="openings"></router-view>
