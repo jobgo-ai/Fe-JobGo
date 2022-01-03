@@ -36,6 +36,7 @@ router.beforeEach(async (to, from, next) => {
     to.meta.super &&
     !user.value.user.organization?.slug === "hireproof"
   ) {
+    console.log("what");
     next({ name: "openings" });
   }
   // finally

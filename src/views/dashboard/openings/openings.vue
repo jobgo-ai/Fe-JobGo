@@ -84,7 +84,9 @@ watch(
       );
       await fetchCandidates();
     } else {
-      router.push(`/openings/${openings.value[0].reference}`);
+      if (route.path.includes("openings")) {
+        router.push(`/openings/${openings.value[0].reference}`);
+      }
     }
   }
 );

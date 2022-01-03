@@ -9,6 +9,7 @@
       class="candidate-list"
       :class="{ 'candidate-list--left': isCandidateDetailsOpen }"
     >
+      <h2>{{ opening.name }}</h2>
       <hp-button
         @handleClick="isAddCandidateModalOpen = true"
         label="add candidate"
