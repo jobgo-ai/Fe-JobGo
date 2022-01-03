@@ -1,11 +1,13 @@
 <template>
   <div>
-    <hp-breadcrumbs></hp-breadcrumbs>
+    <hp-breadcrumbs :crumbs="[{ label: 'New Opening' }]">
+      <div>Context Save</div></hp-breadcrumbs
+    >
     <div>new Opening</div>
     <form @submit.prevent="onSubmit">
       <hp-input name="name"></hp-input>
       <hp-input name="description"></hp-input>
-      <hp-button type="submit" label="Add interview"></hp-button>
+      <hp-button type="submit" label="Save"></hp-button>
     </form>
   </div>
 </template>
@@ -25,7 +27,7 @@ const schema = yup.object({
   description: yup.string(),
 });
 
-const { handleSubmit, isSubmitting } = useForm({
+const { handleSubmit } = useForm({
   validationSchema: schema,
   initialValues: { title: "", description: "" },
 });

@@ -6,7 +6,6 @@
       }}</router-link>
     </ol>
     <div class="context">
-      eee
       <slot></slot>
     </div>
   </div>
