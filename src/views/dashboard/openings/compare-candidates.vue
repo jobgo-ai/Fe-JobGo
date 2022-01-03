@@ -1,6 +1,8 @@
 <template>
-  <hp-breadcrumbs></hp-breadcrumbs>
-  Hey nerds, I compared
+  <div>
+    <hp-breadcrumbs></hp-breadcrumbs>
+    Hey nerds, I compared
+  </div>
 </template>
 
 <script setup>

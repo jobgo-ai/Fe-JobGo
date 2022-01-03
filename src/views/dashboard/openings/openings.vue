@@ -80,6 +80,8 @@ watch(
         (opening) => opening.reference === route.params.openingRef
       );
       await fetchCandidates();
+    } else {
+      router.push(`/openings/${openings.value[0].reference}`);
     }
   }
 );
