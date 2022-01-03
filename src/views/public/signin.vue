@@ -1,29 +1,42 @@
 <template>
   <div>
     signin
-    <hp-input v-model="username" label="username" />
-    <hp-input v-model="password" label="username" type="password" />
+    <hp-input name="email" label="username" />
+    <hp-input name="password" label="password" type="password" />
     <hp-button @handleClick="onSubmit" label="Signin"></hp-button>
   </div>
 </template>
 
 <script setup>
-import { ref } from "vue";
 import { useRouter } from "vue-router";
-import HpInput from "@/components/hp-input.vue";
+import HpInput from "@/components/form/hp-input.vue";
 import HpButton from "@/components/hp-button.vue";
 import useAuth from "@/hooks/useAuth";
 import { usePost } from "@/hooks/useHttp";
 
+import * as yup from "yup";
+import { useForm } from "vee-validate";
+
+const schema = yup.object().shape({
+  email: yup
+    .string()
+    .email("Must be a valid email address")
+    .required()
+    .label("Email"),
+  password: yup.string().min(6).required().label("Password"),
+});
+
+const { handleSubmit, isSubmitting } = useForm({
+  validationSchema: schema,
+  initialValues: { title: "", description: "" },
+});
+
 const router = useRouter();
 const postLogin = usePost("self/login");
 
-const username = ref("");
-const password = ref("");
-
-const onSubmit = async (values) => {
+const onSubmit = handleSubmit(async (values) => {
   const data = {
-    credentials: { email: username.value, password: password.value },
+    credentials: { ...values },
   };
   await postLogin.post(data);
   if (postLogin.data.value) {
@@ -31,5 +44,5 @@ const onSubmit = async (values) => {
     setUser(postLogin.data.value, true);
     router.push("/openings");
   }
-};
+});
 </script>

@@ -24,6 +24,14 @@ const routes = [
     component: Layout,
     children: [
       {
+        path: "new-opening",
+        name: "new-opening",
+        component: NewOpening,
+        meta: {
+          breadcrumbs: true,
+        },
+      },
+      {
         path: "/openings",
         name: "openings",
         component: Openings,
@@ -77,14 +85,6 @@ const routes = [
             },
           },
         ],
-      },
-      {
-        path: "new-opening",
-        name: "new-opening",
-        component: NewOpening,
-        meta: {
-          breadcrumbs: true,
-        },
       },
       {
         path: "settings",

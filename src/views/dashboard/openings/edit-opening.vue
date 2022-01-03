@@ -25,7 +25,7 @@
 
 <script setup>
 import HpBreadcrumbs from "@/components/hp-breadcrumbs.vue";
-import HpInput from "@/components/hp-input.vue";
+import HpInput from "@/components/form/hp-input.vue";
 import HpButton from "@/components/hp-button.vue";
 import { useGet } from "@/hooks/useHttp";
 import { onMounted, ref } from "vue";
