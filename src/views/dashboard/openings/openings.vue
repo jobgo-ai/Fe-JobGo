@@ -54,6 +54,9 @@ onMounted(async () => {
   // Checks to see if candidate detail page is open
   isCandidateDetailsOpen.value = route.path.includes("/candidates");
   // If we have a selected opening, fetch candidates else navigate to openings with first opening
+  if (!getRoles.data.value.roles[0]) {
+    return;
+  }
   if (!route.params.openingRef) {
     router.push(`/openings/${getRoles.data.value.roles[0].reference}`);
   } else {
