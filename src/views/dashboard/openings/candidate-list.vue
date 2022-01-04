@@ -29,7 +29,7 @@
         <li
           @click="
             router.push(
-              `/opening/${route.params.openingRef}/candidates/${candidate.reference}`
+              `/openings/${route.params.openingRef}/candidates/${candidate.reference}`
             )
           "
           :key="candidate.reference"
