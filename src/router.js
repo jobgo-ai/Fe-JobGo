@@ -8,6 +8,7 @@ import Signup from "@/views/public/signup.vue";
 
 // Private
 import Layout from "@/views/dashboard/layout.vue";
+import Passthrough from "@/views/dashboard/passthrough.vue";
 import Settings from "@/views/dashboard/settings/settings.vue";
 
 //Openings
@@ -35,56 +36,38 @@ const routes = [
             path: ":openingRef",
             name: "openings-list",
             component: OpeningsList,
-            meta: {
-              breadcrumbs: false,
-            },
           },
           {
             path: ":openingRef/candidates/:candidateRef",
             name: "candidate-details",
             component: CandidateDetails,
-            meta: {
-              breadcrumbs: false,
-            },
           },
         ],
       },
       {
         name: "opening",
         path: "opening/:openingRef",
-        component: Layout,
+        component: Passthrough,
         children: [
           {
             path: "edit",
             name: "edit-opening",
             component: EditOpening,
-            meta: {
-              breadcrumbs: true,
-            },
           },
           {
             path: "edit/add-interview",
             name: "add-interview",
             component: AddInterview,
-            meta: {
-              breadcrumbs: true,
-            },
           },
           {
             path: "edit/create-interview",
             name: "create-interview",
             component: CreateInterview,
-            meta: {
-              breadcrumbs: true,
-            },
           },
           {
             path: "compare",
             name: "compare-candidates",
             component: CompareCandidates,
-            meta: {
-              breadcrumbs: true,
-            },
           },
         ],
       },

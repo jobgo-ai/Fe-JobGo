@@ -11,3 +11,9 @@ defineProps({
 });
 defineEmits(["close"]);
 </script>
+
+<style lang="scss">
+.hp-drawer {
+  background-color: blue;
+}
+</style>

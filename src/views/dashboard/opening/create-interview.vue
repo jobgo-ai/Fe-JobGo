@@ -1,12 +1,11 @@
 <template>
   <div>
-    <hp-drawer><add-questions /></hp-drawer>
+    <hp-drawer :isOpen="isAddQuestionDrawerOpen"><questions /></hp-drawer>
     <hp-breadcrumbs></hp-breadcrumbs>
     <form @submit.prevent="onSubmit">
       <div>Create interview</div>
       <hp-input label="Name" name="name"></hp-input>
       <hp-input label="Description" name="description"></hp-input>
-      <hp-button type="submit" label="Create"></hp-button>
       <div>
         <div>
           <h3>Warmup</h3>
@@ -23,28 +22,38 @@
           </div>
         </div>
       </div>
+      <hp-button
+        @handleClick="isAddQuestionDrawerOpen = true"
+        label="Add questions"
+        type="button"
+      ></hp-button>
+      <hp-button type="submit" label="Create"></hp-button>
     </form>
   </div>
 </template>
 
 <script setup>
 //Vendor
+import { ref } from "vue";
 import { useForm } from "vee-validate";
 import * as yup from "yup";
 
 //Views
-import AddQuestions from "@/views/dashboard/opening/add-questions.vue";
+// TODO: Make this a router vue
+import Questions from "@/views/dashboard/opening/questions/questions.vue";
 
 //Components
 import HpBreadcrumbs from "@/components/hp-breadcrumbs.vue";
 import HpInput from "@/components/form/hp-input.vue";
 import HpButton from "@/components/hp-button.vue";
 import HpCounter from "@/components/hp-counter.vue";
-import HpDrawer from "@/components/hp-counter.vue";
+import HpDrawer from "@/components/hp-drawer.vue";
 import HpTextarea from "@/components/form/hp-textarea.vue";
 
 //Hooks
 import { usePost } from "@/hooks/useHttp";
+
+const isAddQuestionDrawerOpen = ref(false);
 
 const postInterview = usePost("templates");
 

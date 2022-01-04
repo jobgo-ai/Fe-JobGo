@@ -2,7 +2,7 @@
   <button
     @click="emit('handleClick')"
     class="input"
-    :type="type ? type : 'submit'"
+    :type="type ? type : 'button'"
   >
     {{ label }}
   </button>
