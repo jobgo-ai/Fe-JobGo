@@ -3,7 +3,7 @@
     wsaodosaofdosa
     <ol>
       <li v-for="question in questions" :key="question.reference">
-        {{ question.reference }}
+        {{ question.content }}
       </li>
     </ol>
   </div>
