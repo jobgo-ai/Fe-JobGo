@@ -4,7 +4,9 @@
   "scripts": {
     "dev": "vite --mode beta",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook"
   },
   "dependencies": {
     "vee-validate": "^4.5.7",
@@ -13,8 +15,15 @@
     "yup": "^0.32.11"
   },
   "devDependencies": {
+    "@babel/core": "^7.16.7",
+    "@storybook/addon-actions": "^6.4.9",
+    "@storybook/addon-essentials": "^6.4.9",
+    "@storybook/addon-links": "^6.4.9",
+    "@storybook/vue3": "^6.4.9",
     "@vitejs/plugin-vue": "^2.0.0",
+    "babel-loader": "^8.2.3",
     "sass": "^1.45.0",
-    "vite": "^2.7.2"
+    "vite": "^2.7.2",
+    "vue-loader": "^16.8.3"
   }
 }
