@@ -2,8 +2,16 @@
   <div>
     wsaodosaofdosa
     <ol>
-      <li v-for="question in questions" :key="question.reference">
+      <li
+        class="question"
+        v-for="question in questions"
+        :key="question.reference"
+      >
         {{ question.content }}
+        <hp-button
+          label="add to interview"
+          @handleClick="addToInterview"
+        ></hp-button>
       </li>
     </ol>
   </div>
@@ -56,4 +64,13 @@ const getQuestions = async () => {
   questions.value = data.value.questions;
 };
 getQuestions();
+
+const addToInterview = async (question) => {};
 </script>
+
+<style lang="scss" scoped>
+.question {
+  background: black;
+  color: white;
+}
+</style>
