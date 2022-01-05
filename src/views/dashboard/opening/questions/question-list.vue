@@ -18,8 +18,12 @@
 </template>
 
 <script setup>
-import { useGet } from "@/hooks/useHttp";
+// Vendor
 import { ref, watch, reactive } from "vue";
+//Components
+import HpButton from "@/components/hp-button.vue";
+// Hooks
+import { useGet } from "@/hooks/useHttp";
 
 let next = null;
 const questions = ref([]);

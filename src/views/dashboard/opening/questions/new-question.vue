@@ -4,6 +4,7 @@
     <form @submit.prevent="onSubmit">
       <hp-input label="Add question" name="content"></hp-input>
       <hp-input label="Duration" name="duration"></hp-input>
+      <hp-multi-input />
       <hp-button type="submit" label="Create"></hp-button>
     </form>
   </div>
@@ -17,6 +18,7 @@ import * as yup from "yup";
 
 //Components
 import HpInput from "@/components/form/hp-input.vue";
+import HpMultiInput from "@/components/hp-multi-input.vue";
 import HpButton from "@/components/hp-button.vue";
 
 //Hooks
