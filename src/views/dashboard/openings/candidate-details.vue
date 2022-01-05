@@ -20,7 +20,7 @@ const details = ref({});
 const fetchDetails = async () => {
   const getDetails = useGet(`candidates/${route.params.candidateRef}`);
   await getDetails.get();
-  details.value = getDetails.data.value.candidate.roles[0];
+  details.value = getDetails.data.value.candidate.openings[0];
 };
 
 onMounted(async () => {

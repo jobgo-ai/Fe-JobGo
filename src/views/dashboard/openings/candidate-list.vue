@@ -95,7 +95,7 @@ const onSubmit = handleSubmit(async (values) => {
   const payload = {
     candidate: {
       ...values,
-      roles: [props.opening.reference],
+      openings: [props.opening.reference],
     },
   };
   await postCandidate.post(payload);

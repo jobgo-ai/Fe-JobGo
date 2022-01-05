@@ -7,7 +7,7 @@
     <form @submit.prevent="handleSubmit">
       <hp-input name="name"></hp-input>
       <hp-input name="description"></hp-input>
-      <hp-button type="submit" label="Edit role"></hp-button>
+      <hp-button type="submit" label="Edit Opening"></hp-button>
     </form>
     <div>
       <ol>
@@ -56,16 +56,16 @@ const { handleSubmit, setFieldValue } = useForm({
 
 onMounted(async () => {
   if (route.params.openingRef) {
-    const getOpening = useGet(`roles/${route.params.openingRef}`);
+    const getOpening = useGet(`openings/${route.params.openingRef}`);
     await getOpening.get();
-    templates.value = getOpening.data.value.role.templates;
-    setFieldValue("name", getOpening.data.value.role.name);
-    setFieldValue("description", getOpening.data.value.role.description);
+    templates.value = getOpening.data.value.opening.templates;
+    setFieldValue("name", getOpening.data.value.opening.name);
+    setFieldValue("description", getOpening.data.value.opening.description);
   }
 });
 
 const archiveOpening = async () => {
-  const deleteOpening = useDelete(`roles/${route.params.openingRef}`);
+  const deleteOpening = useDelete(`openings/${route.params.openingRef}`);
   await deleteOpening.remove();
   router.push("/openings");
 };

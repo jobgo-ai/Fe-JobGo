@@ -32,20 +32,22 @@ const isCandidateListOpen = ref(
 );
 
 const fetchCandidates = async () => {
-  const getCandidates = useGet(`roles/${route.params.openingRef}/candidates`);
+  const getCandidates = useGet(
+    `openings/${route.params.openingRef}/candidates`
+  );
   await getCandidates.get();
   candidates.value = getCandidates.data.value?.candidates;
 };
 
-const fetchRoles = async () => {
-  const getRoles = useGet("roles");
-  getRoles.get();
-  await getRoles.get();
-  openings.value = getRoles.data.value.roles;
+const fetchOpenings = async () => {
+  const getOpenings = useGet("openings");
+  getOpenings.get();
+  await getOpenings.get();
+  openings.value = getOpenings.data.value.openings;
 };
 
 onMounted(async () => {
-  await fetchRoles();
+  await fetchOpenings();
   // Checks for openingRef in route params
   if (route.params.openingRef) {
     // Sets selected opening to openingRef in route params
@@ -90,7 +92,7 @@ watch(
       await fetchCandidates();
     } else {
       if (route.path.includes("openings")) {
-        await fetchRoles();
+        await fetchOpenings();
         router.push(`/openings/${openings.value[0].reference}`);
       }
     }

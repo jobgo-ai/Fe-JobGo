@@ -56,11 +56,11 @@ const { handleSubmit } = useForm({
 });
 
 const router = useRouter();
-const postRole = usePost("roles");
+const postOpening = usePost("openings");
 const onSubmit = handleSubmit(async (values) => {
-  await postRole.post({ role: { ...values, templates: [] } });
-  if (postRole.data.value) {
-    router.push(`/openings/${postRole.data.value.role.reference}/edit`);
+  await postOpening.post({ opening: { ...values, templates: [] } });
+  if (postOpening.data.value) {
+    router.push(`/opening/${postOpening.data.value.opening.reference}/edit`);
   }
 });
 
