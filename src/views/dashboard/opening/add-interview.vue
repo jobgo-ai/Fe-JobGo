@@ -17,7 +17,10 @@
     <ol>
       <li v-for="template in templates" :key="template.reference">
         {{ template.name }}
-        <hp-button label="View"></hp-button>
+        <router-link
+          :to="`/opening/${route.params.openingRef}/view/view-interview/${template.reference}`"
+          >View</router-link
+        >
       </li>
     </ol>
   </div>
