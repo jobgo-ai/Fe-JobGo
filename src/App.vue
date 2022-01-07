@@ -3,6 +3,10 @@
 <template><router-view></router-view></template>
 
 <style lang="scss">
+:root {
+  --color-primary: blue;
+}
+
 html,
 body,
 div,

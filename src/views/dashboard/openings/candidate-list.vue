@@ -107,7 +107,7 @@ const onSubmit = handleSubmit(async (values) => {
 <style lang="scss" scoped>
 .candidate-list {
   padding: 10px;
-  background-color: green;
+  background-color: var(--color-primary);
   position: absolute;
   height: 100%;
   transition: all 0.15s ease-in-out;
