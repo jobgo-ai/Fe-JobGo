@@ -15,8 +15,9 @@
       @handleClick="isAddInterviewModalOpen = true"
     ></hp-button>
     <ol>
-      <li v-for="template in templates" :key="template.reference">
+      <li v-for="template in availableTemplateList" :key="template.reference">
         {{ template.name }}
+        <div @click="handleAddToInterview(template)">Add to interview</div>
         <router-link
           :to="`/opening/${route.params.openingRef}/view/view-interview/${template.reference}`"
           >View</router-link
@@ -28,7 +29,7 @@
 
 <script setup>
 // Vendor
-import { onMounted, ref } from "vue";
+import { onMounted, ref, computed } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import { useForm } from "vee-validate";
 import * as yup from "yup";
@@ -43,12 +44,16 @@ import HpInput from "@/components/form/hp-input.vue";
 import { useGet, usePost } from "@/hooks/useHttp";
 
 const templates = ref([]);
+const opening = ref({});
 const isAddInterviewModalOpen = ref(false);
 
 onMounted(async () => {
   const getTemplates = useGet(`templates`);
   await getTemplates.get();
+  const getOpening = useGet(`openings/${route.params.openingRef}`);
+  await getOpening.get();
 
+  opening.value = getOpening.data.value.opening;
   templates.value = getTemplates.data.value.templates;
 });
 
@@ -74,4 +79,21 @@ const onSubmit = handleSubmit(async (values) => {
     );
   }
 });
+
+const availableTemplateList = computed(() => {
+  return templates.value.filter((template) => {
+    return !opening.value.templates.some(
+      (t) => t.reference === template.reference
+    );
+  });
+});
+
+const handleAddToInterview = async (template) => {
+  const postRole = usePost(`openings/${route.params.openingRef}/templates`);
+  const payload = {
+    template: template.reference,
+  };
+  await postRole.post(payload);
+  router.push(`/opening/${route.params.openingRef}/edit`);
+};
 </script>

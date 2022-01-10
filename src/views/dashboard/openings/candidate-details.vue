@@ -1,6 +1,13 @@
 <template>
-  <div>Details</div>
-  <div v-if="details.name">{{ details.name }}</div>
+  <div class="candidate-details">
+    <div>Details</div>
+    <div v-if="details.name">{{ details.name }}</div>
+    <div class="candidate-details__interview-grid">
+      <ul class="">
+        <li></li>
+      </ul>
+    </div>
+  </div>
 </template>
 
 <script setup>

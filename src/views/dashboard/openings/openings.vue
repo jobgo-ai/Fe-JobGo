@@ -77,7 +77,9 @@ watch(
       );
       await fetchCandidates();
     } else {
-      await fetchOpenings();
+      if (route.path.includes("openings")) {
+        await fetchOpenings();
+      }
     }
   }
 );
@@ -94,7 +96,7 @@ watch(
   display: flex;
   flex-direction: column;
   &--left {
-    margin-left: 240px;
+    margin-left: 440px;
   }
 }
 </style>
