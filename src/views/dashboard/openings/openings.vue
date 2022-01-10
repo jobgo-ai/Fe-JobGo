@@ -1,18 +1,14 @@
 <template>
-  <div
-    class="openings"
-    :class="{ 'openings--details-open': isCandidateDetailsOpen }"
-  >
-    <div class="openings__view">
+  <div class="openings">
+    <candidate-list
+      v-if="isCandidateListOpen"
+      :isCandidateDetailsOpen="isCandidateDetailsOpen"
+      :candidates="candidates"
+      :opening="selectedOpening"
+      @updateCandidateList="fetchCandidates"
+    />
+    <div class="view" :class="{ 'view--left': isCandidateDetailsOpen }">
       <router-view :openings="openings"></router-view>
-    </div>
-    <div class="openings__candidate-list" v-if="isCandidateDetailsOpen">
-      <candidate-list
-        :isCandidateDetailsOpen="isCandidateDetailsOpen"
-        :candidates="candidates"
-        :opening="selectedOpening"
-        @updateCandidateList="fetchCandidates"
-      />
     </div>
   </div>
 </template>
@@ -58,7 +54,7 @@ onMounted(async () => {
     );
   }
   // Checks to see if candidate detail page is open
-  isCandidateDetailsOpen.value = route.params.openingRef;
+  isCandidateDetailsOpen.value = route.path.includes("/candidates");
   // If we have a selected opening, fetch candidates else navigate to openings with first opening
   if (!openings.value[0]) {
     return;
@@ -74,7 +70,7 @@ watch(
   async () => {
     isCandidateListOpen.value =
       !route.path.includes("compare") && !route.path.includes("edit");
-    isCandidateDetailsOpen.value = route.params.openingRef;
+    isCandidateDetailsOpen.value = route.path.includes("/candidates");
   }
 );
 
@@ -98,17 +94,16 @@ watch(
 
 <style lang="scss" scoped>
 .openings {
-  display: grid;
-  justify-content: center;
-  grid-template-columns: var(--content-container);
-  transition: 3s ease-in-out;
-  &--details-open {
-    grid-template-columns: var(--content-container) var(--sidebar-container);
-  }
-  &__view {
-  }
-  &__candidate-list {
-    background-color: blue;
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+}
+
+.view {
+  display: flex;
+  flex-direction: column;
+  &--left {
+    margin-left: 240px;
   }
 }
 </style>

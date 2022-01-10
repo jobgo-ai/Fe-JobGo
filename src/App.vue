@@ -1,19 +1,10 @@
 <script setup></script>
 
-<template>
-  <div class="container">
-    <router-view></router-view>
-  </div>
-</template>
+<template><router-view></router-view></template>
 
 <style lang="scss">
 :root {
-  // Colors
   --color-primary: blue;
-
-  // Containers
-  --content-container: 960px;
-  --sidebar-container: 400px;
 }
 
 html,

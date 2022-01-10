@@ -10,17 +10,10 @@
       <hp-button type="submit" label="Save"></hp-button>
     </form>
   </hp-modal>
-  <h1>Openings</h1>
-  <p>Manage your active opening or create a new one.</p>
-  <ol class="opening-list__grid" v-if="openings.length > 0">
+  <div @click="isAddNewOpeningModalOpen = true">New opening</div>
+  Openings list:
+  <ol v-if="openings.length > 0">
     <li
-      class="opening-list__grid-item"
-      @click="isAddNewOpeningModalOpen = true"
-    >
-      New opening
-    </li>
-    <li
-      class="opening-list__grid-item"
       @click="router.push(`/openings/${opening.reference}`)"
       :key="opening.reference"
       v-for="opening in openings"
@@ -73,15 +66,3 @@ const onSubmit = handleSubmit(async (values) => {
 
 const isAddNewOpeningModalOpen = ref(false);
 </script>
-
-<style lang="scss" scoped>
-.opening-list__grid {
-  display: grid;
-  grid-template-columns: 33% 33% 33%;
-  grid-gap: 1rem;
-}
-
-.opening-list__grid-item {
-  background-color: gray;
-}
-</style>

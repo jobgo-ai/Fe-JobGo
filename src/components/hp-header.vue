@@ -10,6 +10,8 @@
 <style lang="scss" scoped>
 .header {
   height: 40px;
+  background-color: red;
+  width: 100%;
   display: flex;
   justify-content: space-between;
 }
