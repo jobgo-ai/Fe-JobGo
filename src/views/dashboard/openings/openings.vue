@@ -54,21 +54,9 @@ onMounted(async () => {
     selectedOpening.value = openings.value.find(
       (opening) => opening.reference === route.params.openingRef
     );
-  } else {
-    // Takes first opening
-    selectedOpening.value = openings.value[0];
   }
   // Checks to see if candidate detail page is open
   isCandidateDetailsOpen.value = route.path.includes("/candidates");
-  // If we have a selected opening, fetch candidates else navigate to openings with first opening
-  if (!openings.value[0]) {
-    return;
-  }
-  if (!route.params.openingRef) {
-    router.push(`/openings/${openings.value[0].reference}`);
-  } else {
-    await fetchCandidates();
-  }
 });
 
 // Watches for route changes to deal with candidate details page
@@ -93,7 +81,6 @@ watch(
     } else {
       if (route.path.includes("openings")) {
         await fetchOpenings();
-        router.push(`/openings/${openings.value[0].reference}`);
       }
     }
   }
