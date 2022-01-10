@@ -27,9 +27,7 @@ const selectedOpening = ref({});
 const openings = ref([]);
 const candidates = ref([]);
 const isCandidateDetailsOpen = ref(false);
-const isCandidateListOpen = ref(
-  !route.path.includes("compare") && !route.path.includes("edit")
-);
+const isCandidateListOpen = ref(route.params.openingRef);
 
 const fetchCandidates = async () => {
   const getCandidates = useGet(
@@ -79,9 +77,7 @@ watch(
       );
       await fetchCandidates();
     } else {
-      if (route.path.includes("openings")) {
-        await fetchOpenings();
-      }
+      await fetchOpenings();
     }
   }
 );
