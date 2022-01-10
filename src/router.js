@@ -34,7 +34,7 @@ const routes = [
         component: Openings,
         children: [
           {
-            path: ":openingRef?",
+            path: ":openingRef",
             name: "openings-list",
             component: OpeningsList,
           },

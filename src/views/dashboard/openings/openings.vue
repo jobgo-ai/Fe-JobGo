@@ -27,7 +27,9 @@ const selectedOpening = ref({});
 const openings = ref([]);
 const candidates = ref([]);
 const isCandidateDetailsOpen = ref(false);
-const isCandidateListOpen = ref(route.params.openingRef);
+const isCandidateListOpen = ref(
+  !route.path.includes("compare") && !route.path.includes("edit")
+);
 
 const fetchCandidates = async () => {
   const getCandidates = useGet(
@@ -52,6 +54,9 @@ onMounted(async () => {
     selectedOpening.value = openings.value.find(
       (opening) => opening.reference === route.params.openingRef
     );
+  } else {
+    // Takes first opening
+    selectedOpening.value = openings.value[0];
   }
   // Checks to see if candidate detail page is open
   isCandidateDetailsOpen.value = route.path.includes("/candidates");
@@ -59,7 +64,9 @@ onMounted(async () => {
   if (!openings.value[0]) {
     return;
   }
-  if (route.params.openingRef) {
+  if (!route.params.openingRef) {
+    router.push(`/openings/${openings.value[0].reference}`);
+  } else {
     await fetchCandidates();
   }
 });
@@ -86,6 +93,7 @@ watch(
     } else {
       if (route.path.includes("openings")) {
         await fetchOpenings();
+        router.push(`/openings/${openings.value[0].reference}`);
       }
     }
   }
