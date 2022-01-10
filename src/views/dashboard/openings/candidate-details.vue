@@ -1,10 +1,12 @@
 <template>
   <div class="candidate-details">
     <div>Details</div>
-    <div v-if="details.name">{{ details.name }}</div>
+    <div v-if="candidate.name">{{ candidate.name }}</div>
     <div class="candidate-details__interview-grid">
       <ul class="">
-        <li></li>
+        <li v-for="interview in opening.templates">
+          {{ interview.interview.token }}
+        </li>
       </ul>
     </div>
   </div>
@@ -22,23 +24,26 @@ import { useGet } from "@/hooks/useHttp";
 import { onMounted, watch, ref } from "vue";
 import { useRoute } from "vue-router";
 const route = useRoute();
-const details = ref({});
+const candidate = ref({});
+const opening = ref({});
 
-const fetchDetails = async () => {
-  const getDetails = useGet(`candidates/${route.params.candidateRef}`);
-  await getDetails.get();
-  details.value = getDetails.data.value.candidate.openings[0];
+const fetchCandidate = async () => {
+  const getCandidate = useGet(`candidates/${route.params.candidateRef}`);
+  await getCandidate.get();
+  candidate.value = getCandidate.data.value.candidate;
+  opening.value = getCandidate.data.value.candidate.openings[0];
+  console.log(getCandidate.data.value.candidate.openings[0]);
 };
 
 onMounted(async () => {
-  await fetchDetails();
+  await fetchCandidate();
 });
 
 watch(
   () => route.params.candidateRef,
   async () => {
     if (route.params.candidateRef) {
-      await fetchDetails();
+      await fetchCandidate();
     }
   }
 );

@@ -89,7 +89,7 @@ const { handleSubmit } = useForm({
   initialValues: { name: "", email: "" },
 });
 
-// Create candidate
+// CREATE candidate
 const postCandidate = usePost("candidates");
 const onSubmit = handleSubmit(async (values) => {
   const payload = {
