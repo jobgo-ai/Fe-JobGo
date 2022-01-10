@@ -1,9 +1,11 @@
 <template>
   <div>
     <hp-header></hp-header>
-    <router-view v-slot="{ Component }">
-      <component :is="Component" />
-    </router-view>
+    <main>
+      <router-view v-slot="{ Component }">
+        <component :is="Component" />
+      </router-view>
+    </main>
   </div>
 </template>
 
