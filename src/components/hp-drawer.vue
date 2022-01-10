@@ -14,6 +14,6 @@ defineEmits(["close"]);
 
 <style lang="scss">
 .hp-drawer {
-  background-color: blue;
+  background-color: gainsboro;
 }
 </style>

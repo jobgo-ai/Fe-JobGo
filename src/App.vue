@@ -6,7 +6,7 @@
 
 <style lang="scss">
 :root {
-  --color-primary: blue;
+  --color-primary: gainsboro;
 }
 
 html,
