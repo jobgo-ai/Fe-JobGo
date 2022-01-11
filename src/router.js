@@ -15,6 +15,7 @@ import Settings from "@/views/dashboard/settings/settings.vue";
 import Openings from "@/views/dashboard/openings/openings.vue";
 import OpeningsList from "@/views/dashboard/openings/openings-list.vue";
 import CandidateDetails from "@/views/dashboard/openings/candidate-details.vue";
+import InterviewResults from "@/views/dashboard/openings/interview-results.vue";
 
 //Opening
 import EditOpening from "@/views/dashboard/opening/edit-opening.vue";
@@ -42,6 +43,11 @@ const routes = [
             path: ":openingRef/candidates/:candidateRef",
             name: "candidate-details",
             component: CandidateDetails,
+          },
+          {
+            path: ":openingRef/candidates/:candidateRef/results/:interviewRef",
+            name: "interview-results",
+            component: InterviewResults,
           },
         ],
       },

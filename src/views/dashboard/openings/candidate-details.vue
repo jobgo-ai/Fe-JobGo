@@ -2,13 +2,25 @@
   <div class="candidate-details">
     <div>Details</div>
     <div v-if="candidate.name">{{ candidate.name }}</div>
-    <div class="candidate-details__interview-grid">
-      <ul class="">
-        <li v-for="interview in opening.templates">
-          {{ interview.interview.token }}
-        </li>
-      </ul>
-    </div>
+    <ul class="candidate-details__interview-grid">
+      <li
+        class="candidate-details__interview-grid__item"
+        v-for="interview in opening.templates"
+      >
+        <div v-if="interview.interview.terminated">
+          Terminated
+          <router-link
+            :to="`${route.params.candidateRef}/results/${interview.interview.token}`"
+            >View results</router-link
+          >
+        </div>
+        <div v-else>
+          <a target="_blank" :href="`${URL}/token/${interview.interview.token}`"
+            >Go to interview</a
+          >
+        </div>
+      </li>
+    </ul>
   </div>
 </template>
 
@@ -26,6 +38,7 @@ import { useRoute } from "vue-router";
 const route = useRoute();
 const candidate = ref({});
 const opening = ref({});
+const URL = import.meta.env.VITE_INTERVIEW_URL;
 
 const fetchCandidate = async () => {
   const getCandidate = useGet(`candidates/${route.params.candidateRef}`);
@@ -48,3 +61,17 @@ watch(
   }
 );
 </script>
+
+<style scoped lang="scss">
+.candidate-details {
+  &__interview-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-gap: 20px;
+  }
+  &__interview-grid__item {
+    padding: 20px;
+    background: cornsilk;
+  }
+}
+</style>
