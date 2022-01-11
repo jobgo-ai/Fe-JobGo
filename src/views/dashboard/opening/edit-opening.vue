@@ -4,7 +4,7 @@
       :crumbs="[{ label: 'Crumb1' }, { label: 'crumb2' }]"
     ></hp-breadcrumbs>
     <div>edit Opening</div>
-    <form @submit.prevent="handleSubmit">
+    <form @submit.prevent="onSubmit">
       <hp-input name="name"></hp-input>
       <hp-input name="description"></hp-input>
       <hp-button type="submit" label="Edit Opening"></hp-button>
@@ -34,7 +34,7 @@
 import HpBreadcrumbs from "@/components/hp-breadcrumbs.vue";
 import HpInput from "@/components/form/hp-input.vue";
 import HpButton from "@/components/hp-button.vue";
-import { useGet, useDelete } from "@/hooks/useHttp";
+import { useGet, useDelete, usePatch } from "@/hooks/useHttp";
 
 import { onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
@@ -44,6 +44,7 @@ import * as yup from "yup";
 const route = useRoute();
 const router = useRouter();
 const templates = ref([]);
+const opening = ref({});
 
 const schema = yup.object({
   name: yup.string().required("Job title is required"),
@@ -54,10 +55,16 @@ const { handleSubmit, setFieldValue } = useForm({
   validationSchema: schema,
 });
 
+const onSubmit = handleSubmit(async (values) => {
+  const putOpening = usePatch(`openings/${route.params.openingRef}`);
+  await putOpening.patch({ opening: { ...opening, ...values } });
+});
+
 onMounted(async () => {
   if (route.params.openingRef) {
     const getOpening = useGet(`openings/${route.params.openingRef}`);
     await getOpening.get();
+    opening.value = getOpening.data.value.opening;
     templates.value = getOpening.data.value.opening.templates;
     setFieldValue("name", getOpening.data.value.opening.name);
     setFieldValue("description", getOpening.data.value.opening.description);
