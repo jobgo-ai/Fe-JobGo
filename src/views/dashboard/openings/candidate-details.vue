@@ -14,7 +14,17 @@
             >View results</router-link
           >
         </div>
+        <div
+          v-else-if="
+            interview.interview.started && !interview.interview.terminated
+          "
+        >
+          Started but not done
+        </div>
         <div v-else>
+          <div v-if="nextAction === interview.interview.token">
+            This is the action to take
+          </div>
           <a target="_blank" :href="`${URL}/token/${interview.interview.token}`"
             >Go to interview</a
           >
@@ -38,6 +48,7 @@ import { useRoute } from "vue-router";
 const route = useRoute();
 const candidate = ref({});
 const opening = ref({});
+const nextAction = ref(null);
 const URL = import.meta.env.VITE_INTERVIEW_URL;
 
 const fetchCandidate = async () => {
@@ -45,7 +56,10 @@ const fetchCandidate = async () => {
   await getCandidate.get();
   candidate.value = getCandidate.data.value.candidate;
   opening.value = getCandidate.data.value.candidate.openings[0];
-  console.log(getCandidate.data.value.candidate.openings[0]);
+  nextAction.value =
+    getCandidate.data.value.candidate.openings[0].templates.find((t) => {
+      return !t.interview.started;
+    }).interview?.token;
 };
 
 onMounted(async () => {
