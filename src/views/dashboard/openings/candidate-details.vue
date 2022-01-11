@@ -2,6 +2,9 @@
   <div class="candidate-details">
     <div>Details</div>
     <div v-if="candidate.name">{{ candidate.name }}</div>
+    <div>
+      {{ candidate }}
+    </div>
     <ul class="candidate-details__interview-grid">
       <li
         class="candidate-details__interview-grid__item"

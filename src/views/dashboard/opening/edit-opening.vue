@@ -13,8 +13,8 @@
       <ol>
         <li v-for="template in templates" :key="template.reference">
           {{ template.name }}
-          <router-view :to="`interviews/${template.reference}/edit`"
-            >Edit</router-view
+          <router-link :to="`edit/edit-interview/${template.reference}`"
+            >Edit my precious</router-link
           >
         </li>
       </ol>
