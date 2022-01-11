@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@vueform/multiselect": "^2.3.1",
+    "luxon": "^2.3.0",
     "uuid": "^3.4.0",
     "vee-validate": "^4.5.7",
     "vue": "^3.2.25",
