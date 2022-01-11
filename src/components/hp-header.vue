@@ -1,18 +1,33 @@
 <template>
   <div class="header">
     <div>Hireproof</div>
-    <hp-popper>
-      <Button>Demo</Button>
-      <template #content>
-        <div>This is the Popper content 🍿</div>
-      </template>
-    </hp-popper>
-    <router-link to="/settings">Nick Barth</router-link>
+    <div v-if="user">
+      <hp-popper>
+        <div>{{ user.email }}</div>
+        <template #content>
+          <router-link to="/change-password">Change password</router-link>
+          <router-link to="/settings">Settings</router-link>
+          <div @click="handleLogout">Logout</div>
+        </template>
+      </hp-popper>
+    </div>
   </div>
 </template>
 
 <script setup>
+// Vendor
 import HpPopper from "@/components/hp-popper.vue";
+import { useRouter } from "vue-router";
+// Hooks
+import useAuth from "@/hooks/useAuth";
+
+const { user, logout } = useAuth();
+const router = useRouter();
+
+const handleLogout = () => {
+  logout();
+  router.push("/login");
+};
 </script>
 
 <style lang="scss" scoped>

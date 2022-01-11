@@ -9,6 +9,7 @@ import Signup from "@/views/public/signup.vue";
 // Private
 import Layout from "@/views/dashboard/layout.vue";
 import Passthrough from "@/views/dashboard/passthrough.vue";
+import ChangePassword from "@/views/dashboard/settings/change-password.vue";
 import Settings from "@/views/dashboard/settings/settings.vue";
 
 //Openings
@@ -87,6 +88,11 @@ const routes = [
         path: "settings",
         name: "settings",
         component: Settings,
+      },
+      {
+        path: "change-password",
+        name: "change-password",
+        component: ChangePassword,
       },
     ],
   },
