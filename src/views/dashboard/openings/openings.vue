@@ -1,13 +1,15 @@
 <template>
   <div class="openings">
-    <candidate-list
-      v-if="isCandidateListOpen"
-      :isCandidateDetailsOpen="isCandidateDetailsOpen"
-      :candidates="candidates"
-      :opening="selectedOpening"
-      @updateCandidateList="fetchCandidates"
-    />
-    <div class="view" :class="{ 'view--left': isCandidateDetailsOpen }">
+    <div class="candidate-list">
+      <candidate-list
+        v-if="isCandidateListOpen"
+        :isCandidateDetailsOpen="isCandidateDetailsOpen"
+        :candidates="candidates"
+        :opening="selectedOpening"
+        @updateCandidateList="fetchCandidates"
+      />
+    </div>
+    <div :class="isCandidateDetailsOpen ? 'view--left' : 'view'">
       <router-view :openings="openings"></router-view>
     </div>
   </div>
@@ -25,7 +27,7 @@ const route = useRoute();
 const selectedOpening = ref({});
 const openings = ref([]);
 const candidates = ref([]);
-const isCandidateDetailsOpen = ref(false);
+const isCandidateDetailsOpen = ref(route.path.includes("/candidates"));
 const isCandidateListOpen = ref(route.params.openingRef);
 
 const fetchCandidates = async () => {
@@ -95,8 +97,10 @@ watch(
 .view {
   display: flex;
   flex-direction: column;
-  &--left {
-    margin-left: 440px;
-  }
+}
+.view--left {
+  display: flex;
+  flex-direction: column;
+  margin-left: 440px;
 }
 </style>
