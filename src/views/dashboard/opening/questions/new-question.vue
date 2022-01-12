@@ -4,6 +4,16 @@
     <form @submit.prevent="onSubmit">
       <hp-input label="Add question" name="content"></hp-input>
       <hp-input label="Duration" name="duration"></hp-input>
+      <hp-multi-select
+        label="Skills"
+        mode="tags"
+        :max="3"
+        fullWidth
+        name="skills"
+        :delay="100"
+        :canDeselect="true"
+        :options="searchSkills"
+      ></hp-multi-select>
       <hp-multi-input />
       <hp-button type="submit" label="Create"></hp-button>
     </form>
@@ -18,11 +28,13 @@ import * as yup from "yup";
 
 //Components
 import HpInput from "@/components/form/hp-input.vue";
-import HpMultiInput from "@/components/hp-multi-input.vue";
+import HpMultiSelect from "@/components/form/hp-multi-select.vue";
+import HpMultiInput from "@/components/form/hp-multi-input.vue";
 import HpButton from "@/components/hp-button.vue";
 
 //Hooks
 import { usePost } from "@/hooks/useHttp";
+import useSkillSearch from "@/hooks/useSkillSearch";
 
 const schema = yup.object({
   content: yup.string().required("A question is required"),
@@ -33,6 +45,8 @@ const { handleSubmit } = useForm({
   validationSchema: schema,
   initialValues: { value: "", duration: "" },
 });
+
+const { searchSkills } = useSkillSearch();
 
 const postQuestion = usePost("questions");
 const onSubmit = handleSubmit(async (values) => {
