@@ -1,6 +1,6 @@
 <template>
   <div class="header">
-    <div>Hireproof</div>
+    <router-link to="/openings">Hireproof</router-link>
     <div v-if="user">
       <hp-popper>
         <div>{{ user.email }}</div>
