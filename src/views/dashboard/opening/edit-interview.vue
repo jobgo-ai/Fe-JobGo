@@ -1,7 +1,6 @@
 <template>
   <div>
     <hp-drawer :isOpen="isAddQuestionDrawerOpen"><questions /></hp-drawer>
-    <hp-breadcrumbs></hp-breadcrumbs>
     <form @submit.prevent="onSubmit">
       <div>Create interview</div>
       <hp-input label="Name" name="name"></hp-input>
@@ -43,7 +42,6 @@ import * as yup from "yup";
 import Questions from "@/views/dashboard/opening/questions/questions.vue";
 
 //Components
-import HpBreadcrumbs from "@/components/hp-breadcrumbs.vue";
 import HpInput from "@/components/form/hp-input.vue";
 import HpButton from "@/components/hp-button.vue";
 import HpCounter from "@/components/hp-counter.vue";

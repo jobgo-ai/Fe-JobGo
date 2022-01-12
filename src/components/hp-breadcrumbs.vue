@@ -1,31 +1,27 @@
 <template>
-  <div class="breadcrumbs">
-    <ol>
-      <router-link tag="li" :to="'crumb'" v-for="crumb in crumbs">{{
-        crumb.label
-      }}</router-link>
+  <div class="hp-breadcrumbs">
+    <ol v-if="props.opening" class="">
+      <li>{{ props.opening.name }}</li>
     </ol>
-    <div class="context">
-      <slot></slot>
-    </div>
   </div>
 </template>
 
 <script setup>
 const props = defineProps({
-  crumbs: {
-    type: Array,
-    default: [],
+  opening: {
+    type: Object,
+    default: false,
   },
 });
 </script>
 
 <style lang="scss" scoped>
-.breadcrumbs {
+.hp-breadcrumbs {
   height: 64px;
   width: 100%;
   display: flex;
   justify-content: space-between;
   background-color: purple;
+  color: white;
 }
 </style>

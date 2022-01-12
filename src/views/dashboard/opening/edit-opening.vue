@@ -1,8 +1,5 @@
 <template>
   <div>
-    <hp-breadcrumbs
-      :crumbs="[{ label: 'Crumb1' }, { label: 'crumb2' }]"
-    ></hp-breadcrumbs>
     <div>edit Opening</div>
     <form @submit.prevent="onSubmit">
       <hp-input name="name"></hp-input>
@@ -31,7 +28,6 @@
 </template>
 
 <script setup>
-import HpBreadcrumbs from "@/components/hp-breadcrumbs.vue";
 import HpInput from "@/components/form/hp-input.vue";
 import HpButton from "@/components/hp-button.vue";
 import { useGet, useDelete, usePatch } from "@/hooks/useHttp";

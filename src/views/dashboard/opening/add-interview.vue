@@ -8,7 +8,6 @@
         <button type="submit">Hello</button>
       </form>
     </hp-modal>
-    <hp-breadcrumbs></hp-breadcrumbs>
     <div>Add interviews</div>
     <hp-button
       label="From scratch"
@@ -35,7 +34,6 @@ import { useForm } from "vee-validate";
 import * as yup from "yup";
 
 // Components
-import HpBreadcrumbs from "@/components/hp-breadcrumbs.vue";
 import HpButton from "@/components/hp-button.vue";
 import HpModal from "@/components/hp-modal.vue";
 import HpInput from "@/components/form/hp-input.vue";
@@ -43,17 +41,20 @@ import HpInput from "@/components/form/hp-input.vue";
 // Hooks
 import { useGet, usePost } from "@/hooks/useHttp";
 
+const props = defineProps({
+  opening: {
+    type: Object,
+    default: false,
+  },
+});
+
 const templates = ref([]);
-const opening = ref({});
 const isAddInterviewModalOpen = ref(false);
 
 onMounted(async () => {
   const getTemplates = useGet(`templates`);
   await getTemplates.get();
-  const getOpening = useGet(`openings/${route.params.openingRef}`);
-  await getOpening.get();
 
-  opening.value = getOpening.data.value.opening;
   templates.value = getTemplates.data.value.templates;
 });
 
@@ -82,7 +83,7 @@ const onSubmit = handleSubmit(async (values) => {
 
 const availableTemplateList = computed(() => {
   return templates.value.filter((template) => {
-    return !opening.value.templates.some(
+    return !props.opening.value.templates.some(
       (t) => t.reference === template.reference
     );
   });

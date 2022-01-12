@@ -8,7 +8,6 @@ import Signup from "@/views/public/signup.vue";
 
 // Private
 import Layout from "@/views/dashboard/layout.vue";
-import Passthrough from "@/views/dashboard/passthrough.vue";
 import ChangePassword from "@/views/dashboard/settings/change-password.vue";
 import Settings from "@/views/dashboard/settings/settings.vue";
 
@@ -19,6 +18,7 @@ import CandidateDetails from "@/views/dashboard/openings/candidate-details.vue";
 import InterviewResults from "@/views/dashboard/openings/interview-results.vue";
 
 //Opening
+import Opening from "@/views/dashboard/opening/opening.vue";
 import EditOpening from "@/views/dashboard/opening/edit-opening.vue";
 import AddInterview from "@/views/dashboard/opening/add-interview.vue";
 import ViewInterview from "@/views/dashboard/opening/view-interview.vue";
@@ -55,7 +55,7 @@ const routes = [
       {
         name: "opening",
         path: "opening/:openingRef",
-        component: Passthrough,
+        component: Opening,
         children: [
           {
             path: "edit",
