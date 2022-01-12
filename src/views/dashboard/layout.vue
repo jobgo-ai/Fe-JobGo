@@ -8,5 +8,19 @@
 </template>
 
 <script setup>
+// Vendor
+import { onMounted } from "vue";
+
+//  Hooks
+import useConstants from "@/hooks/useConstants";
+
+// Components
 import HpHeader from "@/components/hp-header.vue";
+
+const { loadCompetencies, loadQuestionLevels } = useConstants();
+
+onMounted(() => {
+  loadCompetencies();
+  loadQuestionLevels();
+});
 </script>

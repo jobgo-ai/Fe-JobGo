@@ -58,11 +58,12 @@ const fetchCandidate = async () => {
   const getCandidate = useGet(`candidates/${route.params.candidateRef}`);
   await getCandidate.get();
   candidate.value = getCandidate.data.value.candidate;
-  opening.value = getCandidate.data.value.candidate.openings[0];
-  nextAction.value =
-    getCandidate.data.value.candidate.openings[0].templates.find((t) => {
-      return !t.interview.started;
-    }).interview?.token;
+  opening.value = getCandidate.data.value.candidate.opening;
+  // nextAction.value = getCandidate.data.value.candidate.opening.templates.find(
+  //   (t) => {
+  //     return !t.interview?.started;
+  //   }
+  // ).interview?.token;
 };
 
 onMounted(async () => {

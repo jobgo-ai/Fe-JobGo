@@ -22,7 +22,6 @@ import { useGet } from "@/hooks/useHttp.js";
 import CandidateList from "@/views/dashboard/openings/candidate-list.vue";
 
 const route = useRoute();
-const router = useRouter();
 const selectedOpening = ref({});
 const openings = ref([]);
 const candidates = ref([]);
@@ -81,7 +80,8 @@ watch(
         await fetchOpenings();
       }
     }
-  }
+  },
+  { immediate: true }
 );
 </script>
 
