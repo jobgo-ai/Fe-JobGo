@@ -25,6 +25,9 @@ const route = useRoute();
 watch(
   () => route.params.openingRef,
   async (newOpeningRef) => {
+    if (!newOpeningRef) {
+      return;
+    }
     const getOpening = useGet(`openings/${newOpeningRef}`);
     await getOpening.get();
     opening.value = getOpening.data.value.opening;
