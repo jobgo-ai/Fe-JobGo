@@ -156,7 +156,12 @@ const handleNewOpening = async () => {
 .candidate-details {
   position: absolute;
   left: 440px;
-  height: calc(100vh - 400px);
+  height: 100%;
+  overflow: scroll;
+}
+
+.candidate-details::-webkit-scrollbar {
+  display: none;
 }
 
 .openingslist {

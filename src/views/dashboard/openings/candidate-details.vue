@@ -4,6 +4,8 @@
     <div v-if="candidate.name">{{ candidate.name }}</div>
     <div>
       {{ candidate }}
+      {{ candidate }}
+      {{ candidate }}
     </div>
     <ul class="candidate-details__interview-grid">
       <li
