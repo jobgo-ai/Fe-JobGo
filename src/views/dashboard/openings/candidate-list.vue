@@ -113,6 +113,7 @@ const onSubmit = handleSubmit(async (values) => {
   transform: translateX(0);
   right: 16px;
   width: 400px;
+  z-index: 2;
   &--left {
     right: calc(100% - 16px);
     transform: translateX(100%);

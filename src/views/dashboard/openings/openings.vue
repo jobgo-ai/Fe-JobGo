@@ -22,10 +22,26 @@
         :class="`openingslist ${!isCandidateListOpen && 'openingslist--empty'}`"
         name="slide-right"
       >
-        <openings-list
-          v-if="!isCandidateDetailsOpen"
-          :openings="openings"
-        ></openings-list>
+        <div v-if="!isCandidateDetailsOpen" class="opening-list">
+          <h2>Openings</h2>
+          <div @click="emits('filterChange', { state: 'active' })">Active</div>
+          <div @click="emits('filterChange', { state: 'archived' })">
+            Archived
+          </div>
+          <ol class="opening-list__grid" v-if="openings.length > 0">
+            <div class="opening-list__grid-item" @click="handleNewOpening">
+              New opening
+            </div>
+            <li
+              class="opening-list__grid-item"
+              @click="router.push(`/openings/${opening.reference}`)"
+              :key="opening.reference"
+              v-for="opening in openings"
+            >
+              {{ opening.name }}
+            </li>
+          </ol>
+        </div>
       </transition>
     </div>
   </div>
@@ -35,18 +51,22 @@
 import { ref, watch, computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { onMounted } from "vue";
-import { useGet } from "@/hooks/useHttp.js";
+import { useGet, usePost } from "@/hooks/useHttp.js";
 
 import CandidateList from "@/views/dashboard/openings/candidate-list.vue";
 import CandidateDetails from "@/views/dashboard/openings/candidate-details.vue";
-import OpeningsList from "@/views/dashboard/openings/openings-list.vue";
 
 const route = useRoute();
+const router = useRouter();
 const selectedOpening = ref({});
 const openings = ref([]);
 const candidates = ref([]);
 const isCandidateDetailsOpen = ref(route.query.candidate);
 const isCandidateListOpen = ref(route.params.openingRef);
+
+const filters = ref({
+  state: "active",
+});
 
 const fetchCandidates = async () => {
   const getCandidates = useGet(
@@ -103,6 +123,21 @@ watch(
   },
   { immediate: true }
 );
+
+// Handle add opening
+const postOpening = usePost("openings");
+const handleNewOpening = async () => {
+  await postOpening.post({
+    opening: {
+      name: `Opening #${openings.value.length + 1}`,
+      description: "",
+      templates: [],
+    },
+  });
+  if (postOpening.data.value) {
+    router.push(`/opening/${postOpening.data.value.opening.reference}/edit`);
+  }
+};
 </script>
 
 <style lang="scss" scoped>
@@ -115,24 +150,50 @@ watch(
 .view {
   display: flex;
   position: relative;
+  height: calc(100vh - 40px);
+  z-index: 0;
 }
 .candidate-details {
   position: absolute;
   left: 440px;
-  width: calc(100% - 440px);
+  height: calc(100vh - 400px);
 }
 
 .openingslist {
   position: absolute;
-  left: 0;
+  overflow: hidden;
   width: calc(100% - 440px);
-  transition: all 0.25s ease-out;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  transition: all 0.25s ease-in;
 }
 
 .openingslist--empty {
   left: 50%;
   transform: translateX(-50%);
 }
+
+.opening-list {
+  &__grid {
+    position: relative;
+    overflow: scroll;
+    height: 100%;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    padding-bottom: 75px;
+  }
+  &__grid-item {
+    background-color: blue;
+    padding: 80px;
+  }
+}
+
+.opening-list__grid::-webkit-scrollbar {
+  display: none;
+}
+
 .fade-enter-active,
 .fade-leave-active {
   transition: all 0.25s ease;
