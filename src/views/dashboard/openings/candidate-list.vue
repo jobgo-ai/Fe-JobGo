@@ -111,10 +111,10 @@ const onSubmit = handleSubmit(async (values) => {
   position: absolute;
   transition: all 0.15s ease-in-out;
   transform: translateX(0);
-  right: 0;
+  right: 16px;
   width: 400px;
   &--left {
-    right: 100%;
+    right: calc(100% - 16px);
     transform: translateX(100%);
   }
 }

@@ -1,15 +1,20 @@
 <template>
-  <div @click="handleNewOpening">New opening</div>
-  Openings list:
-  <ol v-if="openings.length > 0">
-    <li
-      @click="router.push(`/openings/${opening.reference}`)"
-      :key="opening.reference"
-      v-for="opening in openings"
-    >
-      {{ opening.name }}
-    </li>
-  </ol>
+  <div class="opening-list">
+    <h2>Openings</h2>
+    <ol class="opening-list__grid" v-if="openings.length > 0">
+      <div class="opening-list__grid-item" @click="handleNewOpening">
+        New opening
+      </div>
+      <li
+        class="opening-list__grid-item"
+        @click="router.push(`/openings/${opening.reference}`)"
+        :key="opening.reference"
+        v-for="opening in openings"
+      >
+        {{ opening.name }}
+      </li>
+    </ol>
+  </div>
 </template>
 
 <script setup>
@@ -42,3 +47,17 @@ const handleNewOpening = async () => {
   }
 };
 </script>
+
+<style lang="scss" scoped>
+.opening-list {
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+  }
+  &__grid-item {
+    background-color: blue;
+    padding: 80px;
+  }
+}
+</style>

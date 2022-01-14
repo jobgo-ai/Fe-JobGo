@@ -9,6 +9,14 @@
   --color-primary: gainsboro;
 }
 
+* {
+  box-sizing: border-box;
+}
+
+html {
+  overflow: hidden;
+}
+
 html,
 body,
 div,

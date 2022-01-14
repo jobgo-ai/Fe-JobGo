@@ -83,7 +83,7 @@ const onSubmit = handleSubmit(async (values) => {
 
 const availableTemplateList = computed(() => {
   return templates.value.filter((template) => {
-    return !props.opening.value.templates.some(
+    return !props.opening.templates.some(
       (t) => t.reference === template.reference
     );
   });

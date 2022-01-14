@@ -1,22 +1,28 @@
 <template>
   <div class="openings">
     <div class="candidate-list">
-      <candidate-list
-        v-if="isCandidateListOpen"
-        :isCandidateDetailsOpen="isCandidateDetailsOpen"
-        :candidates="candidates"
-        :opening="selectedOpening"
-        @updateCandidateList="fetchCandidates"
-      />
+      <transition name="fade" mode="in-out">
+        <candidate-list
+          v-if="isCandidateListOpen"
+          :isCandidateDetailsOpen="isCandidateDetailsOpen"
+          :candidates="candidates"
+          :opening="selectedOpening"
+          @updateCandidateList="fetchCandidates"
+        />
+      </transition>
     </div>
     <div :class="isCandidateDetailsOpen ? 'view--left' : 'view'">
-      <router-view :openings="openings"></router-view>
+      <router-view v-slot="{ Component, route }">
+        <transition :name="routeTransition">
+          <component :is="Component" :openings="openings" />
+        </transition>
+      </router-view>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, watch } from "vue";
+import { ref, watch, computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { onMounted } from "vue";
 import { useGet } from "@/hooks/useHttp.js";
@@ -62,8 +68,6 @@ onMounted(async () => {
 watch(
   () => route.path,
   async () => {
-    isCandidateListOpen.value =
-      !route.path.includes("compare") && !route.path.includes("edit");
     isCandidateDetailsOpen.value = route.path.includes("/candidates");
   }
 );
@@ -73,11 +77,13 @@ watch(
   () => route.params.openingRef,
   async () => {
     if (route.params.openingRef) {
+      isCandidateListOpen.value = true;
       selectedOpening.value = openings.value.find(
         (opening) => opening.reference === route.params.openingRef
       );
       await fetchCandidates();
     } else {
+      isCandidateListOpen.value = false;
       if (route.path.includes("openings")) {
         await fetchOpenings();
       }
@@ -85,6 +91,13 @@ watch(
   },
   { immediate: true }
 );
+
+const routeTransition = computed(() => {
+  if (isCandidateDetailsOpen.value) {
+    return "slide-left";
+  }
+  return "slide-right";
+});
 </script>
 
 <style lang="scss" scoped>
@@ -92,15 +105,43 @@ watch(
   display: flex;
   width: 100%;
   flex-direction: column;
+  margin-top: 40px;
 }
 
 .view {
+  padding-left: 40px;
+  padding-right: 40px;
   display: flex;
   flex-direction: column;
+  max-width: calc(100% - 400px);
 }
 .view--left {
   display: flex;
   flex-direction: column;
   margin-left: 440px;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: all 0.5s ease;
+  transform: translateX(0);
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  transform: translateX(500px);
+  opacity: 0;
+}
+
+.route-enter-active,
+.route-leave-active {
+  transition: all 0.5s ease;
+  transform: translateX(0);
+}
+
+.route-enter-from,
+.route-leave-to {
+  transform: translateX(500px);
+  opacity: 0;
 }
 </style>
