@@ -13,8 +13,6 @@ import Settings from "@/views/dashboard/settings/settings.vue";
 
 //Openings
 import Openings from "@/views/dashboard/openings/openings.vue";
-import OpeningsList from "@/views/dashboard/openings/openings-list.vue";
-import CandidateDetails from "@/views/dashboard/openings/candidate-details.vue";
 import InterviewResults from "@/views/dashboard/openings/interview-results.vue";
 
 //Opening
@@ -31,25 +29,15 @@ const routes = [
     component: Layout,
     children: [
       {
-        path: "/openings",
+        path: "/openings/:openingRef?",
         name: "openings",
         component: Openings,
         children: [
-          {
-            path: ":openingRef?",
-            name: "openings-list",
-            component: OpeningsList,
-          },
-          {
-            path: ":openingRef/candidates/:candidateRef",
-            name: "candidate-details",
-            component: CandidateDetails,
-          },
-          {
-            path: ":openingRef/candidates/:candidateRef/results/:interviewRef",
-            name: "interview-results",
-            component: InterviewResults,
-          },
+          // {
+          //   path: ":openingRef/candidates/:candidateRef/results/:interviewRef",
+          //   name: "interview-results",
+          //   component: InterviewResults,
+          // },
         ],
       },
       {

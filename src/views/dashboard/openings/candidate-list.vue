@@ -29,7 +29,7 @@
         <li
           @click="
             router.push(
-              `/openings/${route.params.openingRef}/candidates/${candidate.reference}`
+              `/openings/${route.params.openingRef}?candidate=${candidate.reference}`
             )
           "
           :key="candidate.reference"
@@ -65,8 +65,8 @@ const props = defineProps({
     default: [],
   },
   isCandidateDetailsOpen: {
-    type: Boolean,
-    default: false,
+    type: String,
+    default: null,
   },
   opening: {
     type: Object,
@@ -109,7 +109,7 @@ const onSubmit = handleSubmit(async (values) => {
   padding: 10px;
   background-color: var(--color-primary);
   position: absolute;
-  transition: all 0.15s ease-in-out;
+  transition: all 0.25s ease-in;
   transform: translateX(0);
   right: 16px;
   width: 400px;

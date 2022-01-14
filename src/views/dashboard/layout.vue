@@ -1,9 +1,11 @@
 <template>
   <div>
     <hp-header></hp-header>
-    <router-view v-slot="{ Component }">
-      <component :is="Component" />
-    </router-view>
+    <main class="container">
+      <router-view v-slot="{ Component }">
+        <component :is="Component" />
+      </router-view>
+    </main>
   </div>
 </template>
 
@@ -24,3 +26,12 @@ onMounted(() => {
   loadQuestionLevels();
 });
 </script>
+
+<style lang="scss" scoped>
+.container {
+  display: flex;
+  max-width: 1200px;
+  position: relative;
+  margin: auto;
+}
+</style>

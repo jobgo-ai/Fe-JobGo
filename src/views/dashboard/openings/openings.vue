@@ -11,12 +11,22 @@
         />
       </transition>
     </div>
-    <div :class="isCandidateDetailsOpen ? 'view--left' : 'view'">
-      <router-view v-slot="{ Component, route }">
-        <transition :name="routeTransition">
-          <component :is="Component" :openings="openings" />
-        </transition>
-      </router-view>
+    <div :class="`view`">
+      <transition class="candidate-details" name="slide-left">
+        <candidate-details
+          v-if="isCandidateDetailsOpen"
+          :isCandidateDetailsOpen="isCandidateDetailsOpen"
+        ></candidate-details>
+      </transition>
+      <transition
+        :class="`openingslist ${!isCandidateListOpen && 'openingslist--empty'}`"
+        name="slide-right"
+      >
+        <openings-list
+          v-if="!isCandidateDetailsOpen"
+          :openings="openings"
+        ></openings-list>
+      </transition>
     </div>
   </div>
 </template>
@@ -28,12 +38,14 @@ import { onMounted } from "vue";
 import { useGet } from "@/hooks/useHttp.js";
 
 import CandidateList from "@/views/dashboard/openings/candidate-list.vue";
+import CandidateDetails from "@/views/dashboard/openings/candidate-details.vue";
+import OpeningsList from "@/views/dashboard/openings/openings-list.vue";
 
 const route = useRoute();
 const selectedOpening = ref({});
 const openings = ref([]);
 const candidates = ref([]);
-const isCandidateDetailsOpen = ref(route.path.includes("/candidates"));
+const isCandidateDetailsOpen = ref(route.query.candidate);
 const isCandidateListOpen = ref(route.params.openingRef);
 
 const fetchCandidates = async () => {
@@ -61,14 +73,14 @@ onMounted(async () => {
     );
   }
   // Checks to see if candidate detail page is open
-  isCandidateDetailsOpen.value = route.path.includes("/candidates");
+  isCandidateDetailsOpen.value = route.query.candidate;
 });
 
 // Watches for route changes to deal with candidate details page
 watch(
-  () => route.path,
+  () => route.query.candidate,
   async () => {
-    isCandidateDetailsOpen.value = route.path.includes("/candidates");
+    isCandidateDetailsOpen.value = route.query.candidate;
   }
 );
 
@@ -91,13 +103,6 @@ watch(
   },
   { immediate: true }
 );
-
-const routeTransition = computed(() => {
-  if (isCandidateDetailsOpen.value) {
-    return "slide-left";
-  }
-  return "slide-right";
-});
 </script>
 
 <style lang="scss" scoped>
@@ -105,25 +110,32 @@ const routeTransition = computed(() => {
   display: flex;
   width: 100%;
   flex-direction: column;
-  margin-top: 40px;
 }
 
 .view {
-  padding-left: 40px;
-  padding-right: 40px;
   display: flex;
-  flex-direction: column;
-  max-width: calc(100% - 400px);
+  position: relative;
 }
-.view--left {
-  display: flex;
-  flex-direction: column;
-  margin-left: 440px;
+.candidate-details {
+  position: absolute;
+  left: 440px;
+  width: calc(100% - 440px);
 }
 
+.openingslist {
+  position: absolute;
+  left: 0;
+  width: calc(100% - 440px);
+  transition: all 0.25s ease-out;
+}
+
+.openingslist--empty {
+  left: 50%;
+  transform: translateX(-50%);
+}
 .fade-enter-active,
 .fade-leave-active {
-  transition: all 0.5s ease;
+  transition: all 0.25s ease;
   transform: translateX(0);
 }
 
@@ -133,15 +145,33 @@ const routeTransition = computed(() => {
   opacity: 0;
 }
 
-.route-enter-active,
-.route-leave-active {
-  transition: all 0.5s ease;
-  transform: translateX(0);
+.slide-left-enter-active {
+  transition: all 0.25s ease-out;
+  transition-delay: 0.15s;
 }
 
-.route-enter-from,
-.route-leave-to {
-  transform: translateX(500px);
+.slide-left-leave-active {
+  transition: all 0.25s ease-in;
+}
+
+.slide-left-enter-from,
+.slide-left-leave-to {
+  transform: translateX(400px);
+  opacity: 0;
+}
+
+.slide-right-enter-active {
+  transition: all 0.25s ease-out;
+  transition-delay: 0.15s;
+}
+
+.slide-right-leave-active {
+  transition: all 0.25s ease-in;
+}
+
+.slide-right-enter-from,
+.slide-right-leave-to {
+  transform: translateX(-400px);
   opacity: 0;
 }
 </style>

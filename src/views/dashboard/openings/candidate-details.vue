@@ -13,7 +13,7 @@
         <div v-if="interview.interview.terminated">
           Terminated
           <router-link
-            :to="`${route.params.candidateRef}/results/${interview.interview.token}`"
+            :to="`${route.query.candidate}/results/${interview.interview.token}`"
             >View results</router-link
           >
         </div>
@@ -55,7 +55,7 @@ const nextAction = ref(null);
 const URL = import.meta.env.VITE_INTERVIEW_URL;
 
 const fetchCandidate = async () => {
-  const getCandidate = useGet(`candidates/${route.params.candidateRef}`);
+  const getCandidate = useGet(`candidates/${route.query.candidate}`);
   await getCandidate.get();
   candidate.value = getCandidate.data.value.candidate;
   opening.value = getCandidate.data.value.candidate.opening;
@@ -71,9 +71,9 @@ onMounted(async () => {
 });
 
 watch(
-  () => route.params.candidateRef,
+  () => route.query.candidate,
   async () => {
-    if (route.params.candidateRef) {
+    if (route.query.candidate) {
       await fetchCandidate();
     }
   }
