@@ -56,6 +56,8 @@ const styles = computed(() => {
 </script>
 
 <styles lang="scss" scoped>
+@import "@/styles/variables.scss";
+
 .hp-content-toggle {
   position: relative;
   display: inline-flex;
@@ -64,6 +66,7 @@ const styles = computed(() => {
   z-index: 2;
   padding: 8px;
   &__background {
+    border-radius: $border-radius;
     top: 50%;
     transform: translateY(-50%);
     z-index: -1;
