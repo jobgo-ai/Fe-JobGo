@@ -24,10 +24,8 @@
       >
         <div v-if="!isCandidateDetailsOpen" class="opening-list">
           <h2>Openings</h2>
-          <div @click="emits('filterChange', { state: 'active' })">Active</div>
-          <div @click="emits('filterChange', { state: 'archived' })">
-            Archived
-          </div>
+          <div @click="handleFilterChange({ state: 'active' })">Active</div>
+          <div @click="handleFilterChange({ state: 'archived' })">Archived</div>
           <ol class="opening-list__grid" v-if="openings.length > 0">
             <div class="opening-list__grid-item" @click="handleNewOpening">
               New opening
@@ -77,7 +75,8 @@ const fetchCandidates = async () => {
 };
 
 const fetchOpenings = async () => {
-  const getOpenings = useGet("openings");
+  const url = `openings?state=${filters.value.state}`;
+  const getOpenings = useGet(url);
   getOpenings.get();
   await getOpenings.get();
   openings.value = getOpenings.data.value.openings;
@@ -137,6 +136,11 @@ const handleNewOpening = async () => {
   if (postOpening.data.value) {
     router.push(`/opening/${postOpening.data.value.opening.reference}/edit`);
   }
+};
+
+const handleFilterChange = (newValues) => {
+  filters.value = { ...filters.value, ...newValues };
+  fetchOpenings();
 };
 </script>
 
