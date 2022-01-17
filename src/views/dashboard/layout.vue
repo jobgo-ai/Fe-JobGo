@@ -1,8 +1,8 @@
 <template>
   <div>
     <hp-header></hp-header>
-    <main class="container">
-      <router-view v-slot="{ Component }">
+    <main class="main">
+      <router-view class="router-view" v-slot="{ Component }">
         <component :is="Component" />
       </router-view>
     </main>
@@ -28,10 +28,14 @@ onMounted(() => {
 </script>
 
 <style lang="scss" scoped>
-.container {
+.main {
   display: flex;
   max-width: 1400px;
   position: relative;
   margin: auto;
+}
+
+.router-view {
+  width: 100%;
 }
 </style>

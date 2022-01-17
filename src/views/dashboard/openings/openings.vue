@@ -192,6 +192,7 @@ watch(state, (newFilters) => {
     display: grid;
     grid-gap: 40px;
     grid-template-columns: repeat(auto-fill, 264px);
+    align-content: baseline;
     padding-bottom: 75px;
   }
   &__grid-item {
