@@ -176,7 +176,7 @@ watch(state, (newFilters) => {
   top: 0;
   left: 0;
   bottom: 0;
-  transition: all 0.25s ease-in;
+  transition: all 0.35s linear;
 }
 
 .openingslist--empty {
@@ -208,7 +208,7 @@ watch(state, (newFilters) => {
 
 .fade-enter-active,
 .fade-leave-active {
-  transition: all 0.25s ease;
+  transition: all 0.35s linear;
   transform: translateX(0);
 }
 
@@ -219,32 +219,30 @@ watch(state, (newFilters) => {
 }
 
 .slide-left-enter-active {
-  transition: all 0.25s ease-out;
-  transition-delay: 0.15s;
+  transition: all 0.35s linear;
 }
 
 .slide-left-leave-active {
-  transition: all 0.25s ease-in;
+  transition: all 0.35s linear;
 }
 
 .slide-left-enter-from,
 .slide-left-leave-to {
-  transform: translateX(400px);
+  transform: translateX(900px);
   opacity: 0;
 }
 
 .slide-right-enter-active {
-  transition: all 0.25s ease-out;
-  transition-delay: 0.15s;
+  transition: all 0.35s linear;
 }
 
 .slide-right-leave-active {
-  transition: all 0.25s ease-in;
+  transition: all 0.35s linear;
 }
 
 .slide-right-enter-from,
 .slide-right-leave-to {
-  transform: translateX(-400px);
+  transform: translateX(-900px);
   opacity: 0;
 }
 </style>

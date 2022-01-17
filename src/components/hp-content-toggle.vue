@@ -73,7 +73,7 @@ const styles = computed(() => {
     height: 80%;
     position: absolute;
     background-color: white;
-    transition: 0.25s all ease-in-out;
+    transition: 0.25s all ease-in;
   }
 }
 </styles>

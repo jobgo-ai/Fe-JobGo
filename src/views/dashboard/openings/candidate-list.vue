@@ -109,7 +109,7 @@ const onSubmit = handleSubmit(async (values) => {
   padding: 10px;
   background-color: var(--color-primary);
   position: absolute;
-  transition: all 0.25s ease-in;
+  transition: all 0.35s linear;
   transform: translateX(0);
   right: 16px;
   width: 400px;
