@@ -1,27 +1,33 @@
 import { createRouter, createWebHistory } from "vue-router";
 
 // Public
-import ForgotPassword from "@/views/public/forgot-password.vue";
-import NotFound from "@/views/public/not-found.vue";
-import Signin from "@/views/public/signin.vue";
-import Signup from "@/views/public/signup.vue";
+const ForgotPassword = () => import("@/views/public/forgot-password.vue");
+const NotFound = () => import("@/views/public/not-found.vue");
+const Signin = () => import("@/views/public/signin.vue");
+const Signup = () => import("@/views/public/signup.vue");
 
 // Private
-import Layout from "@/views/dashboard/layout.vue";
-import ChangePassword from "@/views/dashboard/settings/change-password.vue";
-import Settings from "@/views/dashboard/settings/settings.vue";
+const Layout = () => import("@/views/dashboard/layout.vue");
+const ChangePassword = () =>
+  import("@/views/dashboard/settings/change-password.vue");
+const Settings = () => import("@/views/dashboard/settings/settings.vue");
 
 //Openings
-import Openings from "@/views/dashboard/openings/openings.vue";
-import InterviewResults from "@/views/dashboard/openings/interview-results.vue";
+const Openings = () => import("@/views/dashboard/openings/openings.vue");
+const InterviewResults = () =>
+  import("@/views/dashboard/openings/interview-results.vue");
 
 //Opening
-import Opening from "@/views/dashboard/opening/opening.vue";
-import EditOpening from "@/views/dashboard/opening/edit-opening.vue";
-import AddInterview from "@/views/dashboard/opening/add-interview.vue";
-import ViewInterview from "@/views/dashboard/opening/view-interview.vue";
-import EditInterview from "@/views/dashboard/opening/edit-interview.vue";
-import CompareCandidates from "@/views/dashboard/opening/compare-candidates.vue";
+const Opening = () => import("@/views/dashboard/opening/opening.vue");
+const EditOpening = () => import("@/views/dashboard/opening/edit-opening.vue");
+const AddInterview = () =>
+  import("@/views/dashboard/opening/add-interview.vue");
+const ViewInterview = () =>
+  import("@/views/dashboard/opening/view-interview.vue");
+const EditInterview = () =>
+  import("@/views/dashboard/opening/edit-interview.vue");
+const CompareCandidates = () =>
+  import("@/views/dashboard/opening/compare-candidates.vue");
 
 const routes = [
   {
