@@ -113,11 +113,9 @@ watch(
         (opening) => opening.reference === route.params.openingRef
       );
       await fetchCandidates();
-    } else {
+    } else if (!route.params.openingRef) {
       isCandidateListOpen.value = false;
-      if (route.path.includes("openings")) {
-        await fetchOpenings();
-      }
+      await fetchOpenings();
     }
   },
   { immediate: true }

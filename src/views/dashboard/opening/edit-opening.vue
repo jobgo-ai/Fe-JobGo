@@ -30,7 +30,7 @@
 <script setup>
 import HpInput from "@/components/form/hp-input.vue";
 import HpButton from "@/components/hp-button.vue";
-import { useGet, useDelete, usePatch } from "@/hooks/useHttp";
+import { useGet, usePut, usePatch } from "@/hooks/useHttp";
 
 import { onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
@@ -68,8 +68,14 @@ onMounted(async () => {
 });
 
 const archiveOpening = async () => {
-  const deleteOpening = useDelete(`openings/${route.params.openingRef}`);
-  await deleteOpening.remove();
+  const putOpening = usePut(`openings/${route.params.openingRef}/state`);
+  await putOpening.put({
+    state: "archived",
+  });
   router.push("/openings");
+  //Hard delete
+  // const deleteOpening = useDelete(`openings/${route.params.openingRef}`);
+  // await deleteOpening.remove();
+  // router.push("/openings");
 };
 </script>
