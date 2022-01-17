@@ -30,7 +30,7 @@ onMounted(() => {
 <style lang="scss" scoped>
 .container {
   display: flex;
-  max-width: 1200px;
+  max-width: 1400px;
   position: relative;
   margin: auto;
 }

@@ -24,8 +24,10 @@
       >
         <div v-if="!isCandidateDetailsOpen" class="opening-list">
           <h2>Openings</h2>
-          <div @click="handleFilterChange({ state: 'active' })">Active</div>
-          <div @click="handleFilterChange({ state: 'archived' })">Archived</div>
+          <hp-content-toggle
+            :options="['Active', 'Archived']"
+            v-model="state"
+          />
           <ol class="opening-list__grid" v-if="openings.length > 0">
             <div class="opening-list__grid-item" @click="handleNewOpening">
               New opening
@@ -46,13 +48,17 @@
 </template>
 
 <script setup>
-import { ref, watch, computed } from "vue";
+import { ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { onMounted } from "vue";
 import { useGet, usePost } from "@/hooks/useHttp.js";
 
+// Views
 import CandidateList from "@/views/dashboard/openings/candidate-list.vue";
 import CandidateDetails from "@/views/dashboard/openings/candidate-details.vue";
+
+// Components
+import HpContentToggle from "@/components/hp-content-toggle.vue";
 
 const route = useRoute();
 const router = useRouter();
@@ -62,9 +68,7 @@ const candidates = ref([]);
 const isCandidateDetailsOpen = ref(route.query.candidate);
 const isCandidateListOpen = ref(route.params.openingRef);
 
-const filters = ref({
-  state: "active",
-});
+const state = ref("active");
 
 const fetchCandidates = async () => {
   const getCandidates = useGet(
@@ -75,7 +79,7 @@ const fetchCandidates = async () => {
 };
 
 const fetchOpenings = async () => {
-  const url = `openings?state=${filters.value.state}`;
+  const url = `openings?state=${state.value.toLowerCase()}`;
   const getOpenings = useGet(url);
   getOpenings.get();
   await getOpenings.get();
@@ -136,10 +140,9 @@ const handleNewOpening = async () => {
   }
 };
 
-const handleFilterChange = (newValues) => {
-  filters.value = { ...filters.value, ...newValues };
+watch(state, (newFilters) => {
   fetchOpenings();
-};
+});
 </script>
 
 <style lang="scss" scoped>
@@ -187,11 +190,12 @@ const handleFilterChange = (newValues) => {
     overflow: scroll;
     height: 100%;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 20px;
+    grid-gap: 40px;
+    grid-template-columns: repeat(auto-fill, 264px);
     padding-bottom: 75px;
   }
   &__grid-item {
+    height: 264px;
     background-color: blue;
     padding: 80px;
   }
