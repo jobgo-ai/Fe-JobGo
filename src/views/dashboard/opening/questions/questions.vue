@@ -5,8 +5,14 @@
       @handleClick="isCurrentViewQuestionList = !isCurrentViewQuestionList"
       label="change q"
     ></hp-button>
-    <question-list v-if="isCurrentViewQuestionList" />
-    <new-question v-if="!isCurrentViewQuestionList" />
+    <question-list
+      @updateList="emits('updateQuestionList')"
+      v-if="isCurrentViewQuestionList"
+    />
+    <new-question
+      @updateList="emits('updateQuestionList')"
+      v-if="!isCurrentViewQuestionList"
+    />
   </div>
 </template>
 
@@ -22,4 +28,5 @@ import QuestionList from "@/views/dashboard/opening/questions/question-list.vue"
 import NewQuestion from "@/views/dashboard/opening/questions/new-question.vue";
 
 const isCurrentViewQuestionList = ref(true);
+const emits = defineEmits(["updateQuestionList"]);
 </script>

@@ -1,6 +1,8 @@
 <template>
   <div>
-    <hp-drawer :isOpen="isAddQuestionDrawerOpen"><questions /></hp-drawer>
+    <hp-drawer :isOpen="isAddQuestionDrawerOpen"
+      ><questions @updateQuestionList="fetchInterview"
+    /></hp-drawer>
     <form @submit.prevent="onSubmit">
       <div>Create interview</div>
       <hp-input label="Name" name="name"></hp-input>
@@ -14,19 +16,25 @@
           </div>
         </div>
         <div>
-          <h3>Cooldwon</h3>
+          <h3>Cooldown</h3>
           <div>
             <hp-textarea name="cooldown" />
             <hp-counter />
           </div>
         </div>
       </div>
+      <div>Questions</div>
+      <ol>
+        <li v-for="question in interview.questions" :key="question">
+          {{ question.content }}
+        </li>
+      </ol>
       <hp-button
         @handleClick="isAddQuestionDrawerOpen = true"
         label="Add questions"
         type="button"
       ></hp-button>
-      <hp-button type="submit" label="Create"></hp-button>
+      <hp-button type="submit" label="Save"></hp-button>
     </form>
   </div>
 </template>
@@ -50,13 +58,13 @@ import HpDrawer from "@/components/hp-drawer.vue";
 import HpTextarea from "@/components/form/hp-textarea.vue";
 
 //Hooks
-import { usePost, useGet } from "@/hooks/useHttp";
+import { usePatch, useGet } from "@/hooks/useHttp";
 
 const route = useRoute();
 const isAddQuestionDrawerOpen = ref(false);
 const interview = ref({});
 
-const postInterview = usePost("templates");
+const putInterview = usePatch(`templates/${route.params.interviewRef}`);
 
 const schema = yup.object({
   name: yup.string().required("Interview name is required"),
@@ -70,14 +78,18 @@ const { handleSubmit, setValues } = useForm({
   initialValues: interview.value,
 });
 
-onMounted(async () => {
+const fetchInterview = async () => {
   const getInterview = useGet(`templates/${route.params.interviewRef}`);
   await getInterview.get();
   interview.value = getInterview.data.value.template;
+};
+
+onMounted(async () => {
+  await fetchInterview();
   setValues(interview.value);
 });
 
 const onSubmit = handleSubmit(async (values) => {
-  await postInterview.post({ template: { ...values, levels: [] } });
+  await putInterview.patch({ template: { ...values, levels: [] } });
 });
 </script>

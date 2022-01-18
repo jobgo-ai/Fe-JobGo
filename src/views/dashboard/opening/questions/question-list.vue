@@ -10,7 +10,7 @@
         {{ question.content }}
         <hp-button
           label="add to interview"
-          @handleClick="addToInterview"
+          @handleClick="addToInterview(question.reference)"
         ></hp-button>
       </li>
     </ol>
@@ -20,10 +20,11 @@
 <script setup>
 // Vendor
 import { ref, watch, reactive } from "vue";
+import { useRoute } from "vue-router";
 //Components
 import HpButton from "@/components/hp-button.vue";
 // Hooks
-import { useGet } from "@/hooks/useHttp";
+import { useGet, usePost } from "@/hooks/useHttp";
 
 let next = null;
 const questions = ref([]);
@@ -69,7 +70,16 @@ const getQuestions = async () => {
 };
 getQuestions();
 
-const addToInterview = async (question) => {};
+const route = useRoute();
+
+const addToInterview = async (reference) => {
+  const postTemplateQuestion = usePost(
+    `templates/${route.params.interviewRef}/questions`
+  );
+  await postTemplateQuestion.post({
+    question: reference,
+  });
+};
 </script>
 
 <style lang="scss" scoped>

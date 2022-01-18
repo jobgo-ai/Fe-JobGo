@@ -25,6 +25,7 @@
 import { ref } from "vue";
 import { useForm } from "vee-validate";
 import * as yup from "yup";
+import { useRoute } from "vue-router";
 
 //Components
 import HpInput from "@/components/form/hp-input.vue";
@@ -36,6 +37,10 @@ import HpButton from "@/components/hp-button.vue";
 import { usePost } from "@/hooks/useHttp";
 import useSkillSearch from "@/hooks/useSkillSearch";
 
+const emits = defineEmits(["updateList"]);
+
+const route = useRoute();
+
 const schema = yup.object({
   content: yup.string().required("A question is required"),
   duration: yup.string(),
@@ -43,11 +48,10 @@ const schema = yup.object({
 
 const { handleSubmit } = useForm({
   validationSchema: schema,
-  initialValues: { value: "", duration: "" },
+  initialValues: { content: "", duration: "" },
 });
 
 const { searchSkills } = useSkillSearch();
-
 const postQuestion = usePost("questions");
 const onSubmit = handleSubmit(async (values) => {
   const formattedValues = {
@@ -60,7 +64,16 @@ const onSubmit = handleSubmit(async (values) => {
     levels: [],
   };
 
-  await postQuestion.post({ question: { ...formattedValues, templates: [] } });
+  await postQuestion.post({
+    question: { ...formattedValues, templates: [route.params.interviewRef] },
+  });
+  const postTemplateQuestion = usePost(
+    `templates/${route.params.interviewRef}/questions`
+  );
+  await postTemplateQuestion.post({
+    question: postQuestion.data.value.question.reference,
+  });
+  emits("updateList");
 });
 
 const isAddNewOpeningModalOpen = ref(false);

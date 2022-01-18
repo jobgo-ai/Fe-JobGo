@@ -144,7 +144,7 @@ const handleNewOpening = async () => {
   }
 };
 
-watch(state, (newFilters) => {
+watch(state, () => {
   fetchOpenings();
 });
 </script>
@@ -201,8 +201,10 @@ watch(state, (newFilters) => {
   }
   &__grid-item {
     height: 264px;
-    background-color: blue;
-    padding: 80px;
+    background-color: white;
+    border: 1px solid grey;
+    border-radius: 12px;
+    padding: 12px;
   }
 }
 

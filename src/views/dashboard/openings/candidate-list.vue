@@ -95,12 +95,12 @@ const onSubmit = handleSubmit(async (values) => {
   const payload = {
     candidate: {
       ...values,
-      openings: [props.opening.reference],
+      opening: props.opening.reference,
     },
   };
   await postCandidate.post(payload);
-
   emit("updateCandidateList");
+  isAddCandidateModalOpen.value = false;
 });
 </script>
 
