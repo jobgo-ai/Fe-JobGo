@@ -73,7 +73,7 @@ const route = useRoute();
 
 const postInterview = usePost("templates");
 const onSubmit = handleSubmit(async (values) => {
-  await postInterview.post({ template: { ...values, levels: [] } });
+  await postInterview.post({ template: { ...values, jobLevels: [] } });
   if (postInterview.data.value) {
     router.push(
       `/opening/${route.params.openingRef}/edit/edit-interview/${postInterview.data.value.template.reference}`

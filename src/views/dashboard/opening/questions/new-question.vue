@@ -61,7 +61,7 @@ const onSubmit = handleSubmit(async (values) => {
     duration: (values.duration * 60).toFixed(),
     guidelines: [],
     skills: values.skills ? values.skills : [],
-    levels: [],
+    jobLevels: [],
   };
 
   await postQuestion.post({

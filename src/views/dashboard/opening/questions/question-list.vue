@@ -50,7 +50,7 @@ const getUrl = (loadingMore) => {
     params.append("offset", next);
   }
   if (filters.experience.length > 0) {
-    params.append("levels", filters.experience.join(","));
+    params.append("job-levels", filters.experience.join(","));
   }
   if (filters.skills.length > 0) {
     params.append("skills", filters.skills.join(","));

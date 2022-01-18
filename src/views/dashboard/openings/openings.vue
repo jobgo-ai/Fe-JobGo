@@ -117,6 +117,9 @@ watch(
   () => route.params.openingRef,
   async () => {
     if (route.params.openingRef) {
+      if (openings.value.length === 0) {
+        await fetchOpenings();
+      }
       isCandidateListOpen.value = true;
       selectedOpening.value = openings.value.find(
         (opening) => opening.reference === route.params.openingRef

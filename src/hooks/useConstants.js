@@ -3,7 +3,7 @@ import { useGet } from "@/hooks/useHttp";
 
 const constants = reactive({
   competencies: [],
-  levels: [],
+  jobLevels: [],
 });
 
 export default function useConstants() {
@@ -16,7 +16,7 @@ export default function useConstants() {
   const loadQuestionLevels = async () => {
     const getLevels = useGet("job-levels");
     await getLevels.get();
-    constants.levels = getLevels.data.value.jobLevels;
+    constants.jobLevels = getLevels.data.value.jobLevels;
   };
 
   return {

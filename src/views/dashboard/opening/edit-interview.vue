@@ -58,13 +58,13 @@ import HpDrawer from "@/components/hp-drawer.vue";
 import HpTextarea from "@/components/form/hp-textarea.vue";
 
 //Hooks
-import { usePatch, useGet } from "@/hooks/useHttp";
+import { usePut, useGet } from "@/hooks/useHttp";
 
 const route = useRoute();
 const isAddQuestionDrawerOpen = ref(false);
 const interview = ref({});
 
-const putInterview = usePatch(`templates/${route.params.interviewRef}`);
+const putInterview = usePut(`templates/${route.params.interviewRef}`);
 
 const schema = yup.object({
   name: yup.string().required("Interview name is required"),
@@ -90,6 +90,6 @@ onMounted(async () => {
 });
 
 const onSubmit = handleSubmit(async (values) => {
-  await putInterview.patch({ template: { ...values, levels: [] } });
+  await putInterview.put({ template: { ...values, jobLevels: [] } });
 });
 </script>

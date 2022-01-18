@@ -30,7 +30,7 @@
 <script setup>
 import HpInput from "@/components/form/hp-input.vue";
 import HpButton from "@/components/hp-button.vue";
-import { useGet, usePut, usePatch } from "@/hooks/useHttp";
+import { useGet, usePut } from "@/hooks/useHttp";
 
 import { onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
@@ -54,7 +54,10 @@ const { handleSubmit, setFieldValue } = useForm({
 const onSubmit = handleSubmit(async (values) => {
   const putOpening = usePut(`openings/${route.params.openingRef}`);
   await putOpening.put({
-    opening: { ...values, templates: opening.value.templates },
+    opening: {
+      ...values,
+      templates: opening.value.templates.map((t) => t.reference),
+    },
   });
 });
 
