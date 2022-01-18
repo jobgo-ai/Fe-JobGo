@@ -24,11 +24,12 @@
       >
         <div v-if="!isCandidateDetailsOpen" class="opening-list">
           <h2>Openings</h2>
+          <p>Manage your openings or quickly create new ones</p>
           <hp-content-toggle
             :options="['Active', 'Archived']"
             v-model="state"
           />
-          <ol class="opening-list__grid" v-if="openings.length > 0">
+          <ol class="opening-list__grid">
             <div class="opening-list__grid-item" @click="handleNewOpening">
               New opening
             </div>
@@ -38,7 +39,10 @@
               :key="opening.reference"
               v-for="opening in openings"
             >
-              {{ opening.name }}
+              <div class="opening-list__grid-item__content">
+                <h4>{{ opening.name }}</h4>
+                <p>{{ opening.description }}</p>
+              </div>
             </li>
           </ol>
         </div>

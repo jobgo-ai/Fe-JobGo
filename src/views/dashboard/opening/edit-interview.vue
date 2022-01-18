@@ -33,8 +33,9 @@
 
 <script setup>
 //Vendor
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import { useForm } from "vee-validate";
+import { useRoute } from "vue-router";
 import * as yup from "yup";
 
 //Views
@@ -49,9 +50,11 @@ import HpDrawer from "@/components/hp-drawer.vue";
 import HpTextarea from "@/components/form/hp-textarea.vue";
 
 //Hooks
-import { usePost } from "@/hooks/useHttp";
+import { usePost, useGet } from "@/hooks/useHttp";
 
+const route = useRoute();
 const isAddQuestionDrawerOpen = ref(false);
+const interview = ref({});
 
 const postInterview = usePost("templates");
 
@@ -62,9 +65,16 @@ const schema = yup.object({
   cooldown: yup.string(),
 });
 
-const { handleSubmit } = useForm({
+const { handleSubmit, setValues } = useForm({
   validationSchema: schema,
-  initialValues: { name: "", description: "" },
+  initialValues: interview.value,
+});
+
+onMounted(async () => {
+  const getInterview = useGet(`templates/${route.params.interviewRef}`);
+  await getInterview.get();
+  interview.value = getInterview.data.value.template;
+  setValues(interview.value);
 });
 
 const onSubmit = handleSubmit(async (values) => {

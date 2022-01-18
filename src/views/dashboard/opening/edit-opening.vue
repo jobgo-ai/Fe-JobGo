@@ -52,8 +52,10 @@ const { handleSubmit, setFieldValue } = useForm({
 });
 
 const onSubmit = handleSubmit(async (values) => {
-  const putOpening = usePatch(`openings/${route.params.openingRef}`);
-  await putOpening.patch({ opening: { ...opening, ...values } });
+  const putOpening = usePut(`openings/${route.params.openingRef}`);
+  await putOpening.put({
+    opening: { ...values, templates: opening.value.templates },
+  });
 });
 
 onMounted(async () => {
