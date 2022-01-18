@@ -27,6 +27,7 @@
       <ol v-if="candidates.length > 0">
         Candidate List
         <li
+          class="candidate-list__candidate"
           @click="
             router.push(
               `/openings/${route.params.openingRef}?candidate=${candidate.reference}`
@@ -35,7 +36,19 @@
           :key="candidate.reference"
           v-for="candidate in candidates"
         >
-          {{ candidate.name }}
+          <div class="candidate-list__candidate-info">
+            {{ candidate.name }}
+            {{ candidate.email }}
+          </div>
+          <div class="candidate-list__interview-ticks">
+            <div
+              :class="`candidate-list__interview-ticks`"
+              v-for="template in candidate.opening.templates"
+              :key="template"
+            >
+              {{ isNextAction(template, candidate.opening.templates) }}
+            </div>
+          </div>
         </li>
       </ol>
     </div>
@@ -88,8 +101,6 @@ const { handleSubmit } = useForm({
   validationSchema: schema,
   initialValues: { name: "", email: "" },
 });
-
-// CREATE candidate
 const postCandidate = usePost("candidates");
 const onSubmit = handleSubmit(async (values) => {
   const payload = {
@@ -102,6 +113,13 @@ const onSubmit = handleSubmit(async (values) => {
   emit("updateCandidateList");
   isAddCandidateModalOpen.value = false;
 });
+
+const isNextAction = (template, templates) => {
+  const nextRef = templates.find((t) => {
+    return !t.interview?.started;
+  }).interview?.token;
+  return template.interview.token === nextRef;
+};
 </script>
 
 <style lang="scss" scoped>
@@ -117,6 +135,13 @@ const onSubmit = handleSubmit(async (values) => {
   &--left {
     right: calc(100% - 16px);
     transform: translateX(100%);
+  }
+
+  &__candidate {
+    font-size: 12px;
+    padding: 8px;
+    border: 1px solid black;
+    border-radius: 8px;
   }
 }
 </style>
