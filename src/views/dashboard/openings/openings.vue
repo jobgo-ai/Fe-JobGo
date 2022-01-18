@@ -88,13 +88,11 @@ const fetchCandidates = async () => {
 const fetchOpenings = async () => {
   const url = `openings?state=${state.value.toLowerCase()}`;
   const getOpenings = useGet(url);
-  getOpenings.get();
   await getOpenings.get();
   openings.value = getOpenings.data.value.openings;
 };
 
 onMounted(async () => {
-  await fetchOpenings();
   // Checks for openingRef in route params
   if (route.params.openingRef) {
     // Sets selected opening to openingRef in route params
