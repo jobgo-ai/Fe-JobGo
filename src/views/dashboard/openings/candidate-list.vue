@@ -42,12 +42,16 @@
           </div>
           <div class="candidate-list__interview-ticks">
             <div
-              :class="`candidate-list__interview-ticks`"
+              :class="[
+                `candidate-list__interview-tick`,
+                isNextAction(template, candidate.opening.templates) &&
+                  'candidate-list__interview-tick--next',
+                isCompleted(template) &&
+                  'candidate-list__interview-tick--completed',
+              ]"
               v-for="template in candidate.opening.templates"
               :key="template"
-            >
-              {{ isNextAction(template, candidate.opening.templates) }}
-            </div>
+            ></div>
           </div>
         </li>
       </ol>
@@ -120,6 +124,10 @@ const isNextAction = (template, templates) => {
   }).interview?.token;
   return template.interview.token === nextRef;
 };
+
+const isCompleted = (template) => {
+  return template.interview.started && template.interview.terminated;
+};
 </script>
 
 <style lang="scss" scoped>
@@ -142,6 +150,25 @@ const isNextAction = (template, templates) => {
     padding: 8px;
     border: 1px solid black;
     border-radius: 8px;
+  }
+
+  &__interview-ticks {
+    display: flex;
+  }
+  &__interview-tick {
+    width: 100%;
+    height: 4px;
+    background-color: red;
+    margin-right: 2px;
+    &--next {
+      background-color: green;
+    }
+    &--completed {
+      background-color: blue;
+    }
+    &:last-child {
+      margin-right: 0;
+    }
   }
 }
 </style>
