@@ -4,8 +4,6 @@
     <div v-if="candidate.name">{{ candidate.name }}</div>
     <div>
       {{ candidate }}
-      {{ candidate }}
-      {{ candidate }}
     </div>
     <ul class="candidate-details__interview-grid">
       <li
@@ -15,7 +13,7 @@
         <div v-if="interview.interview.terminated">
           Terminated
           <router-link
-            :to="`${route.query.candidate}/results/${interview.interview.token}`"
+            :to="`/opening/${route.params.openingRef}/results/${interview.interview.token}`"
             >View results</router-link
           >
         </div>

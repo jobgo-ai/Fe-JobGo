@@ -38,13 +38,6 @@ const routes = [
         path: "/openings/:openingRef?",
         name: "openings",
         component: Openings,
-        children: [
-          // {
-          //   path: ":openingRef/candidates/:candidateRef/results/:interviewRef",
-          //   name: "interview-results",
-          //   component: InterviewResults,
-          // },
-        ],
       },
       {
         name: "opening",
@@ -75,6 +68,11 @@ const routes = [
             path: "compare",
             name: "compare-candidates",
             component: CompareCandidates,
+          },
+          {
+            path: "results/:interviewRef",
+            name: "interview-results",
+            component: InterviewResults,
           },
         ],
       },

@@ -42,6 +42,9 @@
               <div class="opening-list__grid-item__content">
                 <h4>{{ opening.name }}</h4>
                 <p>{{ opening.description }}</p>
+                {{ opening.statistics.candidates }} Candidates
+                {{ opening.statistics.templates }} Templates
+                {{ opening.statistics.skills.length }} Skills
               </div>
             </li>
           </ol>
