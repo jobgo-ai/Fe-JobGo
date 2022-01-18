@@ -24,6 +24,7 @@
         >Compare results</router-link
       >
       <router-link :to="`/opening/${opening.reference}/edit`">Edit</router-link>
+      <input class="candidate-list__search" v-model="search" />
       <ol v-if="candidates.length > 0">
         Candidate List
         <li
@@ -34,7 +35,7 @@
             )
           "
           :key="candidate.reference"
-          v-for="candidate in candidates"
+          v-for="candidate in candidateList"
         >
           <div class="candidate-list__candidate-info">
             {{ candidate.name }}
@@ -61,9 +62,10 @@
 
 <script setup>
 //Vendor
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import { useForm } from "vee-validate";
+import { useDebounce } from "@vueuse/core";
 import * as yup from "yup";
 
 //Components
@@ -128,6 +130,26 @@ const isNextAction = (template, templates) => {
 const isCompleted = (template) => {
   return template.interview.started && template.interview.terminated;
 };
+
+const search = ref("");
+const debouncedSearch = useDebounce(search, 450);
+
+const candidateList = computed(() => {
+  const { candidates } = props;
+  if (debouncedSearch.value) {
+    return candidates.filter((candidate) => {
+      return (
+        candidate.name
+          .toLowerCase()
+          .includes(debouncedSearch.value.toLowerCase()) ||
+        candidate.email
+          .toLowerCase()
+          .includes(debouncedSearch.value.toLowerCase())
+      );
+    });
+  }
+  return candidates;
+});
 </script>
 
 <style lang="scss" scoped>
