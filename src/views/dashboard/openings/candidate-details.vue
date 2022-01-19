@@ -1,39 +1,60 @@
 <template>
   <div class="candidate-details">
-    <div>Details</div>
-    <div v-if="candidate.name">{{ candidate.name }}</div>
-    <div>
-      {{ candidate }}
-    </div>
-    <ul class="candidate-details__interview-grid">
-      <li
-        class="candidate-details__interview-grid__item"
-        v-for="interview in opening.templates"
-      >
-        <div v-if="interview.interview.terminated">
-          Terminated
-          <router-link
-            :to="`/opening/${route.params.openingRef}/results/${interview.interview.token}`"
-            >View results</router-link
-          >
+    <div v-if="candidate.reference">
+      <div class="candidate-details__personal-info">
+        {{ candidate.name }}
+        {{ candidate.email }}
+      </div>
+      <div class="candidate-details__overview">
+        <div class="candidate-details__overview__score">
+          {{ candidate.opening.statistics.averageScore }}
         </div>
-        <div
-          v-else-if="
-            interview.interview.started && !interview.interview.terminated
-          "
+        <div class="candidate-details__overview__skills">
+          <ol
+            class="candidate-details__overview__skills__skill"
+            v-for="skill in skillList"
+          >
+            {{
+              skill.label
+            }}
+            {{
+              skill.value
+            }}
+          </ol>
+        </div>
+      </div>
+      <ul class="candidate-details__interview-grid">
+        <li
+          class="candidate-details__interview-grid__item"
+          v-for="interview in opening.templates"
         >
-          Started but not done
-        </div>
-        <div v-else>
-          <div v-if="nextAction === interview.interview.token">
-            This is the action to take
+          <div v-if="interview.interview.terminated">
+            Terminated
+            <router-link
+              :to="`/opening/${route.params.openingRef}/results/${interview.interview.token}`"
+              >View results</router-link
+            >
           </div>
-          <a target="_blank" :href="`${URL}/token/${interview.interview.token}`"
-            >Go to interview</a
+          <div
+            v-else-if="
+              interview.interview.started && !interview.interview.terminated
+            "
           >
-        </div>
-      </li>
-    </ul>
+            Started but not done
+          </div>
+          <div v-else>
+            <div v-if="nextAction === interview.interview.token">
+              This is the action to take
+            </div>
+            <a
+              target="_blank"
+              :href="`${URL}/token/${interview.interview.token}`"
+              >Go to interview</a
+            >
+          </div>
+        </li>
+      </ul>
+    </div>
   </div>
 </template>
 
@@ -46,7 +67,7 @@ const props = defineProps({
 });
 
 import { useGet } from "@/hooks/useHttp";
-import { onMounted, watch, ref } from "vue";
+import { onMounted, watch, ref, computed } from "vue";
 import { useRoute } from "vue-router";
 const route = useRoute();
 const candidate = ref({});
@@ -59,11 +80,6 @@ const fetchCandidate = async () => {
   await getCandidate.get();
   candidate.value = getCandidate.data.value.candidate;
   opening.value = getCandidate.data.value.candidate.opening;
-  // nextAction.value = getCandidate.data.value.candidate.opening.templates.find(
-  //   (t) => {
-  //     return !t.interview?.started;
-  //   }
-  // ).interview?.token;
 };
 
 onMounted(async () => {
@@ -78,18 +94,63 @@ watch(
     }
   }
 );
+
+const skillList = computed(() => {
+  console.log("whats up here");
+  console.log(candidate);
+  if (candidate.value.statistics) {
+    return [];
+  }
+  return candidate.value?.opening?.statistics?.averageSkillScores.map(
+    (skill) => ({ label: skill.skill.name, value: skill.score.value })
+  );
+});
 </script>
 
 <style scoped lang="scss">
 .candidate-details {
   &__interview-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    grid-gap: 20px;
+    grid-template-columns: repeat(auto-fit, 264px);
+    grid-gap: 24px;
+    margin-top: 100px;
   }
   &__interview-grid__item {
     padding: 20px;
     background: cornsilk;
+    border-radius: 12px;
+    width: 264px;
+  }
+  &__overview {
+    margin-top: 40px;
+    display: grid;
+    grid-template-columns: 264px 552px;
+    grid-gap: 24px;
+    &__score {
+      border: 1px solid #ccc;
+      border-radius: 12px;
+      background-color: green;
+      padding: 10px;
+    }
+    &__skills {
+      border: 1px solid #ccc;
+      border-radius: 12px;
+      background-color: green;
+      padding: 10px;
+      display: grid;
+      font-size: 12px;
+      display: flex;
+      flex-wrap: wrap;
+      &__skill {
+        border: 1px solid grey;
+        background-color: paleturquoise;
+        padding: 2px;
+        display: inline-block;
+        padding: 8px;
+        margin-right: 10px;
+        margin-bottom: 10px;
+      }
+    }
   }
 }
 </style>
