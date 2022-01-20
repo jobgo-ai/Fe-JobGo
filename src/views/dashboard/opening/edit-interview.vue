@@ -18,7 +18,7 @@
         <div>
           <h3>Cooldown</h3>
           <div>
-            <hp-textarea name="ceremony.warmup.content" />
+            <hp-textarea name="ceremony.cooldown.content" />
             <hp-counter name="ceremony.cooldown.duration" />
           </div>
         </div>
