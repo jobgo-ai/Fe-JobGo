@@ -1,7 +1,7 @@
 <template>
   <div class="hp-counter">
     <div class="hp-counter__count">
-      <span class="hp-counter__count-number">{{ count }}</span>
+      <span class="hp-counter__count-number">{{ modelValue }}</span>
     </div>
     <button type="button" @click="handleCountIncrement">Increase</button>
     <button type="button" @click="handleCountDecrement">Decrease</button>
@@ -10,7 +10,7 @@
 
 <script setup>
 // Vendor
-import { ref } from "vue";
+import { useField } from "vee-validate";
 
 const emits = defineEmits(["update:modelValue"]);
 const props = defineProps({
@@ -18,16 +18,21 @@ const props = defineProps({
     type: Number,
     default: 0,
   },
+  name: {
+    type: String,
+  },
 });
 
-const count = ref(props.modelValue);
+console.log(props.name);
+
+const { errorMessage, value: modelValue } = useField(props.name);
 
 const handleCountIncrement = () => {
-  count.value++;
-  emits("update:modelValue", count.value);
+  modelValue.value++;
+  emits("update:modelValue", modelValue.value);
 };
 const handleCountDecrement = () => {
-  count.value--;
-  emits("update:modelValue", count.value);
+  modelValue.value--;
+  emits("update:modelValue", modelValue.value);
 };
 </script>

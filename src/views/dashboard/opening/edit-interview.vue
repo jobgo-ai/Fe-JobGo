@@ -11,15 +11,15 @@
         <div>
           <h3>Warmup</h3>
           <div>
-            <hp-textarea name="warmup" />
-            <hp-counter v-model="interview.ceremony.cooldown.duration" />
+            <hp-textarea name="ceremony.warmup.content" />
+            <hp-counter name="ceremony.warmup.duration" />
           </div>
         </div>
         <div>
           <h3>Cooldown</h3>
           <div>
-            <hp-textarea name="cooldown" />
-            <hp-counter v-model="interview.ceremony.cooldown.duration" />
+            <hp-textarea name="ceremony.warmup.content" />
+            <hp-counter name="ceremony.cooldown.duration" />
           </div>
         </div>
       </div>
@@ -69,8 +69,16 @@ const putInterview = usePut(`templates/${route.params.interviewRef}`);
 const schema = yup.object({
   name: yup.string().required("Interview name is required"),
   description: yup.string(),
-  warmup: yup.string(),
-  cooldown: yup.string(),
+  ceremony: yup.object({
+    cooldown: yup.object({
+      content: yup.string(),
+      duration: yup.number(),
+    }),
+    warmup: yup.object({
+      content: yup.string(),
+      duration: yup.number(),
+    }),
+  }),
 });
 
 const { handleSubmit, setValues } = useForm({
