@@ -3,7 +3,7 @@
     <hp-drawer :isOpen="isAddQuestionDrawerOpen"
       ><questions @updateQuestionList="fetchInterview"
     /></hp-drawer>
-    <form @submit.prevent="onSubmit">
+    <form @submit.prevent="onSubmit" v-if="interview?.reference">
       <div>Edit interview</div>
       <hp-input label="Name" name="name"></hp-input>
       <hp-input label="Description" name="description"></hp-input>
@@ -12,14 +12,14 @@
           <h3>Warmup</h3>
           <div>
             <hp-textarea name="warmup" />
-            <hp-counter />
+            <hp-counter v-model="interview.ceremony.cooldown.duration" />
           </div>
         </div>
         <div>
           <h3>Cooldown</h3>
           <div>
             <hp-textarea name="cooldown" />
-            <hp-counter />
+            <hp-counter v-model="interview.ceremony.cooldown.duration" />
           </div>
         </div>
       </div>
@@ -90,9 +90,9 @@ onMounted(async () => {
 });
 
 const onSubmit = handleSubmit(async (values) => {
-  const formattedQuestions = values.questions
-    ? values.questions.map((q) => q.reference)
-    : [];
+  console.log("ww");
+  console.log(values);
+  const formattedQuestions = values?.questions.map((q) => q.reference) || [];
   await putInterview.put({
     template: { ...values, jobLevels: [], questions: formattedQuestions },
   });

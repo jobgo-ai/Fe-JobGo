@@ -3,8 +3,8 @@
     <div class="hp-counter__count">
       <span class="hp-counter__count-number">{{ count }}</span>
     </div>
-    <button @click="handleCountIncrement">Increase</button>
-    <button @click="handleCountDecrement">Decrease</button>
+    <button type="button" @click="handleCountIncrement">Increase</button>
+    <button type="button" @click="handleCountDecrement">Decrease</button>
   </div>
 </template>
 
@@ -12,12 +12,22 @@
 // Vendor
 import { ref } from "vue";
 
-const count = ref(5);
+const emits = defineEmits(["update:modelValue"]);
+const props = defineProps({
+  modelValue: {
+    type: Number,
+    default: 0,
+  },
+});
+
+const count = ref(props.modelValue);
 
 const handleCountIncrement = () => {
   count.value++;
+  emits("update:modelValue", count.value);
 };
 const handleCountDecrement = () => {
   count.value--;
+  emits("update:modelValue", count.value);
 };
 </script>
