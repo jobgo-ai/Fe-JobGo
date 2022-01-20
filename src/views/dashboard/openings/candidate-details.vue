@@ -96,8 +96,6 @@ watch(
 );
 
 const skillList = computed(() => {
-  console.log("whats up here");
-  console.log(candidate);
   if (candidate.value.statistics) {
     return [];
   }

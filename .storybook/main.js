@@ -1,3 +1,4 @@
+const svgLoader = require("vite-svg-loader");
 const { loadConfigFromFile, mergeConfig } = require("vite");
 const path = require("path");
 
@@ -15,8 +16,7 @@ module.exports = {
 
     return mergeConfig(config, {
       ...userConfig,
-      // manually specify plugins to avoid conflict
-      plugins: [],
+      plugins: [svgLoader()],
     });
   },
 };

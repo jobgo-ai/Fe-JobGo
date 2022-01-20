@@ -9,7 +9,6 @@ export default {
 const Template = (args) => ({
   components: { HpButton },
   setup() {
-    console.log(args);
     return { args };
   },
   template: `<div>
