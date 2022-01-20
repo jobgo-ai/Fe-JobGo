@@ -4,7 +4,7 @@
       ><questions @updateQuestionList="fetchInterview"
     /></hp-drawer>
     <form @submit.prevent="onSubmit">
-      <div>Create interview</div>
+      <div>Edit interview</div>
       <hp-input label="Name" name="name"></hp-input>
       <hp-input label="Description" name="description"></hp-input>
       <div>
@@ -90,6 +90,11 @@ onMounted(async () => {
 });
 
 const onSubmit = handleSubmit(async (values) => {
-  await putInterview.put({ template: { ...values, jobLevels: [] } });
+  const formattedQuestions = values.questions
+    ? values.questions.map((q) => q.reference)
+    : [];
+  await putInterview.put({
+    template: { ...values, jobLevels: [], questions: formattedQuestions },
+  });
 });
 </script>
