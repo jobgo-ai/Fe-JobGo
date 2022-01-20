@@ -149,6 +149,7 @@ const skillList = computed(() => {
         padding: 8px;
         margin-right: 10px;
         margin-bottom: 10px;
+        border-radius: 12px;
       }
     }
   }

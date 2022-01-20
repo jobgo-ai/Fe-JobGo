@@ -5,7 +5,9 @@
 </template>
 
 <script setup>
+import { ref } from "vue";
 import Toggle from "@vueform/toggle";
+
 const value = ref(false);
 </script>
 
