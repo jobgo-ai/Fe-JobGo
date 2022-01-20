@@ -23,7 +23,6 @@
 
 <script setup>
 import { computed, ref } from "vue";
-import { useElementBounding } from "@vueuse/core";
 
 const emits = defineEmits(["update:modelValue"]);
 

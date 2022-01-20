@@ -10,7 +10,7 @@
 const props = defineProps({
   opening: {
     type: Object,
-    default: false,
+    default: () => {},
   },
 });
 </script>

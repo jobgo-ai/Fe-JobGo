@@ -6,8 +6,7 @@
     "build": "vite build",
     "preview": "vite preview",
     "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook",
-    "build-static-webapp":"expo build:web"
+    "build-storybook": "build-storybook"
   },
   "dependencies": {
     "@vueform/multiselect": "^2.3.1",
