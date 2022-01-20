@@ -1,5 +1,4 @@
 <template>
-  <!-- Hardcoded "hover", "openDelay" and "closeDelay" -->
   <Popper v-bind="$attrs">
     <slot />
     <template #content="props">
