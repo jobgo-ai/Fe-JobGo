@@ -27,7 +27,7 @@ const route = useRoute();
 const interview = ref({});
 
 onMounted(async () => {
-  const getInterview = useGet(`interviews/${route.params.interviewRef}`);
+  const getInterview = useGet(`interviews/${route.params.resultsRef}`);
   await getInterview.get();
   interview.value = getInterview.data.value.interview;
 });

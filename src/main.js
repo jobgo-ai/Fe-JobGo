@@ -2,15 +2,8 @@ import { createApp } from "vue";
 import App from "./App.vue";
 import router from "./router";
 import useAuth from "@/hooks/useAuth";
-// import mixpanel from "mixpanel-browser";
 
 const app = createApp(App);
-
-// mixpanel.init(import.meta.env.VITE_MIX_PANEL_TOKEN, {
-//   api_host: "https://proxy.hireproof.io/mixpanel",
-//   debug: false,
-// });
-// app.provide("mixpanel", mixpanel);
 
 // Router before each
 router.beforeEach(async (to, from, next) => {
@@ -41,13 +34,5 @@ router.beforeEach(async (to, from, next) => {
   // finally
   else next();
 });
-
-// router.afterEach((to, from) => {
-//   mixpanel.track("pageView", {
-//     to: to.path,
-//     from: from.path,
-//     pageName: to.name,
-//   });
-// });
 
 app.use(router).mount("#app");

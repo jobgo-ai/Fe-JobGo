@@ -38,8 +38,8 @@ watch(
 watch(
   () => route.params.interviewRef,
   async (newOpeningRef) => {
-    if (newOpeningRef) {
-      const getInterview = useGet(`templates/${newOpeningRef}`);
+    if (route.params.interviewRef) {
+      const getInterview = useGet(`templates/${route.params.interviewRef}`);
       await getInterview.get();
       interview.value = getInterview.data.value;
     }
