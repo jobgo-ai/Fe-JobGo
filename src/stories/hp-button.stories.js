@@ -6,19 +6,23 @@ export default {
   argTypes: {},
 };
 
+import { ref } from "vue";
 const Template = (args) => ({
   components: { HpButton },
   setup() {
-    return { args };
+    const buttonIsLoading = ref(false);
+    return { args, buttonIsLoading };
   },
-  template: `<div>
-    <hp-button v-bind="args"> </hp-button>
+  template: `<div style="display:flex">
+    <hp-button style="margin-right: 12px" v-bind="args"> </hp-button>
+    <hp-button style="margin-right: 12px" @click="buttonIsLoading = !buttonIsLoading" label="Click" :isLoading="buttonIsLoading" />
+    <hp-button style="margin-right: 12px" :isDisabled="true" label="Disabled" />
   </div>`,
 });
 
 export const Primary = Template.bind({});
 Primary.args = {
-  label: "button",
+  label: "Button",
 };
 
 export const Secondary = Template.bind({});

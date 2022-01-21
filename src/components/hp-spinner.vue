@@ -24,6 +24,7 @@ const props = defineProps({
     border-top: 1px solid rgba(51, 70, 82, 1); /* Blue */
     border-radius: 50%;
     animation: spin 1s linear infinite;
+    transition: all 0.3s ease-in-out;
   }
 
   @keyframes spin {

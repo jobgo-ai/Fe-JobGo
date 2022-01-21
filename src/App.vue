@@ -10,11 +10,17 @@
 :root {
   font-family: "Inter", sans-serif;
   font-size: 16px;
+
+  // Colours
   --color-white: #fff;
   --color-accent-background: #334652;
-  --color-text-primary: #212c33;
   --color-border: #e3e5e5;
+  --color-border-subtle: #f0f0f0;
   --color-gray-background: #f9f9f9;
+
+  // Text
+  --color-text-primary: #212c33;
+  --color-text-tertiery: #c6cacc;
 }
 
 * {
