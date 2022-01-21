@@ -1,12 +1,6 @@
 <template>
   <div class="hp-tabs">
-    <div
-      class="hp-tabs__background"
-      :style="{
-        ...styles,
-      }"
-    ></div>
-    <div
+    <button
       v-for="(item, index) in props.options"
       @click="emits('update:modelValue', item)"
       :class="`hp-tabs__option hp-tabs__option--${index} ${
@@ -19,7 +13,7 @@
       "
     >
       {{ item }}
-    </div>
+    </button>
   </div>
 </template>
 
@@ -49,17 +43,17 @@ const correctIndex = computed(() => {
   });
 });
 
-const styles = computed(() => {
-  const correctIndex = props.options.findIndex((item) => {
-    return item.toLowerCase() === props.modelValue.toLowerCase();
-  });
-  const width = optionRefs.value[correctIndex]?.clientWidth;
-  const left = optionRefs.value[correctIndex]?.offsetLeft;
-  return {
-    width: `${width}px`,
-    left: `${left}px`,
-  };
-});
+// const styles = computed(() => {
+//   const correctIndex = props.options.findIndex((item) => {
+//     return item.toLowerCase() === props.modelValue.toLowerCase();
+//   });
+//   const width = optionRefs.value[correctIndex]?.clientWidth;
+//   const left = optionRefs.value[correctIndex]?.offsetLeft;
+//   return {
+//     width: `${width}px`,
+//     left: `${left}px`,
+//   };
+// });
 </script>
 
 <styles lang="scss" scoped>
@@ -69,26 +63,37 @@ const styles = computed(() => {
   justify-content: space-between;
   background-color: var(--color-border);
   z-index: 2;
-  padding: 6px;
+  padding: 4px;
   border-radius: 12px;
   &__option {
+    background-color: transparent;
     cursor: pointer;
-    transition: color 0.15s cubic-bezier(0.17, 0.67, 0.83, 0.67);
+    border: none;
+    line-height: 20px;
+    transition: all 0.15s cubic-bezier(0.17, 0.67, 0.83, 0.67);
     padding: 6px 16px;
     color: var(--color-text-secondary);
+    border-radius: 12px;
+
     &--selected {
       color: var(--color-text-primary);
+      background-color: white;
+    }
+
+    &:focus {
+      outline: var(--color-outline) solid 4px;
     }
   }
-  &__background {
-    border-radius: 12px;
-    top: 50%;
-    transform: translateY(-50%);
-    z-index: -1;
-    height: 32px;
-    position: absolute;
-    background-color: white;
-    transition: 0.15s all cubic-bezier(0.17, 0.67, 0.83, 0.67);
-  }
+  // &__background {
+  //   border-radius: 12px;
+  //   top: 4px;
+  //   z-index: -1;
+  //   height: 32px;
+  //   position: absolute;
+  //   background-color: var(--color-accent-forground);
+  //   transition: 0.15s all cubic-bezier(0.17, 0.67, 0.83, 0.67);
+  //   box-shadow: 0px 4px 8px rgba(33, 44, 51, 0.02),
+  //     0px 0px 1px rgba(33, 44, 51, 0.02);
+  // }
 }
 </styles>

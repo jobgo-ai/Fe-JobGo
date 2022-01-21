@@ -10,8 +10,8 @@ import { ref } from "vue";
 const Template = (args) => ({
   components: { HpTabs },
   setup() {
-    const state = ref("tab1");
-    const options = ["tab1", "longtab", "super freaking long tab"];
+    const state = ref("tabs");
+    const options = ["tabs", "longtab", "super freaking long tab"];
     return { args, state, options };
   },
   template: `<div style="display:flex">
