@@ -9,17 +9,23 @@
 
 <script setup>
 const props = defineProps({
-  name: String,
-  size: Number,
-  color: String,
+  name: {
+    type: String,
+    default: "cog",
+  },
+  size: {
+    default: 20,
+    type: Number,
+  },
+  color: {
+    type: Number,
+  },
 });
 
 import { computed, defineAsyncComponent } from "vue";
 
 const iconMap = {
-  test: defineAsyncComponent(() =>
-    import("../assets/icons/test.svg?component")
-  ),
+  cog: defineAsyncComponent(() => import("../assets/icons/cog.svg?component")),
 };
 
 const svg = computed(() => {
@@ -29,8 +35,6 @@ const svg = computed(() => {
 
 <style lang="scss">
 .hp-icon {
-  color: red;
-  display: inline-block;
   fill: currentColor;
 }
 </style>

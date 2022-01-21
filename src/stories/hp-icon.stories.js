@@ -18,6 +18,6 @@ const Template = (args) => ({
 
 export const Primary = Template.bind({});
 Primary.args = {
-  name: "test",
+  name: "cog",
   size: 16,
 };
