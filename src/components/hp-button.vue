@@ -35,6 +35,10 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  primary: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const buttonClasses = computed(() => {
@@ -60,7 +64,7 @@ const emit = defineEmits(["handleClick"]);
   outline: none;
   border: 1px solid rgba(227, 229, 229, 1);
   border-radius: 8px;
-  transition: border-color 0.25s linear;
+  transition: border-color 0.15s linear, background-color 0.15s linear;
   filter: drop-shadow(0px 4px 8px rgba(33, 44, 51, 0.02))
     drop-shadow(0px 0px 1px rgba(33, 44, 51, 0.02));
 
