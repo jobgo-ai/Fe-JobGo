@@ -134,10 +134,11 @@ const emit = defineEmits(["handleClick"]);
     }
   }
 
-  &--primary > .hp-button__button__icon--solo {
-    background-color: red;
+  &--primary .hp-button__button__icon--solo {
+    color: var(--color-accent-forground);
   }
 
+  // Default
   &__button {
     font-family: "Inter", sans-serif;
     display: flex;
