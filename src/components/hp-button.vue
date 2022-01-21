@@ -13,6 +13,7 @@
       :size="14"
     ></hp-spinner>
   </button>
+  <button v-if="dropdown">Hello</button>
 </template>
 
 <script setup>
@@ -38,6 +39,10 @@ const props = defineProps({
   primary: {
     type: Boolean,
     default: false,
+  },
+  dropdown: {
+    type: Boolean,
+    default: true,
   },
 });
 

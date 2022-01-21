@@ -1,6 +1,6 @@
 <template>
   <component
-    :is="svg"
+    :is="icon"
     role="img"
     :style="{ height: `${size}px`, width: `${size}px` }"
     class="hp-icon"
@@ -8,6 +8,8 @@
 </template>
 
 <script setup>
+import { onMounted, shallowRef } from "vue";
+
 const props = defineProps({
   name: {
     type: String,
@@ -17,24 +19,14 @@ const props = defineProps({
     default: 20,
     type: Number,
   },
-  color: {
-    type: Number,
-  },
 });
 
-import { computed, defineAsyncComponent } from "vue";
+const icon = shallowRef(null);
 
-const iconMap = {
-  cog: defineAsyncComponent(() => import("../assets/icons/cog.svg?component")),
-};
-
-const svg = computed(() => {
-  return iconMap[props.name];
+onMounted(async () => {
+  const comp = await import(`../assets/icons/${props.name}.svg?component`);
+  icon.value = comp.default || null;
 });
 </script>
 
-<style lang="scss">
-.hp-icon {
-  fill: currentColor;
-}
-</style>
+<style lang="scss"></style>

@@ -1,4 +1,83 @@
-import HpIcon from "../components/hp-icon.vue";
+import HpIcon from "@/components/hp-icon.vue";
+
+const iconNames = [
+  "alert-octagone",
+  "box",
+  "copy",
+  "gift",
+  "minus-square",
+  "search",
+  "alert",
+  "calendar",
+  "credit-card-declined",
+  "globe",
+  "minus",
+  "skills",
+  "archive",
+  "candidates",
+  "credit-card",
+  "heart",
+  "moon",
+  "star",
+  "arrow-down",
+  "check-circle",
+  "cross-circle",
+  "help",
+  "notallowed",
+  "sun",
+  "arrow-left",
+  "check",
+  "cross",
+  "house",
+  "notifications",
+  "trash",
+  "arrow-right",
+  "chevron-down",
+  "diamond",
+  "image",
+  "pencil",
+  "unlocked",
+  "arrow-top",
+  "chevron-left",
+  "discover",
+  "import",
+  "placeholder",
+  "upload",
+  "at",
+  "chevron-right",
+  "drag",
+  "layers",
+  "play",
+  "user",
+  "attach",
+  "chevron.top",
+  "expand",
+  "lightning",
+  "plug",
+  "video",
+  "bag",
+  "chronometer",
+  "eye-closed",
+  "location",
+  "plus-square",
+  "wallet",
+  "binoculars",
+  "clean",
+  "eye",
+  "locked",
+  "plus",
+  "work-bag",
+  "blocked",
+  "cog",
+  "file",
+  "mail",
+  "questions",
+  "book",
+  "computer",
+  "folder",
+  "micro",
+  "score",
+];
 
 export default {
   title: "Components/Icon",
@@ -9,15 +88,13 @@ export default {
 const Template = (args) => ({
   components: { HpIcon },
   setup() {
-    return { args };
+    return { args, iconNames };
   },
-  template: `<div>
-    <hp-icon v-bind="args"> </hp-icon>
+  template: `<div style="display:flex">
+    <div style="margin-right:8px">
+        <hp-icon v-for="icon in iconNames" :name="icon" v-bind="args"> </hp-icon>
+    </div>
   </div>`,
 });
 
 export const Primary = Template.bind({});
-Primary.args = {
-  name: "cog",
-  size: 16,
-};
