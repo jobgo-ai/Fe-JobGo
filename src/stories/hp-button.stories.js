@@ -17,7 +17,7 @@ const Template = (args) => ({
     <hp-button style="margin-right: 12px" v-bind="args"> </hp-button>
     <hp-button style="margin-right: 12px" @click="buttonIsLoading = !buttonIsLoading" label="Click" :isLoading="buttonIsLoading" />
     <hp-button style="margin-right: 12px" :isDisabled="true" label="Disabled" />
-    <hp-button style="margin-right: 12px" :isDisabled="true" :dropdown="true" />
+    <hp-button style="margin-right: 12px" :isDisabled="true" label="Dropdown" :dropdown="true" />
   </div>`,
 });
 

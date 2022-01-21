@@ -1,6 +1,6 @@
 import HpIcon from "@/components/hp-icon.vue";
 
-const files = Object.entries(import.meta.globEager("../assets/icons/*.svg"));
+const files = Object.entries(import.meta.globEager("@/assets/icons/*.svg"));
 const iconNames = files.map((glob) => {
   return glob[0].replace("../assets/icons/", "").replace(".svg", "");
 });
