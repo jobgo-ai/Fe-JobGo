@@ -21,7 +21,7 @@ const props = defineProps({
   display: flex;
   &__spinner {
     border: 1px solid rgba(51, 70, 82, 0.4);
-    border-top: 1px solid rgba(51, 70, 82, 1); /* Blue */
+    border-top: 1px solid rgba(51, 70, 82, 1);
     border-radius: 50%;
     animation: spin 1s linear infinite;
     transition: all 0.3s ease-in-out;

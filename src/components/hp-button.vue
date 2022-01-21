@@ -103,6 +103,32 @@ const emit = defineEmits(["handleClick"]);
 .hp-button {
   display: flex;
 
+  &--primary > .hp-button__button {
+    color: var(--color-accent-forground);
+    background-color: var(--color-accent-background);
+    border-color: var(--color-accent-background);
+    &--disabled {
+      border-color: var(--color-border);
+      background-color: var(--color-border);
+    }
+    &:active:not([disabled]),
+    &:hover:not([disabled]) {
+      background-color: var(--color-accent-background);
+      box-shadow: 0px 4px 8px rgba(33, 44, 51, 0.02),
+        0px 0px 1px rgba(33, 44, 51, 0.02);
+    }
+
+    &:active:not([disabled]) {
+      border-color: var(--color-accent-background);
+    }
+    &:focus:not([disabled]) {
+      outline: var(--color-focus) solid 4px;
+      border-color: var(--color-accent-background);
+      filter: drop-shadow(0px 4px 8px rgba(33, 44, 51, 0.02))
+        drop-shadow(0px 0px 1px rgba(33, 44, 51, 0.02));
+    }
+  }
+
   &__button {
     font-family: "Inter", sans-serif;
     display: flex;
@@ -113,7 +139,7 @@ const emit = defineEmits(["handleClick"]);
     background-color: var(--color-background);
     color: var(--color-text-primary);
     outline: none;
-    border: 1px solid rgba(227, 229, 229, 1);
+    border: 1px solid var(--color-border);
     border-radius: 8px;
     transition: border-color 0.15s linear, background-color 0.15s linear;
     filter: drop-shadow(0px 4px 8px rgba(33, 44, 51, 0.02))

@@ -13,13 +13,23 @@ const Template = (args) => ({
     const buttonIsLoading = ref(true);
     return { args, buttonIsLoading };
   },
-  template: `<div style="display:flex">
-    <hp-button style="margin-right: 12px" v-bind="args"> </hp-button>
-    <hp-button style="margin-right: 12px" @click="buttonIsLoading = !buttonIsLoading" label="Loading" :isLoading="buttonIsLoading" />
-    <hp-button style="margin-right: 12px" :isDisabled="true" label="Disabled" />
-    <hp-button style="margin-right: 12px" label="Dropdown" dropdownIcon="plus" :hasDropdown="true" />
-    <hp-button style="margin-right: 12px" label="Icon" icon="plus" />
-    <hp-button style="margin-right: 12px" icon="plus" />
+  template: `<div>
+    <div style="display:flex; margin-bottom: 16px;">
+      <hp-button style="margin-right: 12px" v-bind="args"> </hp-button>
+      <hp-button style="margin-right: 12px" @click="buttonIsLoading = !buttonIsLoading" label="Loading" :isLoading="buttonIsLoading" />
+      <hp-button style="margin-right: 12px" :isDisabled="true" label="Disabled" />
+      <hp-button style="margin-right: 12px" label="Dropdown" dropdownIcon="plus" :hasDropdown="true" />
+      <hp-button style="margin-right: 12px" label="Icon" icon="plus" />
+      <hp-button style="margin-right: 12px" icon="plus" />
+    </div>
+    <div style="display:flex">
+      <hp-button primary style="margin-right: 12px" v-bind="args"> </hp-button>
+      <hp-button primary style="margin-right: 12px" @click="buttonIsLoading = !buttonIsLoading" label="Loading" :isLoading="buttonIsLoading" />
+      <hp-button primary style="margin-right: 12px" :isDisabled="true" label="Disabled" />
+      <hp-button primary style="margin-right: 12px" label="Dropdown" dropdownIcon="plus" :hasDropdown="true" />
+      <hp-button primary style="margin-right: 12px" label="Icon" icon="plus" />
+      <hp-button primary style="margin-right: 12px" icon="plus" />
+    </div>
   </div>`,
 });
 

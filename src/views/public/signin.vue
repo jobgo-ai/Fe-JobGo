@@ -3,7 +3,11 @@
     signin
     <hp-input name="email" label="username" />
     <hp-input name="password" label="password" type="password" />
-    <hp-button @handleClick="onSubmit" label="Signin"></hp-button>
+    <hp-button
+      icon="diamond"
+      @handleClick="onSubmit"
+      label="Signin"
+    ></hp-button>
   </div>
 </template>
 

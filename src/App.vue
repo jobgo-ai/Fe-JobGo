@@ -21,9 +21,9 @@
   --color-text-primary: #212c33;
   --color-text-secondary: #778085;
   --color-text-tertiary: #c6cacc;
-  --color-background-accent-: #334652;
-  --color-forground-accent: #ffffff;
-  --color-background-positive-: #e0eee7;
+  --color-accent-background: #334652;
+  --color-accent-forground: #ffffff;
+  --color-background-positive: #e0eee7;
   --color-border-positive: #a7cdba;
   --color-forground-positive: #3f755a;
   --color-background-negative: #f2e2df;
