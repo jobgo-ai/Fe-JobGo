@@ -1,0 +1,38 @@
+<template>
+  <div class="hp-spinner">
+    <span
+      class="hp-spinner__spinner"
+      :style="{ width: `${size}px`, height: `${size}px` }"
+    ></span>
+  </div>
+</template>
+
+<script setup>
+const props = defineProps({
+  size: {
+    type: Number,
+    default: 16,
+  },
+});
+</script>
+
+<style lang="scss">
+.hp-spinner {
+  display: flex;
+  &__spinner {
+    border: 1px solid rgba(51, 70, 82, 0.4);
+    border-top: 1px solid rgba(51, 70, 82, 1); /* Blue */
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+}
+</style>
