@@ -67,7 +67,6 @@ const iconNames = [
   "locked",
   "pointinghand",
   "blocked",
-  "cog 2",
   "file",
   "mail",
   "questions",
