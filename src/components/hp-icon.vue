@@ -9,24 +9,26 @@
 </template>
 
 <script setup>
-import { onMounted, shallowRef } from "vue";
+import { computed, defineAsyncComponent } from "vue";
 
 const props = defineProps({
   name: {
     type: String,
-    default: "cog",
+    default: "test",
   },
   size: {
     default: 20,
     type: Number,
   },
+  color: {
+    type: Number,
+  },
 });
 
-const icon = shallowRef(null);
-
-onMounted(async () => {
-  const comp = await import(`../assets/icons/${props.name}.svg?component`);
-  icon.value = comp.default || null;
+const icon = computed(() => {
+  return defineAsyncComponent(() =>
+    import(/* @vite-ignore */ `../assets/icons/${props.name}.svg`)
+  );
 });
 </script>
 

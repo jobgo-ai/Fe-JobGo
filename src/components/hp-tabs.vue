@@ -65,6 +65,7 @@ const correctIndex = computed(() => {
   z-index: 2;
   padding: 4px;
   border-radius: 12px;
+  transition: all 0.15s cubic-bezier(0.17, 0.67, 0.83, 0.67);
   &__option {
     background-color: transparent;
     cursor: pointer;

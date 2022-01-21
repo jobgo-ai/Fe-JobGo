@@ -62,7 +62,7 @@ import CandidateList from "@/views/dashboard/openings/candidate-list.vue";
 import CandidateDetails from "@/views/dashboard/openings/candidate-details.vue";
 
 // Components
-import HpContentToggle from "@/components/hp-tabs.vue";
+import HpTabs from "@/components/hp-tabs.vue";
 
 const route = useRoute();
 const router = useRouter();
