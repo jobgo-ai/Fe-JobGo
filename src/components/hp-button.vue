@@ -103,6 +103,7 @@ const emit = defineEmits(["handleClick"]);
 .hp-button {
   display: flex;
 
+  // Button primary
   &--primary > .hp-button__button {
     color: var(--color-accent-forground);
     background-color: var(--color-accent-background);
@@ -110,6 +111,10 @@ const emit = defineEmits(["handleClick"]);
     &--disabled {
       border-color: var(--color-border);
       background-color: var(--color-border);
+    }
+    &--addon {
+      color: var(--color-accent-forground);
+      opacity: 0.88;
     }
     &:active:not([disabled]),
     &:hover:not([disabled]) {
@@ -129,6 +134,10 @@ const emit = defineEmits(["handleClick"]);
     }
   }
 
+  &--primary > .hp-button__button__icon--solo {
+    background-color: red;
+  }
+
   &__button {
     font-family: "Inter", sans-serif;
     display: flex;
@@ -141,7 +150,8 @@ const emit = defineEmits(["handleClick"]);
     outline: none;
     border: 1px solid var(--color-border);
     border-radius: 8px;
-    transition: border-color 0.15s linear, background-color 0.15s linear;
+    transition: border-color 0.15s cubic-bezier(0.17, 0.67, 0.83, 0.67),
+      background-color 0.15s cubic-bezier(0.17, 0.67, 0.83, 0.67);
     filter: drop-shadow(0px 4px 8px rgba(33, 44, 51, 0.02))
       drop-shadow(0px 0px 1px rgba(33, 44, 51, 0.02));
 

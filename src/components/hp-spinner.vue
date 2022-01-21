@@ -23,7 +23,7 @@ const props = defineProps({
     border: 1px solid rgba(51, 70, 82, 0.4);
     border-top: 1px solid rgba(51, 70, 82, 1);
     border-radius: 50%;
-    animation: spin 1s linear infinite;
+    animation: spin 1s cubic-bezier(0.17, 0.67, 0.83, 0.67) infinite;
     transition: all 0.3s ease-in-out;
   }
 

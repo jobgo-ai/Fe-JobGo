@@ -25,10 +25,7 @@
         <div v-if="!isCandidateDetailsOpen" class="opening-list">
           <h2>Openings</h2>
           <p>Manage your openings or quickly create new ones</p>
-          <hp-content-toggle
-            :options="['Active', 'Archived']"
-            v-model="state"
-          />
+          <hp-tabs :options="['Active', 'Archived']" v-model="state" />
           <ol class="opening-list__grid">
             <div class="opening-list__grid-item" @click="handleNewOpening">
               New opening
@@ -65,7 +62,7 @@ import CandidateList from "@/views/dashboard/openings/candidate-list.vue";
 import CandidateDetails from "@/views/dashboard/openings/candidate-details.vue";
 
 // Components
-import HpContentToggle from "@/components/hp-content-toggle.vue";
+import HpContentToggle from "@/components/hp-tabs.vue";
 
 const route = useRoute();
 const router = useRouter();
@@ -185,7 +182,7 @@ watch(state, () => {
   top: 0;
   left: 0;
   bottom: 0;
-  transition: all 0.35s linear;
+  transition: all 0.35s cubic-bezier(0.17, 0.67, 0.83, 0.67);
 }
 
 .openingslist--empty {
@@ -219,7 +216,7 @@ watch(state, () => {
 
 .fade-enter-active,
 .fade-leave-active {
-  transition: all 0.35s linear;
+  transition: all 0.35s cubic-bezier(0.17, 0.67, 0.83, 0.67);
   transform: translateX(0);
 }
 
@@ -230,11 +227,11 @@ watch(state, () => {
 }
 
 .slide-left-enter-active {
-  transition: all 0.35s linear;
+  transition: all 0.35s cubic-bezier(0.17, 0.67, 0.83, 0.67);
 }
 
 .slide-left-leave-active {
-  transition: all 0.35s linear;
+  transition: all 0.35s cubic-bezier(0.17, 0.67, 0.83, 0.67);
 }
 
 .slide-left-enter-from,
@@ -244,11 +241,11 @@ watch(state, () => {
 }
 
 .slide-right-enter-active {
-  transition: all 0.35s linear;
+  transition: all 0.35s cubic-bezier(0.17, 0.67, 0.83, 0.67);
 }
 
 .slide-right-leave-active {
-  transition: all 0.35s linear;
+  transition: all 0.35s cubic-bezier(0.17, 0.67, 0.83, 0.67);
 }
 
 .slide-right-enter-from,

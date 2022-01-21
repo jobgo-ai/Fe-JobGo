@@ -1,7 +1,7 @@
 <template>
-  <div class="hp-content-toggle">
+  <div class="hp-tabs">
     <div
-      class="hp-content-toggle__background"
+      class="hp-tabs__background"
       :style="{
         ...styles,
       }"
@@ -9,7 +9,9 @@
     <div
       v-for="(item, index) in props.options"
       @click="emits('update:modelValue', item)"
-      :class="`hp-content-toggle__option hp-content-toggle__option--${index}`"
+      :class="`hp-tabs__option hp-tabs__option--${index} ${
+        index === correctIndex && 'hp-tabs__option--selected'
+      }`"
       :ref="
         (el) => {
           if (el) optionRefs[index] = el;
@@ -41,6 +43,12 @@ const props = defineProps({
 
 const optionRefs = ref([]);
 
+const correctIndex = computed(() => {
+  return props.options.findIndex((item) => {
+    return item.toLowerCase() === props.modelValue.toLowerCase();
+  });
+});
+
 const styles = computed(() => {
   const correctIndex = props.options.findIndex((item) => {
     return item.toLowerCase() === props.modelValue.toLowerCase();
@@ -55,24 +63,32 @@ const styles = computed(() => {
 </script>
 
 <styles lang="scss" scoped>
-@import "@/styles/variables.scss";
-
-.hp-content-toggle {
+.hp-tabs {
   position: relative;
   display: inline-flex;
   justify-content: space-between;
-  background-color: gray;
+  background-color: var(--color-border);
   z-index: 2;
-  padding: 8px;
+  padding: 6px;
+  border-radius: 12px;
+  &__option {
+    cursor: pointer;
+    transition: color 0.15s cubic-bezier(0.17, 0.67, 0.83, 0.67);
+    padding: 6px 16px;
+    color: var(--color-text-secondary);
+    &--selected {
+      color: var(--color-text-primary);
+    }
+  }
   &__background {
-    border-radius: $border-radius;
+    border-radius: 12px;
     top: 50%;
     transform: translateY(-50%);
     z-index: -1;
-    height: 80%;
+    height: 32px;
     position: absolute;
     background-color: white;
-    transition: 0.25s all ease-in;
+    transition: 0.15s all cubic-bezier(0.17, 0.67, 0.83, 0.67);
   }
 }
 </styles>

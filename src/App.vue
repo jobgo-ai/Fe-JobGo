@@ -9,7 +9,7 @@
 
 :root {
   font-family: "Inter", sans-serif;
-  font-size: 16px;
+  font-size: 14px;
 
   // Colours
   --color-background: #ffffff;
