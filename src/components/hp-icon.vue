@@ -2,6 +2,7 @@
   <component
     :is="icon"
     role="img"
+    :alt="icon"
     :style="{ height: `${size}px`, width: `${size}px` }"
     class="hp-icon"
   />

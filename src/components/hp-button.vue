@@ -7,15 +7,21 @@
       :type="type ? type : 'button'"
       :disabled="isDisabled"
     >
+      <hp-icon
+        :class="iconClasses"
+        v-if="icon"
+        :name="icon"
+        :size="14"
+      ></hp-icon>
       <div>{{ label }}</div>
       <hp-spinner
-        class="hp-button__spinner"
+        class="hp-button__button__spinner"
         v-if="isLoading"
         :size="14"
       ></hp-spinner>
     </button>
-    <button :class="addonButton" v-if="dropdown">
-      <hp-icon :name="dropdown" size="14" />
+    <button :class="addonClasses" v-if="hasDropdown">
+      <hp-icon :name="dropdownIcon" :size="14" />
     </button>
   </div>
 </template>
@@ -29,7 +35,9 @@ import HpSpinner from "@/components/hp-spinner.vue";
 const props = defineProps({
   label: {
     type: String,
-    default: "",
+  },
+  icon: {
+    type: String,
   },
   type: {
     type: String,
@@ -47,7 +55,11 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
-  dropdown: {
+  hasDropdown: {
+    type: Boolean,
+    default: false,
+  },
+  dropdownIcon: {
     type: String,
     default: "chevron-down",
   },
@@ -57,7 +69,7 @@ const containerClasses = computed(() => {
   return {
     "hp-button": true,
     "hp-button--primary": props.primary,
-    "hp-button--dropdown": props.dropdown,
+    "hp-button--dropdown": props.hasDropdown,
   };
 });
 
@@ -65,14 +77,22 @@ const buttonClasses = computed(() => {
   return {
     "hp-button__button": true,
     "hp-button__button--disabled": props.isDisabled,
-    "hp-button__button--dropdown": props.dropdown,
+    "hp-button__button--dropdown": props.hasDropdown,
+    "hp-button__button--button-icon": props.icon && !props.label,
   };
 });
 
-const addonButton = computed(() => {
+const addonClasses = computed(() => {
   return {
     "hp-button__button": true,
-    "hp-button__button--addon": props.dropdown,
+    "hp-button__button--addon": props.hasDropdown,
+  };
+});
+
+const iconClasses = computed(() => {
+  return {
+    "hp-button__button__icon": true,
+    "hp-button__button__icon--solo": !props.label,
   };
 });
 
@@ -103,8 +123,24 @@ const emit = defineEmits(["handleClick"]);
       margin-left: 8px;
     }
 
+    &__icon {
+      color: var(--color-text-secondary);
+      margin-right: 6px;
+      margin-left: -10px;
+      &--solo {
+        margin-right: 0;
+        margin-left: 0;
+        color: var(--color-text-primary);
+      }
+    }
+
+    &--button-icon {
+      padding: 6px;
+      color: var(--color-text-primary);
+    }
+
     &--disabled {
-      color: var(--color-text-tertiery);
+      color: var(--color-text-tertiary);
       cursor: not-allowed;
     }
 
@@ -117,6 +153,8 @@ const emit = defineEmits(["handleClick"]);
       border-top-left-radius: 0px;
       border-bottom-left-radius: 0px;
       border-left: none;
+      padding: 6px;
+      color: var(--color-text-secondary);
     }
 
     &:active:not([disabled]),
