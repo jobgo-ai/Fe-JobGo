@@ -14,7 +14,7 @@
         :size="14"
       ></hp-spinner>
     </button>
-    <button v-if="dropdown">Hello</button>
+    <button class="hp-button__button" v-if="dropdown">Hello</button>
   </div>
 </template>
 
