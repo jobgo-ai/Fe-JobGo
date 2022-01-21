@@ -10,7 +10,11 @@
 :root {
   font-family: "Inter", sans-serif;
   font-size: 16px;
-  --color-primary: gainsboro;
+  --color-white: #fff;
+  --color-accent-background: #334652;
+  --color-text-primary: #212c33;
+  --color-border: #e3e5e5;
+  --color-gray-background: #f9f9f9;
 }
 
 * {
@@ -18,6 +22,7 @@
 }
 
 html {
+  color: var(--color-text-primary);
   overflow: hidden;
 }
 

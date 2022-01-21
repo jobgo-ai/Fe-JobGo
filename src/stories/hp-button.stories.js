@@ -18,7 +18,7 @@ const Template = (args) => ({
 
 export const Primary = Template.bind({});
 Primary.args = {
-  label: "Im a button",
+  label: "button",
 };
 
 export const Secondary = Template.bind({});
