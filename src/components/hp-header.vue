@@ -55,7 +55,7 @@
           </div>
           <div class="hp-header__dropdown__options">
             <div
-              @click="darkmode = !darkmode"
+              @click.prevent="darkmode = !darkmode"
               class="
                 hp-header__dropdown__options__option
                 hp-header__dropdown__options__option--toggle
