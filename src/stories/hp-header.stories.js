@@ -6,9 +6,16 @@ export default {
   argTypes: {},
 };
 
+import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
 const Template = (args) => ({
   components: { HpHeader },
   setup() {
+    const crumbz = [
+      { label: "Openings", to: "/openings" },
+      { label: "Lead Designer", to: "/opening/whatever" },
+    ];
+    const { setBreadcrumbs } = useBreadcrumbs();
+    setBreadcrumbs(crumbz);
     return { args };
   },
   template: `<div>
