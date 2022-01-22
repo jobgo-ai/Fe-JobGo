@@ -1,7 +1,7 @@
 <template>
   <div class="hp-breadcrumbs">
     <transition-group
-      name="hp-breadcrumbs__list-animation"
+      name="hp-breadcrumbs__list-transition"
       class="hp-breadcrumbs__list"
       tag="ol"
     >
@@ -48,16 +48,16 @@ const { crumbs } = useBreadcrumbs();
   }
 }
 
-.hp-breadcrumbs__list-animation-item {
+.hp-breadcrumbs__list-transition-item {
   display: inline-block;
   margin-right: 10px;
 }
-.hp-breadcrumbs__list-animation-enter-active,
-.hp-breadcrumbs__list-animation-leave-active {
+.hp-breadcrumbs__list-transition-enter-active,
+.hp-breadcrumbs__list-transition-leave-active {
   transition: all 0.15s cubic-bezier(0.17, 0.67, 0.83, 0.67);
 }
-.hp-breadcrumbs__list-animation-enter-from,
-.hp-breadcrumbs__list-animation-leave-to {
+.hp-breadcrumbs__list-transition-enter-from,
+.hp-breadcrumbs__list-transition-leave-to {
   opacity: 0;
   transform: translateX(30px);
 }

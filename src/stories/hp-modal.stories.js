@@ -15,7 +15,7 @@ const Template = (args) => ({
   },
   template: `<div>
     <button @click="isModalOpen = true">Open Modal</button>
-    <hp-modal v-bind="args" :isOpen="isModalOpen" @close="isModalOpen = false"> I'm a modal </hp-modal>
+    <hp-modal v-bind="args" :isOpen="isModalOpen" @close="isModalOpen = false"> <div style="padding:40px">I'm a modal</div> </hp-modal>
   </div>`,
 });
 

@@ -1,15 +1,25 @@
 <template>
   <teleport to="body">
-    <div v-if="isOpen">
-      <div class="modal__overlay" @click="emits('close')"></div>
-      <div class="modal__modal">
-        <slot></slot>
+    <transition name="hp-modal__modal-transition" appear>
+      <div v-if="isOpen">
+        <div class="hp-modal__overlay" @click="emits('close')"></div>
+        <transition name="hp-modal__modal-transition" appear>
+          <div v-if="isOpen" class="hp-modal__modal">
+            <div class="hp-modal__modal__content">
+              <div class="hp-modal__modal__content__close">
+                <hp-icon name="cross" :size="24" @click="emits('close')" />
+              </div>
+              <slot></slot>
+            </div>
+          </div>
+        </transition>
       </div>
-    </div>
+    </transition>
   </teleport>
 </template>
 
 <script setup>
+import HpIcon from "@/components/hp-icon.vue";
 import { watch } from "vue";
 const emits = defineEmits(["close"]);
 const props = defineProps({
@@ -36,7 +46,7 @@ watch(
 .modal-open {
   overflow: hidden;
 }
-.modal {
+.hp-modal {
   &__overlay {
     position: fixed;
     top: 0;
@@ -47,12 +57,36 @@ watch(
   }
 
   &__modal {
+    border-radius: 12px;
+    min-width: 332px;
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     background-color: #fff;
-    padding: 20px;
+    &__content {
+      position: relative;
+      &__close {
+        position: absolute;
+        top: 0;
+        right: 0;
+        margin: 20px;
+        cursor: pointer;
+        color: var(--color-text-secondary);
+      }
+    }
   }
+}
+
+.hp-modal__modal-transition-item {
+  transform: translateY(0);
+}
+.hp-modal__modal-transition-enter-active,
+.hp-modal__modal-transition-leave-active {
+  transition: all 0.15s cubic-bezier(0.17, 0.67, 0.83, 0.67);
+}
+.hp-modal__modal-transition-enter-from,
+.hp-modal__modal-transition-leave-to {
+  opacity: 0;
 }
 </style>

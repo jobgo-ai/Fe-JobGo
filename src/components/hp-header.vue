@@ -22,7 +22,7 @@
           />
         </div>
       </div>
-      <transition name="hp-header__dropdown-animation">
+      <transition name="hp-header__dropdown-transition">
         <div
           v-if="isAccountMenuOpen"
           class="hp-header__dropdown"
@@ -226,15 +226,15 @@ const dropdownClasses = computed(() => {
   }
 }
 
-.hp-header__dropdown-animation-item {
+.hp-header__dropdown-transition-item {
   transform: translateX(-100%) translateY(0);
 }
-.hp-header__dropdown-animation-enter-active,
-.hp-header__dropdown-animation-leave-active {
+.hp-header__dropdown-transition-enter-active,
+.hp-header__dropdown-transition-leave-active {
   transition: all 0.15s cubic-bezier(0.17, 0.67, 0.83, 0.67);
 }
-.hp-header__dropdown-animation-enter-from,
-.hp-header__dropdown-animation-leave-to {
+.hp-header__dropdown-transition-enter-from,
+.hp-header__dropdown-transition-leave-to {
   opacity: 0;
   transform: translateX(-100%) translateY(-10px);
 }
