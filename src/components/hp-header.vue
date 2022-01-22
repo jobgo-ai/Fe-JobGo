@@ -10,9 +10,9 @@
           {{ user.email }} <hp-icon name="chevron-up" />
         </div>
         <template #content>
-          <router-link to="/change-password">Change password</router-link>
-          <router-link to="/settings">Settings</router-link>
-          <div @click="handleLogout">Logout</div>
+          <div class="header__dropdown">
+            <hp-avatar />
+          </div>
         </template>
       </hp-popper>
     </div>
@@ -25,6 +25,7 @@ import HpBreadcrumbs from "@/components/hp-breadcrumbs.vue";
 import HpPopper from "@/components/hp-popper.vue";
 import { useRouter } from "vue-router";
 // Components
+import HpAvatar from "@/components/hp-avatar.vue";
 import HpIcon from "@/components/hp-icon.vue";
 // Hooks
 import useAuth from "@/hooks/useAuth";
