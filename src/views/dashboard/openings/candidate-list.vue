@@ -161,7 +161,7 @@ const candidateList = computed(() => {
   transform: translateX(0);
   right: 16px;
   width: 400px;
-  z-index: 2;
+  z-index: 10;
   &--left {
     right: calc(100% - 16px);
     transform: translateX(100%);

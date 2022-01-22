@@ -14,7 +14,7 @@ import { computed, defineAsyncComponent } from "vue";
 const props = defineProps({
   name: {
     type: String,
-    default: "test",
+    default: "cog",
   },
   size: {
     default: 20,

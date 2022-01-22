@@ -16,10 +16,13 @@ const Template = (args) => ({
   setup() {
     return { args, iconNames };
   },
-  template: `<div style="display:flex">
-    <div style="margin-right:8px">
-        <hp-icon v-for="icon in iconNames" :name="icon" v-bind="args"> </hp-icon>
-    </div>
+  template: `<div style="display:flex; flex-wrap: wrap;">
+      <div v-for="icon in iconNames">
+        <div style="display:flex; flex-flow: column; margin-right:8px; font-size: 8px;">
+        <hp-icon :name="icon" v-bind="args"> </hp-icon>
+        {{icon}} 
+        </div>
+      </div>  
   </div>`,
 });
 
