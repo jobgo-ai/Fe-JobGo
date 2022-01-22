@@ -34,11 +34,14 @@ const { crumbs } = useBreadcrumbs();
     font-size: 16px;
     line-height: 24px;
     margin-right: 2px;
-    letter-spacing: -0.015em;
     color: var(--color-text-secondary);
+    font-weight: 700;
+    transition: all 0.15s cubic-bezier(0.17, 0.67, 0.83, 0.67);
     &:last-child {
-      font-weight: 900;
       color: var(--color-text-primary);
+      .hp-breadcrumbs__crumb__icon {
+        color: var(--color-text-secondary);
+      }
     }
     &:first-child {
       .hp-breadcrumbs__crumb__icon {

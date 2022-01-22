@@ -68,9 +68,8 @@ watch(
       position: relative;
       &__close {
         position: absolute;
-        top: 0;
-        right: 0;
-        margin: 20px;
+        top: 10px;
+        right: 10px;
         cursor: pointer;
         color: var(--color-text-secondary);
       }
