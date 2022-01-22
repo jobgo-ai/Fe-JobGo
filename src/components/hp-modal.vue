@@ -1,16 +1,14 @@
 <template>
   <teleport to="body">
-    <transition name="hp-modal__overlay-transition">
-      <div v-if="isOpen">
-        <div class="hp-modal__overlay" @click="emits('close')"></div>
-      </div>
-    </transition>
+    <div v-if="isOpen">
+      <div class="hp-modal__overlay" @click="emits('close')"></div>
+    </div>
     <transition name="hp-modal__modal-transition">
       <div v-if="isOpen" class="hp-modal__modal">
+        <div class="hp-modal__modal__content__close">
+          <hp-icon name="cross" :size="24" @click="emits('close')" />
+        </div>
         <div class="hp-modal__modal__content">
-          <div class="hp-modal__modal__content__close">
-            <hp-icon name="cross" :size="24" @click="emits('close')" />
-          </div>
           <slot></slot>
         </div>
       </div>
@@ -49,6 +47,7 @@ watch(
 .hp-modal {
   &__overlay {
     position: fixed;
+    z-index: 100;
     top: 0;
     left: 0;
     width: 100%;
@@ -57,6 +56,7 @@ watch(
   }
 
   &__modal {
+    z-index: 101;
     border-radius: 12px;
     min-width: 332px;
     position: fixed;
@@ -68,6 +68,7 @@ watch(
       position: relative;
       &__close {
         position: absolute;
+        z-index: 10;
         top: 10px;
         right: 10px;
         cursor: pointer;
