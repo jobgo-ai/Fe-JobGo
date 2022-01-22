@@ -92,6 +92,9 @@ const dropdownTarget = ref(null);
 const isAccountMenuOpen = ref(true);
 
 onClickOutside(dropdownTarget, (event) => {
+  if (event.target.className.includes("hp-header__dropdown")) {
+    return;
+  }
   isAccountMenuOpen.value = false;
 });
 
