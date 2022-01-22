@@ -5,7 +5,7 @@
       <hp-breadcrumbs />
     </div>
     <div v-if="user">
-      <hp-popper>
+      <hp-popper show="true">
         <div class="header__dropdown-target">
           {{ user.email }} <hp-icon name="chevron-up" />
         </div>

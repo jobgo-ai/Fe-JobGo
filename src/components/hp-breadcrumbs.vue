@@ -1,6 +1,10 @@
 <template>
   <div class="hp-breadcrumbs">
-    <transition-group name="list" class="hp-breadcrumbs__list" tag="ol">
+    <transition-group
+      name="hp-breadcrumbs__list-animation"
+      class="hp-breadcrumbs__list"
+      tag="ol"
+    >
       <li class="hp-breadcrumbs__crumb" v-for="(crumb, i) in crumbs" :key="i">
         <hp-icon
           class="hp-breadcrumbs__crumb__icon"
@@ -44,16 +48,16 @@ const { crumbs } = useBreadcrumbs();
   }
 }
 
-.list-item {
+.hp-breadcrumbs__list-animation-item {
   display: inline-block;
   margin-right: 10px;
 }
-.list-enter-active,
-.list-leave-active {
+.hp-breadcrumbs__list-animation-enter-active,
+.hp-breadcrumbs__list-animation-leave-active {
   transition: all 0.15s cubic-bezier(0.17, 0.67, 0.83, 0.67);
 }
-.list-enter-from,
-.list-leave-to {
+.hp-breadcrumbs__list-animation-enter-from,
+.hp-breadcrumbs__list-animation-leave-to {
   opacity: 0;
   transform: translateX(30px);
 }
