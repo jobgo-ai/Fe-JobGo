@@ -1,13 +1,13 @@
 <template>
-  <label class="container">
+  <label class="hp-switch">
     <input
       v-bind="$attrs"
-      class="input"
+      class="hp-switch__input"
       type="checkbox"
       :checked="checked"
       @change="$emit('update:checked', $event.target.checked)"
     />
-    <span class="switch"></span>
+    <span class="hp-switch__switch"></span>
     <span class="label">{{ label }}</span>
   </label>
 </template>
@@ -25,7 +25,7 @@ const props = defineProps({
 </script>
 
 <sytle lang="scss">
-.input {
+.hp-switch__input {
   position: absolute;
   width: 1px;
   height: 1px;
@@ -37,13 +37,13 @@ const props = defineProps({
   border-width: 0;
 }
 
-.container {
+.hp-switch {
   cursor: pointer;
   display: flex;
   align-items: center;
 }
 
-.switch {
+.hp-switch__switch {
   --switch-container-width: 34px;
   --switch-size: 24px;
 
@@ -58,15 +58,15 @@ const props = defineProps({
   transition: all 0.15s cubic-bezier(0.17, 0.67, 0.83, 0.67);
 }
 
-.input:focus + .switch {
+.hp-switch__input:focus + .hp-switch__switch {
   outline: var(--color-focus) solid 4px;
 }
 
-.input:active + .switch {
+.hp-switch__input:active + .hp-switch__switch {
   outline: var(--color-focus) solid 4px;
 }
 
-.switch::before {
+.hp-switch__switch::before {
   content: "";
   position: absolute;
   transition: all 0.15s linear;
@@ -78,11 +78,11 @@ const props = defineProps({
   background-color: white;
 }
 
-.input:checked + .switch {
+.hp-switch__input:checked + .hp-switch__switch {
   background-color: var(--color-accent-background);
 }
 
-.input:checked + .switch::before {
+.hp-switch__input:checked + .hp-switch__switch::before {
   /* Move the inner circle to the right */
   transform: translateX(
     calc(var(--switch-container-width) - var(--switch-size))
