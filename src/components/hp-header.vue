@@ -220,7 +220,7 @@ const dropdownClasses = computed(() => {
       }
       &__email {
         color: var(--color-text-secondary);
-        font-weight: 400;
+        font-weight: 300;
       }
     }
   }
