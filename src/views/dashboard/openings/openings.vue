@@ -55,7 +55,10 @@
 import { ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { onMounted } from "vue";
+
+// Hooks
 import { useGet, usePost } from "@/hooks/useHttp.js";
+import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
 
 // Views
 import CandidateList from "@/views/dashboard/openings/candidate-list.vue";
@@ -105,6 +108,10 @@ onMounted(async () => {
 watch(
   () => route.query.candidate,
   async () => {
+    if (!route.query.candidate) {
+      const { setBreadcrumbs } = useBreadcrumbs();
+      setBreadcrumbs([]);
+    }
     isCandidateDetailsOpen.value = route.query.candidate;
   }
 );

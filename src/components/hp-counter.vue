@@ -23,8 +23,6 @@ const props = defineProps({
   },
 });
 
-console.log(props.name);
-
 const { errorMessage, value: modelValue } = useField(props.name);
 
 const handleCountIncrement = () => {

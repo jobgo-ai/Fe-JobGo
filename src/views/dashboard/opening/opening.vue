@@ -1,6 +1,5 @@
 <template>
   <div>
-    <hp-breadcrumbs :opening="opening" />
     <router-view v-slot="{ Component }">
       <component :opening="opening" :is="Component" />
     </router-view>

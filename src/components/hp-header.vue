@@ -1,6 +1,9 @@
 <template>
   <div class="header">
-    <router-link to="/openings"><Logo /></router-link>
+    <div class="header__left">
+      <router-link class="header__logo" to="/openings"><Logo /></router-link>
+      <hp-breadcrumbs />
+    </div>
     <div v-if="user">
       <hp-popper>
         <div class="header__dropdown-target">
@@ -18,6 +21,7 @@
 
 <script setup>
 // Vendor
+import HpBreadcrumbs from "@/components/hp-breadcrumbs.vue";
 import HpPopper from "@/components/hp-popper.vue";
 import { useRouter } from "vue-router";
 // Components
@@ -43,6 +47,14 @@ const handleLogout = () => {
   justify-content: space-between;
   align-items: center;
   padding: 24px;
+  &__logo {
+    margin-right: 24px;
+    display: flex;
+  }
+  &__left {
+    display: flex;
+    align-items: center;
+  }
   &__dropdown-target {
     display: flex;
     align-items: center;

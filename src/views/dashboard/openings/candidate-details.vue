@@ -66,6 +66,7 @@ const props = defineProps({
   },
 });
 
+import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
 import { useGet } from "@/hooks/useHttp";
 import { onMounted, watch, ref, computed } from "vue";
 import { useRoute } from "vue-router";
@@ -80,6 +81,21 @@ const fetchCandidate = async () => {
   await getCandidate.get();
   candidate.value = getCandidate.data.value.candidate;
   opening.value = getCandidate.data.value.candidate.opening;
+  const { setBreadcrumbs } = useBreadcrumbs();
+  setBreadcrumbs([
+    {
+      label: "Openings",
+      to: "/openings",
+    },
+    {
+      label: opening.value.name,
+      to: `/openings/${opening.value.reference}`,
+    },
+    {
+      label: "Candidates",
+      to: `/opening/${opening.value.reference}?candidate=${candidate.value.reference}`,
+    },
+  ]);
 };
 
 onMounted(async () => {

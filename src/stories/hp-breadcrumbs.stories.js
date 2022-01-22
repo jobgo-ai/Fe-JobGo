@@ -6,12 +6,34 @@ export default {
   argTypes: {},
 };
 
+import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
 const Template = (args) => ({
   components: { HpBreadcrumbs },
   setup() {
-    return { args };
+    const crumbz = [
+      { label: "Openings", to: "/openings" },
+      { label: "Lead Designer", to: "/opening/whatever" },
+      { label: "Candidates", to: "/opening/whatever?candidate=ejejej" },
+    ];
+    const crumbz2 = [
+      { label: "Openings", to: "/openings" },
+      { label: "Lead Designer", to: "/opening/whatever" },
+    ];
+    const { crumbs, setBreadcrumbs } = useBreadcrumbs();
+    setBreadcrumbs(crumbz);
+
+    const toggleCrumbs = () => {
+      if (crumbs.value.length === 2) {
+        setBreadcrumbs(crumbz);
+      } else {
+        setBreadcrumbs(crumbz2);
+      }
+    };
+
+    return { args, crumbz, toggleCrumbs };
   },
   template: `<div>
+    <button @click="toggleCrumbs">Toggle crumbs</button>
     <hp-breadcrumbs v-bind="args"> </hp-breadcrumbs>
   </div>`,
 });

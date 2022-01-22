@@ -98,8 +98,6 @@ onMounted(async () => {
 });
 
 const onSubmit = handleSubmit(async (values) => {
-  console.log("ww");
-  console.log(values);
   const formattedQuestions = values?.questions.map((q) => q.reference) || [];
   await putInterview.put({
     template: { ...values, jobLevels: [], questions: formattedQuestions },
