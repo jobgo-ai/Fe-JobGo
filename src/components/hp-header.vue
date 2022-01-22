@@ -89,7 +89,7 @@ const { logout } = useAuth();
 const router = useRouter();
 
 const dropdownTarget = ref(null);
-const isAccountMenuOpen = ref(true);
+const isAccountMenuOpen = ref(false);
 
 onClickOutside(dropdownTarget, (event) => {
   if (event.target.className.includes("hp-header__dropdown")) {
@@ -190,7 +190,13 @@ const dropdownClasses = computed(() => {
         display: flex;
         align-items: center;
         padding: 8px;
+        border-radius: 8px;
         line-height: 20px;
+        cursor: pointer;
+        transition: all 0.15s cubic-bezier(0.17, 0.67, 0.83, 0.67);
+        &:hover {
+          background-color: var(--color-forground-floating);
+        }
         &__icon {
           margin-right: 8px;
           color: var(--color-text-secondary);
