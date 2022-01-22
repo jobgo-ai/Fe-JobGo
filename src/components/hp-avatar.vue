@@ -15,9 +15,9 @@ const props = defineProps({
 });
 
 const user = {
-  first_name: "Nick",
-  last_name: "Barth",
-  email: "nick@hireproof.io",
+  first_name: "Neea",
+  last_name: "Ahlström",
+  email: "neea@hireproof.io",
   organization: { slug: "hireproof", name: "Hireproof" },
 };
 
