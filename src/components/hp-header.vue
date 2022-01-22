@@ -54,12 +54,21 @@
             </div>
           </div>
           <div class="hp-header__dropdown__options">
-            <div class="hp-header__dropdown__options__option">
-              <hp-icon
-                name="moon"
-                class="hp-header__dropdown__options__option__icon"
-              />
-              Dark mode
+            <div
+              @click="darkmode = !darkmode"
+              class="
+                hp-header__dropdown__options__option
+                hp-header__dropdown__options__option--toggle
+              "
+            >
+              <div class="hp-header__dropdown__options__dark-mode">
+                <hp-icon
+                  name="moon"
+                  class="hp-header__dropdown__options__option__icon"
+                />
+                Dark mode
+              </div>
+              <hp-switch v-model:checked="darkmode" />
             </div>
           </div>
           <div class="hp-header__dropdown__options">
@@ -80,6 +89,7 @@ import { onClickOutside } from "@vueuse/core";
 // Components
 import HpAvatar from "@/components/hp-avatar.vue";
 import HpIcon from "@/components/hp-icon.vue";
+import HpSwitch from "@/components/hp-switch.vue";
 // Hooks
 import useAuth from "@/hooks/useAuth";
 // Svg
@@ -88,6 +98,7 @@ import Logo from "@/assets/logo.svg";
 const { logout } = useAuth();
 const router = useRouter();
 
+const darkmode = ref(false);
 const dropdownTarget = ref(null);
 const isAccountMenuOpen = ref(false);
 
@@ -201,6 +212,13 @@ const dropdownClasses = computed(() => {
           margin-right: 8px;
           color: var(--color-text-secondary);
         }
+        &--toggle {
+          justify-content: space-between;
+        }
+      }
+      &__dark-mode {
+        display: flex;
+        align-items: center;
       }
     }
 
