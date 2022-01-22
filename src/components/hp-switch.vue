@@ -39,7 +39,7 @@ const props = defineProps({
 
 .hp-switch {
   cursor: pointer;
-  display: flex;
+  display: inline-flex;
   align-items: center;
 }
 
