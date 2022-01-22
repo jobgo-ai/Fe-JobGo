@@ -1,18 +1,18 @@
 <template>
   <teleport to="body">
-    <transition name="hp-modal__modal-transition" appear>
+    <transition name="hp-modal__overlay-transition">
       <div v-if="isOpen">
         <div class="hp-modal__overlay" @click="emits('close')"></div>
-        <transition name="hp-modal__modal-transition" appear>
-          <div v-if="isOpen" class="hp-modal__modal">
-            <div class="hp-modal__modal__content">
-              <div class="hp-modal__modal__content__close">
-                <hp-icon name="cross" :size="24" @click="emits('close')" />
-              </div>
-              <slot></slot>
-            </div>
+      </div>
+    </transition>
+    <transition name="hp-modal__modal-transition">
+      <div v-if="isOpen" class="hp-modal__modal">
+        <div class="hp-modal__modal__content">
+          <div class="hp-modal__modal__content__close">
+            <hp-icon name="cross" :size="24" @click="emits('close')" />
           </div>
-        </transition>
+          <slot></slot>
+        </div>
       </div>
     </transition>
   </teleport>
@@ -78,15 +78,36 @@ watch(
   }
 }
 
-.hp-modal__modal-transition-item {
+.hp-modal__overlay-transition {
   transform: translateY(0);
+}
+.hp-modal__overlay-transition-enter-active,
+.hp-modal__overlay-transition-leave-active {
+  transition: all 0.15s cubic-bezier(0.17, 0.67, 0.83, 0.67);
+}
+.hp-modal__overlay-transition-leave-active {
+  transition-delay: 0.15s;
+}
+
+.hp-modal__overlay-transition-enter-from,
+.hp-modal__overlay-transition-leave-to {
+  opacity: 0;
+}
+
+.hp-modal__modal-transition {
+  opacity: 1;
+  transform: translate(-50%, -50%);
 }
 .hp-modal__modal-transition-enter-active,
 .hp-modal__modal-transition-leave-active {
   transition: all 0.15s cubic-bezier(0.17, 0.67, 0.83, 0.67);
 }
+.hp-modal__modal-transition-enter-active {
+  transition-delay: 0.15s;
+}
 .hp-modal__modal-transition-enter-from,
 .hp-modal__modal-transition-leave-to {
   opacity: 0;
+  transform: translate(-50%, -60%);
 }
 </style>
