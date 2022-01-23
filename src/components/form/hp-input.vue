@@ -20,9 +20,11 @@
         :name="icon"
       ></hp-icon>
     </div>
-    <div v-if="errorMessage" class="hp-input__error">
-      {{ errorMessage }}
-    </div>
+    <transition name="hp-input__error-transition">
+      <div v-if="errorMessage" class="hp-input__error">
+        {{ errorMessage }}
+      </div>
+    </transition>
   </div>
 </template>
 
@@ -146,5 +148,18 @@ const containerClasses = computed(() => {
       border: 1px solid var(--color-accent-background);
     }
   }
+}
+
+.hp-input__error-transition {
+  opacity: 1;
+}
+.hp-input__error-transition-enter-active,
+.hp-input__error-transition-leave-active {
+  transition: all 0.15s cubic-bezier(0.17, 0.67, 0.83, 0.67);
+}
+.hp-input__error-transition-enter-from,
+.hp-input__error-transition-leave-to {
+  opacity: 0;
+  transform: translateY(10px);
 }
 </style>

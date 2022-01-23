@@ -1,6 +1,5 @@
 <template>
   <div class="signin">
-    signin
     <hp-input name="email" label="username" />
     <hp-input name="password" label="password" type="password" />
     <hp-button
