@@ -6,13 +6,28 @@ export default {
   argTypes: {},
 };
 
+import { useForm } from "vee-validate";
+import * as yup from "yup";
+
 const Template = (args) => ({
   components: { HpCounter },
   setup() {
+    const schema = yup.object({
+      number: yup.number(),
+    });
+
+    const { handleSubmit } = useForm({
+      validationSchema: schema,
+      initialValues: {
+        number: 14,
+      },
+    });
+
     return { args };
   },
   template: `<div>
-    <hp-counter  />
+    <hp-counter style="margin-right:16px" label="Default" name="number"  />
+    <hp-counter label="Disabled" :isDisabled="true" name="number"  />
   </div>`,
 });
 
