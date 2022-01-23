@@ -26,6 +26,7 @@ const Template = (args) => ({
     return { args };
   },
   template: `<div>
+  TODO: limit characters
     <hp-counter style="margin-right:16px" label="Default" name="number"  />
     <hp-counter label="Disabled" :isDisabled="true" name="number"  />
   </div>`,
