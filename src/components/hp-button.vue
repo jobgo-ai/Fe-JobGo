@@ -6,6 +6,8 @@
       :class="buttonClasses"
       :type="type ? type : 'button'"
       :disabled="isDisabled"
+      @focus="isFocused = true"
+      @blur="isFocused = false"
     >
       <hp-icon
         :class="iconClasses"
@@ -20,7 +22,12 @@
         :size="14"
       ></hp-spinner>
     </button>
-    <button :class="addonClasses" v-if="hasDropdown">
+    <button
+      @focus="isFocused = true"
+      @blur="isFocused = false"
+      :class="addonClasses"
+      v-if="hasDropdown"
+    >
       <hp-icon :name="dropdownIcon" :size="14" />
     </button>
   </div>
@@ -28,7 +35,7 @@
 
 <script setup>
 //Vendor
-import { computed } from "vue";
+import { computed, ref } from "vue";
 // Components
 import HpIcon from "@/components/hp-icon.vue";
 import HpSpinner from "@/components/hp-spinner.vue";
@@ -65,11 +72,14 @@ const props = defineProps({
   },
 });
 
+const isFocused = ref(false);
+
 const containerClasses = computed(() => {
   return {
     "hp-button": true,
     "hp-button--primary": props.primary,
     "hp-button--dropdown": props.hasDropdown,
+    "hp-button--focused": isFocused.value,
   };
 });
 
@@ -103,6 +113,14 @@ const emit = defineEmits(["handleClick"]);
 .hp-button {
   display: flex;
 
+  &--focused {
+    border-radius: 8px;
+    outline: var(--color-focus) solid 4px;
+    border-color: var(--color-accent-background);
+    filter: drop-shadow(0px 4px 8px rgba(33, 44, 51, 0.02))
+      drop-shadow(0px 0px 1px rgba(33, 44, 51, 0.02));
+  }
+
   // Button primary
   &--primary > .hp-button__button {
     color: var(--color-accent-forground);
@@ -125,12 +143,6 @@ const emit = defineEmits(["handleClick"]);
 
     &:active:not([disabled]) {
       border-color: var(--color-accent-background);
-    }
-    &:focus:not([disabled]) {
-      outline: var(--color-focus) solid 4px;
-      border-color: var(--color-accent-background);
-      filter: drop-shadow(0px 4px 8px rgba(33, 44, 51, 0.02))
-        drop-shadow(0px 0px 1px rgba(33, 44, 51, 0.02));
     }
   }
 
@@ -203,12 +215,6 @@ const emit = defineEmits(["handleClick"]);
 
     &:active:not([disabled]) {
       border-color: var(--color-border-subtle);
-    }
-    &:focus:not([disabled]) {
-      outline: var(--color-focus) solid 4px;
-      border-color: var(--color-border);
-      filter: drop-shadow(0px 4px 8px rgba(33, 44, 51, 0.02))
-        drop-shadow(0px 0px 1px rgba(33, 44, 51, 0.02));
     }
   }
 }
