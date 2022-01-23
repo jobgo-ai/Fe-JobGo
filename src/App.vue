@@ -29,6 +29,7 @@
   --color-background-negative: #f2e2df;
   --color-border-negative: #d9ada4;
   --color-forground-negative: #86483b;
+  --color-error: #bd6455;
   --color-focus: #f2f4f5;
   --color-background-floating: #ffffff;
   --color-forground-floating: #f0f0f0;
