@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="signin">
     signin
     <hp-input name="email" label="username" />
     <hp-input name="password" label="password" type="password" />
@@ -54,3 +54,12 @@ const onSubmit = handleSubmit(async (values) => {
   }
 });
 </script>
+
+<style lang="scss">
+.signin {
+  width: 600px;
+  margin: auto;
+  border: 1px solid gray;
+  padding: 40px;
+}
+</style>
