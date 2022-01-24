@@ -212,12 +212,12 @@ watch(state, () => {
   top: 0;
   left: 0;
   bottom: 0;
-  transition: all 0.35s cubic-bezier(0.17, 0.67, 0.83, 0.67);
+  transform: translateX(0);
+  transition: all 0.25s cubic-bezier(0.17, 0.67, 0.83, 0.67);
 }
 
 .openingslist--empty {
-  left: 50%;
-  transform: translateX(-50%);
+  transform: translateX(25%);
 }
 
 .opening-list {
@@ -246,7 +246,7 @@ watch(state, () => {
 
 .fade-enter-active,
 .fade-leave-active {
-  transition: all 0.35s cubic-bezier(0.17, 0.67, 0.83, 0.67);
+  transition: all 0.25s cubic-bezier(0.17, 0.67, 0.83, 0.67);
   transform: translateX(0);
 }
 
@@ -257,11 +257,11 @@ watch(state, () => {
 }
 
 .slide-left-enter-active {
-  transition: all 0.35s cubic-bezier(0.17, 0.67, 0.83, 0.67);
+  transition: all 0.25s cubic-bezier(0.17, 0.67, 0.83, 0.67);
 }
 
 .slide-left-leave-active {
-  transition: all 0.35s cubic-bezier(0.17, 0.67, 0.83, 0.67);
+  transition: all 0.25s cubic-bezier(0.17, 0.67, 0.83, 0.67);
 }
 
 .slide-left-enter-from,
@@ -271,11 +271,11 @@ watch(state, () => {
 }
 
 .slide-right-enter-active {
-  transition: all 0.35s cubic-bezier(0.17, 0.67, 0.83, 0.67);
+  transition: all 0.25s cubic-bezier(0.17, 0.67, 0.83, 0.67);
 }
 
 .slide-right-leave-active {
-  transition: all 0.35s cubic-bezier(0.17, 0.67, 0.83, 0.67);
+  transition: all 0.25s cubic-bezier(0.17, 0.67, 0.83, 0.67);
 }
 
 .slide-right-enter-from,

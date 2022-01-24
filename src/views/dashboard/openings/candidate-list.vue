@@ -157,7 +157,7 @@ const candidateList = computed(() => {
   padding: 10px;
   background-color: var(--color-primary);
   position: absolute;
-  transition: all 0.35s cubic-bezier(0.17, 0.67, 0.83, 0.67);
+  transition: all 0.25s cubic-bezier(0.17, 0.67, 0.83, 0.67);
   transform: translateX(0);
   right: 16px;
   width: 400px;
