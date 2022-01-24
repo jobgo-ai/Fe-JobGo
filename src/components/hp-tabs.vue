@@ -68,7 +68,7 @@ const styles = computed(() => {
   background-color: var(--color-border);
   z-index: 2;
   padding: 4px;
-  border-radius: 12px;
+  border-radius: 12px / 10px;
   transition: all 0.15s cubic-bezier(0.17, 0.67, 0.83, 0.67);
   &__option {
     background-color: transparent;
@@ -78,7 +78,7 @@ const styles = computed(() => {
     transition: all 0.15s cubic-bezier(0.17, 0.67, 0.83, 0.67);
     padding: 6px 16px;
     color: var(--color-text-secondary);
-    border-radius: 12px;
+    border-radius: 10px / 12px;
 
     &--selected {
       color: var(--color-text-primary);
