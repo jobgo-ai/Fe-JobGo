@@ -131,6 +131,7 @@ const containerClasses = computed(() => {
     color: var(--color-text-secondary);
   }
   &__input {
+    background-color: var(--color-background);
     border: 1px solid var(--color-border);
     border-radius: 8px;
     padding: 8px 8px 8px 12px;
