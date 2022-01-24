@@ -1,7 +1,7 @@
 <template>
   <div class="hp-spinner">
     <span
-      class="hp-spinner__spinner"
+      :class="`hp-spinner__spinner hp-spinner__spinner--${mode}`"
       :style="{ width: `${size}px`, height: `${size}px` }"
     ></span>
   </div>
@@ -12,6 +12,10 @@ const props = defineProps({
   size: {
     type: Number,
     default: 16,
+  },
+  mode: {
+    type: String,
+    default: "dark",
   },
 });
 </script>
@@ -25,6 +29,14 @@ const props = defineProps({
     border-radius: 50%;
     animation: spin 1s linear infinite;
     transition: all 0.3s ease-in-out;
+    &--dark {
+      border: 1px solid rgba(51, 70, 82, 0.4);
+      border-top: 1px solid rgba(51, 70, 82, 1);
+    }
+    &--light {
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      border-top: 1px solid rgba(255, 255, 255, 1);
+    }
   }
 
   @keyframes spin {

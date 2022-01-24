@@ -20,6 +20,7 @@
         class="hp-button__button__spinner"
         v-if="isLoading"
         :size="14"
+        :mode="primary ? 'light' : 'dark'"
       ></hp-spinner>
     </button>
     <button
