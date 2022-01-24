@@ -1,4 +1,12 @@
-<script setup></script>
+<script setup>
+const currentTheme = localStorage.getItem("theme")
+  ? localStorage.getItem("theme")
+  : null;
+
+if (currentTheme) {
+  document.documentElement.setAttribute("data-theme", currentTheme);
+}
+</script>
 
 <template>
   <router-view></router-view>
@@ -38,12 +46,45 @@
   --color-forground-tooltip: #ffffff;
 }
 
+[data-theme="dark"] {
+  --color-background: #1d2429;
+  --color-card: #1d2429;
+  --color-panel: #171f24;
+  --color-border-subtle: #242b30;
+  --color-border: #343b40;
+  --color-border-soft: #252c30;
+  --color-text-primary: #ffffff;
+  --color-text-secondary: #c6cacc;
+  --color-text-tertiary: #778085;
+  --color-accent-background: #505099;
+  --color-accent-forground: #ffffff;
+  --color-underground: #151c21;
+  --color-background-positive: rgba(85, 158, 122, 0.08);
+  --color-border-positive: rgba(85, 158, 122, 0.32);
+  --color-forground-positive: #559e7a;
+  --color-background-negative: rgba(181, 97, 80, 0.08);
+  --color-border-negative: rgba(181, 97, 80, 0.32);
+  --color-forground-negative: #b56150;
+  --color-focus: linear-gradient(
+      0deg,
+      rgba(41, 52, 59, 0.72),
+      rgba(41, 52, 59, 0.72)
+    ),
+    #505099;
+  --color-background-floating: #242c30;
+  --color-forground-floating: #363e42;
+  --color-overylay: #1d2429;
+  --color-tooltip: #393f42;
+  --color-forground-tooltip: #393f42;
+}
+
 * {
   box-sizing: border-box;
 }
 
 html {
   color: var(--color-text-primary);
+  background-color: var(--color-background);
   overflow: hidden;
   font-size: 14px;
   line-height: 20px;

@@ -55,7 +55,7 @@
           </div>
           <div class="hp-header__dropdown__options">
             <div
-              @click.prevent="darkmode = !darkmode"
+              @click.prevent="handleDarkModeToggle"
               class="
                 hp-header__dropdown__options__option
                 hp-header__dropdown__options__option--toggle
@@ -98,7 +98,7 @@ import Logo from "@/assets/logo.svg";
 const { logout } = useAuth();
 const router = useRouter();
 
-const darkmode = ref(false);
+const darkmode = ref(localStorage.getItem("theme") === "dark");
 const dropdownTarget = ref(null);
 const isAccountMenuOpen = ref(false);
 
@@ -119,6 +119,17 @@ const user = {
 const handleLogout = () => {
   logout();
   router.push("/login");
+};
+
+const handleDarkModeToggle = () => {
+  darkmode.value = !darkmode.value;
+  if (darkmode.value) {
+    document.documentElement.setAttribute("data-theme", "dark");
+    localStorage.setItem("theme", "dark");
+  } else {
+    document.documentElement.setAttribute("data-theme", "light");
+    localStorage.setItem("theme", "light");
+  }
 };
 
 const dropdownClasses = computed(() => {
@@ -180,7 +191,7 @@ const dropdownClasses = computed(() => {
   }
   &__dropdown {
     z-index: 100;
-    background-color: var(--color-accent-forground);
+    background-color: var(--background-color);
     position: absolute;
     top: calc(100% + 8px);
     left: 100%;
@@ -191,6 +202,7 @@ const dropdownClasses = computed(() => {
     box-shadow: 0px 16px 24px rgba(33, 44, 51, 0.06),
       0px 2px 6px rgba(33, 44, 51, 0.04), 0px 0px 1px rgba(33, 44, 51, 0.04);
     border-radius: 12px;
+    border: 1px solid var(--color-border-subtle);
     &__options {
       padding: 8px;
       border-bottom: 1px dashed var(--color-border);

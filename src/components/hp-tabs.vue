@@ -95,7 +95,7 @@ const styles = computed(() => {
     z-index: -1;
     height: 32px;
     position: absolute;
-    background-color: var(--color-accent-forground);
+    background-color: var(--color-background);
     transition: 0.15s all cubic-bezier(0.17, 0.67, 0.83, 0.67);
     box-shadow: 0px 4px 8px rgba(33, 44, 51, 0.02),
       0px 0px 1px rgba(33, 44, 51, 0.02);
