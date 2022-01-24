@@ -20,7 +20,7 @@ import HpInput from "@/components/form/hp-input.vue";
 import HpButton from "@/components/hp-button.vue";
 
 // Hooks
-import { usePatch } from "@/hooks/useHttp";
+import { usePut } from "@/hooks/useHtt/passwordp";
 
 const props = defineProps({
   candidates: {
@@ -37,7 +37,7 @@ const props = defineProps({
   },
 });
 
-const patchUser = usePatch("self");
+const putUser = usePut("self/password");
 const schema = yup.object().shape({
   currentPassword: yup
     .string()
@@ -66,16 +66,14 @@ const { handleSubmit, resetForm, setFieldError } = useForm({
 });
 
 const onSubmit = handleSubmit(async (values) => {
-  await patchUser.patch({
-    self: {
-      password: {
-        current: values.currentPassword,
-        new: values.password,
-      },
+  await putUser.put({
+    password: {
+      current: values.currentPassword,
+      new: values.password,
     },
   });
 
-  if (patchUser.error.value) {
+  if (putUser.error.value) {
     setFieldError("currentPassword", "Current password is incorrect");
   } else {
     resetForm();
