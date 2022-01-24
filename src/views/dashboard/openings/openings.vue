@@ -46,7 +46,7 @@
             </hp-opening-card>
           </ol>
           <hp-spinner
-            class="opening-list__spinner"
+            class="openingslist__spinner"
             :size="24"
             v-else
           ></hp-spinner>
