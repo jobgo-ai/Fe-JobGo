@@ -67,21 +67,13 @@ const props = defineProps({
 
 const splash = computed(() => {
   return defineAsyncComponent(() =>
-    import(
-      /* @vite-ignore */ `../assets/abstracts/covers/cover_${
-        Math.floor(Math.random() * 10) + 1
-      }.svg`
-    )
+    import(/* @vite-ignore */ `../assets/abstracts/covers/cover_6.svg`)
   );
 });
 
 const avatar = computed(() => {
   return defineAsyncComponent(() =>
-    import(
-      /* @vite-ignore */ `../assets/abstracts/avatars/avatar_${
-        Math.floor(Math.random() * 10) + 1
-      }.svg`
-    )
+    import(/* @vite-ignore */ `../assets/abstracts/avatars/avatar_6.svg`)
   );
 });
 
