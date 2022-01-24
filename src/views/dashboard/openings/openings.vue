@@ -33,23 +33,15 @@
             v-model="state"
           />
           <ol class="opening-list__grid">
-            <div class="opening-list__grid-item" @click="handleNewOpening">
-              New opening
-            </div>
-            <li
-              class="opening-list__grid-item"
+            <hp-opening-card @click="handleNewOpening" :isAddCard="true">
+            </hp-opening-card>
+            <hp-opening-card
               @click="router.push(`/openings/${opening.reference}`)"
               :key="opening.reference"
               v-for="opening in openings"
+              :opening="opening"
             >
-              <div class="opening-list__grid-item__content">
-                <h4>{{ opening.name }}</h4>
-                <p>{{ opening.description }}</p>
-                {{ opening.statistics.candidates }} Candidates
-                {{ opening.statistics.templates }} Templates
-                {{ opening.statistics.skills.length }} Skills
-              </div>
-            </li>
+            </hp-opening-card>
           </ol>
         </div>
       </transition>
@@ -72,6 +64,7 @@ import CandidateDetails from "@/views/dashboard/openings/candidate-details.vue";
 
 // Components
 import HpTabs from "@/components/hp-tabs.vue";
+import HpOpeningCard from "@/components/hp-opening-card.vue";
 
 const route = useRoute();
 const router = useRouter();
