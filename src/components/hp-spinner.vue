@@ -24,14 +24,12 @@ const props = defineProps({
 .hp-spinner {
   display: flex;
   &__spinner {
-    border: 1px solid rgba(51, 70, 82, 0.4);
-    border-top: 1px solid rgba(51, 70, 82, 1);
     border-radius: 50%;
     animation: spin 1s linear infinite;
     transition: all 0.3s ease-in-out;
     &--dark {
-      border: 1px solid rgba(51, 70, 82, 0.4);
-      border-top: 1px solid rgba(51, 70, 82, 1);
+      border: 1px solid var(--color-spinner-track);
+      border-top: 1px solid var(--color-spinner-bullet);
     }
     &--light {
       border: 1px solid rgba(255, 255, 255, 0.4);

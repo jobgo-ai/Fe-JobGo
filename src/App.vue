@@ -44,6 +44,8 @@ if (currentTheme) {
   --color-overylay: #1d2429;
   --color-tooltip: #29343b;
   --color-forground-tooltip: #ffffff;
+  --color-spinner-track: rgba(51, 70, 82, 0.4);
+  --color-spinner-bullet: rgba(51, 70, 82, 1);
 }
 
 [data-theme="dark"] {
@@ -76,6 +78,8 @@ if (currentTheme) {
   --color-overylay: #1d2429;
   --color-tooltip: #393f42;
   --color-forground-tooltip: #393f42;
+  --color-spinner-track: rgba(255, 255, 255, 0.4);
+  --color-spinner-bullet: rgba(255, 255, 255, 1);
 }
 
 * {
