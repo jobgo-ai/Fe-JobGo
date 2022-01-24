@@ -20,7 +20,7 @@ import HpInput from "@/components/form/hp-input.vue";
 import HpButton from "@/components/hp-button.vue";
 
 // Hooks
-import { usePut } from "@/hooks/useHtt/passwordp";
+import { usePut } from "@/hooks/useHttp";
 
 const props = defineProps({
   candidates: {

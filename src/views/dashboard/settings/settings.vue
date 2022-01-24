@@ -1,1 +1,1 @@
-<template>I'm settings</template>
+<template><div>Settings</div></template>

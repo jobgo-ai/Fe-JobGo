@@ -14,7 +14,7 @@
             class="hp-header__dropdown-target__info__avatar"
             size="sm"
           />
-          {{ user.first_name }} {{ user.last_name }}
+          {{ user.firstName }} {{ user.lastName }}
           <hp-icon
             class="hp-header__dropdown-target__info__icon"
             name="chevron-up"
@@ -31,27 +31,37 @@
           <div class="hp-header__dropdown__info">
             <hp-avatar class="hp-header__dropdown__info__avatar" />
             <div class="hp-header__dropdown__info__name">
-              {{ user.first_name }} {{ user.last_name }}
+              {{ user.firstName }} {{ user.lastName }}
               <div class="hp-header__dropdown__info__email">
                 {{ user.email }}
               </div>
             </div>
           </div>
           <div class="hp-header__dropdown__options">
-            <div class="hp-header__dropdown__options__option">
+            <router-link
+              to="/settings"
+              tag="div"
+              class="hp-header__dropdown__options__option"
+              @click="isAccountMenuOpen = false"
+            >
               <hp-icon
                 name="cog"
                 class="hp-header__dropdown__options__option__icon"
               />
               Account Settings
-            </div>
-            <div class="hp-header__dropdown__options__option">
+            </router-link>
+            <router-link
+              @click="isAccountMenuOpen = false"
+              tag="div"
+              to="/change-password"
+              class="hp-header__dropdown__options__option"
+            >
               <hp-icon
                 name="locked"
                 class="hp-header__dropdown__options__option__icon"
               />
               Change password
-            </div>
+            </router-link>
           </div>
           <div class="hp-header__dropdown__options">
             <div
@@ -109,12 +119,7 @@ onClickOutside(dropdownTarget, (event) => {
   isAccountMenuOpen.value = false;
 });
 
-const user = {
-  first_name: "Neea",
-  last_name: "Ahlström",
-  email: "neea@hireproof.io",
-  organization: { slug: "hireproof", name: "Hireproof" },
-};
+const { user } = useAuth();
 
 const handleLogout = () => {
   logout();
