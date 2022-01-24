@@ -1,11 +1,15 @@
 <template>
   <div class="hp-tabs">
+    <div
+      class="hp-tabs__background"
+      :style="{
+        ...styles,
+      }"
+    ></div>
     <button
       v-for="(item, index) in props.options"
       @click="emits('update:modelValue', item)"
-      :class="`hp-tabs__option hp-tabs__option--${index} ${
-        index === correctIndex && 'hp-tabs__option--selected'
-      }`"
+      :class="`hp-tabs__option hp-tabs__option--${index}`"
       :ref="
         (el) => {
           if (el) optionRefs[index] = el;
@@ -43,17 +47,17 @@ const correctIndex = computed(() => {
   });
 });
 
-// const styles = computed(() => {
-//   const correctIndex = props.options.findIndex((item) => {
-//     return item.toLowerCase() === props.modelValue.toLowerCase();
-//   });
-//   const width = optionRefs.value[correctIndex]?.clientWidth;
-//   const left = optionRefs.value[correctIndex]?.offsetLeft;
-//   return {
-//     width: `${width}px`,
-//     left: `${left}px`,
-//   };
-// });
+const styles = computed(() => {
+  const correctIndex = props.options.findIndex((item) => {
+    return item.toLowerCase() === props.modelValue.toLowerCase();
+  });
+  const width = optionRefs.value[correctIndex]?.clientWidth;
+  const left = optionRefs.value[correctIndex]?.offsetLeft;
+  return {
+    width: `${width}px`,
+    left: `${left}px`,
+  };
+});
 </script>
 
 <styles lang="scss" scoped>
@@ -85,16 +89,16 @@ const correctIndex = computed(() => {
       outline: var(--color-outline) solid 4px;
     }
   }
-  // &__background {
-  //   border-radius: 12px;
-  //   top: 4px;
-  //   z-index: -1;
-  //   height: 32px;
-  //   position: absolute;
-  //   background-color: var(--color-accent-forground);
-  //   transition: 0.15s all cubic-bezier(0.17, 0.67, 0.83, 0.67);
-  //   box-shadow: 0px 4px 8px rgba(33, 44, 51, 0.02),
-  //     0px 0px 1px rgba(33, 44, 51, 0.02);
-  // }
+  &__background {
+    border-radius: 8px;
+    top: 4px;
+    z-index: -1;
+    height: 32px;
+    position: absolute;
+    background-color: var(--color-accent-forground);
+    transition: 0.15s all cubic-bezier(0.17, 0.67, 0.83, 0.67);
+    box-shadow: 0px 4px 8px rgba(33, 44, 51, 0.02),
+      0px 0px 1px rgba(33, 44, 51, 0.02);
+  }
 }
 </styles>
