@@ -62,7 +62,7 @@ import { useRoute, useRouter } from "vue-router";
 import { onMounted } from "vue";
 
 // Hooks
-import { useGet, usePost } from "@/hooks/useHttp.js";
+import { useGet, usePost } from "@/hooks/useHttp";
 import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
 
 // Views
