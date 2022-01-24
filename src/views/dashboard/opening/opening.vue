@@ -11,9 +11,6 @@
 import { ref, watch } from "vue";
 import { useRoute } from "vue-router";
 
-// Components
-import HpBreadcrumbs from "@/components/hp-breadcrumbs.vue";
-
 // Hooks
 import { useGet } from "@/hooks/useHttp";
 

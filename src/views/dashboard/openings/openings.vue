@@ -32,7 +32,7 @@
             :options="['Active', 'Archived']"
             v-model="state"
           />
-          <ol class="opening-list__grid">
+          <ol v-if="!isOpeningsLoading" class="opening-list__grid">
             <hp-opening-card @click="handleNewOpening" :isAddCard="true">
             </hp-opening-card>
             <hp-opening-card
@@ -41,9 +41,15 @@
               :key="opening.reference"
               v-for="opening in openings"
               :opening="opening"
+              :isArchived="state === 'Archived'"
             >
             </hp-opening-card>
           </ol>
+          <hp-spinner
+            class="opening-list__spinner"
+            :size="24"
+            v-else
+          ></hp-spinner>
         </div>
       </transition>
     </div>
@@ -66,6 +72,7 @@ import CandidateDetails from "@/views/dashboard/openings/candidate-details.vue";
 // Components
 import HpTabs from "@/components/hp-tabs.vue";
 import HpOpeningCard from "@/components/hp-opening-card.vue";
+import HpSpinner from "@/components/hp-spinner.vue";
 
 const route = useRoute();
 const router = useRouter();
@@ -75,6 +82,7 @@ const candidates = ref([]);
 const isCandidateDetailsOpen = ref(route.query.candidate);
 const isCandidateListOpen = ref(route.params.openingRef);
 
+const isOpeningsLoading = ref(true);
 const state = ref("active");
 
 const fetchCandidates = async () => {
@@ -86,13 +94,18 @@ const fetchCandidates = async () => {
 };
 
 const fetchOpenings = async () => {
+  isOpeningsLoading.value = true;
   const url = `openings?state=${state.value.toLowerCase()}`;
   const getOpenings = useGet(url);
   await getOpenings.get();
   openings.value = getOpenings.data.value.openings;
+  isOpeningsLoading.value = false;
 };
 
 const handleOpeningCardClick = (opening) => {
+  if (opening.state === "archived") {
+    return;
+  }
   if (opening.reference === route.params.openingRef) {
     router.push(`/openings/`);
   } else {
@@ -139,7 +152,11 @@ watch(
       await fetchCandidates();
     } else if (!route.params.openingRef) {
       isCandidateListOpen.value = false;
-      await fetchOpenings();
+      if (openings.value.length > 0) {
+        return;
+      } else {
+        await fetchOpenings();
+      }
     }
   },
   { immediate: true }
@@ -214,6 +231,10 @@ watch(state, () => {
   bottom: 0;
   transform: translateX(0);
   transition: all 0.25s cubic-bezier(0.17, 0.67, 0.83, 0.67);
+  &__spinner {
+    display: flex;
+    justify-content: center;
+  }
 }
 
 .openingslist--empty {
@@ -229,7 +250,7 @@ watch(state, () => {
     grid-gap: 40px;
     grid-template-columns: repeat(auto-fill, 264px);
     align-content: baseline;
-    padding-bottom: 75px;
+    padding-bottom: 500px;
   }
   &__grid-item {
     height: 264px;

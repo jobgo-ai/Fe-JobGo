@@ -191,7 +191,7 @@ const dropdownClasses = computed(() => {
   }
   &__dropdown {
     z-index: 100;
-    background-color: var(--background-color);
+    background-color: var(--color-background);
     position: absolute;
     top: calc(100% + 8px);
     left: 100%;
