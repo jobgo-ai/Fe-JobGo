@@ -5,11 +5,11 @@
 </template>
 
 <style lang="scss">
-@import url("https://fonts.googleapis.com/css2?family=Inter&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap");
 
 :root {
   font-family: "Inter", sans-serif;
-  font-size: 14px;
+  font-weight: 400;
 
   // Colours
   --color-background: #ffffff;
@@ -45,6 +45,8 @@
 html {
   color: var(--color-text-primary);
   overflow: hidden;
+  font-size: 14px;
+  line-height: 20px;
 }
 
 ol,

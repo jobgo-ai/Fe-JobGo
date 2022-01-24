@@ -113,7 +113,7 @@ const containerClasses = computed(() => {
     }
   }
   &__label {
-    font-weight: 800;
+    font-weight: 500;
     margin-bottom: 8px;
     color: var(--color-text-secondary);
   }

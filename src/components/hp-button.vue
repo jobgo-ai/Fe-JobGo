@@ -111,7 +111,7 @@ const emit = defineEmits(["handleClick"]);
 
 <div lang="scss" scoped>
 .hp-button {
-  display: flex;
+  display: inline-flex;
 
   &--focused {
     border-radius: 8px;

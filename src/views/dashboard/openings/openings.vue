@@ -23,9 +23,15 @@
         name="slide-right"
       >
         <div v-if="!isCandidateDetailsOpen" class="opening-list">
-          <h2>Openings</h2>
-          <p>Manage your openings or quickly create new ones</p>
-          <hp-tabs :options="['Active', 'Archived']" v-model="state" />
+          <h2 class="openings__title">Openings</h2>
+          <p class="openings__subtitle">
+            Manage your openings or quickly create new ones
+          </p>
+          <hp-tabs
+            class="openings__tabs"
+            :options="['Active', 'Archived']"
+            v-model="state"
+          />
           <ol class="opening-list__grid">
             <div class="opening-list__grid-item" @click="handleNewOpening">
               New opening
@@ -162,6 +168,21 @@ watch(state, () => {
   display: flex;
   width: 100%;
   flex-direction: column;
+  &__title {
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 32px;
+    margin: 0;
+    margin-bottom: 4px;
+  }
+  &__subtitle {
+    color: var(--color-text-secondary);
+    margin: 0;
+    margin-bottom: 16px;
+  }
+  &__tabs {
+    margin-bottom: 24px;
+  }
 }
 
 .view {

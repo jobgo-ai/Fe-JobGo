@@ -123,10 +123,10 @@ const containerClasses = computed(() => {
   }
   &__error {
     color: var(--color-error);
-    font-weight: 800;
+    font-weight: 500;
   }
   &__label {
-    font-weight: 800;
+    font-weight: 500;
     margin-bottom: 8px;
     color: var(--color-text-secondary);
   }

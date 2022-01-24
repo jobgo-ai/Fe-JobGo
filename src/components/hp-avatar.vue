@@ -30,7 +30,7 @@ const initials = computed(() => {
 .hp-avatar {
   display: inline-flex;
   background-color: var(--color-panel);
-  font-weight: 900;
+  font-weight: 500;
   color: var(--color-text-secondary);
   border: 1px solid var(--color-border);
   box-shadow: 0px 4px 8px rgba(33, 44, 51, 0.02),
