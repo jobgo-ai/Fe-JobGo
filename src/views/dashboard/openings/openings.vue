@@ -1,7 +1,7 @@
 <template>
   <div class="openings">
     <div class="candidate-list">
-      <transition name="fade" mode="in-out">
+      <transition name="fade" mode="in-out" appear>
         <candidate-list
           v-if="isCandidateListOpen"
           :isCandidateDetailsOpen="isCandidateDetailsOpen"
@@ -36,7 +36,8 @@
             <hp-opening-card @click="handleNewOpening" :isAddCard="true">
             </hp-opening-card>
             <hp-opening-card
-              @click="router.push(`/openings/${opening.reference}`)"
+              :isSelected="opening.reference === route.params.openingRef"
+              @click="handleOpeningCardClick(opening)"
               :key="opening.reference"
               v-for="opening in openings"
               :opening="opening"
@@ -89,6 +90,14 @@ const fetchOpenings = async () => {
   const getOpenings = useGet(url);
   await getOpenings.get();
   openings.value = getOpenings.data.value.openings;
+};
+
+const handleOpeningCardClick = (opening) => {
+  if (opening.reference === route.params.openingRef) {
+    router.push(`/openings/`);
+  } else {
+    router.push(`/openings/${opening.reference}`);
+  }
 };
 
 onMounted(async () => {
