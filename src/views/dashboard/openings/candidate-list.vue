@@ -15,7 +15,7 @@
     >
       <div v-if="!isCandidateListLoading && opening.statistics">
         <div class="candidate-list__header">
-          <hp-abstract-avatar />
+          <hp-abstract-avatar :abstractKey="opening.artwork" />
           <div class="candidate-list__header__button-group">
             <router-link :to="`/opening/${opening.reference}/compare`">
               <hp-button

@@ -27,7 +27,7 @@
           </p>
           <hp-tabs
             class="openings__tabs"
-            :options="['Active', 'Archived']"
+            :options="['active', 'archived']"
             v-model="state"
           />
           <ol v-if="!isOpeningsLoading" class="opening-list__grid">

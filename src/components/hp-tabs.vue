@@ -79,6 +79,7 @@ const styles = computed(() => {
     padding: 6px 16px;
     color: var(--color-text-secondary);
     border-radius: 10px / 12px;
+    text-transform: capitalize;
 
     &--selected {
       color: var(--color-text-primary);

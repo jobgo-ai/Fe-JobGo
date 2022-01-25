@@ -3,10 +3,18 @@
 </template>
 
 <script setup>
+const props = defineProps({
+  abstractKey: {
+    type: [String, Number],
+    default: "1",
+  },
+});
 import { defineAsyncComponent } from "vue";
 
 const avatar = defineAsyncComponent(() =>
-  import(/* @vite-ignore */ `../assets/abstracts/avatars/avatar_6.svg`)
+  import(
+    /* @vite-ignore */ `../assets/abstracts/avatars/avatar_${props.abstractKey}.svg`
+  )
 );
 </script>
 

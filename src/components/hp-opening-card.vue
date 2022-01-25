@@ -15,7 +15,7 @@
       </div>
     </div>
     <div class="hp-opening-card__archived-header" v-if="isArchived">
-      <hp-abstract-avatar />
+      <hp-abstract-avatar :abstractKey="opening.artwork" />
       <hp-button label="Restore"> </hp-button>
     </div>
     <div
@@ -83,7 +83,9 @@ const props = defineProps({
 });
 
 const splash = defineAsyncComponent(() =>
-  import(/* @vite-ignore */ `../assets/abstracts/covers/cover_6.svg`)
+  import(
+    /* @vite-ignore */ `../assets/abstracts/covers/cover_${props.opening.artwork}.svg`
+  )
 );
 
 const containerClasses = computed(() => {
