@@ -6,12 +6,17 @@
     <div class="hp-input__input-container">
       <input
         :disabled="isDisabled"
-        class="hp-input__input"
+        :class="`hp-input__input hp-input__input--${variant}`"
         :name="name"
         :type="type ? type : 'text'"
         :placeholder="placeholder"
         :value="modelValue"
-        v-on:input="modelValue = $event.target.value"
+        @input="
+          (e) => {
+            modelValue = e.target.value;
+            $emit('update:modelValue', e.target.value);
+          }
+        "
       />
       <hp-icon
         v-if="icon"
@@ -62,7 +67,13 @@ const props = defineProps({
     type: String,
     default: "",
   },
+  variant: {
+    type: String,
+    value: "normal",
+  },
 });
+
+const emits = defineEmits(["update:modelValue"]);
 
 const { errorMessage, value: modelValue } = useField(props.name);
 
@@ -85,7 +96,6 @@ const containerClasses = computed(() => {
   width: 100%;
   &--icon {
     .hp-input__input {
-      width: calc(100% - 12px);
       padding-left: 30px;
     }
   }
@@ -126,7 +136,7 @@ const containerClasses = computed(() => {
     font-weight: 500;
   }
   &__label {
-    font-weight: 500;
+    font-weight: 400;
     margin-bottom: 8px;
     color: var(--color-text-secondary);
   }
@@ -140,6 +150,9 @@ const containerClasses = computed(() => {
     width: 100%;
     transition: border-color 0.15s cubic-bezier(0.17, 0.67, 0.83, 0.67);
     color: var(--color-text-primary);
+    &--search {
+      background-color: var(--color-underground);
+    }
     &::placeholder {
       color: var(--color-text-secondary);
     }

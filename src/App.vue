@@ -41,6 +41,7 @@ if (currentTheme) {
   --color-focus: #f2f4f5;
   --color-background-floating: #ffffff;
   --color-forground-floating: #f0f0f0;
+  --color-underground: #f0f0f0;
   --color-overylay: #1d2429;
   --color-tooltip: #29343b;
   --color-forground-tooltip: #ffffff;

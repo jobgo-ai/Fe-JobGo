@@ -4,12 +4,7 @@
       :isOpen="isAddCandidateModalOpen"
       @close="isAddCandidateModalOpen = false"
     >
-      <h3>Add candidate</h3>
-      <form @submit.prevent="onSubmit">
-        <hp-input name="name"></hp-input>
-        <hp-input name="email"></hp-input>
-        <hp-button type="submit" label="Create candidate"></hp-button>
-      </form>
+      <add-candidate-modal />
     </hp-modal>
     <div
       class="candidate-list"
@@ -62,15 +57,17 @@
           Candidates
         </div>
       </div>
-      <hp-button
+      <!-- <hp-button
         @handleClick="isAddCandidateModalOpen = true"
         label="add candidate"
-      ></hp-button>
-      <router-link :to="`/opening/${opening.reference}/compare`"
-        >Compare results</router-link
-      >
-      <router-link :to="`/opening/${opening.reference}/edit`">Edit</router-link>
-      <input class="candidate-list__search" v-model="search" />
+      ></hp-button> -->
+      <hp-input
+        variant="search"
+        class="candidate-list__search"
+        v-model="search"
+        icon="search"
+        placeholder="Search..."
+      />
       <ol v-if="candidates.length > 0">
         Candidate List
         <li
@@ -110,9 +107,10 @@
 //Vendor
 import { ref, computed, defineAsyncComponent, watch } from "vue";
 import { useRouter, useRoute } from "vue-router";
-import { useForm } from "vee-validate";
 import { useDebounce } from "@vueuse/core";
-import * as yup from "yup";
+
+// Views
+import AddCandidateModal from "./add-candidate-modal.vue";
 
 //Components
 import HpModal from "@/components/hp-modal.vue";
@@ -122,7 +120,7 @@ import HpButton from "@/components/hp-button.vue";
 import HpIcon from "@/components/hp-icon.vue";
 
 // Hooks
-import { usePost, useGet } from "@/hooks/useHttp";
+import { useGet } from "@/hooks/useHttp";
 
 const props = defineProps({
   isCandidateDetailsOpen: {
@@ -143,11 +141,6 @@ const candidates = ref([]);
 
 const isAddCandidateModalOpen = ref(false);
 
-const schema = yup.object({
-  name: yup.string().required("Name is required"),
-  email: yup.string(),
-});
-
 const fetchCandidates = async () => {
   isCandidateListLoading.value = true;
   const getCandidates = useGet(
@@ -157,23 +150,6 @@ const fetchCandidates = async () => {
   candidates.value = getCandidates.data.value?.candidates;
   isCandidateListLoading.value = false;
 };
-
-const { handleSubmit } = useForm({
-  validationSchema: schema,
-  initialValues: { name: "", email: "" },
-});
-const postCandidate = usePost("candidates");
-const onSubmit = handleSubmit(async (values) => {
-  const payload = {
-    candidate: {
-      ...values,
-      opening: props.opening.reference,
-    },
-  };
-  await postCandidate.post(payload);
-  await fetchCandidates();
-  isAddCandidateModalOpen.value = false;
-});
 
 const isNextAction = (template, templates) => {
   const nextRef = templates.find((t) => {
@@ -187,7 +163,7 @@ const isCompleted = (template) => {
 };
 
 const search = ref("");
-const debouncedSearch = useDebounce(search, 450);
+const debouncedSearch = useDebounce(search, 269);
 
 watch(
   () => route.params.openingRef,
