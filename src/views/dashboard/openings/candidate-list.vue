@@ -17,11 +17,15 @@
         <div class="candidate-list__header">
           <hp-abstract-avatar />
           <div class="candidate-list__header__button-group">
-            <hp-button
-              class="candidate-list__header__button-group__button"
-              label="Compare"
-            ></hp-button>
-            <hp-button icon="pencil"></hp-button>
+            <router-link :to="`/opening/${opening.reference}/compare`">
+              <hp-button
+                class="candidate-list__header__button-group__button"
+                label="Compare"
+              ></hp-button>
+            </router-link>
+            <router-link :to="`/opening/${opening.reference}/edit`">
+              <hp-button icon="pencil"></hp-button>
+            </router-link>
           </div>
         </div>
         <h2 class="candidate-list__opening-title">{{ opening.name }}</h2>

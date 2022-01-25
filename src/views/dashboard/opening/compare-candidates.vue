@@ -1,5 +1,5 @@
 <template>
-  <div><hp-icon :size="24" name="test" /></div>
+  <div><hp-icon :size="24" name="cog" /></div>
 </template>
 
 <script setup>
