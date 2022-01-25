@@ -68,36 +68,12 @@
         icon="search"
         placeholder="Search..."
       />
-      <ol v-if="candidates.length > 0">
-        Candidate List
-        <li
-          class="candidate-list__candidate"
-          @click="
-            router.push(
-              `/openings/${route.params.openingRef}?candidate=${candidate.reference}`
-            )
-          "
-          :key="candidate.reference"
+      <ol>
+        <hp-candidate-card
           v-for="candidate in candidateList"
-        >
-          <div class="candidate-list__candidate-info">
-            {{ candidate.name }}
-            {{ candidate.email }}
-          </div>
-          <div class="candidate-list__interview-ticks">
-            <div
-              :class="[
-                `candidate-list__interview-tick`,
-                isNextAction(template, candidate.opening.templates) &&
-                  'candidate-list__interview-tick--next',
-                isCompleted(template) &&
-                  'candidate-list__interview-tick--completed',
-              ]"
-              v-for="template in candidate.opening.templates"
-              :key="template"
-            ></div>
-          </div>
-        </li>
+          :key="candidate.reference"
+          :candidate="candidate"
+        ></hp-candidate-card>
       </ol>
     </div>
   </div>
@@ -118,6 +94,7 @@ import HpAbstractAvatar from "@/components/hp-abstract-avatar.vue";
 import HpInput from "@/components/form/hp-input.vue";
 import HpButton from "@/components/hp-button.vue";
 import HpIcon from "@/components/hp-icon.vue";
+import HpCandidateCard from "@/components/hp-candidate-card.vue";
 
 // Hooks
 import { useGet } from "@/hooks/useHttp";
@@ -149,17 +126,6 @@ const fetchCandidates = async () => {
   await getCandidates.get();
   candidates.value = getCandidates.data.value?.candidates;
   isCandidateListLoading.value = false;
-};
-
-const isNextAction = (template, templates) => {
-  const nextRef = templates.find((t) => {
-    return !t.interview?.started;
-  }).interview?.token;
-  return template.interview.token === nextRef;
-};
-
-const isCompleted = (template) => {
-  return template.interview.started && template.interview.terminated;
 };
 
 const search = ref("");
@@ -263,32 +229,6 @@ const avatar = defineAsyncComponent(() =>
         color: var(--color-text-secondary);
         margin-right: 4px;
       }
-    }
-  }
-
-  &__candidate {
-    font-size: 12px;
-    padding: 8px;
-    border: 1px solid black;
-    border-radius: 8px;
-  }
-
-  &__interview-ticks {
-    display: flex;
-  }
-  &__interview-tick {
-    width: 100%;
-    height: 4px;
-    background-color: red;
-    margin-right: 2px;
-    &--next {
-      background-color: green;
-    }
-    &--completed {
-      background-color: blue;
-    }
-    &:last-child {
-      margin-right: 0;
     }
   }
 }
