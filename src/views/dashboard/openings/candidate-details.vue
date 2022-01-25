@@ -88,11 +88,7 @@ const fetchCandidate = async () => {
       to: "/openings",
     },
     {
-      label: opening.value.name,
-      to: `/openings/${opening.value.reference}`,
-    },
-    {
-      label: "Candidates",
+      label: getCandidate.data.value.candidate.name,
       to: `/opening/${opening.value.reference}?candidate=${candidate.value.reference}`,
     },
   ]);

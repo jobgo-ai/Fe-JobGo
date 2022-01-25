@@ -1,6 +1,6 @@
 <template>
   <div class="hp-tooltip__container">
-    <div @mouseleave="handleHover" @mouseenter="handleHover">
+    <div @mouseleave="handleHoverOut" @mouseenter="handleHoverEnter">
       <slot />
     </div>
     <transition name="hp-tooltip-transition">
@@ -20,10 +20,16 @@ import { ref } from "vue";
 const isHovered = ref(false);
 
 let timeout = null;
-const handleHover = () => {
+const handleHoverOut = () => {
   clearTimeout(timeout);
   timeout = setTimeout(() => {
-    isHovered.value = !isHovered.value;
+    isHovered.value = false;
+  }, 350);
+};
+const handleHoverEnter = () => {
+  clearTimeout(timeout);
+  timeout = setTimeout(() => {
+    isHovered.value = true;
   }, 350);
 };
 </script>
