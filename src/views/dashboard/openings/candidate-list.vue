@@ -62,11 +62,6 @@
       </div>
       <div class="candidate-list__candidate-list">
         <div>
-          <hp-button
-            primary
-            @click="isAddCandidateModalOpen = true"
-            label="Add candidate"
-          ></hp-button>
           <hp-input
             variant="search"
             class="candidate-list__search"
@@ -74,6 +69,13 @@
             icon="search"
             placeholder="Search..."
           />
+          <hp-button
+            primary
+            icon="plus"
+            @click="isAddCandidateModalOpen = true"
+            label="Add candidate"
+            class="candidate-list__add-candidate"
+          ></hp-button>
         </div>
         <ol v-if="candidateList.length > 0">
           <hp-candidate-card
@@ -273,6 +275,10 @@ const candidateList = computed(() => {
     &::-webkit-scrollbar {
       display: none;
     }
+  }
+
+  &__add-candidate {
+    width: 100%;
   }
 }
 </style>
