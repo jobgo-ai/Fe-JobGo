@@ -12,94 +12,100 @@
     <div
       class="candidate-list"
       :class="{ 'candidate-list--left': isCandidateDetailsOpen }"
-      v-if="!isCandidateListLoading && opening.statistics"
     >
-      <div class="candidate-list__header">
-        <hp-abstract-avatar />
-        <div class="candidate-list__header__button-group">
-          <hp-button
-            class="candidate-list__header__button-group__button"
-            label="Compare"
-          ></hp-button>
-          <hp-button icon="pencil"></hp-button>
+      <div v-if="!isCandidateListLoading && opening.statistics">
+        <div class="candidate-list__header">
+          <hp-abstract-avatar />
+          <div class="candidate-list__header__button-group">
+            <hp-button
+              class="candidate-list__header__button-group__button"
+              label="Compare"
+            ></hp-button>
+            <hp-button icon="pencil"></hp-button>
+          </div>
+        </div>
+        <h2 class="candidate-list__opening-title">{{ opening.name }}</h2>
+        <p class="candidate-list__opening-description">
+          {{ opening.description }}
+        </p>
+        <div class="candidate-list__stats">
+          <div class="candidate-list__stats__stat">
+            <hp-icon
+              class="candidate-list__stats__stat__icon"
+              name="layers"
+            ></hp-icon>
+            <div class="candidate-list__stats__stat__number">
+              {{ opening.statistics.templates }}
+            </div>
+            Interviews
+          </div>
+          <div class="candidate-list__stats__stat">
+            <hp-icon
+              class="candidate-list__stats__stat__icon"
+              name="skills"
+            ></hp-icon>
+            <div class="candidate-list__stats__stat__number">
+              {{ opening.statistics.skills.length }}
+            </div>
+            Skills
+          </div>
+          <div class="candidate-list__stats__stat">
+            <hp-icon
+              class="candidate-list__stats__stat__icon"
+              name="candidates"
+            ></hp-icon>
+            <div class="candidate-list__stats__stat__number">
+              {{ opening.statistics.candidates }}
+            </div>
+            Candidates
+          </div>
+        </div>
+        <div class="candidate-list__candidate-list">
+          <div>
+            <hp-input
+              variant="search"
+              class="candidate-list__search"
+              v-model="search"
+              icon="search"
+              placeholder="Search..."
+            />
+            <hp-button
+              primary
+              icon="plus"
+              @click="isAddCandidateModalOpen = true"
+              label="Add candidate"
+              class="candidate-list__add-candidate"
+            ></hp-button>
+          </div>
+          <ol v-if="candidateList.length > 0">
+            <hp-candidate-card
+              v-for="candidate in candidateList"
+              :key="candidate.reference"
+              :candidate="candidate"
+            ></hp-candidate-card>
+            <hp-candidate-card
+              v-for="candidate in candidateList"
+              :key="candidate.reference"
+              :candidate="candidate"
+            ></hp-candidate-card>
+          </ol>
+          <div class="candidate-list__empty-state" v-else>
+            <empty-state />
+            <div class="candidate-list__empty-state__text--primary">
+              Hello? Is anybody there?
+            </div>
+            <div class="candidate-list__empty-state__text--secondary">
+              Looking a tad empty, try adding a candidate
+            </div>
+            <hp-button primary label="Add candidate"></hp-button>
+          </div>
         </div>
       </div>
-      <h2 class="candidate-list__opening-title">{{ opening.name }}</h2>
-      <p class="candidate-list__opening-description">
-        {{ opening.description }}
-      </p>
-      <div class="candidate-list__stats">
-        <div class="candidate-list__stats__stat">
-          <hp-icon
-            class="candidate-list__stats__stat__icon"
-            name="layers"
-          ></hp-icon>
-          <div class="candidate-list__stats__stat__number">
-            {{ opening.statistics.templates }}
-          </div>
-          Interviews
-        </div>
-        <div class="candidate-list__stats__stat">
-          <hp-icon
-            class="candidate-list__stats__stat__icon"
-            name="skills"
-          ></hp-icon>
-          <div class="candidate-list__stats__stat__number">
-            {{ opening.statistics.skills.length }}
-          </div>
-          Skills
-        </div>
-        <div class="candidate-list__stats__stat">
-          <hp-icon
-            class="candidate-list__stats__stat__icon"
-            name="candidates"
-          ></hp-icon>
-          <div class="candidate-list__stats__stat__number">
-            {{ opening.statistics.candidates }}
-          </div>
-          Candidates
-        </div>
-      </div>
-      <div class="candidate-list__candidate-list">
-        <div>
-          <hp-input
-            variant="search"
-            class="candidate-list__search"
-            v-model="search"
-            icon="search"
-            placeholder="Search..."
-          />
-          <hp-button
-            primary
-            icon="plus"
-            @click="isAddCandidateModalOpen = true"
-            label="Add candidate"
-            class="candidate-list__add-candidate"
-          ></hp-button>
-        </div>
-        <ol v-if="candidateList.length > 0">
-          <hp-candidate-card
-            v-for="candidate in candidateList"
-            :key="candidate.reference"
-            :candidate="candidate"
-          ></hp-candidate-card>
-          <hp-candidate-card
-            v-for="candidate in candidateList"
-            :key="candidate.reference"
-            :candidate="candidate"
-          ></hp-candidate-card>
-        </ol>
-        <div class="candidate-list__empty-state" v-else>
-          <empty-state />
-          <div class="candidate-list__empty-state__text--primary">
-            Hello? Is anybody there?
-          </div>
-          <div class="candidate-list__empty-state__text--secondary">
-            Looking a tad empty, try adding a candidate
-          </div>
-          <hp-button primary label="Add candidate"></hp-button>
-        </div>
-      </div>
+      <hp-spinner
+        :size="24"
+        class="candidate-list__spinner"
+        v-else
+      ></hp-spinner>
     </div>
   </div>
 </template>
@@ -119,6 +125,7 @@ import HpAbstractAvatar from "@/components/hp-abstract-avatar.vue";
 import HpInput from "@/components/form/hp-input.vue";
 import HpButton from "@/components/hp-button.vue";
 import HpIcon from "@/components/hp-icon.vue";
+import HpSpinner from "@/components/hp-spinner.vue";
 import HpCandidateCard from "@/components/hp-candidate-card.vue";
 import EmptyState from "@/assets/abstracts/empty-state.svg";
 
@@ -195,6 +202,7 @@ const candidateList = computed(() => {
   transform: translateX(0);
   right: 16px;
   width: 400px;
+  min-height: 600px;
   z-index: 10;
   &--left {
     right: calc(100% - 16px);
@@ -216,6 +224,12 @@ const candidateList = computed(() => {
         margin-right: 6px;
       }
     }
+  }
+
+  &__spinner {
+    display: flex;
+    margin-top: 80px;
+    justify-content: center;
   }
 
   &__opening-title {
