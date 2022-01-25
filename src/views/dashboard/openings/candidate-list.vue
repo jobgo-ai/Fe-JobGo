@@ -14,15 +14,54 @@
     <div
       class="candidate-list"
       :class="{ 'candidate-list--left': isCandidateDetailsOpen }"
+      v-if="!isCandidateListLoading && opening.statistics?.templates"
     >
       <div class="candidate-list__header">
         <hp-abstract-avatar />
         <div class="candidate-list__header__button-group">
-          <hp-button label="compare"></hp-button>
+          <hp-button
+            class="candidate-list__header__button-group__button"
+            label="Compare"
+          ></hp-button>
           <hp-button icon="pencil"></hp-button>
         </div>
       </div>
-      <h2>{{ opening.name }}</h2>
+      <h2 class="candidate-list__opening-title">{{ opening.name }}</h2>
+      <p class="candidate-list__opening-description">
+        {{ opening.description }}
+      </p>
+      <div class="candidate-list__stats">
+        <div class="candidate-list__stats__stat">
+          <hp-icon
+            class="candidate-list__stats__stat__icon"
+            name="layers"
+          ></hp-icon>
+          <div class="candidate-list__stats__stat__number">
+            {{ opening.statistics.templates }}
+          </div>
+          Candidates
+        </div>
+        <div class="candidate-list__stats__stat">
+          <hp-icon
+            class="candidate-list__stats__stat__icon"
+            name="skills"
+          ></hp-icon>
+          <div class="candidate-list__stats__stat__number">
+            {{ opening.statistics.skills.length }}
+          </div>
+          Skills
+        </div>
+        <div class="candidate-list__stats__stat">
+          <hp-icon
+            class="candidate-list__stats__stat__icon"
+            name="candidates"
+          ></hp-icon>
+          <div class="candidate-list__stats__stat__number">
+            {{ opening.statistics.candidates }}
+          </div>
+          Candidates
+        </div>
+      </div>
       <hp-button
         @handleClick="isAddCandidateModalOpen = true"
         label="add candidate"
@@ -69,7 +108,7 @@
 
 <script setup>
 //Vendor
-import { ref, computed, defineAsyncComponent } from "vue";
+import { ref, computed, defineAsyncComponent, watch } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import { useForm } from "vee-validate";
 import { useDebounce } from "@vueuse/core";
@@ -80,29 +119,27 @@ import HpModal from "@/components/hp-modal.vue";
 import HpAbstractAvatar from "@/components/hp-abstract-avatar.vue";
 import HpInput from "@/components/form/hp-input.vue";
 import HpButton from "@/components/hp-button.vue";
+import HpIcon from "@/components/hp-icon.vue";
 
 // Hooks
-import { usePost } from "@/hooks/useHttp";
-
-const emit = defineEmits(["updateCandidateList"]);
+import { usePost, useGet } from "@/hooks/useHttp";
 
 const props = defineProps({
-  candidates: {
-    type: Array,
-    default: [],
-  },
   isCandidateDetailsOpen: {
     type: String,
     default: null,
   },
   opening: {
     type: Object,
-    default: [],
+    default: {},
   },
 });
 
 const router = useRouter();
 const route = useRoute();
+
+const isCandidateListLoading = ref(true);
+const candidates = ref([]);
 
 const isAddCandidateModalOpen = ref(false);
 
@@ -110,6 +147,16 @@ const schema = yup.object({
   name: yup.string().required("Name is required"),
   email: yup.string(),
 });
+
+const fetchCandidates = async () => {
+  isCandidateListLoading.value = true;
+  const getCandidates = useGet(
+    `openings/${route.params.openingRef}/candidates`
+  );
+  await getCandidates.get();
+  candidates.value = getCandidates.data.value?.candidates;
+  isCandidateListLoading.value = false;
+};
 
 const { handleSubmit } = useForm({
   validationSchema: schema,
@@ -124,7 +171,7 @@ const onSubmit = handleSubmit(async (values) => {
     },
   };
   await postCandidate.post(payload);
-  emit("updateCandidateList");
+  await fetchCandidates();
   isAddCandidateModalOpen.value = false;
 });
 
@@ -142,10 +189,20 @@ const isCompleted = (template) => {
 const search = ref("");
 const debouncedSearch = useDebounce(search, 450);
 
+watch(
+  () => route.params.openingRef,
+  async () => {
+    if (!route.params.openingRef) {
+      return;
+    }
+    await fetchCandidates();
+  },
+  { immediate: true }
+);
+
 const candidateList = computed(() => {
-  const { candidates } = props;
   if (debouncedSearch.value) {
-    return candidates.filter((candidate) => {
+    return candidates.value.filter((candidate) => {
       return (
         candidate.name
           .toLowerCase()
@@ -156,7 +213,7 @@ const candidateList = computed(() => {
       );
     });
   }
-  return candidates;
+  return candidates.value;
 });
 
 const avatar = defineAsyncComponent(() =>
@@ -184,6 +241,7 @@ const avatar = defineAsyncComponent(() =>
   &__header {
     display: flex;
     justify-content: space-between;
+    margin-bottom: 16px;
     &__avatar {
       height: 40px;
       width: 40px;
@@ -191,6 +249,44 @@ const avatar = defineAsyncComponent(() =>
     &__button-group {
       display: flex;
       align-items: center;
+      &__button {
+        margin-right: 6px;
+      }
+    }
+  }
+
+  &__opening-title {
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 24px;
+    margin-bottom: 4px;
+  }
+
+  &__opening-description {
+    color: var(--color-text-secondary);
+  }
+
+  &__stats {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px dashed var(--color-border);
+    margin-top: 16px;
+    padding-bottom: 24px;
+    margin-bottom: 24px;
+
+    &__stat {
+      display: flex;
+      align-items: center;
+      color: var(--color-text-primary);
+      &__number {
+        font-weight: 400;
+        margin-right: 2px;
+      }
+      &__icon {
+        color: var(--color-text-secondary);
+        margin-right: 4px;
+      }
     }
   }
 

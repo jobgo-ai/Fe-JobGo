@@ -5,9 +5,7 @@
         <candidate-list
           v-if="isCandidateListOpen"
           :isCandidateDetailsOpen="isCandidateDetailsOpen"
-          :candidates="candidates"
           :opening="selectedOpening"
-          @updateCandidateList="fetchCandidates"
         />
       </transition>
     </div>
@@ -82,20 +80,11 @@ const route = useRoute();
 const router = useRouter();
 const selectedOpening = ref({});
 const openings = ref([]);
-const candidates = ref([]);
 const isCandidateDetailsOpen = ref(route.query.candidate);
 const isCandidateListOpen = ref(route.params.openingRef);
 
 const isOpeningsLoading = ref(true);
 const state = ref("active");
-
-const fetchCandidates = async () => {
-  const getCandidates = useGet(
-    `openings/${route.params.openingRef}/candidates`
-  );
-  await getCandidates.get();
-  candidates.value = getCandidates.data.value?.candidates;
-};
 
 const fetchOpenings = async () => {
   isOpeningsLoading.value = true;
@@ -153,7 +142,6 @@ watch(
       selectedOpening.value = openings.value.find(
         (opening) => opening.reference === route.params.openingRef
       );
-      await fetchCandidates();
     } else if (!route.params.openingRef) {
       isCandidateListOpen.value = false;
       if (openings.value.length > 0) {
