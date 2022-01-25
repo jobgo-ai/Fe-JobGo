@@ -33,7 +33,11 @@
             v-model="state"
           />
           <ol v-if="!isOpeningsLoading" class="opening-list__grid">
-            <hp-opening-card @click="handleNewOpening" :isAddCard="true">
+            <hp-opening-card
+              v-if="state === 'active'"
+              @click="handleNewOpening"
+              :isAddCard="true"
+            >
             </hp-opening-card>
             <hp-opening-card
               :isSelected="opening.reference === route.params.openingRef"
