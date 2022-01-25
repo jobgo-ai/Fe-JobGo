@@ -165,8 +165,7 @@ const emit = defineEmits(["handleClick"]);
     outline: none;
     border: 1px solid var(--color-border);
     border-radius: 8px;
-    transition: border-color 0.15s cubic-bezier(0.17, 0.67, 0.83, 0.67),
-      background-color 0.15s cubic-bezier(0.17, 0.67, 0.83, 0.67);
+    transition: border-color 0.15s cubic-bezier(0.17, 0.67, 0.83, 0.67);
     filter: drop-shadow(0px 4px 8px rgba(33, 44, 51, 0.02))
       drop-shadow(0px 0px 1px rgba(33, 44, 51, 0.02));
 

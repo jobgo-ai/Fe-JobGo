@@ -106,7 +106,6 @@ const containerClasses = computed(() => {
   border-radius: 12px;
   border: 1px solid var(--color-border);
   overflow: hidden;
-  transition: all 0.15s cubic-bezier(0.17, 0.67, 0.83, 0.67);
   &--archived {
     cursor: default;
     .hp-opening-card__content {

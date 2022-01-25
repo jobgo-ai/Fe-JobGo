@@ -69,7 +69,6 @@ const styles = computed(() => {
   z-index: 2;
   padding: 4px;
   border-radius: 12px / 10px;
-  transition: all 0.15s cubic-bezier(0.17, 0.67, 0.83, 0.67);
   &__option {
     background-color: transparent;
     cursor: pointer;
@@ -97,7 +96,7 @@ const styles = computed(() => {
     height: 32px;
     position: absolute;
     background-color: var(--color-background);
-    transition: 0.15s all cubic-bezier(0.17, 0.67, 0.83, 0.67);
+    transition: left 0.15s cubic-bezier(0.17, 0.67, 0.83, 0.67);
     box-shadow: 0px 4px 8px rgba(33, 44, 51, 0.02),
       0px 0px 1px rgba(33, 44, 51, 0.02);
   }
