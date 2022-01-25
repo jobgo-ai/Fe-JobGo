@@ -85,6 +85,6 @@ const handleHoverEnter = () => {
 .hp-tooltip-transition-enter-from,
 .hp-tooltip-transition-leave-to {
   opacity: 0;
-  transform: translateX(-50%) translateY(-10px);
+  transform: translateX(-50%) translateY(-5px) scale(0.9);
 }
 </style>
