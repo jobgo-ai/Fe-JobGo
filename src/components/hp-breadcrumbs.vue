@@ -35,9 +35,9 @@ const { crumbs } = useBreadcrumbs();
     line-height: 24px;
     margin-right: 2px;
     color: var(--color-text-secondary);
-    font-weight: 500;
     transition: all 0.15s cubic-bezier(0.17, 0.67, 0.83, 0.67);
     &:last-child {
+      font-weight: 500;
       color: var(--color-text-primary);
       .hp-breadcrumbs__crumb__icon {
         color: var(--color-text-secondary);

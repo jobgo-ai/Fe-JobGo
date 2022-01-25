@@ -14,29 +14,48 @@
         <hp-button label="Create new"></hp-button>
       </div>
     </div>
-    <div v-else>
+    <div class="hp-opening-card__archived-header" v-if="isArchived">
+      <component
+        :is="avatar"
+        role="img"
+        :alt="avatar"
+        class="hp-opening-card__avatar"
+      />
+      <hp-button label="Restore"> </hp-button>
+    </div>
+    <div
+      class="hp-opening-card__content-container"
+      v-if="!isArchived && !isAddCard"
+    >
       <component
         :is="splash"
         role="img"
         :alt="splash"
-        v-if="!isArchived"
         class="hp-opening-card__splash"
       />
-      <div class="hp-opening-card__archived-header" v-else>
-        <component
-          :is="avatar"
-          role="img"
-          :alt="avatar"
-          v-if="isArchived"
-          class="hp-opening-card__avatar"
-        />
-        <hp-button label="Restore"> </hp-button>
-      </div>
       <div class="hp-opening-card__content">
         <h4 class="hp-opening-card__content__name">{{ opening.name }}</h4>
-        <p class="hp-opening-card__content__description">
+        <div class="hp-opening-card__content__description">
           {{ opening.description }}
-        </p>
+        </div>
+
+        <div class="hp-opening-card__content__badges">
+          <hp-badge
+            icon="layers"
+            class="hp-opening-card__content__badges__badge"
+            :content="opening.statistics.templates"
+          ></hp-badge>
+          <hp-badge
+            icon="skills"
+            class="hp-opening-card__content__badges__badge"
+            :content="opening.statistics.skills.length"
+          ></hp-badge>
+          <hp-badge
+            icon="candidates"
+            class="hp-opening-card__content__badges__badge"
+            :content="opening.statistics.candidates"
+          ></hp-badge>
+        </div>
       </div>
     </div>
   </li>
@@ -45,6 +64,7 @@
 <script setup>
 import { computed, defineAsyncComponent } from "vue";
 import HpButton from "@/components/hp-button.vue";
+import HpBadge from "@/components/hp-badge.vue";
 import HpIcon from "@/components/hp-icon.vue";
 const props = defineProps({
   opening: {
@@ -111,16 +131,31 @@ const containerClasses = computed(() => {
       inset 0px 0px 48px rgba(33, 44, 51, 0.03);
   }
   &__splash {
-    height: 84px;
+    flex-shrink: 0;
+  }
+  &__content-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
   }
   &__content {
     padding: 16px;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
     &__name {
       font-weight: 500;
       margin-bottom: 4px;
     }
     &__description {
+      flex: 1;
       color: var(--color-text-secondary);
+    }
+    &__badges {
+      display: flex;
+      &__badge {
+        margin-right: 6px;
+      }
     }
   }
   &__archived-header {
