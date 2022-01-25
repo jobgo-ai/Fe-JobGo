@@ -4,12 +4,15 @@
       :isOpen="isAddCandidateModalOpen"
       @close="isAddCandidateModalOpen = false"
     >
-      <add-candidate-modal />
+      <add-candidate-modal
+        @afterCandidateAdd="fetchCandidates"
+        :opening="opening"
+      />
     </hp-modal>
     <div
       class="candidate-list"
       :class="{ 'candidate-list--left': isCandidateDetailsOpen }"
-      v-if="!isCandidateListLoading && opening.statistics?.templates"
+      v-if="!isCandidateListLoading && opening.statistics"
     >
       <div class="candidate-list__header">
         <hp-abstract-avatar />
@@ -34,7 +37,7 @@
           <div class="candidate-list__stats__stat__number">
             {{ opening.statistics.templates }}
           </div>
-          Candidates
+          Interviews
         </div>
         <div class="candidate-list__stats__stat">
           <hp-icon
@@ -57,24 +60,44 @@
           Candidates
         </div>
       </div>
-      <!-- <hp-button
-        @handleClick="isAddCandidateModalOpen = true"
-        label="add candidate"
-      ></hp-button> -->
-      <hp-input
-        variant="search"
-        class="candidate-list__search"
-        v-model="search"
-        icon="search"
-        placeholder="Search..."
-      />
-      <ol>
-        <hp-candidate-card
-          v-for="candidate in candidateList"
-          :key="candidate.reference"
-          :candidate="candidate"
-        ></hp-candidate-card>
-      </ol>
+      <div class="candidate-list__candidate-list">
+        <div>
+          <hp-button
+            primary
+            @click="isAddCandidateModalOpen = true"
+            label="Add candidate"
+          ></hp-button>
+          <hp-input
+            variant="search"
+            class="candidate-list__search"
+            v-model="search"
+            icon="search"
+            placeholder="Search..."
+          />
+        </div>
+        <ol v-if="candidateList.length > 0">
+          <hp-candidate-card
+            v-for="candidate in candidateList"
+            :key="candidate.reference"
+            :candidate="candidate"
+          ></hp-candidate-card>
+          <hp-candidate-card
+            v-for="candidate in candidateList"
+            :key="candidate.reference"
+            :candidate="candidate"
+          ></hp-candidate-card>
+        </ol>
+        <div class="candidate-list__empty-state" v-else>
+          <empty-state />
+          <div class="candidate-list__empty-state__text--primary">
+            Hello? Is anybody there?
+          </div>
+          <div class="candidate-list__empty-state__text--secondary">
+            Looking a tad empty, try adding a candidate
+          </div>
+          <hp-button primary label="Add candidate"></hp-button>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -82,7 +105,7 @@
 <script setup>
 //Vendor
 import { ref, computed, defineAsyncComponent, watch } from "vue";
-import { useRouter, useRoute } from "vue-router";
+import { useRoute } from "vue-router";
 import { useDebounce } from "@vueuse/core";
 
 // Views
@@ -95,6 +118,7 @@ import HpInput from "@/components/form/hp-input.vue";
 import HpButton from "@/components/hp-button.vue";
 import HpIcon from "@/components/hp-icon.vue";
 import HpCandidateCard from "@/components/hp-candidate-card.vue";
+import EmptyState from "@/assets/abstracts/empty-state.svg";
 
 // Hooks
 import { useGet } from "@/hooks/useHttp";
@@ -110,7 +134,6 @@ const props = defineProps({
   },
 });
 
-const router = useRouter();
 const route = useRoute();
 
 const isCandidateListLoading = ref(true);
@@ -157,10 +180,6 @@ const candidateList = computed(() => {
   }
   return candidates.value;
 });
-
-const avatar = defineAsyncComponent(() =>
-  import(/* @vite-ignore */ `../../../assets/abstracts/avatars/avatar_6.svg`)
-);
 </script>
 
 <style lang="scss" scoped>
@@ -229,6 +248,30 @@ const avatar = defineAsyncComponent(() =>
         color: var(--color-text-secondary);
         margin-right: 4px;
       }
+    }
+  }
+  &__empty-state {
+    margin-top: 80px;
+    margin-bottom: 80px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    &__text--secondary {
+      margin-bottom: 16px;
+    }
+    &__text--primary {
+      color: var(--color-text-primary);
+      font-weight: 500;
+      margin-bottom: 2px;
+    }
+  }
+
+  &__candidate-list {
+    max-height: 500px;
+    overflow: scroll;
+    &::-webkit-scrollbar {
+      display: none;
     }
   }
 }

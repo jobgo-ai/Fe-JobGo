@@ -58,12 +58,11 @@ watch(
   &__modal {
     z-index: 101;
     border-radius: 12px;
-    min-width: 332px;
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background-color: #fff;
+    background: var(--color-background);
     &__content {
       position: relative;
       &__close {
