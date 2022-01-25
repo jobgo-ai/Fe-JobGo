@@ -13,6 +13,7 @@
           <hp-avatar
             class="hp-header__dropdown-target__info__avatar"
             size="sm"
+            :user="user"
           />
           {{ user.firstName }} {{ user.lastName }}
           <hp-icon
@@ -29,7 +30,7 @@
           ref="dropdownTarget"
         >
           <div class="hp-header__dropdown__info">
-            <hp-avatar class="hp-header__dropdown__info__avatar" />
+            <hp-avatar :user="user" class="hp-header__dropdown__info__avatar" />
             <div class="hp-header__dropdown__info__name">
               {{ user.firstName }} {{ user.lastName }}
               <div class="hp-header__dropdown__info__email">

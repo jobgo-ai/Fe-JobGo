@@ -1,11 +1,10 @@
 <template>
-  <div v-if="user.firstName" :class="`hp-avatar hp-avatar--${props.size}`">
+  <div :class="`hp-avatar hp-avatar--${props.size}`">
     {{ initials }}
   </div>
 </template>
 
 <script setup>
-import useAuth from "@/hooks/useAuth";
 import { computed } from "vue";
 
 const props = defineProps({
@@ -13,15 +12,17 @@ const props = defineProps({
     type: String,
     default: "md",
   },
+  user: {
+    type: Object,
+    default: () => {},
+  },
 });
 
-const { user } = useAuth();
-
 const initials = computed(() => {
-  if (!user?.value?.firstName) {
+  if (!props.user?.firstName) {
     return;
   }
-  return user.value.firstName.slice(0, 1) + user.value.lastName.slice(0, 1);
+  return props.user.firstName.slice(0, 1) + props.user.lastName.slice(0, 1);
 });
 </script>
 

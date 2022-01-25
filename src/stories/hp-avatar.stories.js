@@ -19,4 +19,10 @@ const Template = (args) => ({
 });
 
 export const Primary = Template.bind({});
-Primary.args = {};
+Primary.args = {
+  user: {
+    firstName: "John",
+    lastName: "Doe",
+    email: "johndoe@gmail.com",
+  },
+};
