@@ -251,7 +251,7 @@ watch(state, () => {
     overflow: scroll;
     height: 100%;
     display: grid;
-    grid-gap: 40px;
+    grid-gap: 26px;
     grid-template-columns: repeat(auto-fill, 264px);
     align-content: baseline;
     padding-bottom: 500px;
