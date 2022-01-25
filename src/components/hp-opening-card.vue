@@ -15,12 +15,7 @@
       </div>
     </div>
     <div class="hp-opening-card__archived-header" v-if="isArchived">
-      <component
-        :is="avatar"
-        role="img"
-        :alt="avatar"
-        class="hp-opening-card__avatar"
-      />
+      <hp-abstract-avatar />
       <hp-button label="Restore"> </hp-button>
     </div>
     <div
@@ -31,6 +26,7 @@
         :is="splash"
         role="img"
         :alt="splash"
+        :key="opening.reference"
         class="hp-opening-card__splash"
       />
       <div class="hp-opening-card__content">
@@ -65,6 +61,7 @@
 import { computed, defineAsyncComponent } from "vue";
 import HpButton from "@/components/hp-button.vue";
 import HpBadge from "@/components/hp-badge.vue";
+import HpAbstractAvatar from "@/components/hp-abstract-avatar.vue";
 import HpIcon from "@/components/hp-icon.vue";
 const props = defineProps({
   opening: {
@@ -85,17 +82,9 @@ const props = defineProps({
   },
 });
 
-const splash = computed(() => {
-  return defineAsyncComponent(() =>
-    import(/* @vite-ignore */ `../assets/abstracts/covers/cover_6.svg`)
-  );
-});
-
-const avatar = computed(() => {
-  return defineAsyncComponent(() =>
-    import(/* @vite-ignore */ `../assets/abstracts/avatars/avatar_6.svg`)
-  );
-});
+const splash = defineAsyncComponent(() =>
+  import(/* @vite-ignore */ `../assets/abstracts/covers/cover_6.svg`)
+);
 
 const containerClasses = computed(() => {
   return {
@@ -163,11 +152,6 @@ const containerClasses = computed(() => {
     align-items: center;
     justify-content: space-between;
     padding: 16px;
-  }
-  &__avatar {
-    height: 40px;
-    width: 40px;
-    border-radius: 12px;
   }
   &__add-new {
     padding: 16px;

@@ -15,6 +15,13 @@
       class="candidate-list"
       :class="{ 'candidate-list--left': isCandidateDetailsOpen }"
     >
+      <div class="candidate-list__header">
+        <hp-abstract-avatar />
+        <div class="candidate-list__header__button-group">
+          <hp-button label="compare"></hp-button>
+          <hp-button icon="pencil"></hp-button>
+        </div>
+      </div>
       <h2>{{ opening.name }}</h2>
       <hp-button
         @handleClick="isAddCandidateModalOpen = true"
@@ -62,7 +69,7 @@
 
 <script setup>
 //Vendor
-import { ref, computed } from "vue";
+import { ref, computed, defineAsyncComponent } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import { useForm } from "vee-validate";
 import { useDebounce } from "@vueuse/core";
@@ -70,6 +77,7 @@ import * as yup from "yup";
 
 //Components
 import HpModal from "@/components/hp-modal.vue";
+import HpAbstractAvatar from "@/components/hp-abstract-avatar.vue";
 import HpInput from "@/components/form/hp-input.vue";
 import HpButton from "@/components/hp-button.vue";
 
@@ -150,12 +158,18 @@ const candidateList = computed(() => {
   }
   return candidates;
 });
+
+const avatar = defineAsyncComponent(() =>
+  import(/* @vite-ignore */ `../../../assets/abstracts/avatars/avatar_6.svg`)
+);
 </script>
 
 <style lang="scss" scoped>
 .candidate-list {
   padding: 10px;
-  background-color: var(--color-primary);
+  background-color: var(--color-panel);
+  border-radius: 16px;
+  border: 1px solid var(--color-border-subtle);
   position: absolute;
   transition: all 0.25s cubic-bezier(0.17, 0.67, 0.83, 0.67);
   transform: translateX(0);
@@ -165,6 +179,19 @@ const candidateList = computed(() => {
   &--left {
     right: calc(100% - 16px);
     transform: translateX(100%);
+  }
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    &__avatar {
+      height: 40px;
+      width: 40px;
+    }
+    &__button-group {
+      display: flex;
+      align-items: center;
+    }
   }
 
   &__candidate {
