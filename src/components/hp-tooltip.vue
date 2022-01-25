@@ -35,6 +35,7 @@ const handleHover = () => {
   border-radius: 12px;
   left: 50%;
   top: -50px;
+  z-index: 1000;
   transform: translateX(-50%);
   background-color: var(--color-tooltip);
   color: var(--color-accent-forground);

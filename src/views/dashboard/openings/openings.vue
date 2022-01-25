@@ -38,10 +38,10 @@
             >
             </hp-opening-card>
             <hp-opening-card
+              v-for="opening in openings"
               :isSelected="opening.reference === route.params.openingRef"
               @click="handleOpeningCardClick(opening)"
               :key="opening.reference"
-              v-for="opening in openings"
               :opening="opening"
               :isArchived="state === 'Archived'"
             >

@@ -105,7 +105,6 @@ const containerClasses = computed(() => {
   list-style: none;
   border-radius: 12px;
   border: 1px solid var(--color-border);
-  overflow: hidden;
   &--archived {
     cursor: default;
     .hp-opening-card__content {
@@ -122,6 +121,8 @@ const containerClasses = computed(() => {
   }
   &__splash {
     flex-shrink: 0;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
   }
   &__content-container {
     display: flex;
