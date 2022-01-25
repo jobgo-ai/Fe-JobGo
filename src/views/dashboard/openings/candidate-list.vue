@@ -197,7 +197,6 @@ const candidateList = computed(() => {
 
 <style lang="scss" scoped>
 .candidate-list {
-  padding: 10px;
   background-color: var(--color-panel);
   border-radius: 16px;
   border: 1px solid var(--color-border-subtle);
@@ -208,6 +207,7 @@ const candidateList = computed(() => {
   width: 400px;
   min-height: 600px;
   z-index: 10;
+  padding: 24px;
   &--left {
     right: calc(100% - 16px);
     transform: translateX(100%);
