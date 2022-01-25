@@ -1,26 +1,31 @@
 <template>
-  <Popper :show="true" :arrow="true" v-bind="$attrs">
-    <slot />
-    <template #content="props">
-      <div class="hp-tooltip">
-        <div class="hp__tooltip-arrow"></div>
-        <slot name="content" v-bind="props" />
+  <div class="hp-tooltip__container">
+    <div @mouseleave="isHovered = false" @mouseenter="isHovered = true">
+      <slot />
+    </div>
+    <div v-if="isHovered" class="hp-tooltip">
+      <div class="hp__tooltip-arrow"></div>
+      <div v-if="isHovered" class="hp-tooltip__content">
+        <slot name="content" />
       </div>
-    </template>
-  </Popper>
+    </div>
+  </div>
 </template>
 
 <script setup>
-import Popper from "vue3-popper";
+import { ref } from "vue";
+
+const isHovered = ref(false);
 </script>
 
-<script></script>
-
-<style>
+<style lang="scss">
 .hp-tooltip {
-  position: relative;
-  padding: 8px 12px;
+  position: absolute;
+  padding: 12px 12px;
   border-radius: 12px;
+  left: 50%;
+  top: -50px;
+  transform: translateX(-50%);
   background-color: var(--color-tooltip);
   color: var(--color-accent-forground);
   filter: drop-shadow(0px 4px 8px rgba(33, 44, 51, 0.02))
@@ -28,6 +33,14 @@ import Popper from "vue3-popper";
   display: flex;
   justify-content: center;
   align-items: center;
+
+  &__container {
+    position: relative;
+    display: inline-flex;
+  }
+  &__content {
+    white-space: nowrap;
+  }
 }
 
 .hp__tooltip-arrow {
@@ -37,10 +50,10 @@ import Popper from "vue3-popper";
   background-color: inherit;
   border: inherit;
   position: absolute;
-  top: -6px;
+  bottom: -6px;
   left: calc(50% - 6px);
   clip-path: polygon(0% 0%, 100% 100%, 0% 100%);
-  transform: rotate(135deg);
+  transform: rotate(315deg);
   border-radius: 0 0 0 4px;
 }
 </style>

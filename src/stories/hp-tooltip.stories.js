@@ -11,7 +11,7 @@ const Template = (args) => ({
   setup() {
     return { args };
   },
-  template: `<div>
+  template: `<div style="padding:200px">
     <hp-tooltip>
         <div>
            Hover me
