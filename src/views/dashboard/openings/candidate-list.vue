@@ -13,7 +13,7 @@
       class="candidate-list"
       :class="{ 'candidate-list--left': isCandidateDetailsOpen }"
     >
-      <div v-if="!isCandidateListLoading && opening.statistics">
+      <div v-if="opening.statistics">
         <div class="candidate-list__header">
           <hp-abstract-avatar :abstractKey="opening.artwork" />
           <div class="candidate-list__header__button-group">
@@ -123,28 +123,30 @@
               class="candidate-list__add-candidate"
             ></hp-button>
           </div>
-          <ol v-if="candidateList.length > 0">
-            <hp-candidate-card
-              v-for="candidate in candidateList"
-              :key="candidate.reference"
-              :candidate="candidate"
-            ></hp-candidate-card>
-            <hp-candidate-card
-              v-for="candidate in candidateList"
-              :key="candidate.reference"
-              :candidate="candidate"
-            ></hp-candidate-card>
-          </ol>
-          <div class="candidate-list__empty-state" v-else>
-            <empty-state />
-            <div class="candidate-list__empty-state__text--primary">
-              Hello? Is anybody there?
+          <div v-if="!isCandidateListLoading">
+            <ol v-if="candidateList.length > 0">
+              <hp-candidate-card
+                v-for="candidate in candidateList"
+                :key="candidate.reference"
+                :candidate="candidate"
+              ></hp-candidate-card>
+            </ol>
+            <div class="candidate-list__empty-state" v-else>
+              <empty-state />
+              <div class="candidate-list__empty-state__text--primary">
+                Hello? Is anybody there?
+              </div>
+              <div class="candidate-list__empty-state__text--secondary">
+                Looking a tad empty, try adding a candidate
+              </div>
+              <hp-button primary label="Add candidate"></hp-button>
             </div>
-            <div class="candidate-list__empty-state__text--secondary">
-              Looking a tad empty, try adding a candidate
-            </div>
-            <hp-button primary label="Add candidate"></hp-button>
           </div>
+          <hp-spinner
+            :size="24"
+            class="candidate-list__spinner"
+            v-else
+          ></hp-spinner>
         </div>
       </div>
       <hp-spinner
