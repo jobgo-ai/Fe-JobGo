@@ -1,9 +1,9 @@
 <template>
   <div class="candidate-details">
     <div v-if="candidate.reference">
-      <div class="candidate-details__personal-info">
-        {{ candidate.name }}
-        {{ candidate.email }}
+      <div class="candidate-details__info">
+        <div class="candidate-details__info__name">{{ candidate.name }}</div>
+        <div class="candidate-details__info__email">{{ candidate.email }}</div>
       </div>
       <div class="candidate-details__overview">
         <div class="candidate-details__overview__score">
@@ -119,6 +119,22 @@ const skillList = computed(() => {
 
 <style scoped lang="scss">
 .candidate-details {
+  &__info {
+    display: flex;
+    flex-direction: column;
+    &__name {
+      font-weight: 600;
+      font-size: 24px;
+      line-height: 32px;
+      letter-spacing: -1.5%;
+    }
+    &__email {
+      font-size: 24px;
+      line-height: 32px;
+      color: var(--color-text-secondary);
+      letter-spacing: -0.015em;
+    }
+  }
   &__interview-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, 264px);

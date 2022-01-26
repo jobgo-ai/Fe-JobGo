@@ -94,10 +94,15 @@
                     <li
                       @click="handleItemClick(index)"
                       v-for="(template, index) in templateList"
-                      class="candidate-list__flyout__items__item"
                     >
-                      {{ template.label }}
-                      <hp-radio name="template" :checked="template.value" />
+                      <div
+                        class="candidate-list__flyout__items__divider"
+                        v-if="index === templateList.length - 1"
+                      ></div>
+                      <div class="candidate-list__flyout__items__item">
+                        {{ template.label }}
+                        <hp-radio name="template" :checked="template.value" />
+                      </div>
                     </li>
                   </ol>
                 </div>
@@ -406,6 +411,12 @@ const candidateList = computed(() => {
     &__items {
       display: flex;
       flex-direction: column;
+      &__divider {
+        width: 100%;
+        border-top: 1px dashed var(--color-border);
+        margin-top: 8px;
+        margin-bottom: 8px;
+      }
       &__item {
         padding: 8px 12px;
         display: flex;
