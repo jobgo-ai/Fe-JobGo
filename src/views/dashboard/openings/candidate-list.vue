@@ -213,6 +213,9 @@ const handleItemClick = (index) => {
 };
 
 onClickOutside(dropdownTarget, (event) => {
+  if (!isFlyoutOpen.value) {
+    return;
+  }
   if (event.target.className.includes("candidate-list__flyout")) {
     return;
   }
