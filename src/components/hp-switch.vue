@@ -24,7 +24,7 @@ const props = defineProps({
 });
 </script>
 
-<sytle lang="scss">
+<style lang="scss">
 .hp-switch__input {
   position: absolute;
   width: 1px;
@@ -88,4 +88,4 @@ const props = defineProps({
     calc(var(--switch-container-width) - var(--switch-size))
   );
 }
-</sytle>
+</style>

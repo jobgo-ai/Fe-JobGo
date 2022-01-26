@@ -1,7 +1,7 @@
 import HpSwitch from "../components/hp-switch.vue";
 
 export default {
-  title: "Components/Toggle",
+  title: "Components/Switch",
   component: HpSwitch,
   argTypes: {},
 };

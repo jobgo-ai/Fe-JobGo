@@ -1,4 +1,5 @@
 import HpOpeningCard from "../components/hp-opening-card.vue";
+import vueRouter from "storybook-vue3-router";
 
 export default {
   title: "Components/Opening Card",
@@ -16,6 +17,7 @@ const Template = (args) => ({
         "Lead Designer include research and analysis, overseeing a variety of design projects.",
       jobLevel: null,
       state: "active",
+      artwork: 2,
       statistics: {
         candidates: 3,
         templates: 3,
@@ -77,3 +79,4 @@ const Template = (args) => ({
 
 export const Primary = Template.bind({});
 Primary.args = {};
+Primary.decorators = [vueRouter()];
