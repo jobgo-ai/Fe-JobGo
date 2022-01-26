@@ -4,8 +4,8 @@
       :isOpen="isAddCandidateModalOpen"
       @close="isAddCandidateModalOpen = false"
     >
-      <add-candidate-modal
-        @afterCandidateAdd="fetchCandidates"
+      <candidate-modal
+        @afterCandidateAdd="handleAddCandidate"
         :opening="opening"
       />
     </hp-modal>
@@ -115,13 +115,13 @@
               icon="search"
               placeholder="Search..."
             />
-            <!-- <hp-button
+            <hp-button
               primary
               icon="plus"
               @click="isAddCandidateModalOpen = true"
               label="Add candidate"
               class="candidate-list__add-candidate"
-            ></hp-button> -->
+            ></hp-button>
           </div>
           <ol v-if="candidateList.length > 0">
             <hp-candidate-card
@@ -163,7 +163,7 @@ import { useRoute } from "vue-router";
 import { useDebounce, onClickOutside } from "@vueuse/core";
 
 // Views
-import AddCandidateModal from "./add-candidate-modal.vue";
+import CandidateModal from "./candidate-modal.vue";
 
 //Components
 import HpModal from "@/components/hp-modal.vue";
@@ -177,7 +177,8 @@ import HpCandidateCard from "@/components/hp-candidate-card.vue";
 import EmptyState from "@/assets/abstracts/empty-state.svg";
 
 // Hooks
-import { useGet } from "@/hooks/useHttp";
+import useFetchCandidates from "@/hooks/useFetchCandidates.js";
+import router from "../../../router";
 
 const props = defineProps({
   isCandidateDetailsOpen: {
@@ -190,43 +191,12 @@ const props = defineProps({
   },
 });
 
+const { fetchCandidates, isCandidateListLoading, candidates, templateList } =
+  useFetchCandidates();
+
 const route = useRoute();
-
-const isCandidateListLoading = ref(true);
-const candidates = ref([]);
-const templateList = ref([]);
-
 const isAddCandidateModalOpen = ref(false);
-
 const isFlyoutOpen = ref(false);
-
-const fetchCandidates = async () => {
-  isCandidateListLoading.value = true;
-  const getCandidates = useGet(
-    `openings/${route.params.openingRef}/candidates`
-  );
-  await getCandidates.get();
-  candidates.value = getCandidates.data.value?.candidates;
-
-  templateList.value =
-    getCandidates.data.value?.candidates[0]?.opening.templates
-      .map((template) => ({
-        label: template.name,
-        value: false,
-      }))
-      .concat(
-        [],
-        [
-          {
-            label: "All interviews",
-            value: true,
-          },
-        ]
-      );
-
-  isCandidateListLoading.value = false;
-};
-
 const dropdownTarget = ref(null);
 
 const handleItemClick = (index) => {
@@ -256,10 +226,16 @@ watch(
     if (!route.params.openingRef) {
       return;
     }
-    await fetchCandidates();
+    await fetchCandidates(route.params.openingRef);
   },
   { immediate: true }
 );
+
+const handleAddCandidate = async (candidateRef) => {
+  await fetchCandidates(route.params.openingRef);
+  isAddCandidateModalOpen.value = false;
+  router.push(`/openings/${route.params.openingRef}?candidate=${candidateRef}`);
+};
 
 const candidateList = computed(() => {
   if (debouncedSearch.value) {

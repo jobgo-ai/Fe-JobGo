@@ -1,5 +1,15 @@
 <template>
   <div class="candidate-details">
+    <hp-modal
+      :isOpen="isEditCandidateModalOpen"
+      @close="isEditCandidateModalOpen = false"
+    >
+      <candidate-modal
+        @afterCandidateAdd="handleAfterCandidateAdd"
+        :opening="opening"
+        :candidate="candidate"
+      />
+    </hp-modal>
     <div v-if="!isCandidateLoading">
       <div class="candidate-details__header">
         <div class="candidate-details__info">
@@ -9,11 +19,16 @@
           </div>
         </div>
         <div class="candidate-details__header__button-group">
+          <router-link :to="`/opening/${route.params.openingRef}/compare`">
+            <hp-button
+              class="candidate-details__header__button-group__button"
+              label="Compare"
+            ></hp-button>
+          </router-link>
           <hp-button
-            class="candidate-details__header__button-group__button"
-            label="Compare"
+            @click="isEditCandidateModalOpen = true"
+            icon="pencil"
           ></hp-button>
-          <hp-button icon="pencil"></hp-button>
         </div>
       </div>
       <div class="candidate-details__overview">
@@ -200,8 +215,10 @@ import { DateTime } from "luxon";
 import HpButton from "@/components/hp-button.vue";
 import HpBadge from "@/components/hp-badge.vue";
 import HpIcon from "@/components/hp-icon.vue";
+import CandidateModal from "./candidate-modal.vue";
 import HpSpinner from "@/components/hp-spinner.vue";
 import EmptyState from "@/assets/abstracts/empty-state.svg";
+import HpModal from "@/components/hp-modal.vue";
 
 const props = defineProps({
   openings: {
@@ -217,6 +234,7 @@ const props = defineProps({
 const route = useRoute();
 const candidate = ref({});
 const isCandidateLoading = ref(true);
+const isEditCandidateModalOpen = ref(false);
 const opening = ref({});
 const URL = import.meta.env.VITE_INTERVIEW_URL;
 
@@ -300,6 +318,11 @@ const calculateColor = (score, avgScore) => {
   } else {
     return "negative";
   }
+};
+
+const handleAfterCandidateAdd = () => {
+  fetchCandidate();
+  isEditCandidateModalOpen.value = false;
 };
 </script>
 
