@@ -191,13 +191,6 @@
 </template>
 
 <script setup>
-const props = defineProps({
-  openings: {
-    type: Array,
-    default: [],
-  },
-});
-
 import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
 import { useGet } from "@/hooks/useHttp";
 import { onMounted, watch, ref, computed } from "vue";
@@ -209,6 +202,17 @@ import HpBadge from "@/components/hp-badge.vue";
 import HpIcon from "@/components/hp-icon.vue";
 import HpSpinner from "@/components/hp-spinner.vue";
 import EmptyState from "@/assets/abstracts/empty-state.svg";
+
+const props = defineProps({
+  openings: {
+    type: Array,
+    default: [],
+  },
+  opening: {
+    type: Object,
+    default: {},
+  },
+});
 
 const route = useRoute();
 const candidate = ref({});
@@ -251,8 +255,13 @@ watch(
 );
 
 const skillList = computed(() => {
-  if (!candidate.value.opening?.statistics?.candidateSkillScores) {
-    return [];
+  if (candidate.value.opening?.statistics?.candidateSkillScores.length === 0) {
+    return props.opening.statistics.skills.map((skill) => {
+      return {
+        label: skill.value.name,
+        value: 0,
+      };
+    });
   }
   return candidate.value?.opening?.statistics?.candidateSkillScores.map(
     (skill) => ({ label: skill.skill.name, value: skill.score.value })

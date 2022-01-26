@@ -14,6 +14,7 @@
         <candidate-details
           v-if="isCandidateDetailsOpen"
           :isCandidateDetailsOpen="isCandidateDetailsOpen"
+          :opening="selectedOpening"
         ></candidate-details>
       </transition>
       <transition

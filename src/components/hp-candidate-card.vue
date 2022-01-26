@@ -12,7 +12,15 @@
             {{ candidate.email }}
           </div>
         </div>
-        <hp-badge type="positive" content="4.6"></hp-badge>
+        <hp-badge
+          :type="
+            calculateColor(
+              candidate.opening.statistics.candidateScore,
+              candidate.opening.statistics.averageOpeningScore
+            )
+          "
+          :content="candidate.opening.statistics.candidateScore"
+        ></hp-badge>
       </div>
       <div class="hp-candidate-card__interview-ticks">
         <div
@@ -54,6 +62,17 @@ const isNextAction = (template, templates) => {
 
 const isCompleted = (template) => {
   return template.interview.started && template.interview.terminated;
+};
+
+const calculateColor = (score, avgScore) => {
+  if (!score) {
+    return "default";
+  }
+  if (score >= avgScore) {
+    return "positive";
+  } else {
+    return "negative";
+  }
 };
 </script>
 
