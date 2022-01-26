@@ -1,6 +1,6 @@
 <template>
   <div class="candidate-details">
-    <div v-if="candidate.reference">
+    <div v-if="!isCandidateLoading">
       <div class="candidate-details__header">
         <div class="candidate-details__info">
           <div class="candidate-details__info__name">{{ candidate.name }}</div>
@@ -182,6 +182,11 @@
         </ul>
       </div>
     </div>
+    <hp-spinner
+      :size="24"
+      class="candidate-details__spinner"
+      v-if="isCandidateLoading"
+    ></hp-spinner>
   </div>
 </template>
 
@@ -202,14 +207,17 @@ import { DateTime } from "luxon";
 import HpButton from "@/components/hp-button.vue";
 import HpBadge from "@/components/hp-badge.vue";
 import HpIcon from "@/components/hp-icon.vue";
+import HpSpinner from "@/components/hp-spinner.vue";
 import EmptyState from "@/assets/abstracts/empty-state.svg";
 
 const route = useRoute();
 const candidate = ref({});
+const isCandidateLoading = ref(true);
 const opening = ref({});
 const URL = import.meta.env.VITE_INTERVIEW_URL;
 
 const fetchCandidate = async () => {
+  isCandidateLoading.value = true;
   const getCandidate = useGet(`candidates/${route.query.candidate}`);
   await getCandidate.get();
   candidate.value = getCandidate.data.value.candidate;
@@ -225,6 +233,8 @@ const fetchCandidate = async () => {
       to: `/opening/${opening.value.reference}?candidate=${candidate.value.reference}`,
     },
   ]);
+  isCandidateLoading.value = true;
+  isCandidateLoading.value = false;
 };
 
 onMounted(async () => {
@@ -286,6 +296,11 @@ const calculateColor = (score, avgScore) => {
 
 <style scoped lang="scss">
 .candidate-details {
+  &__spinner {
+    margin-top: 64px;
+    display: flex;
+    justify-content: center;
+  }
   &__header {
     display: flex;
     justify-content: space-between;
@@ -327,6 +342,9 @@ const calculateColor = (score, avgScore) => {
       text-align: center;
       align-items: center;
       margin-top: 24px;
+      color: var(--color-text-secondary);
+      padding: 12px;
+
       :first-child {
         margin-bottom: 12px;
       }
