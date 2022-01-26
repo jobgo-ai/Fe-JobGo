@@ -1,4 +1,5 @@
 import HpCandidateCard from "../components/hp-candidate-card.vue";
+import vueRouter from "storybook-vue3-router";
 
 export default {
   title: "Components/Candidate Card",
@@ -399,3 +400,4 @@ const Template = (args) => ({
 
 export const Primary = Template.bind({});
 Primary.args = {};
+Primary.decorators = [vueRouter()];
