@@ -67,7 +67,7 @@
             <hp-badge
               class="candidate-details__overview__skills-title__badge"
               icon="skills"
-              :content="skillList.length"
+              :content="skillList ? skillList.length : 0"
             ></hp-badge>
           </div>
           <div class="candidate-details__overview__skills">
@@ -273,8 +273,8 @@ watch(
 );
 
 const skillList = computed(() => {
-  if (candidate.value.opening?.statistics?.candidateSkillScores.length === 0) {
-    return props.opening.statistics.skills.map((skill) => {
+  if (candidate.value.opening?.statistics?.candidateSkillScores?.length === 0) {
+    return props?.opening?.statistics?.skills?.map((skill) => {
       return {
         label: skill.value.name,
         value: 0,
