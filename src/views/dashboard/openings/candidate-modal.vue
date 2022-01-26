@@ -20,6 +20,7 @@
         ></hp-input>
       </div>
       <div class="candidate-modal__actions">
+        <hp-button v-if="!isAddNew" icon="archive"></hp-button>
         <hp-button
           primary
           type="submit"
