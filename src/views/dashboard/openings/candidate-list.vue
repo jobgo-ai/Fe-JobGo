@@ -203,20 +203,21 @@ const fetchCandidates = async () => {
   await getCandidates.get();
   candidates.value = getCandidates.data.value?.candidates;
 
-  templateList.value = getCandidates.data.value?.candidates[0].opening.templates
-    .map((template) => ({
-      label: template.name,
-      value: false,
-    }))
-    .concat(
-      [],
-      [
-        {
-          label: "All interviews",
-          value: true,
-        },
-      ]
-    );
+  templateList.value =
+    getCandidates.data.value?.candidates[0]?.opening.templates
+      .map((template) => ({
+        label: template.name,
+        value: false,
+      }))
+      .concat(
+        [],
+        [
+          {
+            label: "All interviews",
+            value: true,
+          },
+        ]
+      );
 
   isCandidateListLoading.value = false;
 };
