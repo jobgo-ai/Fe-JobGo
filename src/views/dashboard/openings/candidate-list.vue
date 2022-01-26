@@ -399,8 +399,8 @@ const candidateList = computed(() => {
 
   &__flyout {
     background-color: var(--color-background);
-    border-radius: 16px;
     border: 1px solid var(--color-border);
+    border-radius: 16px;
     position: absolute;
     width: 256px;
     padding: 8px;

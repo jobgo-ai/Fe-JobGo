@@ -206,7 +206,7 @@ watch(state, () => {
   position: absolute;
   left: 440px;
   height: 100%;
-  width: 900px;
+  width: 840px;
   overflow: scroll;
 }
 
