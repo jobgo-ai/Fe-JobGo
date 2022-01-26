@@ -66,6 +66,43 @@
         </div>
         <div class="candidate-list__candidate-list">
           <div>
+            <div class="candidate-list__candidate-list__header">
+              <div>Candidates</div>
+              <div
+                class="candidate-list__candidate-list__dropdown-target"
+                @click="isFlyoutOpen = !isFlyoutOpen"
+                ref="dropdownTarget"
+              >
+                <div
+                  class="candidate-list__candidate-list__dropdown-target__view"
+                >
+                  View:
+                </div>
+                <div
+                  class="candidate-list__candidate-list__dropdown-target__tag"
+                >
+                  All interviews
+                </div>
+                <hp-icon
+                  class="candidate-list__candidate-list__dropdown-target__icon"
+                  name="chevron-down"
+                ></hp-icon>
+              </div>
+              <transition name="candidate-list__flyout-transition">
+                <div v-if="isFlyoutOpen" class="candidate-list__flyout">
+                  <ol class="candidate-list__flyout__items">
+                    <li
+                      @click="handleItemClick(index)"
+                      v-for="(template, index) in templateList"
+                      class="candidate-list__flyout__items__item"
+                    >
+                      {{ template.label }}
+                      <hp-radio name="template" :checked="template.value" />
+                    </li>
+                  </ol>
+                </div>
+              </transition>
+            </div>
             <hp-input
               variant="search"
               class="candidate-list__search"
@@ -73,13 +110,13 @@
               icon="search"
               placeholder="Search..."
             />
-            <hp-button
+            <!-- <hp-button
               primary
               icon="plus"
               @click="isAddCandidateModalOpen = true"
               label="Add candidate"
               class="candidate-list__add-candidate"
-            ></hp-button>
+            ></hp-button> -->
           </div>
           <ol v-if="candidateList.length > 0">
             <hp-candidate-card
@@ -116,15 +153,16 @@
 
 <script setup>
 //Vendor
-import { ref, computed, defineAsyncComponent, watch } from "vue";
+import { ref, computed, watch } from "vue";
 import { useRoute } from "vue-router";
-import { useDebounce } from "@vueuse/core";
+import { useDebounce, onClickOutside } from "@vueuse/core";
 
 // Views
 import AddCandidateModal from "./add-candidate-modal.vue";
 
 //Components
 import HpModal from "@/components/hp-modal.vue";
+import HpRadio from "@/components/hp-radio.vue";
 import HpAbstractAvatar from "@/components/hp-abstract-avatar.vue";
 import HpInput from "@/components/form/hp-input.vue";
 import HpButton from "@/components/hp-button.vue";
@@ -151,8 +189,11 @@ const route = useRoute();
 
 const isCandidateListLoading = ref(true);
 const candidates = ref([]);
+const templateList = ref([]);
 
 const isAddCandidateModalOpen = ref(false);
+
+const isFlyoutOpen = ref(false);
 
 const fetchCandidates = async () => {
   isCandidateListLoading.value = true;
@@ -161,8 +202,44 @@ const fetchCandidates = async () => {
   );
   await getCandidates.get();
   candidates.value = getCandidates.data.value?.candidates;
+
+  templateList.value = getCandidates.data.value?.candidates[0].opening.templates
+    .map((template) => ({
+      label: template.name,
+      value: false,
+    }))
+    .concat(
+      [],
+      [
+        {
+          label: "All interviews",
+          value: true,
+        },
+      ]
+    );
+
   isCandidateListLoading.value = false;
 };
+
+const dropdownTarget = ref(null);
+
+const handleItemClick = (index) => {
+  templateList.value = templateList.value.map((template, i) => {
+    if (i === index) {
+      template.value = true;
+    } else {
+      template.value = false;
+    }
+    return template;
+  });
+};
+
+onClickOutside(dropdownTarget, (event) => {
+  if (event.target.className.includes("candidate-list__flyout")) {
+    return;
+  }
+  isFlyoutOpen.value = false;
+});
 
 const search = ref("");
 const debouncedSearch = useDebounce(search, 269);
@@ -291,13 +368,71 @@ const candidateList = computed(() => {
   &__candidate-list {
     max-height: 500px;
     overflow: scroll;
+
+    &__header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 16px;
+      position: relative;
+    }
+    &__dropdown-target {
+      display: flex;
+      align-items: center;
+      position: relative;
+      cursor: pointer;
+      &__view {
+        margin-right: 4px;
+        color: var(--color-text-secondary);
+      }
+    }
+
     &::-webkit-scrollbar {
       display: none;
     }
   }
 
+  &__flyout {
+    background-color: var(--color-background);
+    border-radius: 16px;
+    border: 1px solid var(--color-border);
+    position: absolute;
+    width: 256px;
+    padding: 8px;
+    z-index: 1000;
+    right: 0;
+    top: 30px;
+    transition: all 0.25s cubic-bezier(0.17, 0.67, 0.83, 0.67);
+    &__items {
+      display: flex;
+      flex-direction: column;
+      &__item {
+        padding: 8px 12px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-radius: 8px;
+        &:hover {
+          background-color: var(--color-forground-floating);
+        }
+      }
+    }
+  }
+
   &__add-candidate {
     width: 100%;
+  }
+
+  .candidate-list__flyout-transition {
+    transform: translateY(0);
+  }
+  .candidate-list__flyout-transition-enter-active,
+  .candidate-list__flyout-transition-leave-active {
+    transition: all 0.15s cubic-bezier(0.17, 0.67, 0.83, 0.67);
+  }
+  .candidate-list__flyout-transition-enter-from,
+  .candidate-list__flyout-transition-leave-to {
+    opacity: 0;
+    transform: translateY(-10px);
   }
 }
 </style>

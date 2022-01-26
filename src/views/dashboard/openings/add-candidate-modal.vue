@@ -67,7 +67,6 @@ const { handleSubmit } = useForm({
 
 const postCandidate = usePost("candidates");
 const onSubmit = handleSubmit(async (values) => {
-  console.log(route);
   const payload = {
     candidate: {
       ...values,
