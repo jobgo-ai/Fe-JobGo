@@ -217,7 +217,6 @@ import HpBadge from "@/components/hp-badge.vue";
 import HpIcon from "@/components/hp-icon.vue";
 import CandidateModal from "./candidate-modal.vue";
 import HpSpinner from "@/components/hp-spinner.vue";
-import EmptyState from "@/assets/abstracts/empty-state.svg";
 import HpModal from "@/components/hp-modal.vue";
 import HpCircularBadge from "@/components/hp-circular-badge.vue";
 
