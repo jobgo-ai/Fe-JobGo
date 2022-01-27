@@ -2,6 +2,8 @@ import { ref } from "vue";
 import { useGet } from "./useHttp";
 
 const isCandidateListLoading = ref(true);
+const isCandidateLoading = ref(true);
+const candidate = ref({});
 const candidates = ref([]);
 const templateList = ref([]);
 
@@ -9,7 +11,9 @@ const fetchCandidates = async (openingRef) => {
   isCandidateListLoading.value = true;
   const getCandidates = useGet(`openings/${openingRef}/candidates`);
   await getCandidates.get();
-  candidates.value = getCandidates.data.value?.candidates;
+  candidates.value = getCandidates.data.value?.candidates.filter(
+    (c) => c.state === "active"
+  );
 
   templateList.value =
     getCandidates.data.value?.candidates[0]?.opening.templates
@@ -30,11 +34,22 @@ const fetchCandidates = async (openingRef) => {
   isCandidateListLoading.value = false;
 };
 
+const fetchCandidate = async (candidateRef) => {
+  isCandidateLoading.value = true;
+  const getCandidate = useGet(`candidates/${candidateRef}`);
+  await getCandidate.get();
+  candidate.value = getCandidate.data.value.candidate;
+  isCandidateLoading.value = false;
+};
+
 export default () => {
   return {
     isCandidateListLoading,
+    isCandidateLoading,
     candidates,
+    candidate,
     templateList,
     fetchCandidates,
+    fetchCandidate,
   };
 };

@@ -5,7 +5,7 @@
       @close="isAddCandidateModalOpen = false"
     >
       <candidate-modal
-        @afterCandidateAdd="handleAddCandidate"
+        @close="isAddCandidateModalOpen = false"
         :opening="opening"
       />
     </hp-modal>
@@ -179,7 +179,7 @@ import HpCandidateCard from "@/components/hp-candidate-card.vue";
 import EmptyState from "@/assets/abstracts/empty-state.svg";
 
 // Hooks
-import useFetchCandidates from "@/hooks/useFetchCandidates.js";
+import useCandidates from "@/hooks/useCandidates.js";
 import router from "../../../router";
 
 const props = defineProps({
@@ -194,7 +194,7 @@ const props = defineProps({
 });
 
 const { fetchCandidates, isCandidateListLoading, candidates, templateList } =
-  useFetchCandidates();
+  useCandidates();
 
 const route = useRoute();
 const isAddCandidateModalOpen = ref(false);
@@ -216,6 +216,7 @@ onClickOutside(dropdownTarget, (event) => {
   if (!isFlyoutOpen.value) {
     return;
   }
+  console.log(event.target.className);
   if (event.target.className.includes("candidate-list__flyout")) {
     return;
   }
@@ -235,6 +236,11 @@ watch(
   },
   { immediate: true }
 );
+
+const handleArchiveCandidate = async () => {
+  await fetchCandidates(route.params.openingRef);
+  isCandidateDetailsOpen.value = null;
+};
 
 const handleAddCandidate = async (candidateRef) => {
   await fetchCandidates(route.params.openingRef);

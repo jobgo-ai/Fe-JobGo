@@ -94,6 +94,7 @@ const containerClasses = computed(() => {
   font-size: 14px;
   line-height: 20px;
   width: 100%;
+  margin-bottom: 24px;
   &--icon {
     .hp-input__input {
       padding-left: 30px;

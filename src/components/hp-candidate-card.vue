@@ -13,6 +13,7 @@
           </div>
         </div>
         <hp-badge
+          v-if="candidate.opening.statistics.candidateScore"
           :type="
             calculateColor(
               candidate.opening.statistics.candidateScore,

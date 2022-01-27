@@ -11,19 +11,35 @@
         <hp-input
           placeholder="Enter candidate name"
           label="Name"
+          :isDisabled="isArchivingCandidate || isUpdatingCandidate"
           name="name"
         ></hp-input>
         <hp-input
           placeholder="Enter candidate email..."
           label="Email"
+          :isDisabled="isArchivingCandidate || isUpdatingCandidate"
           name="email"
         ></hp-input>
       </div>
-      <div class="candidate-modal__actions">
-        <hp-button v-if="!isAddNew" icon="archive"></hp-button>
+      <div
+        :class="`candidate-modal__actions ${
+          !isAddNew ? 'candidate-modal__actions--two-button' : ''
+        }`"
+      >
+        <hp-tooltip>
+          <hp-button
+            @handleClick="archiveCandidate(candidate)"
+            v-if="!isAddNew"
+            :isLoading="isArchivingCandidate"
+            icon="archive"
+          ></hp-button>
+          <template #content> Archive candidate </template>
+        </hp-tooltip>
         <hp-button
           primary
           type="submit"
+          :isLoading="isUpdatingCandidate"
+          :isDisabled="isArchivingCandidate"
           :label="content.buttonLabel"
         ></hp-button>
       </div>
@@ -32,18 +48,19 @@
 </template>
 
 <script setup>
-import { computed } from "vue";
+import { computed, ref } from "vue";
 import * as yup from "yup";
 import { useForm } from "vee-validate";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 
 //Components
 import HpInput from "@/components/form/hp-input.vue";
 import HpButton from "@/components/hp-button.vue";
+import HpTooltip from "@/components/hp-tooltip.vue";
 
 // Hooks
 import { usePost, usePut } from "@/hooks/useHttp";
-import useFetchCandidates from "@/hooks/useFetchCandidates.js";
+import useCandidates from "@/hooks/useCandidates.js";
 
 const props = defineProps({
   opening: {
@@ -56,8 +73,10 @@ const props = defineProps({
   },
 });
 
-const emits = defineEmits(["afterCandidateAdd"]);
+const emits = defineEmits(["close"]);
 
+const isUpdatingCandidate = ref(false);
+const isArchivingCandidate = ref(false);
 const isAddNew = props.candidate.name === "";
 
 const content = computed(() => {
@@ -75,10 +94,11 @@ const content = computed(() => {
 });
 
 const route = useRoute();
+const router = useRouter();
 
 const schema = yup.object({
   name: yup.string().required("First name is required"),
-  email: yup.string(),
+  email: yup.string().email("Email must be valid"),
 });
 
 const { handleSubmit } = useForm({
@@ -86,9 +106,10 @@ const { handleSubmit } = useForm({
   initialValues: { ...props.candidate },
 });
 
-const { fetchCandidates } = useFetchCandidates();
+const { fetchCandidates, candidates, fetchCandidate } = useCandidates();
 
 const onSubmit = handleSubmit(async (values) => {
+  isUpdatingCandidate.value = true;
   if (isAddNew) {
     const postCandidate = usePost("candidates");
     const payload = {
@@ -98,7 +119,10 @@ const onSubmit = handleSubmit(async (values) => {
       },
     };
     await postCandidate.post(payload);
-    emits("afterCandidateAdd", postCandidate.data.value.candidate.reference);
+    fetchCandidates(route.params.openingRef);
+    router.push(
+      `'/openings/${route.params.openingRef}?candidate=${postCandidate.data.value.candidate.reference}'`
+    );
   } else {
     const putCandidate = usePut(`candidates/${props.candidate.reference}`);
     const payload = {
@@ -108,10 +132,27 @@ const onSubmit = handleSubmit(async (values) => {
       },
     };
     await putCandidate.put(payload);
-    emits("afterCandidateAdd");
+    fetchCandidate(props.candidate.reference);
+    fetchCandidates(route.params.openingRef);
   }
-  fetchCandidates(route.params.openingRef);
+  isUpdatingCandidate.value = false;
+  emits("close");
 });
+
+const archiveCandidate = async () => {
+  isArchivingCandidate.value = true;
+  const archiveCandidate = usePut(
+    `candidates/${props.candidate.reference}/state`
+  );
+  await archiveCandidate.put({
+    state: "archived",
+  });
+  await fetchCandidates(route.params.openingRef);
+  router.push(
+    `/openings/${route.params.openingRef}?candidate=${candidates.value[0].reference}`
+  );
+  emits("close");
+};
 </script>
 
 <style lang="scss">
@@ -132,11 +173,15 @@ const onSubmit = handleSubmit(async (values) => {
     padding: 24px;
     border-bottom: 1px dashed var(--color-border);
     width: 408px;
+    padding-bottom: 0;
   }
   &__actions {
-    padding: 24px;
+    padding: 16px 24px;
     display: flex;
     justify-content: flex-end;
+    &--two-button {
+      justify-content: space-between;
+    }
   }
 }
 </style>

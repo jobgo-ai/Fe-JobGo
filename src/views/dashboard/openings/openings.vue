@@ -207,7 +207,10 @@ watch(state, () => {
   position: absolute;
   left: 440px;
   height: 100%;
-  width: 840px;
+  width: 848px;
+  padding-right: 4px;
+  padding-left: 4px;
+
   overflow: scroll;
 }
 

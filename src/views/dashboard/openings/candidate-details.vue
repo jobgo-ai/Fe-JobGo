@@ -5,7 +5,7 @@
       @close="isEditCandidateModalOpen = false"
     >
       <candidate-modal
-        @afterCandidateAdd="handleAfterCandidateAdd"
+        @close="isEditCandidateModalOpen = false"
         :opening="opening"
         :candidate="candidate"
       />
@@ -207,10 +207,11 @@
 
 <script setup>
 import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
-import { useGet } from "@/hooks/useHttp";
 import { onMounted, watch, ref, computed } from "vue";
 import { useRoute } from "vue-router";
 import { DateTime } from "luxon";
+
+import useCandidates from "@/hooks/useCandidates";
 
 import HpButton from "@/components/hp-button.vue";
 import HpBadge from "@/components/hp-badge.vue";
@@ -231,19 +232,16 @@ const props = defineProps({
   },
 });
 
+const { fetchCandidate, candidate, isCandidateLoading } = useCandidates();
+
 const route = useRoute();
-const candidate = ref({});
-const isCandidateLoading = ref(true);
 const isEditCandidateModalOpen = ref(false);
 const opening = ref({});
 const URL = import.meta.env.VITE_INTERVIEW_URL;
 
-const fetchCandidate = async () => {
-  isCandidateLoading.value = true;
-  const getCandidate = useGet(`candidates/${route.query.candidate}`);
-  await getCandidate.get();
-  candidate.value = getCandidate.data.value.candidate;
-  opening.value = getCandidate.data.value.candidate.opening;
+const getCandidateDetails = async () => {
+  await fetchCandidate(route.query.candidate);
+  opening.value = candidate.value.opening;
   const { setBreadcrumbs } = useBreadcrumbs();
   setBreadcrumbs([
     {
@@ -251,23 +249,21 @@ const fetchCandidate = async () => {
       to: "/openings",
     },
     {
-      label: getCandidate.data.value.candidate.name,
+      label: candidate.value.name,
       to: `/opening/${opening.value.reference}?candidate=${candidate.value.reference}`,
     },
   ]);
-  isCandidateLoading.value = true;
-  isCandidateLoading.value = false;
 };
 
 onMounted(async () => {
-  await fetchCandidate();
+  await getCandidateDetails();
 });
 
 watch(
   () => route.query.candidate,
   async () => {
     if (route.query.candidate) {
-      await fetchCandidate();
+      await getCandidateDetails();
     }
   }
 );
@@ -318,11 +314,6 @@ const calculateColor = (score, avgScore) => {
   } else {
     return "negative";
   }
-};
-
-const handleAfterCandidateAdd = () => {
-  fetchCandidate();
-  isEditCandidateModalOpen.value = false;
 };
 </script>
 

@@ -13,7 +13,7 @@
         :class="iconClasses"
         v-if="icon"
         :name="icon"
-        :size="14"
+        :size="16"
       ></hp-icon>
       <div>{{ label }}</div>
       <hp-spinner
