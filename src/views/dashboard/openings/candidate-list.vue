@@ -239,7 +239,7 @@ watch(
 );
 
 const selectedTemplateIndex = ref(
-  templateList.value.findIndex((template) => template.value)
+  templateList.value?.findIndex((template) => template.value)
 );
 
 // TODO: refactor
