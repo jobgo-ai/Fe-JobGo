@@ -38,12 +38,9 @@
             candidate.opening.statistics.averageOpeningScore
           )}`"
         >
-          <div
-            v-if="candidate.opening.statistics.candidateScore"
-            class="candidate-details__overview__score-container"
-          >
+          <div class="candidate-details__overview__score-container">
             <div class="candidate-details__overview__score__average">
-              {{ candidate.opening.statistics.candidateScore }}
+              {{ candidate.opening.statistics.candidateScore ?? "0.0" }}
             </div>
             <div class="candidate-details__overview__score__current">
               Current score
@@ -53,12 +50,6 @@
               {{ candidate.opening.statistics.averageOpeningScore }}
               <hp-icon name="arrow-top"></hp-icon>
             </div>
-          </div>
-          <div class="candidate-details__overview--incomplete" v-else>
-            <div class="candidate-details__overview--incomplete-text">
-              {{ candidate.name }} has not started the interview process
-            </div>
-            <empty-state />
           </div>
         </div>
         <div class="candidate-details__overview__skill-container">
@@ -278,16 +269,11 @@ watch(
 );
 
 const skillList = computed(() => {
-  if (candidate.value.opening?.statistics?.candidateSkillScores?.length === 0) {
-    return props?.opening?.statistics?.skills?.map((skill) => {
-      return {
-        label: skill.value.name,
-        value: 0,
-      };
-    });
-  }
   return candidate.value?.opening?.statistics?.candidateSkillScores.map(
-    (skill) => ({ label: skill.skill.name, value: skill.score.value })
+    (skill) => ({
+      label: skill.skill.name,
+      value: skill.score.value?.toFixed(1) ?? "0.0",
+    })
   );
 });
 
@@ -315,7 +301,7 @@ const isNextAction = (template, templates) => {
 };
 
 const calculateColor = (score, avgScore) => {
-  if (!score) {
+  if (!score || score === "0.0") {
     return "default";
   }
   if (score >= avgScore) {
@@ -399,6 +385,7 @@ const completedTemplates = computed(() => {
       font-size: 14px;
       line-height: 20px;
       &--default {
+        color: var(--color-text-secondary);
         background: var(--color-panel);
         border: 1px solid var(--color-border);
       }
@@ -438,6 +425,7 @@ const completedTemplates = computed(() => {
       align-items: center;
       font-weight: 500;
       margin-bottom: 16px;
+      font-size: 16px;
       &__badge {
         margin-left: 8px;
       }

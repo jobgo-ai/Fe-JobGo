@@ -92,6 +92,7 @@
                 <div v-if="isFlyoutOpen" class="candidate-list__flyout">
                   <ol class="candidate-list__flyout__items">
                     <li
+                      class="candidate-list__flyout__li"
                       @click="handleItemClick(index)"
                       v-for="(template, index) in templateList"
                     >
