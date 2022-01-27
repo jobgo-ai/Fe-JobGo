@@ -211,6 +211,7 @@ const handleItemClick = (index) => {
     }
     return template;
   });
+  isFlyoutOpen.value = false;
 };
 
 onClickOutside(dropdownTarget, (event) => {
@@ -248,20 +249,37 @@ const handleAddCandidate = async (candidateRef) => {
   router.push(`/openings/${route.params.openingRef}?candidate=${candidateRef}`);
 };
 
+// TODO: refactor
 const candidateList = computed(() => {
-  if (debouncedSearch.value) {
-    return candidates.value.filter((candidate) => {
-      return (
-        candidate.name
+  // with debounced search
+  const withSearch = debouncedSearch.value
+    ? candidates.value.filter((candidate) => {
+        return candidate.name
           .toLowerCase()
-          .includes(debouncedSearch.value.toLowerCase()) ||
-        candidate.email
-          .toLowerCase()
-          .includes(debouncedSearch.value.toLowerCase())
-      );
-    });
-  }
-  return candidates.value;
+          .includes(debouncedSearch.value.toLowerCase());
+      })
+    : candidates.value;
+
+  // Finding the selected template's index
+  const selectedTemplateIndex = templateList.value.findIndex(
+    (template) => template.value
+  );
+
+  // filtered by currently selected template
+  const filteredByTemplate =
+    selectedTemplateIndex === templateList.value.length - 1
+      ? withSearch
+      : withSearch.filter((candidate) => {
+          console.log(
+            candidate.opening.templates.find((i) => !i.interview.started)
+          );
+          return (
+            candidate.opening.templates.find((i) => !i.interview.started)
+              .name === templateList.value[selectedTemplateIndex].label
+          );
+        });
+
+  return filteredByTemplate;
 });
 </script>
 
