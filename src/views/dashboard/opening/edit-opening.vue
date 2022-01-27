@@ -45,9 +45,10 @@ const opening = ref({});
 const schema = yup.object({
   name: yup.string().required("Job title is required"),
   description: yup.string(),
+  artwork: yup.number(),
 });
 
-const { handleSubmit, setFieldValue } = useForm({
+const { handleSubmit, setValues } = useForm({
   validationSchema: schema,
 });
 
@@ -67,8 +68,7 @@ onMounted(async () => {
     await getOpening.get();
     opening.value = getOpening.data.value.opening;
     templates.value = getOpening.data.value.opening.templates;
-    setFieldValue("name", getOpening.data.value.opening.name);
-    setFieldValue("description", getOpening.data.value.opening.description);
+    setValues(opening.value);
   }
 });
 
