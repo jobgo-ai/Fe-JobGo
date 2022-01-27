@@ -341,7 +341,6 @@ const candidateList = computed(() => {
     border-bottom: 1px dashed var(--color-border);
     margin-top: 16px;
     padding-bottom: 24px;
-    margin-bottom: 24px;
 
     &__stat {
       display: flex;
@@ -377,6 +376,7 @@ const candidateList = computed(() => {
   &__candidate-list {
     max-height: 500px;
     overflow: scroll;
+    padding-top: 24px;
 
     &__header {
       display: flex;
