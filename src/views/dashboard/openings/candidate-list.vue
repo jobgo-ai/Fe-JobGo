@@ -64,7 +64,10 @@
             Candidates
           </div>
         </div>
-        <div class="candidate-list__candidate-list">
+        <div
+          v-if="!isCandidateListLoading"
+          class="candidate-list__candidate-list"
+        >
           <div>
             <div class="candidate-list__candidate-list__header">
               <div>Candidates</div>
@@ -125,31 +128,29 @@
               class="candidate-list__add-candidate"
             ></hp-button>
           </div>
-          <div v-if="!isCandidateListLoading">
-            <ol v-if="candidateList.length > 0">
-              <hp-candidate-card
-                v-for="candidate in candidateList"
-                :key="candidate.reference"
-                :candidate="candidate"
-              ></hp-candidate-card>
-            </ol>
-            <div class="candidate-list__empty-state" v-else>
-              <empty-state />
-              <div class="candidate-list__empty-state__text--primary">
-                Hello? Is anybody there?
-              </div>
-              <div class="candidate-list__empty-state__text--secondary">
-                Looking a tad empty, try adding a candidate
-              </div>
-              <hp-button primary label="Add candidate"></hp-button>
+          <ol v-if="candidateList.length > 0">
+            <hp-candidate-card
+              v-for="candidate in candidateList"
+              :key="candidate.reference"
+              :candidate="candidate"
+            ></hp-candidate-card>
+          </ol>
+          <div class="candidate-list__empty-state" v-else>
+            <empty-state />
+            <div class="candidate-list__empty-state__text--primary">
+              Hello? Is anybody there?
             </div>
+            <div class="candidate-list__empty-state__text--secondary">
+              Looking a tad empty, try adding a candidate
+            </div>
+            <hp-button primary label="Add candidate"></hp-button>
           </div>
-          <hp-spinner
-            :size="24"
-            class="candidate-list__spinner"
-            v-else
-          ></hp-spinner>
         </div>
+        <hp-spinner
+          :size="24"
+          class="candidate-list__spinner"
+          v-else
+        ></hp-spinner>
       </div>
       <hp-spinner
         :size="24"
