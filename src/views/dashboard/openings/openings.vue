@@ -137,7 +137,7 @@ watch(
   async () => {
     if (route.params.openingRef) {
       if (openings.value.length === 0 || state.value === "archived") {
-        state.valeu = "active";
+        state.value = "active";
         await fetchOpenings();
       }
       isCandidateListOpen.value = true;
