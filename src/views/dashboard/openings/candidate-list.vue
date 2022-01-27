@@ -181,7 +181,6 @@ import EmptyState from "@/assets/abstracts/empty-state.svg";
 
 // Hooks
 import useCandidates from "@/hooks/useCandidates.js";
-import router from "../../../router";
 
 const props = defineProps({
   isCandidateDetailsOpen: {
@@ -422,6 +421,7 @@ const candidateList = computed(() => {
         align-items: center;
         justify-content: space-between;
         border-radius: 8px;
+        cursor: pointer;
         &:hover {
           background-color: var(--color-forground-floating);
         }
