@@ -295,7 +295,7 @@ const candidateList = computed(() => {
   z-index: 10;
   padding: 24px;
   &--left {
-    right: calc(100% - 16px);
+    right: 100%;
     transform: translateX(100%);
   }
 
