@@ -65,7 +65,8 @@ import { useRoute, useRouter } from "vue-router";
 import { onMounted } from "vue";
 
 // Hooks
-import { useGet, usePost } from "@/hooks/useHttp";
+import { usePost } from "@/hooks/useHttp";
+import useOpenings from "@/hooks/useOpenings";
 import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
 
 // Views
@@ -80,21 +81,11 @@ import HpSpinner from "@/components/hp-spinner.vue";
 const route = useRoute();
 const router = useRouter();
 const selectedOpening = ref({});
-const openings = ref([]);
 const isCandidateDetailsOpen = ref(route.query.candidate);
 const isCandidateListOpen = ref(route.params.openingRef);
-
-const isOpeningsLoading = ref(true);
 const state = ref("active");
 
-const fetchOpenings = async () => {
-  isOpeningsLoading.value = true;
-  const url = `openings?state=${state.value.toLowerCase()}`;
-  const getOpenings = useGet(url);
-  await getOpenings.get();
-  openings.value = getOpenings.data.value.openings;
-  isOpeningsLoading.value = false;
-};
+const { fetchOpenings, openings, isOpeningsLoading } = useOpenings();
 
 const handleOpeningCardClick = (opening) => {
   if (opening.state === "archived") {
@@ -170,8 +161,9 @@ const handleNewOpening = async () => {
   }
 };
 
-watch(state, () => {
-  fetchOpenings();
+watch(state, async () => {
+  router.push(`/openings/`);
+  await fetchOpenings(state.value);
 });
 </script>
 

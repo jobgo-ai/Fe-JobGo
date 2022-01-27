@@ -216,7 +216,6 @@ onClickOutside(dropdownTarget, (event) => {
   if (!isFlyoutOpen.value) {
     return;
   }
-  console.log(event.target.className);
   if (event.target.className.includes("candidate-list__flyout")) {
     return;
   }

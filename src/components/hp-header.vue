@@ -117,7 +117,6 @@ onClickOutside(dropdownTarget, (event) => {
   if (!isAccountMenuOpen.value) {
     return;
   }
-  console.log(isAccountMenuOpen.value);
   if (event.target.className.includes("hp-header__dropdown")) {
     return;
   }

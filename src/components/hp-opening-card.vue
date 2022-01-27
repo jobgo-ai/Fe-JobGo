@@ -22,13 +22,15 @@
       class="hp-opening-card__content-container"
       v-if="!isArchived && !isAddCard"
     >
-      <component
-        :is="splash"
-        role="img"
-        :alt="splash"
-        :key="opening.reference"
-        class="hp-opening-card__splash"
-      />
+      <div class="hp-opening-card__splash">
+        <component
+          :is="splash"
+          role="img"
+          :alt="splash"
+          :key="opening.reference"
+          class="hp-opening-card__splash__image"
+        />
+      </div>
       <div class="hp-opening-card__content">
         <h4 class="hp-opening-card__content__name">{{ opening.name }}</h4>
         <div class="hp-opening-card__content__description">
@@ -121,8 +123,11 @@ const containerClasses = computed(() => {
   }
   &__splash {
     flex-shrink: 0;
-    border-top-left-radius: 12px;
-    border-top-right-radius: 12px;
+    min-height: 84px;
+    &__image {
+      border-top-left-radius: 12px;
+      border-top-right-radius: 12px;
+    }
   }
   &__content-container {
     display: flex;

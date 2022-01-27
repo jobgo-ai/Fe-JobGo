@@ -7,18 +7,27 @@ export function useGet(endpoint) {
   const data = ref(null);
   const loading = ref(false);
   const error = ref(null);
+  let url = endpoint;
+  let controller = new AbortController();
+  let signal = controller.signal;
 
-  const get = async () => {
+  const get = async (endpoint) => {
+    controller = new AbortController();
+    signal = controller.signal;
+    if (endpoint) {
+      url = endpoint;
+    }
     loading.value = true;
     data.value = null;
     error.value = null;
     try {
-      const res = await fetch(`${API_URL}/${endpoint}`, {
+      const res = await fetch(`${API_URL}/${url}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
           Authorization: "Bearer " + state.token,
         },
+        signal: signal,
       });
       const jsonRes = await res.json();
       if (jsonRes.error) {
@@ -38,6 +47,7 @@ export function useGet(endpoint) {
     loading,
     error,
     get,
+    controller,
   };
 }
 
