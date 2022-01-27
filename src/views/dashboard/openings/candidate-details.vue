@@ -248,6 +248,10 @@ const getCandidateDetails = async () => {
       to: "/openings",
     },
     {
+      label: opening.value.name,
+      to: `/openings/${opening.value.reference}`,
+    },
+    {
       label: candidate.value.name,
       to: `/opening/${opening.value.reference}?candidate=${candidate.value.reference}`,
     },

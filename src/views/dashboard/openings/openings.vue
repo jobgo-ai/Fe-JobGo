@@ -86,6 +86,7 @@ const isCandidateListOpen = ref(route.params.openingRef);
 const state = ref("active");
 
 const { fetchOpenings, openings, isOpeningsLoading } = useOpenings();
+const { setBreadcrumbs } = useBreadcrumbs();
 
 const handleOpeningCardClick = (opening) => {
   if (opening.state === "archived") {
@@ -115,8 +116,16 @@ watch(
   () => route.query.candidate,
   async () => {
     if (!route.query.candidate) {
-      const { setBreadcrumbs } = useBreadcrumbs();
-      setBreadcrumbs([]);
+      setBreadcrumbs([
+        {
+          label: "Openings",
+          to: "/openings",
+        },
+        {
+          label: selectedOpening.value.name,
+          to: `/openings/${selectedOpening.value.reference}`,
+        },
+      ]);
     }
     isCandidateDetailsOpen.value = route.query.candidate;
   }
@@ -134,8 +143,19 @@ watch(
       selectedOpening.value = openings.value.find(
         (opening) => opening.reference === route.params.openingRef
       );
+      setBreadcrumbs([
+        {
+          label: "Openings",
+          to: "/openings",
+        },
+        {
+          label: selectedOpening.value.name,
+          to: `/openings/${selectedOpening.value.reference}`,
+        },
+      ]);
     } else if (!route.params.openingRef) {
       isCandidateListOpen.value = false;
+      setBreadcrumbs([]);
       if (openings.value.length > 0) {
         return;
       } else {
