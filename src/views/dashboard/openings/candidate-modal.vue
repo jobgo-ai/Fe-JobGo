@@ -121,7 +121,7 @@ const onSubmit = handleSubmit(async (values) => {
     await postCandidate.post(payload);
     fetchCandidates(route.params.openingRef);
     router.push(
-      `'/openings/${route.params.openingRef}?candidate=${postCandidate.data.value.candidate.reference}'`
+      `/openings/${route.params.openingRef}?candidate=${postCandidate.data.value.candidate.reference}`
     );
   } else {
     const putCandidate = usePut(`candidates/${props.candidate.reference}`);
