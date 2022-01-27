@@ -93,10 +93,18 @@
         </div>
       </div>
       <div class="candidate-details__interviews">
-        <h3 class="candidate-details__interviews__title">Interviews</h3>
-        <p class="candidate-details__interviews__subtitle">
-          View and manage all interviews
-        </p>
+        <div class="candidate-details__interviews__header">
+          <div>
+            <h3 class="candidate-details__interviews__title">Interviews</h3>
+            <p class="candidate-details__interviews__subtitle">
+              View and manage all interviews
+            </p>
+          </div>
+          <hp-circular-badge
+            :upper="candidate.opening.templates.length"
+            :lower="completedTemplates"
+          ></hp-circular-badge>
+        </div>
         <ul class="candidate-details__interview-grid">
           <li
             :class="createClasses(interview)"
@@ -220,6 +228,7 @@ import CandidateModal from "./candidate-modal.vue";
 import HpSpinner from "@/components/hp-spinner.vue";
 import EmptyState from "@/assets/abstracts/empty-state.svg";
 import HpModal from "@/components/hp-modal.vue";
+import HpCircularBadge from "@/components/hp-circular-badge.vue";
 
 const props = defineProps({
   openings: {
@@ -315,6 +324,11 @@ const calculateColor = (score, avgScore) => {
     return "negative";
   }
 };
+
+const completedTemplates = computed(() => {
+  return candidate.value.opening.templates.filter((t) => t.interview.terminated)
+    .length;
+});
 </script>
 
 <style scoped lang="scss">
@@ -447,6 +461,11 @@ const calculateColor = (score, avgScore) => {
   &__interviews {
     padding-top: 24px;
     margin-bottom: 200px;
+    &__header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
     &__title {
       font-weight: 500;
       font-size: 16px;
