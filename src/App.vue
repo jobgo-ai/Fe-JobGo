@@ -68,12 +68,7 @@ if (currentTheme) {
   --color-background-negative: rgba(181, 97, 80, 0.08);
   --color-border-negative: rgba(181, 97, 80, 0.32);
   --color-forground-negative: #b56150;
-  --color-focus: linear-gradient(
-      0deg,
-      rgba(41, 52, 59, 0.72),
-      rgba(41, 52, 59, 0.72)
-    ),
-    #505099;
+  --color-focus: #343c55;
   --color-background-floating: #242c30;
   --color-forground-floating: #363e42;
   --color-overylay: #1d2429;
@@ -105,6 +100,9 @@ ul {
 a {
   color: inherit;
   text-decoration: none;
+  &:focus {
+    outline: none;
+  }
 }
 
 /*! normalize.css v8.0.1 | MIT License | github.com/necolas/normalize.css */
