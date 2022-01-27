@@ -143,16 +143,18 @@ watch(
       selectedOpening.value = openings.value.find(
         (opening) => opening.reference === route.params.openingRef
       );
-      setBreadcrumbs([
-        {
-          label: "Openings",
-          to: "/openings",
-        },
-        {
-          label: selectedOpening.value.name,
-          to: `/openings/${selectedOpening.value.reference}`,
-        },
-      ]);
+      if (!isCandidateDetailsOpen.value) {
+        setBreadcrumbs([
+          {
+            label: "Openings",
+            to: "/openings",
+          },
+          {
+            label: selectedOpening.value.name,
+            to: `/openings/${selectedOpening.value.reference}`,
+          },
+        ]);
+      }
     } else if (!route.params.openingRef) {
       isCandidateListOpen.value = false;
       setBreadcrumbs([]);
