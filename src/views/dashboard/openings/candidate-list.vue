@@ -72,6 +72,7 @@
                 class="candidate-list__candidate-list__dropdown-target"
                 @click="isFlyoutOpen = !isFlyoutOpen"
                 ref="dropdownTarget"
+                v-if="templateList && templateList.length > 1"
               >
                 <div
                   class="candidate-list__candidate-list__dropdown-target__view"
@@ -243,6 +244,9 @@ const selectedTemplateIndex = ref(
 
 // TODO: refactor
 const candidateList = computed(() => {
+  if (!templateList.value) {
+    return [];
+  }
   // with debounced search
   const withSearch = debouncedSearch.value
     ? candidates.value.filter((candidate) => {
