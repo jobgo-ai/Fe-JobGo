@@ -81,7 +81,7 @@
                 <div
                   class="candidate-list__candidate-list__dropdown-target__tag"
                 >
-                  All interviews
+                  {{ templateList[selectedTemplateIndex]?.label }}
                 </div>
                 <hp-icon
                   class="candidate-list__candidate-list__dropdown-target__icon"
@@ -238,16 +238,9 @@ watch(
   { immediate: true }
 );
 
-const handleArchiveCandidate = async () => {
-  await fetchCandidates(route.params.openingRef);
-  isCandidateDetailsOpen.value = null;
-};
-
-const handleAddCandidate = async (candidateRef) => {
-  await fetchCandidates(route.params.openingRef);
-  isAddCandidateModalOpen.value = false;
-  router.push(`/openings/${route.params.openingRef}?candidate=${candidateRef}`);
-};
+const selectedTemplateIndex = ref(
+  templateList.value.findIndex((template) => template.value)
+);
 
 // TODO: refactor
 const candidateList = computed(() => {
@@ -261,13 +254,13 @@ const candidateList = computed(() => {
     : candidates.value;
 
   // Finding the selected template's index
-  const selectedTemplateIndex = templateList.value.findIndex(
+  selectedTemplateIndex.value = templateList.value.findIndex(
     (template) => template.value
   );
 
   // filtered by currently selected template
   const filteredByTemplate =
-    selectedTemplateIndex === templateList.value.length - 1
+    selectedTemplateIndex.value === templateList.value.length - 1
       ? withSearch
       : withSearch.filter((candidate) => {
           console.log(
@@ -275,7 +268,7 @@ const candidateList = computed(() => {
           );
           return (
             candidate.opening.templates.find((i) => !i.interview.started)
-              .name === templateList.value[selectedTemplateIndex].label
+              .name === templateList.value[selectedTemplateIndex.value].label
           );
         });
 
@@ -306,6 +299,7 @@ const candidateList = computed(() => {
     display: flex;
     justify-content: space-between;
     margin-bottom: 16px;
+    align-items: center;
     &__avatar {
       height: 40px;
       width: 40px;
