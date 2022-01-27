@@ -136,12 +136,15 @@ watch(
   () => route.params.openingRef,
   async () => {
     if (route.params.openingRef) {
-      await fetchOpenings();
+      if (openings.value.length === 0 || state.value === "archived") {
+        state.valeu = "active";
+        await fetchOpenings();
+      }
       isCandidateListOpen.value = true;
       selectedOpening.value = openings.value.find(
         (opening) => opening.reference === route.params.openingRef
       );
-      if (!isCandidateDetailsOpen.value) {
+      if (!isCandidateDetailsOpen.value && selectedOpening.value?.name) {
         setBreadcrumbs([
           {
             label: "Openings",
@@ -182,7 +185,9 @@ const handleNewOpening = async () => {
 };
 
 watch(state, async () => {
-  router.push(`/openings/`);
+  if (state.value === "archived") {
+    router.push(`/openings/`);
+  }
   await fetchOpenings(state.value);
 });
 </script>
