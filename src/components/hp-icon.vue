@@ -1,11 +1,13 @@
 <template>
-  <component
-    :is="icon"
-    role="img"
-    :alt="icon"
-    :style="{ height: `${size}px`, width: `${size}px` }"
-    class="hp-icon"
-  />
+  <div :style="{ height: `${size}px`, width: `${size}px` }">
+    <component
+      :is="icon"
+      role="img"
+      :alt="icon"
+      :style="{ height: `${size}px`, width: `${size}px` }"
+      class="hp-icon"
+    />
+  </div>
 </template>
 
 <script setup>
