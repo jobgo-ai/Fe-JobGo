@@ -1,7 +1,7 @@
 <template>
   <div class="openings">
     <div class="candidate-list">
-      <transition name="fade" mode="in-out" appear>
+      <transition name="candidate-list-transition" mode="in-out" appear>
         <candidate-list
           v-if="isCandidateListOpen"
           :isCandidateDetailsOpen="isCandidateDetailsOpen"
@@ -10,7 +10,11 @@
       </transition>
     </div>
     <div :class="`view`">
-      <transition class="candidate-details" name="slide-left">
+      <transition
+        class="candidate-details"
+        name="candidate-details-transition"
+        appear
+      >
         <candidate-details
           v-if="isCandidateDetailsOpen"
           :isCandidateDetailsOpen="isCandidateDetailsOpen"
@@ -19,7 +23,7 @@
       </transition>
       <transition
         :class="`openingslist ${!isCandidateListOpen && 'openingslist--empty'}`"
-        name="slide-right"
+        name="openings-list-transition"
       >
         <div v-if="!isCandidateDetailsOpen" class="opening-list">
           <h2 class="openings__title">Openings</h2>
@@ -227,7 +231,6 @@ watch(state, async () => {
   width: 848px;
   padding-right: 4px;
   padding-left: 4px;
-
   overflow: scroll;
 }
 
@@ -243,7 +246,7 @@ watch(state, async () => {
   left: 0;
   bottom: 0;
   transform: translateX(0);
-  transition: all 0.25s cubic-bezier(0.17, 0.67, 0.83, 0.67);
+  transition: all 0.25s linear;
   &__spinner {
     display: flex;
     justify-content: center;
@@ -265,56 +268,44 @@ watch(state, async () => {
     align-content: baseline;
     padding-bottom: 500px;
   }
-  &__grid-item {
-    height: 264px;
-    background-color: white;
-    border: 1px solid grey;
-    border-radius: 12px;
-    padding: 12px;
-  }
 }
 
 .opening-list__grid::-webkit-scrollbar {
   display: none;
 }
 
-.fade-enter-active,
-.fade-leave-active {
-  transition: all 0.25s cubic-bezier(0.17, 0.67, 0.83, 0.67);
+.candidate-list-transition-enter-active,
+.candidate-list-transition-leave-active {
+  transition: all 0.25s linear;
   transform: translateX(0);
 }
 
-.fade-enter-from,
-.fade-leave-to {
+.candidate-list-transition-enter-from,
+.candidate-list-transition-leave-to {
   transform: translateX(500px);
   opacity: 0;
 }
 
-.slide-left-enter-active {
-  transition: all 0.25s cubic-bezier(0.17, 0.67, 0.83, 0.67);
+.candidate-details-transition-enter-active,
+.candidate-details-transition-leave-active {
+  transition: all 0.25s linear;
+  transform: translateX(0);
 }
 
-.slide-left-leave-active {
-  transition: all 0.25s cubic-bezier(0.17, 0.67, 0.83, 0.67);
-}
-
-.slide-left-enter-from,
-.slide-left-leave-to {
-  transform: translateX(900px);
+.candidate-details-transition-enter-from,
+.candidate-details-transition-leave-to {
+  transform: translateX(840px);
   opacity: 0;
 }
 
-.slide-right-enter-active {
-  transition: all 0.25s cubic-bezier(0.17, 0.67, 0.83, 0.67);
+.openings-list-transition-enter-active,
+.openings-list-transition-leave-active {
+  transition: all 0.25s linear;
 }
 
-.slide-right-leave-active {
-  transition: all 0.25s cubic-bezier(0.17, 0.67, 0.83, 0.67);
-}
-
-.slide-right-enter-from,
-.slide-right-leave-to {
-  transform: translateX(-900px);
+.openings-list-transition-enter-from,
+.openings-list-transition-leave-to {
+  transform: translateX(-840px);
   opacity: 0;
 }
 </style>
