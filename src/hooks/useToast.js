@@ -5,10 +5,21 @@ let timeouts = [];
 
 export default function useToast() {
   const setToast = (toast) => {
-    const { duration = 3000 } = toast;
+    const { duration = 5500 } = toast;
     const uuid = createUUID();
-    const toastWithId = { ...toast, id: uuid };
-    toastQueue.value = toastQueue.value.concat([], [toastWithId]);
+    const iconMap = {
+      positive: "check-circle",
+      negative: "alert",
+    };
+
+    console.log(toast);
+
+    const icon = iconMap[toast.type] || toast.icon || null;
+
+    console.log(icon);
+
+    const formattedToast = { ...toast, icon: icon, id: uuid };
+    toastQueue.value = toastQueue.value.concat([], [formattedToast]);
     const timeout = setTimeout(() => {
       toastQueue.value.shift();
     }, duration);

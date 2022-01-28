@@ -14,7 +14,7 @@ const Template = (args) => ({
 
     const addToast = () => {
       setToast({
-        type: "success",
+        type: "positive",
         title: "I am a toast",
         message: `The blah has `,
         icon: "layers",
@@ -27,7 +27,6 @@ const Template = (args) => ({
         type: "negative",
         title: "I am a toast",
         message: `The blah has `,
-        icon: "alert",
         duration: 5500,
       });
     };
@@ -37,7 +36,6 @@ const Template = (args) => ({
         type: "positive",
         title: "I am a toast",
         message: `The blah has `,
-        icon: "check-circle",
         duration: 5500,
       });
     };

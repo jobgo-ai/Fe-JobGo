@@ -60,7 +60,9 @@ import HpTooltip from "@/components/hp-tooltip.vue";
 
 // Hooks
 import { usePost, usePut } from "@/hooks/useHttp";
-import useCandidates from "@/hooks/useCandidates.js";
+import useCandidates from "@/hooks/useCandidates";
+import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
+import useToast from "@/hooks/useToast";
 
 const props = defineProps({
   opening: {
@@ -79,6 +81,8 @@ const isUpdatingCandidate = ref(false);
 const isArchivingCandidate = ref(false);
 const isAddNew = props.candidate.name === "";
 
+const { setToast } = useToast();
+
 const content = computed(() => {
   return isAddNew
     ? {
@@ -96,6 +100,8 @@ const content = computed(() => {
 const route = useRoute();
 const router = useRouter();
 
+const { setBreadcrumbs } = useBreadcrumbs();
+
 const schema = yup.object({
   name: yup.string().required("First name is required"),
   email: yup.string().email("Email must be valid"),
@@ -106,7 +112,8 @@ const { handleSubmit } = useForm({
   initialValues: { ...props.candidate },
 });
 
-const { fetchCandidates, candidates, fetchCandidate } = useCandidates();
+const { fetchCandidates, candidates, fetchCandidate, candidate } =
+  useCandidates();
 
 const onSubmit = handleSubmit(async (values) => {
   isUpdatingCandidate.value = true;
@@ -119,6 +126,11 @@ const onSubmit = handleSubmit(async (values) => {
       },
     };
     await postCandidate.post(payload);
+    setToast({
+      type: "positive",
+      title: "Well done!",
+      message: "Candidate created successfully",
+    });
     fetchCandidates(route.params.openingRef);
     router.push(
       `/openings/${route.params.openingRef}?candidate=${postCandidate.data.value.candidate.reference}`
@@ -132,7 +144,26 @@ const onSubmit = handleSubmit(async (values) => {
       },
     };
     await putCandidate.put(payload);
-    fetchCandidate(props.candidate.reference);
+    setToast({
+      type: "positive",
+      title: "What a change!",
+      message: "Candidate updated successfully",
+    });
+    await fetchCandidate(props.candidate.reference);
+    setBreadcrumbs([
+      {
+        label: "Openings",
+        to: "/openings",
+      },
+      {
+        label: props.opening.name,
+        to: `/openings/${route.params.openingRef}`,
+      },
+      {
+        label: candidate.value.name,
+        to: `/opening/${route.params.openingRef}?candidate=${candidate.value.reference}`,
+      },
+    ]);
     fetchCandidates(route.params.openingRef);
   }
   isUpdatingCandidate.value = false;
@@ -148,6 +179,11 @@ const archiveCandidate = async () => {
     state: "archived",
   });
   await fetchCandidates(route.params.openingRef);
+  setToast({
+    type: "success",
+    title: "What a change!",
+    message: "Candidate updated successfully",
+  });
   router.push(
     `/openings/${route.params.openingRef}?candidate=${candidates.value[0].reference}`
   );
