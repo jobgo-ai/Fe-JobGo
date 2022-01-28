@@ -1,6 +1,8 @@
 <template>
   <div class="hp-button" :class="containerClasses">
-    <button
+    <component
+      :is="computedTag"
+      :to="to"
       @click="emit('handleClick')"
       class="hp-button__button"
       :class="buttonClasses"
@@ -22,7 +24,7 @@
         :size="14"
         :mode="primary ? 'light' : 'dark'"
       ></hp-spinner>
-    </button>
+    </component>
     <button
       @focus="isFocused = true"
       @blur="isFocused = false"
@@ -75,9 +77,27 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  to: {
+    type: String,
+  },
+  href: {
+    type: String,
+  },
 });
 
 const isFocused = ref(false);
+
+const computedTag = computed(() => {
+  if (props.to !== undefined && props.to !== null) {
+    return "router-link";
+  }
+
+  // if (props.href !== undefined && props.href !== null) {
+  //   return "a";
+  // }
+
+  return "button";
+});
 
 const containerClasses = computed(() => {
   return {
@@ -230,12 +250,14 @@ const emit = defineEmits(["handleClick"]);
     }
 
     &--dropzone {
+      background-color: inherit;
       border: 1px dashed var(--color-text-tertiary);
       width: 100%;
       justify-content: center;
       &:active:not([disabled]),
       &:hover:not([disabled]),
       &:active:not([disabled]) {
+        background-color: var(--color-background);
         border: 1px dashed var(--color-text-tertiary);
       }
     }

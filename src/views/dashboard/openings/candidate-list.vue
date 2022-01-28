@@ -17,15 +17,15 @@
         <div class="candidate-list__header">
           <hp-abstract-avatar :abstractKey="opening.artwork" />
           <div class="candidate-list__header__button-group">
-            <router-link :to="`/opening/${opening.reference}/compare`">
-              <hp-button
-                class="candidate-list__header__button-group__button"
-                label="Compare"
-              ></hp-button>
-            </router-link>
-            <router-link :to="`/opening/${opening.reference}/edit`">
-              <hp-button icon="pencil"></hp-button>
-            </router-link>
+            <hp-button
+              :to="`/opening/${opening.reference}/compare`"
+              class="candidate-list__header__button-group__button"
+              label="Compare"
+            ></hp-button>
+            <hp-button
+              :to="`/opening/${opening.reference}/edit`"
+              icon="pencil"
+            ></hp-button>
           </div>
         </div>
         <h2 class="candidate-list__opening-title">{{ opening.name }}</h2>
@@ -375,6 +375,7 @@ const candidateList = computed(() => {
   &__candidate-list {
     max-height: 500px;
     overflow: scroll;
+    padding: 4px;
     padding-top: 24px;
 
     &__header {
