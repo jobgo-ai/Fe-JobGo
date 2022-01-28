@@ -42,10 +42,18 @@ const Template = (args) => ({
       });
     };
 
-    return { args, addToast, addHappyToast, addSadToast };
+    const addDefaultToast = () => {
+      setToast({
+        message: `The blah has `,
+        duration: 5500,
+      });
+    };
+
+    return { args, addToast, addHappyToast, addSadToast, addDefaultToast };
   },
   template: `<div>
   <button  type="button" @click="addToast"> add toast </button>
+  <button  type="button" @click="addDefaultToast"> add default toast </button>
   <button  type="button" @click="addHappyToast"> add happy toast </button>
   <button  type="button" @click="addSadToast"> add sad toast </button>
 

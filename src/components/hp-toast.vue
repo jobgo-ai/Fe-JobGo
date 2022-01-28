@@ -10,7 +10,13 @@
           v-if="toast.icon"
           :name="toast.icon"
         ></hp-icon>
-        <div class="hp-toast__content__container__message">
+        <div
+          v-if="!toast.title"
+          class="hp-toast__content__container__message--default"
+        >
+          This is a default toast
+        </div>
+        <div v-else class="hp-toast__content__container__message">
           <p
             class="hp-toast__content__container__message__title"
             v-if="toast.title"
@@ -73,6 +79,11 @@ const { toastQueue, dismissToast } = useToast();
       &__message {
         display: flex;
         flex-direction: column;
+        &__default {
+          font-size: 14px;
+          line-height: 20px;
+          color: var(--color-text-primary);
+        }
         &__title {
           font-weight: 500;
           font-size: 14px;
