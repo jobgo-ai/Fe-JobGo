@@ -1,49 +1,52 @@
 <template>
-  <button
-    :class="`hp-candidate-card ${
-      candidate.reference === route.query.candidate &&
-      'hp-candidate-card--selected'
-    }`"
-    @click="handleCandidateClick"
+  <router-link
+    :to="`/openings/${route.params.openingRef}?candidate=${candidate.reference}`"
   >
-    <div class="hp-candidate-card__info">
-      <div class="hp-candidate-card__info__details">
-        <div class="hp-candidate-card__info__details__detail">
-          {{ candidate.name }}
+    <li
+      :class="`hp-candidate-card ${
+        candidate.reference === route.query.candidate &&
+        'hp-candidate-card--selected'
+      }`"
+    >
+      <div class="hp-candidate-card__info">
+        <div class="hp-candidate-card__info__details">
+          <div class="hp-candidate-card__info__details__detail">
+            {{ candidate.name }}
+          </div>
+          <div class="hp-candidate-card__info__details__detail--email">
+            {{ candidate.email }}
+          </div>
         </div>
-        <div class="hp-candidate-card__info__details__detail--email">
-          {{ candidate.email }}
-        </div>
+        <hp-badge
+          v-if="candidate.opening.statistics.candidateScore"
+          :type="
+            calculateColor(
+              candidate.opening.statistics.candidateScore,
+              candidate.opening.statistics.averageOpeningScore
+            )
+          "
+          :content="candidate.opening.statistics.candidateScore"
+        ></hp-badge>
       </div>
-      <hp-badge
-        v-if="candidate.opening.statistics.candidateScore"
-        :type="
-          calculateColor(
-            candidate.opening.statistics.candidateScore,
-            candidate.opening.statistics.averageOpeningScore
-          )
-        "
-        :content="candidate.opening.statistics.candidateScore"
-      ></hp-badge>
-    </div>
-    <div class="hp-candidate-card__interview-ticks">
-      <div
-        :class="[
-          `hp-candidate-card__interview-tick`,
-          isNextAction(template, candidate.opening.templates) &&
-            'hp-candidate-card__interview-tick--next',
-          isCompleted(template) &&
-            'hp-candidate-card__interview-tick--completed',
-        ]"
-        v-for="template in candidate.opening.templates"
-        :key="template"
-      ></div>
-    </div>
-  </button>
+      <div class="hp-candidate-card__interview-ticks">
+        <div
+          :class="[
+            `hp-candidate-card__interview-tick`,
+            isNextAction(template, candidate.opening.templates) &&
+              'hp-candidate-card__interview-tick--next',
+            isCompleted(template) &&
+              'hp-candidate-card__interview-tick--completed',
+          ]"
+          v-for="template in candidate.opening.templates"
+          :key="template"
+        ></div>
+      </div>
+    </li>
+  </router-link>
 </template>
 
 <script setup>
-import { useRoute, useRouter } from "vue-router";
+import { useRoute } from "vue-router";
 import HpBadge from "@/components/hp-badge.vue";
 
 const props = defineProps({
@@ -55,13 +58,6 @@ const props = defineProps({
 });
 
 const route = useRoute();
-const router = useRouter();
-
-const handleCandidateClick = () => {
-  router.push(
-    `/openings/${route.params.openingRef}?candidate=${props.candidate.reference}`
-  );
-};
 
 const isNextAction = (template, templates) => {
   const nextRef = templates.find((t) => {
@@ -94,11 +90,6 @@ const calculateColor = (score, avgScore) => {
   padding: 12px;
   margin-bottom: 12px;
   cursor: pointer;
-  width: 100%;
-  text-align: left;
-  &:focus {
-    outline: 4px solid var(--color-focus);
-  }
   &:hover {
     box-shadow: inset 0px 0px 4px rgba(33, 44, 51, 0.01),
       inset 0px 0px 48px rgba(33, 44, 51, 0.03);
