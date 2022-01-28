@@ -26,15 +26,13 @@
           !isAddNew ? 'candidate-modal__actions--two-button' : ''
         }`"
       >
-        <hp-tooltip>
-          <hp-button
-            @handleClick="archiveCandidate(candidate)"
-            v-if="!isAddNew"
-            :isLoading="isArchivingCandidate"
-            icon="archive"
-          ></hp-button>
-          <template #content> Archive candidate </template>
-        </hp-tooltip>
+        <hp-button
+          @handleClick="archiveCandidate(candidate)"
+          v-if="!isAddNew"
+          :isLoading="isArchivingCandidate"
+          icon="archive"
+          label="Archive"
+        ></hp-button>
         <hp-button
           primary
           type="submit"
@@ -56,7 +54,6 @@ import { useRoute, useRouter } from "vue-router";
 //Components
 import HpInput from "@/components/form/hp-input.vue";
 import HpButton from "@/components/hp-button.vue";
-import HpTooltip from "@/components/hp-tooltip.vue";
 
 // Hooks
 import { usePost, usePut } from "@/hooks/useHttp";
