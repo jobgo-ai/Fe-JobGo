@@ -120,13 +120,14 @@
               icon="search"
               placeholder="Search..."
             />
-            <hp-button
-              primary
-              icon="plus"
-              @click="isAddCandidateModalOpen = true"
-              label="Add candidate"
-              class="candidate-list__add-candidate"
-            ></hp-button>
+            <div class="candidate-list__add-candidate">
+              <hp-button
+                primary
+                icon="plus"
+                @click="isAddCandidateModalOpen = true"
+                label="Add candidate"
+              ></hp-button>
+            </div>
           </div>
           <ol v-if="candidateList.length > 0">
             <hp-candidate-card
@@ -436,7 +437,10 @@ const candidateList = computed(() => {
   }
 
   &__add-candidate {
-    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 16px;
+    margin-top: -16px;
   }
 
   .candidate-list__flyout-transition {
