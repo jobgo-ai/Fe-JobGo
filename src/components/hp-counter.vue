@@ -120,7 +120,7 @@ const containerClasses = computed(() => {
   &__container {
     display: inline-flex;
     align-items: center;
-    background-color: var(--color-accent-forground);
+    background-color: var(--color-background);
     border: 1px solid var(--color-border);
     border-radius: 8px;
     padding: 8px;
@@ -132,6 +132,8 @@ const containerClasses = computed(() => {
       max-width: 20px;
       border: none;
       outline: none;
+      background-color: var(--color-background);
+      color: var(--color-text-primary);
       &:focus,
       &:active {
       }
@@ -152,7 +154,7 @@ const containerClasses = computed(() => {
       position: relative;
       height: 20px;
       width: 20px;
-      background-color: var(--color-accent-forground);
+      background-color: var(--color-background);
       border: 1px solid var(--color-border);
       cursor: pointer;
       border-radius: 6px;

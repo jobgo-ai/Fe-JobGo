@@ -6,4 +6,6 @@ export const parameters = {
       date: /Date$/,
     },
   },
-}
+};
+
+document.documentElement.setAttribute("data-theme", "dark");

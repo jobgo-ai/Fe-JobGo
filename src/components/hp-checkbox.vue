@@ -57,7 +57,7 @@ input[type="checkbox"] {
       width: 16px;
       height: 16px;
       border: 2px solid var(--color-text-tertiary);
-      background: white;
+      background: var(--color-background);
       border-radius: 4px;
       cursor: pointer;
       transition: border 0.15s cubic-bezier(0.17, 0.67, 0.83, 0.67),
