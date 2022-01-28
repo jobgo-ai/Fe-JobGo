@@ -1,18 +1,22 @@
 import { ref } from "vue";
 
 const toastQueue = ref([]);
+let timeouts = [];
 
 export default function useToast() {
   const setToast = (toast) => {
     const { duration = 3000 } = toast;
-    const toastWithId = { ...toast, id: createUUID() };
+    const uuid = createUUID();
+    const toastWithId = { ...toast, id: uuid };
     toastQueue.value = toastQueue.value.concat([], [toastWithId]);
-    setTimeout(() => {
+    const timeout = setTimeout(() => {
       toastQueue.value.shift();
     }, duration);
+    timeouts.push({ id: uuid, timeout });
   };
 
   const dismissToast = (id) => {
+    clearTimeout(timeouts.find((toast) => toast.id === id).timeout);
     toastQueue.value = toastQueue.value.filter((toast) => toast.id !== id);
   };
 

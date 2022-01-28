@@ -60,6 +60,7 @@ const { toastQueue, dismissToast } = useToast();
     border-radius: 12px;
     box-shadow: 0px 16px 24px rgba(33, 44, 51, 0.06),
       0px 2px 6px rgba(33, 44, 51, 0.04), 0px 0px 1px rgba(33, 44, 51, 0.04);
+    margin-bottom: 16px;
     &__container {
       display: flex;
       padding-right: 28px;
