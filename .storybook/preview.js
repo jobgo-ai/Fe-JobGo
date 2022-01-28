@@ -8,4 +8,11 @@ export const parameters = {
   },
 };
 
-document.documentElement.setAttribute("data-theme", "dark");
+document.addEventListener("keydown", function (event) {
+  console.log(event);
+  if (event.key === "9") {
+    document.documentElement.setAttribute("data-theme", "dark");
+  } else if (event.key === "0") {
+    document.documentElement.setAttribute("data-theme", "light");
+  }
+});
