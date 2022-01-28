@@ -294,6 +294,7 @@ const candidateList = computed(() => {
   min-height: 600px;
   z-index: 10;
   padding: 24px;
+  padding-bottom: 0px;
   &--left {
     right: 100%;
     transform: translateX(100%);
@@ -347,7 +348,7 @@ const candidateList = computed(() => {
       align-items: center;
       color: var(--color-text-primary);
       &__number {
-        font-weight: 400;
+        font-weight: 600;
         margin-right: 2px;
       }
       &__icon {

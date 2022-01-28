@@ -1,4 +1,11 @@
+<template>
+  <router-view></router-view>
+  <hp-toast />
+</template>
+
 <script setup>
+import HpToast from "@/components/hp-toast.vue";
+
 const currentTheme = localStorage.getItem("theme")
   ? localStorage.getItem("theme")
   : null;
@@ -7,10 +14,6 @@ if (currentTheme) {
   document.documentElement.setAttribute("data-theme", currentTheme);
 }
 </script>
-
-<template>
-  <router-view></router-view>
-</template>
 
 <style lang="scss">
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap");

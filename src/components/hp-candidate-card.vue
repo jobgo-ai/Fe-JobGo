@@ -2,7 +2,12 @@
   <router-link
     :to="`/openings/${route.params.openingRef}?candidate=${candidate.reference}`"
   >
-    <li class="hp-candidate-card">
+    <li
+      :class="`hp-candidate-card ${
+        candidate.reference === route.query.candidate &&
+        'hp-candidate-card--selected'
+      }`"
+    >
       <div class="hp-candidate-card__info">
         <div class="hp-candidate-card__info__details">
           <div class="hp-candidate-card__info__details__detail">
@@ -88,6 +93,12 @@ const calculateColor = (score, avgScore) => {
   &:hover {
     box-shadow: inset 0px 0px 4px rgba(33, 44, 51, 0.01),
       inset 0px 0px 48px rgba(33, 44, 51, 0.03);
+  }
+  &--selected {
+    background-color: var(--color-background);
+    &:hover {
+      box-shadow: none;
+    }
   }
   &__info {
     display: flex;
