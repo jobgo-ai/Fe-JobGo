@@ -1,4 +1,5 @@
 import HpButton from "../components/hp-button.vue";
+import vueRouter from "storybook-vue3-router";
 
 export default {
   title: "Components/Button",
@@ -16,6 +17,7 @@ const Template = (args) => ({
   template: `<div>
     <div style="display:flex; margin-bottom: 16px;">
       <hp-button style="margin-right: 12px" v-bind="args"> </hp-button>
+      <hp-button style="margin-right: 12px" :to="{ name: 'home' }" label="Link button"> </hp-button>
       <hp-button style="margin-right: 12px" @click="buttonIsLoading = !buttonIsLoading" label="Loading" :isLoading="buttonIsLoading" />
       <hp-button style="margin-right: 12px" :isDisabled="true" label="Disabled" />
       <hp-button style="margin-right: 12px" label="Dropdown" dropdownIcon="plus" :hasDropdown="true" />
@@ -24,6 +26,7 @@ const Template = (args) => ({
     </div>
     <div style="display:flex">
       <hp-button primary style="margin-right: 12px" v-bind="args"> </hp-button>
+      <hp-button primary style="margin-right: 12px" :to="{ name: 'home' }" label="Link button"> </hp-button>
       <hp-button primary style="margin-right: 12px" @click="buttonIsLoading = !buttonIsLoading" label="Loading" :isLoading="buttonIsLoading" />
       <hp-button primary style="margin-right: 12px" :isDisabled="true" label="Disabled" />
       <hp-button primary style="margin-right: 12px" label="Dropdown" dropdownIcon="plus" :hasDropdown="true" />
@@ -45,3 +48,5 @@ export const Secondary = Template.bind({});
 Secondary.args = {
   label: "whats up",
 };
+
+Primary.decorators = [vueRouter()];
