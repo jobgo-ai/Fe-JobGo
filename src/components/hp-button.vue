@@ -71,6 +71,10 @@ const props = defineProps({
     type: String,
     default: "chevron-down",
   },
+  dropzone: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const isFocused = ref(false);
@@ -78,6 +82,7 @@ const isFocused = ref(false);
 const containerClasses = computed(() => {
   return {
     "hp-button": true,
+    "hp-button--dropzone": props.dropzone,
     "hp-button--primary": props.primary,
     "hp-button--dropdown": props.hasDropdown,
     "hp-button--focused": isFocused.value,
@@ -87,6 +92,7 @@ const containerClasses = computed(() => {
 const buttonClasses = computed(() => {
   return {
     "hp-button__button": true,
+    "hp-button__button--dropzone": props.dropzone,
     "hp-button__button--disabled": props.isDisabled,
     "hp-button__button--dropdown": props.hasDropdown,
     "hp-button__button--button-icon": props.icon && !props.label,
@@ -114,6 +120,11 @@ const emit = defineEmits(["handleClick"]);
 .hp-button {
   display: inline-flex;
   height: 32px;
+
+  &--dropzone {
+    width: 100%;
+    height: 40px;
+  }
 
   &--focused {
     border-radius: 8px;
@@ -216,6 +227,17 @@ const emit = defineEmits(["handleClick"]);
 
     &:active:not([disabled]) {
       border-color: var(--color-border-subtle);
+    }
+
+    &--dropzone {
+      border: 1px dashed var(--color-text-tertiary);
+      width: 100%;
+      justify-content: center;
+      &:active:not([disabled]),
+      &:hover:not([disabled]),
+      &:active:not([disabled]) {
+        border: 1px dashed var(--color-text-tertiary);
+      }
     }
   }
 }

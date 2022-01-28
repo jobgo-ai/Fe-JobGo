@@ -12,11 +12,7 @@ export default function useToast() {
       negative: "alert",
     };
 
-    console.log(toast);
-
     const icon = iconMap[toast.type] || toast.icon || null;
-
-    console.log(icon);
 
     const formattedToast = { ...toast, icon: icon, id: uuid };
     toastQueue.value = toastQueue.value.concat([], [formattedToast]);

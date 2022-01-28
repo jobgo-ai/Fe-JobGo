@@ -30,6 +30,9 @@ const Template = (args) => ({
       <hp-button primary style="margin-right: 12px" label="Icon" icon="plus" />
       <hp-button primary style="margin-right: 12px" icon="plus" />
     </div>
+    <div style="display:flex; width: 240px; margin-top:24px;">
+    <hp-button dropzone label="Add candidate" icon="plus" />
+  </div>
   </div>`,
 });
 

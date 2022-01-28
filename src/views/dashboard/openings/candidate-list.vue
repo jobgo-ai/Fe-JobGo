@@ -122,8 +122,8 @@
             />
             <div class="candidate-list__add-candidate">
               <hp-button
-                primary
                 icon="plus"
+                dropzone
                 @click="isAddCandidateModalOpen = true"
                 label="Add candidate"
               ></hp-button>
@@ -268,9 +268,6 @@ const candidateList = computed(() => {
     selectedTemplateIndex.value === templateList.value.length - 1
       ? withSearch
       : withSearch.filter((candidate) => {
-          console.log(
-            candidate.opening.templates.find((i) => !i.interview.started)
-          );
           return (
             candidate.opening.templates.find((i) => !i.interview.started)
               .name === templateList.value[selectedTemplateIndex.value].label
@@ -439,7 +436,7 @@ const candidateList = computed(() => {
   &__add-candidate {
     display: flex;
     justify-content: flex-end;
-    margin-bottom: 16px;
+    margin-bottom: 12px;
     margin-top: -16px;
   }
 
