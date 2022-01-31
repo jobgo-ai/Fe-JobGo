@@ -30,7 +30,7 @@ const props = defineProps({
   type: String,
   placeholder: {
     type: String,
-    default: "text",
+    default: "",
   },
   isDisabled: {
     type: Boolean,
@@ -92,7 +92,7 @@ const containerClasses = computed(() => {
     font-weight: 500;
   }
   &__label {
-    font-weight: 400;
+    font-weight: 500;
     margin-bottom: 8px;
     color: var(--color-text-secondary);
   }
@@ -101,8 +101,7 @@ const containerClasses = computed(() => {
     background-color: var(--color-background);
     border: 1px solid var(--color-border);
     border-radius: $border-radius-sm;
-    padding: 8px 8px 8px 12px;
-    line-height: 36px;
+    padding: 12px 16px;
     width: 100%;
     transition: border-color 0.15s cubic-bezier(0.17, 0.67, 0.83, 0.67);
     color: var(--color-text-primary);

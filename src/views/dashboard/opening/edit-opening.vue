@@ -7,36 +7,24 @@
       </p>
       <form @submit.prevent="onSubmit">
         <hp-input label="Title" name="name"></hp-input>
-        <hp-input label="Description" name="description"></hp-input>
+        <hp-textarea label="Description" name="description"></hp-textarea>
+        <hp-image-selector
+          label="Cover"
+          name="artwork"
+          v-model="artwork"
+        ></hp-image-selector>
       </form>
-      <div>
-        <ol>
-          <li v-for="template in templates" :key="template.reference">
-            {{ template.name }}
-            <router-link :to="`edit/edit-interview/${template.reference}`"
-              >Edit</router-link
-            >
-          </li>
-        </ol>
-        <router-link
-          :to="`/opening/${route.params.openingRef}/edit/add-interview`"
-          >Add interview</router-link
-        >
-      </div>
-      <hp-button
-        @handleClick="archiveOpening"
-        label="Archive opening"
-      ></hp-button>
     </div>
   </div>
 </template>
 
 <script setup>
 import HpInput from "@/components/form/hp-input.vue";
-import HpButton from "@/components/hp-button.vue";
+import HpTextarea from "@/components/form/hp-textarea.vue";
+import HpImageSelector from "@/components/form/hp-image-selector.vue";
 import { useGet, usePut } from "@/hooks/useHttp";
 
-import { onMounted, ref } from "vue";
+import { onMounted, ref, defineAsyncComponent } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useForm } from "vee-validate";
 import * as yup from "yup";
@@ -46,10 +34,11 @@ const router = useRouter();
 const templates = ref([]);
 const opening = ref({});
 
+const artwork = ref(0);
+
 const schema = yup.object({
   name: yup.string().required("Job title is required"),
   description: yup.string(),
-  artwork: yup.number(),
 });
 
 const { handleSubmit, setValues } = useForm({
@@ -61,6 +50,7 @@ const onSubmit = handleSubmit(async (values) => {
   await putOpening.put({
     opening: {
       ...values,
+      artwork: artwork.value,
       templates: opening.value.templates.map((t) => t.reference),
     },
   });
@@ -87,6 +77,12 @@ const archiveOpening = async () => {
   // await deleteOpening.remove();
   // router.push("/openings");
 };
+
+const currentSplash = defineAsyncComponent(() =>
+  import(
+    /* @vite-ignore */ `../assets/abstracts/covers/cover_${props.opening.artwork}.svg`
+  )
+);
 </script>
 
 <style lang="scss" scoped>
