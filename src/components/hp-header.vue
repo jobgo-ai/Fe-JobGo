@@ -12,7 +12,8 @@
           :isLoading="isContextFormSaving"
           :isDisabled="!isContextFormDirty"
           @handleClick="handleContextFormSave"
-          label="Save changes"
+          label="Save"
+          :hasDropdown="true"
         ></hp-button>
       </div>
       <div class="hp-header__dropdown-container" v-if="user">

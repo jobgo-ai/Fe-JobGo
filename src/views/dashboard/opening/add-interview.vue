@@ -9,19 +9,12 @@
       </form>
     </hp-modal>
     <div>Add interviews</div>
-    <hp-button
-      label="From scratch"
-      @handleClick="isAddInterviewModalOpen = true"
-    ></hp-button>
     <ol>
-      <li v-for="template in availableTemplateList" :key="template.reference">
-        {{ template.name }}
-        <div @click="handleAddToInterview(template)">Add to interview</div>
-        <router-link
-          :to="`/opening/${route.params.openingRef}/view/view-interview/${template.reference}`"
-          >View</router-link
-        >
-      </li>
+      <hp-interview-card
+        :template="template"
+        :key="template.reference"
+        v-for="template in availableTemplateList"
+      ></hp-interview-card>
     </ol>
   </div>
 </template>
@@ -34,14 +27,12 @@ import { useForm } from "vee-validate";
 import * as yup from "yup";
 
 // Components
-import HpButton from "@/components/hp-button.vue";
 import HpModal from "@/components/hp-modal.vue";
 import HpInput from "@/components/form/hp-input.vue";
-
+import HpInterviewCard from "@/components/hp-interview-card.vue";
 // Hooks
 import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
 import { useGet, usePost } from "@/hooks/useHttp";
-import useOpenings from "@/hooks/useOpenings";
 
 const props = defineProps({
   opening: {

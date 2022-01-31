@@ -52,6 +52,9 @@
       </div>
     </div>
   </form>
+  <div class="edit-openings__spinner" v-else>
+    <hp-spinner size="24"></hp-spinner>
+  </div>
 </template>
 
 <script setup>
@@ -66,6 +69,7 @@ import HpInterviewCard from "@/components/hp-interview-card.vue";
 import HpInput from "@/components/form/hp-input.vue";
 import HpButton from "@/components/hp-button.vue";
 import HpTextarea from "@/components/form/hp-textarea.vue";
+import HpSpinner from "@/components/hp-spinner.vue";
 import HpImageSelector from "@/components/form/hp-image-selector.vue";
 import MicCheck from "@/assets/abstracts/mic-check.svg";
 // hooks
@@ -191,6 +195,12 @@ const currentSplash = defineAsyncComponent(() =>
 .edit-openings {
   display: grid;
   grid-template-columns: 30% auto;
+  &__spinner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 24px;
+  }
   &__edit-container {
     background-color: var(--color-panel);
     padding: 24px;
@@ -211,6 +221,7 @@ const currentSplash = defineAsyncComponent(() =>
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    min-height: 400px;
     &__title {
       margin-top: 24px;
       @include text-h4;

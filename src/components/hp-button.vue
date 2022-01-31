@@ -29,10 +29,15 @@
       @focus="isFocused = true"
       @blur="isFocused = false"
       :class="addonClasses"
+      :disabled="isDisabled"
       v-if="hasDropdown"
+      @click="isDropdownOpen = !isDropdownOpen"
     >
       <hp-icon :name="dropdownIcon" :size="14" />
     </button>
+    <div v-if="hasDropdown" class="hp-button__dropdown-content">
+      <slot name="droopdown"></slot>
+    </div>
   </div>
 </template>
 
@@ -85,6 +90,8 @@ const props = defineProps({
   },
 });
 
+const isDropdownOpen = ref(false);
+
 const isFocused = ref(false);
 
 const computedTag = computed(() => {
@@ -122,6 +129,7 @@ const buttonClasses = computed(() => {
 const addonClasses = computed(() => {
   return {
     "hp-button__button": true,
+    "hp-button__button--disabled": props.isDisabled,
     "hp-button__button--addon": props.hasDropdown,
   };
 });
@@ -261,6 +269,9 @@ const emit = defineEmits(["handleClick"]);
         border: 1px dashed var(--color-text-tertiary);
       }
     }
+  }
+  &__dropdown-content {
+    background-color: white;
   }
 }
 </div>

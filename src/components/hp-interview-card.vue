@@ -5,13 +5,16 @@
         <div class="hp-opening-card__add-new__icon-container">
           <hp-icon :size="24" name="plus"></hp-icon>
         </div>
-        <p class="hp-opening-card__content__name">New interview</p>
+        <p class="hp-opening-card__content__name">Add interview</p>
         <p class="hp-opening-card__content__description">
           Add new interview to the process
         </p>
       </div>
       <div>
-        <hp-button label="Create new"></hp-button>
+        <hp-button
+          :to="`/opening/${route.params.openingRef}/edit/add-interview`"
+          label="Add interview"
+        ></hp-button>
       </div>
     </div>
     <div class="hp-opening-card__content" v-else>
@@ -56,6 +59,7 @@
 import HpButton from "@/components/hp-button.vue";
 import HpBadge from "@/components/hp-badge.vue";
 import HpIcon from "@/components/hp-icon.vue";
+import { useRoute } from "vue-router";
 const props = defineProps({
   opening: {
     type: Object,
@@ -74,6 +78,8 @@ const props = defineProps({
     default: 0,
   },
 });
+
+const route = useRoute();
 
 const secondsToMinutes = (seconds) => {
   return Math.floor(seconds / 60);
