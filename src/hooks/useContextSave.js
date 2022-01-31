@@ -1,5 +1,6 @@
 import { ref, watch, computed } from "vue";
 
+const isSaving = ref(false);
 const handleSave = ref(() => {
   console.log("handleSave");
 });
@@ -7,7 +8,14 @@ const handleSave = ref(() => {
 const isDirty = ref(false);
 
 export default function (metaReference, onSubmit) {
-  handleSave.value = onSubmit;
+  handleSave.value = async () => {
+    isSaving.value = true;
+    setTimeout(() => {
+      console.log("whatsup");
+    }, 1000);
+    await onSubmit();
+    isSaving.value = false;
+  };
 
   const dirtyChange = computed(() => metaReference?.value?.dirty);
 
@@ -16,7 +24,8 @@ export default function (metaReference, onSubmit) {
   });
 
   return {
-    isDirty,
-    handleSave,
+    isContextFormSaving: isSaving,
+    isContextFormDirty: isDirty,
+    handleContextFormSave: handleSave,
   };
 }

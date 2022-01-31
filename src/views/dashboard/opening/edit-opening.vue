@@ -5,7 +5,7 @@
       <p class="edit-openings__edit-container__subtitle">
         Main information for your openings
       </p>
-      <form v-if="!isLoading" @submit.prevent="onSubmit">
+      <form v-if="!isLoading" @submit.prevent="handleContextFormSave">
         <hp-input label="Name" name="name"></hp-input>
         <hp-textarea label="Description" name="description"></hp-textarea>
         <hp-image-selector label="Cover" name="artwork"></hp-image-selector>
@@ -69,7 +69,6 @@ const onSubmit = handleSubmit(async (values) => {
     type: "positive",
     message: `${putOpening.data.value.opening.name} updated`,
   });
-  console.log(opening.value.name);
   setBreadcrumbs([
     {
       label: "Openings",
@@ -103,7 +102,7 @@ onMounted(async () => {
   }
 });
 
-useContextSave(meta, onSubmit);
+const { handleContextFormSave } = useContextSave(meta, onSubmit);
 
 const archiveOpening = async () => {
   const putOpening = usePut(`openings/${route.params.openingRef}/state`);

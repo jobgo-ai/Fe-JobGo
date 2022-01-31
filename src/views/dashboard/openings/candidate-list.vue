@@ -356,8 +356,8 @@ const candidateList = computed(() => {
     }
   }
   &__empty-state {
-    margin-top: 80px;
-    margin-bottom: 80px;
+    margin-top: 40px;
+    margin-bottom: 40px;
     display: flex;
     flex-direction: column;
     align-items: center;

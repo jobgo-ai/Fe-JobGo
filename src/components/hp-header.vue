@@ -7,8 +7,9 @@
     <div class="hp-header__right">
       <hp-button
         primary
-        :isDisabled="!isDirty"
-        @handleClick="handleSave"
+        :isLoading="isContextFormSaving"
+        :isDisabled="!isContextFormDirty"
+        @handleClick="handleContextFormSave"
         label="Save changes"
       ></hp-button>
       <div class="hp-header__dropdown-container" v-if="user">
@@ -131,7 +132,8 @@ onClickOutside(dropdownTarget, (event) => {
   isAccountMenuOpen.value = false;
 });
 
-const { handleSave, isDirty } = useContextSave();
+const { handleContextFormSave, isContextFormDirty, isContextFormSaving } =
+  useContextSave();
 
 const { user } = useAuth();
 
