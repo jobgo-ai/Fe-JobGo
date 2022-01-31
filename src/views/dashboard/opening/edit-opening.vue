@@ -1,15 +1,17 @@
 <template>
-  <div class="edit-openings">
+  <form
+    class="edit-openings"
+    v-if="!isLoading"
+    @submit.prevent="handleContextFormSave"
+  >
     <div class="edit-openings__edit-container">
       <h3 class="edit-openings__edit-container__title">Edit opening</h3>
       <p class="edit-openings__edit-container__subtitle">
         Main information for your openings
       </p>
-      <form v-if="!isLoading" @submit.prevent="handleContextFormSave">
-        <hp-input label="Name" name="name"></hp-input>
-        <hp-textarea label="Description" name="description"></hp-textarea>
-        <hp-image-selector label="Cover" name="artwork"></hp-image-selector>
-      </form>
+      <hp-input label="Name" name="name"></hp-input>
+      <hp-textarea label="Description" name="description"></hp-textarea>
+      <hp-image-selector label="Cover" name="artwork"></hp-image-selector>
     </div>
     <div class="edit-openings__empty-state" v-if="templates.length === 0">
       <mic-check />
@@ -22,19 +24,45 @@
         label="Add interview"
       ></hp-button>
     </div>
-    <div v-else>
-      <div></div>
+    <div class="edit-openings__interview-container" v-else>
+      <h2 class="edit-openings__interview-container__title">Interviews</h2>
+      <p class="edit-openings__interview-container__subtitle">
+        View and manage all interviews
+      </p>
+      <div class="edit-openings__interview-container__grid">
+        <hp-interview-card isAddCard></hp-interview-card>
+        <draggable
+          v-model="templates"
+          tag="transition-group"
+          item-key="reference"
+          handle=".hp-opening-card__badge-container__handle"
+          @change="handleDragChange"
+          v-bind="dragOptions"
+          @start="drag = true"
+          @end="drag = false"
+        >
+          <template #item="{ element, index }">
+            <hp-interview-card
+              :template="element"
+              :index="index + 1"
+              :key="element.reference"
+            ></hp-interview-card>
+          </template>
+        </draggable>
+      </div>
     </div>
-  </div>
+  </form>
 </template>
 
 <script setup>
 // vendor
-import { onMounted, ref, defineAsyncComponent } from "vue";
+import { onMounted, ref, defineAsyncComponent, computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useForm } from "vee-validate";
+import draggable from "vuedraggable";
 import * as yup from "yup";
 //components
+import HpInterviewCard from "@/components/hp-interview-card.vue";
 import HpInput from "@/components/form/hp-input.vue";
 import HpButton from "@/components/hp-button.vue";
 import HpTextarea from "@/components/form/hp-textarea.vue";
@@ -51,6 +79,7 @@ const router = useRouter();
 const templates = ref([]);
 const opening = ref({});
 const isLoading = ref(true);
+const drag = ref(false);
 
 const { setBreadcrumbs } = useBreadcrumbs();
 const { setToast } = useToast();
@@ -59,23 +88,38 @@ const schema = yup.object({
   name: yup.string().required("Opening name is required"),
   description: yup.string(),
   artwork: yup.number(),
+  templates: yup.array(),
 });
 
-const { handleSubmit, resetForm, meta } = useForm({
+const { handleSubmit, resetForm, meta, setFieldValue } = useForm({
   validationSchema: schema,
   initialValues: {
     name: "",
     description: "",
     artwork: 0,
+    templates: [],
   },
 });
+
+const dragOptions = computed(() => {
+  return {
+    animation: 200,
+    group: "description",
+    disabled: false,
+    ghostClass: "ghost",
+  };
+});
+
+const handleDragChange = () => {
+  setFieldValue("templates", templates.value);
+};
 
 const onSubmit = handleSubmit(async (values) => {
   const putOpening = usePut(`openings/${route.params.openingRef}`);
   await putOpening.put({
     opening: {
       ...values,
-      templates: opening.value.templates.map((t) => t.reference),
+      templates: values.templates.map((t) => t.reference),
     },
   });
   opening.value = putOpening.data.value.opening;
@@ -177,5 +221,42 @@ const currentSplash = defineAsyncComponent(() =>
       margin-bottom: 24px;
     }
   }
+  &__interview-container {
+    padding-left: 96px;
+    &__grid {
+      display: grid;
+      grid-gap: 26px;
+      grid-template-columns: repeat(auto-fill, 264px);
+      align-content: baseline;
+    }
+    &__title {
+      @include text-h2;
+      font-weight: 500;
+    }
+    &__subtitle {
+      @include text-h5;
+      color: var(--color-text-secondary);
+      margin-bottom: 24px;
+    }
+  }
+}
+
+.flip-list-move {
+  transition: transform 0.5s;
+}
+.no-move {
+  transition: transform 0s;
+}
+.ghost {
+  opacity: 0.5;
+}
+.list-group {
+  min-height: 20px;
+}
+.list-group-item {
+  cursor: move;
+}
+.list-group-item i {
+  cursor: pointer;
 }
 </style>
