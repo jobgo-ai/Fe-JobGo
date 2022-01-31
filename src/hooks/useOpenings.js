@@ -3,6 +3,7 @@ import { useGet } from "./useHttp";
 
 const isOpeningsLoading = ref(true);
 const openings = ref([]);
+const opening = ref([]);
 
 const getOpenings = useGet();
 
@@ -19,8 +20,16 @@ const fetchOpenings = async (state = "active") => {
   isOpeningsLoading.value = false;
 };
 
+const fetchOpening = async (openingRef) => {
+  const getOpening = useGet(`openings/${newOpeningRef}`);
+  await getOpening.get();
+  opening.value = getOpening.data.value.opening;
+};
+
 export default () => {
   return {
+    fetchOpening,
+    opening,
     fetchOpenings,
     isOpeningsLoading,
     openings,

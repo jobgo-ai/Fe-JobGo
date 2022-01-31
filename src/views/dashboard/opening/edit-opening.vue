@@ -11,15 +11,19 @@
         <hp-image-selector label="Cover" name="artwork"></hp-image-selector>
       </form>
     </div>
-    <div>
-      <div class="edit-openings__empty-state" v-if="templates.length === 0">
-        <mic-check />
-        <p class="edit-openings__empty-state__title">Mic check! One, two...</p>
-        <p class="edit-openings__empty-state__subtitle">
-          Looking a bit empty here, please add an interview
-        </p>
-        <hp-button label="Add template"></hp-button>
-      </div>
+    <div class="edit-openings__empty-state" v-if="templates.length === 0">
+      <mic-check />
+      <p class="edit-openings__empty-state__title">Mic check! One, two...</p>
+      <p class="edit-openings__empty-state__subtitle">
+        Looking a bit empty here, please add an interview
+      </p>
+      <hp-button
+        :to="`/opening/${route.params.openingRef}/edit/add-interview`"
+        label="Add interview"
+      ></hp-button>
+    </div>
+    <div v-else>
+      <div></div>
     </div>
   </div>
 </template>
@@ -166,7 +170,6 @@ const currentSplash = defineAsyncComponent(() =>
     &__title {
       margin-top: 24px;
       @include text-h4;
-      font-weight: 500;
     }
     &__subtitle {
       @include text-h5;

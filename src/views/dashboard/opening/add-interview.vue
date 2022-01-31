@@ -39,7 +39,9 @@ import HpModal from "@/components/hp-modal.vue";
 import HpInput from "@/components/form/hp-input.vue";
 
 // Hooks
+import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
 import { useGet, usePost } from "@/hooks/useHttp";
+import useOpenings from "@/hooks/useOpenings";
 
 const props = defineProps({
   opening: {
@@ -50,12 +52,28 @@ const props = defineProps({
 
 const templates = ref([]);
 const isAddInterviewModalOpen = ref(false);
+const { setBreadcrumbs } = useBreadcrumbs();
 
 onMounted(async () => {
   const getTemplates = useGet(`templates`);
   await getTemplates.get();
 
   templates.value = getTemplates.data.value.templates;
+
+  setBreadcrumbs([
+    {
+      label: "Openings",
+      to: "/openings",
+    },
+    {
+      label: props.opening.name,
+      to: `/opening/${props.opening.reference}/edit`,
+    },
+    {
+      label: "Add interview",
+      to: `/opening/${props.opening.reference}/view/add-interview`,
+    },
+  ]);
 });
 
 const schema = yup.object({

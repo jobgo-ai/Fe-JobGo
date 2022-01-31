@@ -167,6 +167,7 @@ const cover = computed(() => {
       pointer-events: none;
     }
     &__overlay {
+      color: var(--color-background);
       position: absolute;
       top: 12px;
       right: 12px;
