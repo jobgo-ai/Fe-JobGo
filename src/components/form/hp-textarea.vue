@@ -53,7 +53,6 @@ const containerClasses = computed(() => {
     "hp-textarea--error": errorMessage.value,
   };
 });
-console.log(containerClasses.value);
 </script>
 
 <style lang="scss">
