@@ -36,7 +36,7 @@
       <hp-icon :name="dropdownIcon" :size="14" />
     </button>
     <div v-if="hasDropdown" class="hp-button__dropdown-content">
-      <slot name="droopdown"></slot>
+      <slot name="dropdown"></slot>
     </div>
   </div>
 </template>
@@ -99,6 +99,7 @@ const computedTag = computed(() => {
     return "router-link";
   }
 
+  // In case we want a as well
   // if (props.href !== undefined && props.href !== null) {
   //   return "a";
   // }
@@ -148,6 +149,7 @@ const emit = defineEmits(["handleClick"]);
 .hp-button {
   display: inline-flex;
   height: 32px;
+  position: relative;
 
   &--dropzone {
     width: 100%;
@@ -272,6 +274,10 @@ const emit = defineEmits(["handleClick"]);
   }
   &__dropdown-content {
     background-color: white;
+    position: absolute;
+    @include flyout;
+    top: calc(100% + 12px);
+    right: 0;
   }
 }
 </div>

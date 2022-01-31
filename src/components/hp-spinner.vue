@@ -10,7 +10,7 @@
 <script setup>
 const props = defineProps({
   size: {
-    type: Number,
+    type: [Number, String],
     default: 16,
   },
   mode: {

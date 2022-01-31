@@ -14,7 +14,18 @@
           @handleClick="handleContextFormSave"
           label="Save"
           :hasDropdown="true"
-        ></hp-button>
+        >
+          <template #dropdown>
+            <div class="hp-header__save-container__dropdown-container">
+              <div class="hp-header__save-container__dropdown-container__item">
+                <hp-icon name="cog"></hp-icon>Save
+              </div>
+              <div class="hp-header__save-container__dropdown-container__item">
+                <hp-icon name="cog"></hp-icon>Save as template
+              </div>
+            </div>
+          </template>
+        </hp-button>
       </div>
       <div class="hp-header__dropdown-container" v-if="user">
         <div
@@ -185,6 +196,11 @@ const { hasHeaderSaveButton } = useBreadcrumbs();
     padding-right: 16px;
     border-right: $border;
     margin-right: 8px;
+    &__dropdown-container {
+      &__item {
+        display: flex;
+      }
+    }
   }
   &__logo {
     margin-right: 24px;

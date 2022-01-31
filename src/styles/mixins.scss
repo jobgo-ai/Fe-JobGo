@@ -1,3 +1,5 @@
+@import "./variables.scss";
+
 @mixin text-h1 {
   font-size: 32px;
   line-height: 40px;
@@ -25,4 +27,11 @@
 @mixin text-h7 {
   font-size: 10px;
   line-height: 16px;
+}
+@mixin flyout {
+  border: $border;
+  border-radius: $border-radius-lg;
+  padding: 16px;
+  z-index: 100;
+  background-color: var(--color-background);
 }

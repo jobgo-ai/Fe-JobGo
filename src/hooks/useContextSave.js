@@ -10,9 +10,6 @@ const isDirty = ref(false);
 export default function (metaReference, onSubmit) {
   handleSave.value = async () => {
     isSaving.value = true;
-    setTimeout(() => {
-      console.log("whatsup");
-    }, 1000);
     await onSubmit();
     isSaving.value = false;
   };

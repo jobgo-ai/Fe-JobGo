@@ -108,12 +108,9 @@ const cover = computed(() => {
     color: var(--color-text-secondary);
   }
   &__flyout {
+    @include flyout;
     position: absolute;
     left: 105%;
-    padding: 16px;
-    background-color: var(--color-background);
-    border: $border;
-    border-radius: $border-radius-lg;
     box-shadow: 0px 16px 24px rgba(33, 44, 51, 0.06),
       0px 2px 6px rgba(33, 44, 51, 0.04), 0px 0px 1px rgba(33, 44, 51, 0.04);
 
