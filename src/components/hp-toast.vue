@@ -14,7 +14,7 @@
           v-if="!toast.title"
           class="hp-toast__content__container__message--default"
         >
-          This is a default toast
+          {{ toast.message }}
         </div>
         <div v-else class="hp-toast__content__container__message">
           <p

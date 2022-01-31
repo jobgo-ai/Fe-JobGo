@@ -1,14 +1,16 @@
 <template>
   <div class="edit-openings">
+    <div @click="handleRandomClick">wow fucking click me</div>
     <div class="edit-openings__edit-container">
       <h3 class="edit-openings__edit-container__title">Edit opening</h3>
       <p class="edit-openings__edit-container__subtitle">
         Main information for your openings
       </p>
-      <form @submit.prevent="onSubmit">
-        <hp-input label="Title" name="name"></hp-input>
+      <form v-if="!isLoading" @submit.prevent="onSubmit">
+        <hp-input label="Name" name="name"></hp-input>
         <hp-textarea label="Description" name="description"></hp-textarea>
         <hp-image-selector
+          v-if="artwork"
           label="Cover"
           name="artwork"
           v-model="artwork"
@@ -19,30 +21,41 @@
 </template>
 
 <script setup>
-import HpInput from "@/components/form/hp-input.vue";
-import HpTextarea from "@/components/form/hp-textarea.vue";
-import HpImageSelector from "@/components/form/hp-image-selector.vue";
-import { useGet, usePut } from "@/hooks/useHttp";
-
-import { onMounted, ref, defineAsyncComponent } from "vue";
+// vendor
+import { onMounted, ref, defineAsyncComponent, computed, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useForm } from "vee-validate";
 import * as yup from "yup";
+//components
+import HpInput from "@/components/form/hp-input.vue";
+import HpTextarea from "@/components/form/hp-textarea.vue";
+import HpImageSelector from "@/components/form/hp-image-selector.vue";
+// hooks
+import useToast from "@/hooks/useToast";
+import useContextSave from "@/hooks/useContextSave";
+import { useGet, usePut } from "@/hooks/useHttp";
 
 const route = useRoute();
 const router = useRouter();
 const templates = ref([]);
 const opening = ref({});
+const isLoading = ref(true);
 
-const artwork = ref(0);
+const artwork = ref(null);
+
+const { setToast } = useToast();
 
 const schema = yup.object({
-  name: yup.string().required("Job title is required"),
+  name: yup.string().required("Opening name is required"),
   description: yup.string(),
 });
 
-const { handleSubmit, setValues } = useForm({
+const { handleSubmit, resetForm, meta } = useForm({
   validationSchema: schema,
+  initialValues: {
+    name: "",
+    description: "",
+  },
 });
 
 const onSubmit = handleSubmit(async (values) => {
@@ -54,6 +67,10 @@ const onSubmit = handleSubmit(async (values) => {
       templates: opening.value.templates.map((t) => t.reference),
     },
   });
+  setToast({
+    type: "positive",
+    message: `${putOpening.data.value.opening.name} updated`,
+  });
 });
 
 onMounted(async () => {
@@ -62,9 +79,15 @@ onMounted(async () => {
     await getOpening.get();
     opening.value = getOpening.data.value.opening;
     templates.value = getOpening.data.value.opening.templates;
-    setValues(opening.value);
+    artwork.value = opening.value.artwork;
+    resetForm({ touched: false, values: opening.value });
+    isLoading.value = false;
   }
 });
+
+const isDirty = computed(() => meta.value.dirty);
+
+useContextSave(isDirty, onSubmit);
 
 const archiveOpening = async () => {
   const putOpening = usePut(`openings/${route.params.openingRef}/state`);

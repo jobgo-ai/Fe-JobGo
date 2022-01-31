@@ -4,91 +4,101 @@
       <router-link class="hp-header__logo" to="/openings"><Logo /></router-link>
       <hp-breadcrumbs />
     </div>
-    <div class="hp-header__dropdown-container" v-if="user">
-      <div
-        :class="dropdownClasses"
-        @click="isAccountMenuOpen = !isAccountMenuOpen"
-      >
-        <div class="hp-header__dropdown-target__info">
-          <hp-avatar
-            class="hp-header__dropdown-target__info__avatar"
-            size="sm"
-            :user="user"
-          />
-          {{ user.firstName }} {{ user.lastName }}
-        </div>
-      </div>
-      <transition name="hp-header__dropdown-transition">
+    <div class="hp-header__right">
+      <hp-button
+        primary
+        :isDisabled="!isDirty"
+        @handleClick="handleSubmit"
+        label="Save changes"
+      ></hp-button>
+      <div class="hp-header__dropdown-container" v-if="user">
         <div
-          v-if="isAccountMenuOpen"
-          class="hp-header__dropdown"
-          ref="dropdownTarget"
+          :class="dropdownClasses"
+          @click="isAccountMenuOpen = !isAccountMenuOpen"
         >
-          <div class="hp-header__dropdown__info">
-            <hp-avatar :user="user" class="hp-header__dropdown__info__avatar" />
-            <div class="hp-header__dropdown__info__name">
-              {{ user.firstName }} {{ user.lastName }}
-              <div class="hp-header__dropdown__info__email">
-                {{ user.email }}
+          <div class="hp-header__dropdown-target__info">
+            <hp-avatar
+              class="hp-header__dropdown-target__info__avatar"
+              size="sm"
+              :user="user"
+            />
+            {{ user.firstName }} {{ user.lastName }}
+          </div>
+        </div>
+        <transition name="hp-header__dropdown-transition">
+          <div
+            v-if="isAccountMenuOpen"
+            class="hp-header__dropdown"
+            ref="dropdownTarget"
+          >
+            <div class="hp-header__dropdown__info">
+              <hp-avatar
+                :user="user"
+                class="hp-header__dropdown__info__avatar"
+              />
+              <div class="hp-header__dropdown__info__name">
+                {{ user.firstName }} {{ user.lastName }}
+                <div class="hp-header__dropdown__info__email">
+                  {{ user.email }}
+                </div>
               </div>
             </div>
-          </div>
-          <div class="hp-header__dropdown__options">
-            <router-link
-              to="/settings"
-              tag="div"
-              class="hp-header__dropdown__options__option"
-              @click="isAccountMenuOpen = false"
-            >
-              <hp-icon
-                name="cog"
-                class="hp-header__dropdown__options__option__icon"
-              />
-              Account Settings
-            </router-link>
-            <router-link
-              @click="isAccountMenuOpen = false"
-              tag="div"
-              to="/change-password"
-              class="hp-header__dropdown__options__option"
-            >
-              <hp-icon
-                name="locked"
-                class="hp-header__dropdown__options__option__icon"
-              />
-              Change password
-            </router-link>
-          </div>
-          <div class="hp-header__dropdown__options">
-            <div
-              @click.prevent="handleDarkModeToggle"
-              class="
-                hp-header__dropdown__options__option
-                hp-header__dropdown__options__option--toggle
-              "
-            >
-              <div class="hp-header__dropdown__options__dark-mode">
+            <div class="hp-header__dropdown__options">
+              <router-link
+                to="/settings"
+                tag="div"
+                class="hp-header__dropdown__options__option"
+                @click="isAccountMenuOpen = false"
+              >
                 <hp-icon
-                  name="moon"
+                  name="cog"
                   class="hp-header__dropdown__options__option__icon"
                 />
-                Dark mode
+                Account Settings
+              </router-link>
+              <router-link
+                @click="isAccountMenuOpen = false"
+                tag="div"
+                to="/change-password"
+                class="hp-header__dropdown__options__option"
+              >
+                <hp-icon
+                  name="locked"
+                  class="hp-header__dropdown__options__option__icon"
+                />
+                Change password
+              </router-link>
+            </div>
+            <div class="hp-header__dropdown__options">
+              <div
+                @click.prevent="handleDarkModeToggle"
+                class="
+                  hp-header__dropdown__options__option
+                  hp-header__dropdown__options__option--toggle
+                "
+              >
+                <div class="hp-header__dropdown__options__dark-mode">
+                  <hp-icon
+                    name="moon"
+                    class="hp-header__dropdown__options__option__icon"
+                  />
+                  Dark mode
+                </div>
+                <hp-switch v-model:checked="darkmode" />
               </div>
-              <hp-switch v-model:checked="darkmode" />
+            </div>
+            <div class="hp-header__dropdown__options">
+              <div class="hp-header__dropdown__options__option">Logout</div>
             </div>
           </div>
-          <div class="hp-header__dropdown__options">
-            <div class="hp-header__dropdown__options__option">Logout</div>
-          </div>
-        </div>
-      </transition>
+        </transition>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
 // Vendor
-import HpBreadcrumbs from "@/components/hp-breadcrumbs.vue";
 import { useRouter } from "vue-router";
 import { ref, computed } from "vue";
 import { onClickOutside } from "@vueuse/core";
@@ -96,8 +106,11 @@ import { onClickOutside } from "@vueuse/core";
 import HpAvatar from "@/components/hp-avatar.vue";
 import HpIcon from "@/components/hp-icon.vue";
 import HpSwitch from "@/components/hp-switch.vue";
+import HpButton from "@/components/hp-button.vue";
+import HpBreadcrumbs from "@/components/hp-breadcrumbs.vue";
 // Hooks
 import useAuth from "@/hooks/useAuth";
+import useContextSave from "@/hooks/useContextSave";
 // Svg
 import Logo from "@/assets/logo.svg";
 
@@ -117,6 +130,8 @@ onClickOutside(dropdownTarget, (event) => {
   }
   isAccountMenuOpen.value = false;
 });
+
+const { handleSubmit, isDirty } = useContextSave();
 
 const { user } = useAuth();
 
@@ -154,6 +169,10 @@ const dropdownClasses = computed(() => {
   &__logo {
     margin-right: 24px;
     display: flex;
+  }
+  &__right {
+    display: flex;
+    align-items: center;
   }
   &__left {
     display: flex;
