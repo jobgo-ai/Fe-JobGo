@@ -1,4 +1,5 @@
 import HpHeader from "../components/hp-header.vue";
+import vueRouter from "storybook-vue3-router";
 
 export default {
   title: "Components/Header",
@@ -24,4 +25,4 @@ const Template = (args) => ({
 });
 
 export const Primary = Template.bind({});
-Primary.args = {};
+Primary.decorators = [vueRouter()];

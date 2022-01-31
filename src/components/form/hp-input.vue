@@ -115,7 +115,7 @@ const containerClasses = computed(() => {
       }
       &:focus:not([disabled]),
       &:active:not([disabled]) {
-        outline: 4px solid var(--color-focus);
+        outline: $outline;
         border: 1px solid var(--color-error);
       }
     }
@@ -144,7 +144,7 @@ const containerClasses = computed(() => {
   &__input {
     background-color: var(--color-background);
     border: 1px solid var(--color-border);
-    border-radius: 8px;
+    border-radius: $border-radius-sm;
     padding: 8px 8px 8px 12px;
     line-height: 36px;
     height: 36px;
@@ -159,7 +159,7 @@ const containerClasses = computed(() => {
     }
     &:focus:not([disabled]),
     &:active:not([disabled]) {
-      outline: 4px solid var(--color-focus);
+      outline: $outline;
       border: 1px solid var(--color-accent-background);
     }
   }

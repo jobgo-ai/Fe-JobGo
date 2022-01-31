@@ -14,6 +14,8 @@ module.exports = {
       path.resolve(__dirname, "../vite.config.js")
     );
 
+    console.log(userConfig);
+
     return mergeConfig(config, {
       ...userConfig,
       plugins: [svgLoader()],

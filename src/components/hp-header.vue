@@ -16,11 +16,6 @@
             :user="user"
           />
           {{ user.firstName }} {{ user.lastName }}
-          <hp-icon
-            class="hp-header__dropdown-target__info__icon"
-            name="chevron-up"
-            :size="14"
-          />
         </div>
       </div>
       <transition name="hp-header__dropdown-transition">
@@ -171,7 +166,7 @@ const dropdownClasses = computed(() => {
     display: flex;
     align-items: center;
     padding: 8px;
-    border-radius: 12px;
+    border-radius: $border-radius-lg;
     cursor: pointer;
     border: 1px solid transparent;
     transition: all 0.15s cubic-bezier(0.17, 0.67, 0.83, 0.67);
@@ -185,17 +180,10 @@ const dropdownClasses = computed(() => {
       &__avatar {
         margin-right: 8px;
       }
-      &__icon {
-        margin-left: 4px;
-        transition: all 0.15s cubic-bezier(0.17, 0.67, 0.83, 0.67);
-      }
     }
     &--open {
       background-color: var(--color-panel);
       border: 1px solid var(--color-border);
-      .hp-header__dropdown-target__info__icon {
-        transform: rotate(180deg);
-      }
     }
   }
   &__dropdown {
@@ -210,7 +198,7 @@ const dropdownClasses = computed(() => {
     flex-direction: column;
     box-shadow: 0px 16px 24px rgba(33, 44, 51, 0.06),
       0px 2px 6px rgba(33, 44, 51, 0.04), 0px 0px 1px rgba(33, 44, 51, 0.04);
-    border-radius: 12px;
+    border-radius: $border-radius-lg;
     border: 1px solid var(--color-border-subtle);
     &__options {
       padding: 8px;
@@ -222,7 +210,7 @@ const dropdownClasses = computed(() => {
         display: flex;
         align-items: center;
         padding: 8px;
-        border-radius: 8px;
+        border-radius: $border-radius-sm;
         line-height: 20px;
         cursor: pointer;
         transition: all 0.15s cubic-bezier(0.17, 0.67, 0.83, 0.67);

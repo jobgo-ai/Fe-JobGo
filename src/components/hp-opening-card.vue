@@ -105,7 +105,7 @@ const containerClasses = computed(() => {
   width: 264px;
   cursor: pointer;
   list-style: none;
-  border-radius: 12px;
+  border-radius: $border-radius-lg;
   border: 1px solid var(--color-border);
   &--archived {
     cursor: default;
@@ -174,7 +174,7 @@ const containerClasses = computed(() => {
       height: 40px;
       width: 40px;
       border: 1px dashed var(--color-border);
-      border-radius: 12px;
+      border-radius: $border-radius-lg;
       margin-bottom: 16px;
     }
   }

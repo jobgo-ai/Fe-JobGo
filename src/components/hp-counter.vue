@@ -97,7 +97,7 @@ const containerClasses = computed(() => {
   display: inline-flex;
   flex-direction: column;
   &__input-container {
-    border-radius: 8px;
+    border-radius: $border-radius-sm;
     &--disabled {
       opacity: 0.4;
       cursor: not-allowed;
@@ -106,7 +106,7 @@ const containerClasses = computed(() => {
       }
     }
     &--focused {
-      outline: 4px solid var(--color-focus);
+      outline: $outline;
       .hp-counter__container {
         border: 1px solid var(--color-accent-background);
       }
@@ -122,7 +122,7 @@ const containerClasses = computed(() => {
     align-items: center;
     background-color: var(--color-background);
     border: 1px solid var(--color-border);
-    border-radius: 8px;
+    border-radius: $border-radius-sm;
     padding: 8px;
     &:hover {
       border: 1px solid var(--color-accent-background);

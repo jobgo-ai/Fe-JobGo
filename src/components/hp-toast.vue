@@ -57,7 +57,7 @@ const { toastQueue, dismissToast } = useToast();
     padding: 15px;
     background-color: var(--color-background);
     border: 1px solid var(--color-border-subtle);
-    border-radius: 12px;
+    border-radius: $border-radius-lg;
     box-shadow: 0px 16px 24px rgba(33, 44, 51, 0.06),
       0px 2px 6px rgba(33, 44, 51, 0.04), 0px 0px 1px rgba(33, 44, 51, 0.04);
     margin-bottom: 16px;

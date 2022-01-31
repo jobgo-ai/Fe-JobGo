@@ -22,6 +22,6 @@ const avatar = defineAsyncComponent(() =>
 .hp-abstract-avatar {
   height: 40px;
   width: 40px;
-  border-radius: 12px;
+  border-radius: $border-radius-lg
 }
 </style>

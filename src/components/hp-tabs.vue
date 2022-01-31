@@ -86,7 +86,7 @@ const styles = computed(() => {
     }
 
     &:focus {
-      outline: var(--color-outline) solid 4px;
+      outline: $outline;
     }
   }
   &__background {

@@ -388,7 +388,7 @@ const completedTemplates = computed(() => {
     }
     &__score {
       border: 1px solid #ccc;
-      border-radius: 12px;
+      border-radius: $border-radius-lg;
       height: 232px;
       font-size: 14px;
       line-height: 20px;
@@ -424,7 +424,7 @@ const completedTemplates = computed(() => {
     }
     &__skill-container {
       border: 1px solid var(--color-border);
-      border-radius: 12px;
+      border-radius: $border-radius-lg;
       padding: 16px;
       font-size: 12px;
     }
@@ -445,7 +445,7 @@ const completedTemplates = computed(() => {
         border: 1px solid var(--color-border);
         background-color: var(--color-panel);
         padding: 6px;
-        border-radius: 8px;
+        border-radius: $border-radius-sm;
         margin-right: 8px;
         margin-bottom: 8px;
         &__badge {
@@ -481,7 +481,7 @@ const completedTemplates = computed(() => {
     grid-gap: 24px;
   }
   &__interview-grid__item {
-    border-radius: 12px;
+    border-radius: $border-radius-lg;
     border: 1px solid var(--color-border);
     width: 264px;
     padding: 16px;

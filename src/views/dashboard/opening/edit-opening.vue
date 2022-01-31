@@ -1,29 +1,34 @@
 <template>
-  <div>
-    <div>edit Opening</div>
-    <form @submit.prevent="onSubmit">
-      <hp-input name="name"></hp-input>
-      <hp-input name="description"></hp-input>
-      <hp-button type="submit" label="Edit Opening"></hp-button>
-    </form>
-    <div>
-      <ol>
-        <li v-for="template in templates" :key="template.reference">
-          {{ template.name }}
-          <router-link :to="`edit/edit-interview/${template.reference}`"
-            >Edit</router-link
-          >
-        </li>
-      </ol>
-      <router-link
-        :to="`/opening/${route.params.openingRef}/edit/add-interview`"
-        >Add interview</router-link
-      >
+  <div class="edit-openings">
+    <div class="edit-openings__edit-container">
+      <h3 class="edit-openings__edit-container__title">Edit opening</h3>
+      <p class="edit-openings__edit-container__subtitle">
+        Main information for your openings
+      </p>
+      <form @submit.prevent="onSubmit">
+        <hp-input label="Title" name="name"></hp-input>
+        <hp-input label="Description" name="description"></hp-input>
+        <hp-button type="submit" label="Edit Opening"></hp-button>
+      </form>
+      <div>
+        <ol>
+          <li v-for="template in templates" :key="template.reference">
+            {{ template.name }}
+            <router-link :to="`edit/edit-interview/${template.reference}`"
+              >Edit</router-link
+            >
+          </li>
+        </ol>
+        <router-link
+          :to="`/opening/${route.params.openingRef}/edit/add-interview`"
+          >Add interview</router-link
+        >
+      </div>
+      <hp-button
+        @handleClick="archiveOpening"
+        label="Archive opening"
+      ></hp-button>
     </div>
-    <hp-button
-      @handleClick="archiveOpening"
-      label="Archive opening"
-    ></hp-button>
   </div>
 </template>
 
@@ -84,3 +89,25 @@ const archiveOpening = async () => {
   // router.push("/openings");
 };
 </script>
+
+<style lang="scss" scoped>
+.edit-openings {
+  display: grid;
+  grid-template-columns: 30% auto;
+  &__edit-container {
+    background-color: var(--color-panel);
+    padding: 24px;
+    border-radius: $border-radius-lg;
+    &__title {
+      @include text-h4;
+      font-weight: 500;
+    }
+    &__subtitle {
+      @include text-h5;
+      margin: 0;
+      color: var(--color-text-secondary);
+      margin-bottom: 24px;
+    }
+  }
+}
+</style>

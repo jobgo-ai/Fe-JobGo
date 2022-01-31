@@ -38,7 +38,7 @@ const handleHoverEnter = () => {
 .hp-tooltip {
   position: absolute;
   padding: 12px 12px;
-  border-radius: 12px;
+  border-radius: $border-radius-lg;
   left: 50%;
   top: -50px;
   z-index: 1000;

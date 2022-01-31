@@ -86,7 +86,7 @@ const calculateColor = (score, avgScore) => {
 .hp-candidate-card {
   border: 1px solid var(--color-border);
   background-color: var(--color-panel);
-  border-radius: 12px;
+  border-radius: $border-radius-lg;
   padding: 12px;
   margin-bottom: 12px;
   cursor: pointer;
@@ -121,7 +121,7 @@ const calculateColor = (score, avgScore) => {
     height: 4px;
     background-color: var(--color-border);
     margin-right: 2px;
-    border-radius: 8px;
+    border-radius: $border-radius-sm;
     &--next {
       background: repeating-linear-gradient(
         45deg,

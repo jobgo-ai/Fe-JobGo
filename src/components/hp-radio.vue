@@ -72,13 +72,13 @@ const handleChange = () => {
 
 .hp-radio:hover {
   > .hp-radio__label:before {
-    outline: 4px solid var(--color-focus);
+    outline: $outline;
   }
 }
 
 .hp-radio:focus {
   + .hp-radio__label:before {
-    outline: 4px solid var(--color-focus);
+    outline: $outline;
   }
 }
 

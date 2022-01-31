@@ -57,7 +57,7 @@ watch(
 
   &__modal {
     z-index: 101;
-    border-radius: 12px;
+    border-radius: $border-radius-lg;
     position: fixed;
     top: 50%;
     left: 50%;

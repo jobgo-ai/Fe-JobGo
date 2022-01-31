@@ -35,7 +35,7 @@ const initials = computed(() => {
   border: 1px solid var(--color-border);
   box-shadow: 0px 4px 8px rgba(33, 44, 51, 0.02),
     0px 0px 1px rgba(33, 44, 51, 0.02);
-  border-radius: 12px;
+  border-radius: $border-radius-lg;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -48,12 +48,12 @@ const initials = computed(() => {
     line-height: 16px;
     height: 24px;
     width: 24px;
-    border-radius: 8px;
+    border-radius: $border-radius-sm;
   }
   &--lg {
     height: 64px;
     width: 64px;
-    border-radius: 16px;
+    border-radius: $border-radius-lg;
   }
 }
 </style>

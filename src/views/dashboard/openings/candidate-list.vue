@@ -281,7 +281,7 @@ const candidateList = computed(() => {
 <style lang="scss" scoped>
 .candidate-list {
   background-color: var(--color-panel);
-  border-radius: 16px;
+  border-radius: $border-radius-lg;
   border: 1px solid var(--color-border-subtle);
   position: absolute;
   transition: transform 0.25s cubic-bezier(0.17, 0.67, 0.83, 0.67),
@@ -403,7 +403,7 @@ const candidateList = computed(() => {
   &__flyout {
     background-color: var(--color-background);
     border: 1px solid var(--color-border);
-    border-radius: 16px;
+    border-radius: $border-radius-lg;
     position: absolute;
     width: 256px;
     padding: 8px;
@@ -425,7 +425,7 @@ const candidateList = computed(() => {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        border-radius: 8px;
+        border-radius: $border-radius-sm;
         cursor: pointer;
         &:hover {
           background-color: var(--color-forground-floating);
