@@ -8,7 +8,6 @@
       <form @submit.prevent="onSubmit">
         <hp-input label="Title" name="name"></hp-input>
         <hp-input label="Description" name="description"></hp-input>
-        <hp-button type="submit" label="Edit Opening"></hp-button>
       </form>
       <div>
         <ol>
