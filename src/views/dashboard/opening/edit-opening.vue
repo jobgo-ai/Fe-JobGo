@@ -11,6 +11,7 @@
         <hp-image-selector label="Cover" name="artwork"></hp-image-selector>
       </form>
     </div>
+    <div></div>
   </div>
 </template>
 
@@ -26,6 +27,7 @@ import HpTextarea from "@/components/form/hp-textarea.vue";
 import HpImageSelector from "@/components/form/hp-image-selector.vue";
 // hooks
 import useToast from "@/hooks/useToast";
+import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
 import useContextSave from "@/hooks/useContextSave";
 import { useGet, usePut } from "@/hooks/useHttp";
 
@@ -35,6 +37,7 @@ const templates = ref([]);
 const opening = ref({});
 const isLoading = ref(true);
 
+const { setBreadcrumbs } = useBreadcrumbs();
 const { setToast } = useToast();
 
 const schema = yup.object({
@@ -60,11 +63,23 @@ const onSubmit = handleSubmit(async (values) => {
       templates: opening.value.templates.map((t) => t.reference),
     },
   });
-  resetForm({ touched: false, values: putOpening.data.value.opening });
+  opening.value = putOpening.data.value.opening;
+  resetForm({ touched: false, values: opening.value });
   setToast({
     type: "positive",
     message: `${putOpening.data.value.opening.name} updated`,
   });
+  console.log(opening.value.name);
+  setBreadcrumbs([
+    {
+      label: "Openings",
+      to: "/openings",
+    },
+    {
+      label: opening.value.name,
+      to: `/openings/${opening.value.reference}`,
+    },
+  ]);
 });
 
 onMounted(async () => {
@@ -75,6 +90,16 @@ onMounted(async () => {
     templates.value = getOpening.data.value.opening.templates;
     resetForm({ touched: false, values: opening.value });
     isLoading.value = false;
+    setBreadcrumbs([
+      {
+        label: "Openings",
+        to: "/openings",
+      },
+      {
+        label: opening.value.name,
+        to: `/openings/${opening.value.reference}`,
+      },
+    ]);
   }
 });
 
@@ -86,7 +111,6 @@ const archiveOpening = async () => {
     state: "archived",
   });
   router.push("/openings");
-  //Hard delete
   // const deleteOpening = useDelete(`openings/${route.params.openingRef}`);
   // await deleteOpening.remove();
   // router.push("/openings");
