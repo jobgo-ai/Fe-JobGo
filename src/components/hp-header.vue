@@ -5,13 +5,16 @@
       <hp-breadcrumbs />
     </div>
     <div class="hp-header__right">
-      <hp-button
-        primary
-        :isLoading="isContextFormSaving"
-        :isDisabled="!isContextFormDirty"
-        @handleClick="handleContextFormSave"
-        label="Save changes"
-      ></hp-button>
+      <div class="hp-header__save-container">
+        <hp-button
+          v-if="hasHeaderSaveButton"
+          primary
+          :isLoading="isContextFormSaving"
+          :isDisabled="!isContextFormDirty"
+          @handleClick="handleContextFormSave"
+          label="Save changes"
+        ></hp-button>
+      </div>
       <div class="hp-header__dropdown-container" v-if="user">
         <div
           :class="dropdownClasses"
@@ -19,11 +22,17 @@
         >
           <div class="hp-header__dropdown-target__info">
             <hp-avatar
-              class="hp-header__dropdown-target__info__avatar"
+              :class="`hp-header__dropdown-target__info__avatar
+            ${
+              hasHeaderSaveButton &&
+              'hp-header__dropdown-target__info__avatar--save-button'
+            }`"
               size="sm"
               :user="user"
             />
-            {{ user.firstName }} {{ user.lastName }}
+            <div v-if="!hasHeaderSaveButton">
+              {{ user.firstName }} {{ user.lastName }}
+            </div>
           </div>
         </div>
         <transition name="hp-header__dropdown-transition">
@@ -112,6 +121,7 @@ import HpBreadcrumbs from "@/components/hp-breadcrumbs.vue";
 // Hooks
 import useAuth from "@/hooks/useAuth";
 import useContextSave from "@/hooks/useContextSave";
+import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
 // Svg
 import Logo from "@/assets/logo.svg";
 
@@ -159,6 +169,8 @@ const dropdownClasses = computed(() => {
     "hp-header__dropdown-target--open": isAccountMenuOpen.value,
   };
 });
+
+const { hasHeaderSaveButton } = useBreadcrumbs();
 </script>
 
 <style lang="scss" scoped>
@@ -168,6 +180,11 @@ const dropdownClasses = computed(() => {
   justify-content: space-between;
   align-items: center;
   padding: 24px;
+  &__save-container {
+    padding-right: 16px;
+    border-right: $border;
+    margin-right: 8px;
+  }
   &__logo {
     margin-right: 24px;
     display: flex;
@@ -200,6 +217,9 @@ const dropdownClasses = computed(() => {
       align-items: center;
       &__avatar {
         margin-right: 8px;
+        &--save-button {
+          margin-right: 0;
+        }
       }
     }
     &--open {

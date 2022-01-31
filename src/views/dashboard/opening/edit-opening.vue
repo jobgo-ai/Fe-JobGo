@@ -11,20 +11,31 @@
         <hp-image-selector label="Cover" name="artwork"></hp-image-selector>
       </form>
     </div>
-    <div></div>
+    <div>
+      <div class="edit-openings__empty-state" v-if="templates.length === 0">
+        <mic-check />
+        <p class="edit-openings__empty-state__title">Mic check! One, two...</p>
+        <p class="edit-openings__empty-state__subtitle">
+          Looking a bit empty here, please add an interview
+        </p>
+        <hp-button label="Add template"></hp-button>
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup>
 // vendor
-import { onMounted, ref, defineAsyncComponent, computed, watch } from "vue";
+import { onMounted, ref, defineAsyncComponent } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useForm } from "vee-validate";
 import * as yup from "yup";
 //components
 import HpInput from "@/components/form/hp-input.vue";
+import HpButton from "@/components/hp-button.vue";
 import HpTextarea from "@/components/form/hp-textarea.vue";
 import HpImageSelector from "@/components/form/hp-image-selector.vue";
+import MicCheck from "@/assets/abstracts/mic-check.svg";
 // hooks
 import useToast from "@/hooks/useToast";
 import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
@@ -69,16 +80,19 @@ const onSubmit = handleSubmit(async (values) => {
     type: "positive",
     message: `${putOpening.data.value.opening.name} updated`,
   });
-  setBreadcrumbs([
-    {
-      label: "Openings",
-      to: "/openings",
-    },
-    {
-      label: opening.value.name,
-      to: `/openings/${opening.value.reference}`,
-    },
-  ]);
+  setBreadcrumbs(
+    [
+      {
+        label: "Openings",
+        to: "/openings",
+      },
+      {
+        label: opening.value.name,
+        to: `/openings/${opening.value.reference}`,
+      },
+    ],
+    true
+  );
 });
 
 onMounted(async () => {
@@ -89,16 +103,19 @@ onMounted(async () => {
     templates.value = getOpening.data.value.opening.templates;
     resetForm({ touched: false, values: opening.value });
     isLoading.value = false;
-    setBreadcrumbs([
-      {
-        label: "Openings",
-        to: "/openings",
-      },
-      {
-        label: opening.value.name,
-        to: `/openings/${opening.value.reference}`,
-      },
-    ]);
+    setBreadcrumbs(
+      [
+        {
+          label: "Openings",
+          to: "/openings",
+        },
+        {
+          label: opening.value.name,
+          to: `/openings/${opening.value.reference}`,
+        },
+      ],
+      true
+    );
   }
 });
 
@@ -137,6 +154,22 @@ const currentSplash = defineAsyncComponent(() =>
     &__subtitle {
       @include text-h5;
       margin: 0;
+      color: var(--color-text-secondary);
+      margin-bottom: 24px;
+    }
+  }
+  &__empty-state {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    &__title {
+      margin-top: 24px;
+      @include text-h4;
+      font-weight: 500;
+    }
+    &__subtitle {
+      @include text-h5;
       color: var(--color-text-secondary);
       margin-bottom: 24px;
     }
