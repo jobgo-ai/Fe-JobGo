@@ -1,6 +1,5 @@
 <template>
   <div class="edit-openings">
-    <div @click="handleRandomClick">wow fucking click me</div>
     <div class="edit-openings__edit-container">
       <h3 class="edit-openings__edit-container__title">Edit opening</h3>
       <p class="edit-openings__edit-container__subtitle">
@@ -9,12 +8,7 @@
       <form v-if="!isLoading" @submit.prevent="onSubmit">
         <hp-input label="Name" name="name"></hp-input>
         <hp-textarea label="Description" name="description"></hp-textarea>
-        <hp-image-selector
-          v-if="artwork"
-          label="Cover"
-          name="artwork"
-          v-model="artwork"
-        ></hp-image-selector>
+        <hp-image-selector label="Cover" name="artwork"></hp-image-selector>
       </form>
     </div>
   </div>
@@ -41,13 +35,12 @@ const templates = ref([]);
 const opening = ref({});
 const isLoading = ref(true);
 
-const artwork = ref(null);
-
 const { setToast } = useToast();
 
 const schema = yup.object({
   name: yup.string().required("Opening name is required"),
   description: yup.string(),
+  artwork: yup.number(),
 });
 
 const { handleSubmit, resetForm, meta } = useForm({
@@ -55,6 +48,7 @@ const { handleSubmit, resetForm, meta } = useForm({
   initialValues: {
     name: "",
     description: "",
+    artwork: 0,
   },
 });
 
@@ -63,10 +57,10 @@ const onSubmit = handleSubmit(async (values) => {
   await putOpening.put({
     opening: {
       ...values,
-      artwork: artwork.value,
       templates: opening.value.templates.map((t) => t.reference),
     },
   });
+  resetForm({ touched: false, values: putOpening.data.value.opening });
   setToast({
     type: "positive",
     message: `${putOpening.data.value.opening.name} updated`,
@@ -79,15 +73,12 @@ onMounted(async () => {
     await getOpening.get();
     opening.value = getOpening.data.value.opening;
     templates.value = getOpening.data.value.opening.templates;
-    artwork.value = opening.value.artwork;
     resetForm({ touched: false, values: opening.value });
     isLoading.value = false;
   }
 });
 
-const isDirty = computed(() => meta.value.dirty);
-
-useContextSave(isDirty, onSubmit);
+useContextSave(meta, onSubmit);
 
 const archiveOpening = async () => {
   const putOpening = usePut(`openings/${route.params.openingRef}/state`);

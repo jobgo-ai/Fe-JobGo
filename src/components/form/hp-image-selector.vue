@@ -40,6 +40,7 @@
 </template>
 
 <script setup>
+import { useField } from "vee-validate";
 import HpIcon from "@/components/hp-icon.vue";
 
 import { defineAsyncComponent, ref, computed } from "vue";
@@ -53,6 +54,8 @@ const props = defineProps({
     default: 9,
   },
 });
+
+const { errorMessage, value: modelValue } = useField(props.name);
 
 const emits = defineEmits(["update:modelValue"]);
 
@@ -76,7 +79,7 @@ onClickOutside(target, (event) => {
 });
 
 const handleImageSelect = (index) => {
-  emits("update:modelValue", index);
+  modelValue.value = index;
 };
 
 const findCoverImage = (artwork) => {
@@ -88,10 +91,10 @@ const findCoverImage = (artwork) => {
 };
 
 const cover = computed(() => {
-  initialValue.value = props.modelValue;
+  initialValue.value = modelValue.value;
   return defineAsyncComponent(() =>
     import(
-      /* @vite-ignore */ `../../assets/abstracts/covers/cover_${props.modelValue}.svg`
+      /* @vite-ignore */ `../../assets/abstracts/covers/cover_${modelValue.value}.svg`
     )
   );
 });
@@ -154,6 +157,7 @@ const cover = computed(() => {
     justify-content: center;
     align-items: center;
     padding: 4px;
+    min-height: 90px;
     box-shadow: inset 0px 0px 4px rgba(33, 44, 51, 0.01),
       inset 0px 0px 48px rgba(33, 44, 51, 0.03);
     &__image {

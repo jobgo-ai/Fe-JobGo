@@ -1,16 +1,18 @@
-import { ref, watch } from "vue";
+import { ref, watch, computed } from "vue";
 
-const handleSave = ref(() => () => {
+const handleSave = ref(() => {
   console.log("handleSave");
 });
 
 const isDirty = ref(false);
 
-export default function (computedDirtDog, onSubmit) {
+export default function (metaReference, onSubmit) {
   handleSave.value = onSubmit;
 
-  watch(computedDirtDog, () => {
-    isDirty.value = !isDirty.value;
+  const dirtyChange = computed(() => metaReference?.value?.dirty);
+
+  watch(dirtyChange, () => {
+    isDirty.value = dirtyChange.value;
   });
 
   return {
