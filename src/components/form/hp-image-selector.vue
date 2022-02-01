@@ -174,6 +174,7 @@ const cover = computed(() => {
       align-items: center;
       justify-content: center;
       background: rgba(255, 255, 255, 0.12);
+      color: var(--color-accent-forground);
       backdrop-filter: blur(24px);
       border-radius: $border-radius-sm;
     }
