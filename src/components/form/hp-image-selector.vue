@@ -1,9 +1,9 @@
 <template>
-  <div class="hp-image-selector">
+  <div ref="target" class="hp-image-selector">
     <div class="hp-image-selector__label">Cover</div>
     <div class="hp-image-selector__wrapper" @click="isFlyoutOpen = true">
       <transition name="hp-image-selector-transition">
-        <div v-if="isFlyoutOpen" ref="target" class="hp-image-selector__flyout">
+        <div v-if="isFlyoutOpen" class="hp-image-selector__flyout">
           <div class="hp-image-selector__flyout__flyout-label">
             Select image
           </div>
@@ -68,10 +68,6 @@ import { onClickOutside } from "@vueuse/core";
 
 onClickOutside(target, (event) => {
   if (!isFlyoutOpen.value) {
-    return;
-  }
-
-  if (event.target.className.includes("hp-image-selector")) {
     return;
   }
 

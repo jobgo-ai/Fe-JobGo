@@ -38,7 +38,11 @@
           </template>
         </hp-button>
       </div>
-      <div class="hp-header__dropdown-container" v-if="user">
+      <div
+        class="hp-header__dropdown-container"
+        ref="dropdownTarget"
+        v-if="user"
+      >
         <div
           :class="dropdownClasses"
           @click="isAccountMenuOpen = !isAccountMenuOpen"
@@ -59,11 +63,7 @@
           </div>
         </div>
         <transition name="hp-header__dropdown-transition">
-          <div
-            v-if="isAccountMenuOpen"
-            class="hp-header__dropdown"
-            ref="dropdownTarget"
-          >
+          <div v-if="isAccountMenuOpen" class="hp-header__dropdown">
             <div class="hp-header__dropdown__info">
               <hp-avatar
                 :user="user"
@@ -160,9 +160,6 @@ onClickOutside(dropdownTarget, (event) => {
     return;
   }
 
-  if (event.target.className.includes("hp-header__dropdown")) {
-    return;
-  }
   isAccountMenuOpen.value = false;
 });
 
