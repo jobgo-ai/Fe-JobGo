@@ -27,11 +27,12 @@
           label="All Skills"
           :options="skillOptions"
           name="skills"
+          searchable
           :onSearch="searchFunction"
           v-model="selectedSkills"
         ></hp-multi-select>
         <hp-multi-select
-          :options="[]"
+          :options="jobLevelOptions"
           class="add-interview__filter__dropdowns__dropdown"
           label="Experience levels"
           name="levels"
@@ -64,6 +65,7 @@ import HpMultiSelect from "@/components/form/hp-multi-select.vue";
 import HpAddInterviewCard from "@/components/hp-add-interview-card.vue";
 // Hooks
 import useSkillSearch from "@/hooks/useSkillSearch";
+import useConstants from "@/hooks/useConstants";
 import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
 import { useGet, usePost } from "@/hooks/useHttp";
 
@@ -75,7 +77,11 @@ const props = defineProps({
 });
 
 const { handleSkillSearch } = useSkillSearch();
+const { jobLevels } = useConstants();
 
+const jobLevelOptions = computed(() => {
+  return jobLevels.value.map((j) => j.name);
+});
 const skillOptions = ref([]);
 const selectedSkills = ref([]);
 

@@ -2,7 +2,7 @@
   <div class="hp-multi-select">
     <hp-dropdown @onChange="handleDropdownChange" :label="computedLabel">
       <template v-slot:dropdown>
-        <div class="hp-multi-select__flyout__search">
+        <div v-if="searchable" class="hp-multi-select__flyout__search">
           <hp-input
             v-model="search"
             variant="search"
@@ -84,6 +84,9 @@ const props = defineProps({
   },
   maxItemsSelected: {
     type: Number,
+  },
+  searchable: {
+    type: Boolean,
   },
   label: {
     type: String,
@@ -182,11 +185,11 @@ const handleChangeEmit = (change) => {
     padding: 0;
     z-index: 1000;
     &__search {
-      min-width: 256px;
       padding: 8px 8px 0px 8px;
       border-bottom: 1px dashed var(--color-border);
     }
     &__options {
+      min-width: 256px;
       padding: 8px;
       overflow-y: scroll;
       max-height: 300px;
