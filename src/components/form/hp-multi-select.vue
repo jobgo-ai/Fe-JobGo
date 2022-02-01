@@ -171,7 +171,7 @@ const handleChangeEmit = (change) => {
 .hp-multi-select {
   width: 100%;
   display: flex;
-  z-index: 100;
+  z-index: 90;
   &__spinner {
     display: flex;
     justify-content: center;
