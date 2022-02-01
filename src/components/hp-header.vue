@@ -13,7 +13,6 @@
           :isDisabled="!isContextFormDirty"
           @handleClick="handleContextFormSave"
           label="Save"
-          :hasDropdown="true"
         >
           <template #dropdown>
             <div class="hp-header__save-container__dropdown-container">
@@ -217,7 +216,7 @@ const { hasHeaderSaveButton } = useBreadcrumbs();
         white-space: nowrap;
         cursor: pointer;
         &:hover {
-          background-color: var(--color-background-floating);
+          background-color: var(--color-forground-floating);
         }
         &__icon {
           margin-right: 6px;
