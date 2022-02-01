@@ -1,19 +1,30 @@
 <template>
   <div class="hp-multi-select">
-    <hp-dropdown label="All skills">
+    <hp-dropdown :label="computedLabel">
       <template v-slot:dropdown>
         <div class="hp-multi-select__flyout__search">
-          <hp-input variant="search" icon="search" placeholder="Search..." />
+          <hp-input
+            v-model="search"
+            variant="search"
+            icon="search"
+            placeholder="Search..."
+            @input="handleAsyncSearch"
+          />
         </div>
         <ul class="hp-multi-select__flyout__options">
           <li
+            v-if="optionsList.length > 0 && !isLoading"
             class="hp-multi-select__flyout__options__option"
-            v-for="option in options"
+            v-for="option in optionsList"
             @click="handleChangeEmit(option)"
           >
             {{ option }}
             <hp-checkbox :checked="modelValue.includes(option)" />
           </li>
+          <div class="hp-multi-select__spinner" v-else-if="isLoading">
+            <hp-spinner />
+          </div>
+          <div v-else>Empty state</div>
         </ul>
       </template>
     </hp-dropdown>
@@ -27,10 +38,11 @@
 
 <script setup>
 import { useField } from "vee-validate";
-import { computed } from "vue";
+import { computed, ref } from "vue";
 import HpDropdown from "@/components/hp-dropdown.vue";
 import HpCheckbox from "@/components/hp-checkbox.vue";
 import HpInput from "@/components/form/hp-input.vue";
+import HpSpinner from "@/components/hp-spinner.vue";
 
 const emits = defineEmits(["update:modelValue"]);
 const props = defineProps({
@@ -47,6 +59,11 @@ const props = defineProps({
   },
   name: {
     type: String,
+  },
+  onSearch: {
+    type: Function,
+    required: false,
+    default: null,
   },
   isDisabled: {
     type: Boolean,
@@ -67,6 +84,9 @@ const props = defineProps({
   maxItemsSelected: {
     type: Number,
   },
+  label: {
+    type: String,
+  },
 });
 
 const {
@@ -79,10 +99,23 @@ const {
   validateOnValueUpdate: false,
 });
 
-// const handleMultipleLabels = (item) => {
-//   const items = Object.keys(item).map((key) => item[key].label);
-//   return items.join(", ");
-// };
+const search = ref("");
+const isLoading = ref(false);
+
+const computedLabel = computed(() => {
+  return props.selectedMessage
+    ? `${props.modelValue.length} ${props.selectedMessage}`
+    : props.label;
+});
+
+const handleAsyncSearch = async () => {
+  if (!props.onSearch) {
+    return;
+  }
+  isLoading.value = true;
+  await props.onSearch(search.value);
+  isLoading.value = false;
+};
 
 const validationListeners = computed(() => {
   if (!errorMessage.value) {
@@ -100,6 +133,16 @@ const validationListeners = computed(() => {
   };
 });
 
+const optionsList = computed(() => {
+  if (!props.onSearch && search.value !== "") {
+    return props.options.filter((item) => {
+      return item.toLowerCase().includes(search.value.toLowerCase());
+    });
+  } else {
+    return props.options;
+  }
+});
+
 const handleChangeEmit = (change) => {
   let newValue = [...props.modelValue];
   if (newValue.includes(change)) {
@@ -115,6 +158,12 @@ const handleChangeEmit = (change) => {
 .hp-multi-select {
   width: 100%;
   display: flex;
+  &__spinner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+  }
   &__flyout {
     border-radius: $border-radius-md;
     background-color: var(--color-background);
@@ -126,6 +175,11 @@ const handleChangeEmit = (change) => {
     }
     &__options {
       padding: 8px;
+      overflow-y: scroll;
+      max-height: 300px;
+      &::-webkit-scrollbar {
+        display: none;
+      }
       &__option {
         cursor: pointer;
         display: flex;
