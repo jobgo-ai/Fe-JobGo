@@ -15,15 +15,22 @@
       </div>
     </div>
     <div class="add-interview__filter">
-      <hp-input name="search" variant="search" icon="search" label="Search" />
-      <hp-dropdown
-        class="add-interview__filter__dropdown"
-        label="Skills"
-      ></hp-dropdown>
-      <hp-dropdown
-        class="add-interview__filter__dropdown"
-        label="Experience levels"
-      ></hp-dropdown>
+      <hp-input
+        name="search"
+        variant="search"
+        icon="search"
+        placeholder="Search by name"
+      />
+      <div class="add-interview__filter__dropdowns">
+        <hp-dropdown
+          class="add-interview__filter__dropdowns__dropdown"
+          label="All Skills"
+        ></hp-dropdown>
+        <hp-dropdown
+          class="add-interview__filter__dropdowns__dropdown"
+          label="Experience levels"
+        ></hp-dropdown>
+      </div>
     </div>
     <ol class="add-interview__interview-grid">
       <hp-add-interview-card isAddCard></hp-add-interview-card>
@@ -152,11 +159,14 @@ const handleAddToInterview = async (template) => {
   }
   &__filter {
     display: flex;
-    &:first-child {
-      margin-right: 6px;
-    }
-    &__button {
-      width: 200px;
+    align-items: flex-end;
+    margin-bottom: 24px;
+    &__dropdowns {
+      display: flex;
+      margin-bottom: 8px;
+      &__dropdown {
+        margin-left: 12px;
+      }
     }
   }
 }

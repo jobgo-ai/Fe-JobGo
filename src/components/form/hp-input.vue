@@ -80,6 +80,7 @@ const { errorMessage, value: modelValue } = useField(props.name);
 const containerClasses = computed(() => {
   return {
     "hp-input": true,
+    "hp-input--search": props.variant === "search",
     "hp-input--disabled": props.isDisabled,
     "hp-input--error": errorMessage.value,
     "hp-input--icon": props.icon,
@@ -95,6 +96,9 @@ const containerClasses = computed(() => {
   line-height: 20px;
   width: 100%;
   margin-bottom: 24px;
+  &--search {
+    margin-bottom: 0;
+  }
   &--icon {
     .hp-input__input {
       padding-left: 30px;
@@ -147,12 +151,13 @@ const containerClasses = computed(() => {
     border-radius: $border-radius-sm;
     padding: 8px 8px 8px 12px;
     line-height: 36px;
-    height: 36px;
+    max-height: 36px;
     width: 100%;
     transition: border-color 0.15s cubic-bezier(0.17, 0.67, 0.83, 0.67);
     color: var(--color-text-primary);
     &--search {
       background-color: var(--color-underground);
+      max-height: 32px;
     }
     &::placeholder {
       color: var(--color-text-secondary);
