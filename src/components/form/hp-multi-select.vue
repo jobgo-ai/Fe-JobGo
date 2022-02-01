@@ -9,9 +9,10 @@
           <li
             class="hp-multi-select__flyout__options__option"
             v-for="option in options"
+            @click="handleChangeEmit(option)"
           >
-            {{ option.label }}
-            <hp-checkbox :checked="option.value" />
+            {{ option }}
+            <hp-checkbox :checked="modelValue.includes(option)" />
           </li>
         </ul>
       </template>
@@ -42,7 +43,7 @@ const props = defineProps({
     required: true,
   },
   modelValue: {
-    default: null,
+    default: [],
   },
   name: {
     type: String,
@@ -100,7 +101,13 @@ const validationListeners = computed(() => {
 });
 
 const handleChangeEmit = (change) => {
-  emits("update:modelValue", change);
+  let newValue = [...props.modelValue];
+  if (newValue.includes(change)) {
+    newValue = newValue.filter((item) => item !== change);
+  } else {
+    newValue.push(change);
+  }
+  emits("update:modelValue", newValue);
 };
 </script>
 
@@ -120,6 +127,7 @@ const handleChangeEmit = (change) => {
     &__options {
       padding: 8px;
       &__option {
+        cursor: pointer;
         display: flex;
         align-items: center;
         justify-content: space-between;
