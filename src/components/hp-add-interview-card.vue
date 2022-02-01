@@ -119,7 +119,6 @@ const handleAddToInterview = async () => {
 .hp-add-opening-card {
   width: 264px;
   height: 208px;
-  cursor: pointer;
   list-style: none;
   border-radius: $border-radius-lg;
   border: $border;

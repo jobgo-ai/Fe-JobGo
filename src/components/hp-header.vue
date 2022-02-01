@@ -133,7 +133,7 @@
 <script setup>
 // Vendor
 import { useRouter } from "vue-router";
-import { ref, computed } from "vue";
+import { ref, computed, onMounted, onUnmounted } from "vue";
 import { onClickOutside } from "@vueuse/core";
 // Components
 import HpAvatar from "@/components/hp-avatar.vue";
@@ -165,6 +165,22 @@ onClickOutside(dropdownTarget, (event) => {
 
 const { handleContextFormSave, isContextFormDirty, isContextFormSaving } =
   useContextSave();
+
+const promptAreYouSure = (e) => {
+  if (!isContextFormDirty.value) {
+    return undefined;
+  }
+
+  const dialogText =
+    "You have unsaved changes, are you sure you want to leave?";
+  e.returnValue = dialogText;
+  return dialogText;
+};
+
+onMounted(() => {
+  window.addEventListener("beforeunload", promptAreYouSure);
+});
+onUnmounted(() => window.removeEventListener("beforeunload", promptAreYouSure));
 
 const { user } = useAuth();
 
