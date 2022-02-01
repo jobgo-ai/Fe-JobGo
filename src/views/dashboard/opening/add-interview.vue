@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="add-interview">
     <hp-modal :isOpen="isAddInterviewModalOpen"
       >Add interview
       <form @submit="onSubmit">
@@ -8,13 +8,19 @@
         <button type="submit">Hello</button>
       </form>
     </hp-modal>
-    <div>Add interviews</div>
-    <ol>
-      <hp-interview-card
+    <div class="add-interview__header">
+      <div class="add-interview__title">Add interviews</div>
+      <div class="add-interview__subtitle">
+        Select a template or create a new one from scratch
+      </div>
+    </div>
+    <ol class="add-interview__interview-grid">
+      <hp-add-interview-card isAddCard></hp-add-interview-card>
+      <hp-add-interview-card
         :template="template"
         :key="template.reference"
         v-for="template in availableTemplateList"
-      ></hp-interview-card>
+      ></hp-add-interview-card>
     </ol>
   </div>
 </template>
@@ -29,7 +35,7 @@ import * as yup from "yup";
 // Components
 import HpModal from "@/components/hp-modal.vue";
 import HpInput from "@/components/form/hp-input.vue";
-import HpInterviewCard from "@/components/hp-interview-card.vue";
+import HpAddInterviewCard from "@/components/hp-add-interview-card.vue";
 // Hooks
 import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
 import { useGet, usePost } from "@/hooks/useHttp";
@@ -107,3 +113,30 @@ const handleAddToInterview = async (template) => {
   router.push(`/opening/${route.params.openingRef}/edit`);
 };
 </script>
+
+<style lang="scss">
+.add-interview {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  max-width: 840px;
+  margin: auto;
+  &__header {
+    align-self: flex-start;
+    margin-bottom: 24px;
+  }
+  &__title {
+    @include text-h2;
+    font-weight: 600;
+  }
+  &__subtitle {
+    @include text-h5;
+    color: var(--color-text-secondary);
+  }
+  &__interview-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-gap: 24px;
+  }
+}
+</style>
