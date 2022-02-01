@@ -4,14 +4,16 @@
     v-if="!isLoading"
     @submit.prevent="handleContextFormSave"
   >
-    <div class="edit-openings__edit-container">
-      <h3 class="edit-openings__edit-container__title">Edit opening</h3>
-      <p class="edit-openings__edit-container__subtitle">
-        Main information for your openings
-      </p>
-      <hp-input label="Name" name="name"></hp-input>
-      <hp-textarea label="Description" name="description"></hp-textarea>
-      <hp-image-selector label="Cover" name="artwork"></hp-image-selector>
+    <div>
+      <div class="edit-openings__edit-container">
+        <h3 class="edit-openings__edit-container__title">Edit opening</h3>
+        <p class="edit-openings__edit-container__subtitle">
+          Main information for your openings
+        </p>
+        <hp-input label="Name" name="name"></hp-input>
+        <hp-textarea label="Description" name="description"></hp-textarea>
+        <hp-image-selector label="Cover" name="artwork"></hp-image-selector>
+      </div>
     </div>
     <div class="edit-openings__empty-state" v-if="templates.length === 0">
       <mic-check />
@@ -46,6 +48,7 @@
               :template="element"
               :index="index + 1"
               :key="element.reference"
+              @handleRemove="handleRemoveInterview"
             ></hp-interview-card>
           </template>
         </draggable>
@@ -118,6 +121,14 @@ const handleDragChange = () => {
   setFieldValue("templates", templates.value);
 };
 
+const handleRemoveInterview = (templateReference) => {
+  const newTemplate = templates.value.filter(
+    (t) => t.reference !== templateReference
+  );
+  templates.value = newTemplate;
+  setFieldValue("templates", newTemplate);
+};
+
 const onSubmit = handleSubmit(async (values) => {
   const putOpening = usePut(`openings/${route.params.openingRef}`);
   await putOpening.put({
@@ -130,6 +141,7 @@ const onSubmit = handleSubmit(async (values) => {
   resetForm({ touched: false, values: opening.value });
   setToast({
     type: "positive",
+    title: "Well done!",
     message: `${putOpening.data.value.opening.name} updated`,
   });
   setBreadcrumbs(
@@ -205,6 +217,7 @@ const currentSplash = defineAsyncComponent(() =>
     background-color: var(--color-panel);
     padding: 24px;
     border-radius: $border-radius-lg;
+    min-height: 80vh;
     &__title {
       @include text-h4;
       font-weight: 500;

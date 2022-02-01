@@ -19,6 +19,7 @@
         name="search"
         variant="search"
         icon="search"
+        v-model="filter.search"
         placeholder="Search by name"
       />
       <div class="add-interview__filter__dropdowns">
@@ -29,18 +30,18 @@
           name="skills"
           searchable
           :onSearch="searchFunction"
-          v-model="selectedSkills"
+          v-model="filter.skills"
         ></hp-multi-select>
         <hp-multi-select
           :options="jobLevelOptions"
           class="add-interview__filter__dropdowns__dropdown"
           label="Experience levels"
           name="levels"
-          v-model="selectedSkills"
+          v-model="filter.jobLevels"
         ></hp-multi-select>
       </div>
     </div>
-    <ol class="add-interview__interview-grid">
+    <ol v-if="!isInterviewsLoading" class="add-interview__interview-grid">
       <hp-add-interview-card isAddCard></hp-add-interview-card>
       <hp-add-interview-card
         :template="template"
@@ -48,6 +49,7 @@
         v-for="template in availableTemplateList"
       ></hp-add-interview-card>
     </ol>
+    <hp-spinner v-else size="24" class="add-interview__spinner" />
   </div>
 </template>
 
@@ -61,6 +63,7 @@ import * as yup from "yup";
 // Components
 import HpModal from "@/components/hp-modal.vue";
 import HpInput from "@/components/form/hp-input.vue";
+import HpSpinner from "@/components/hp-spinner.vue";
 import HpMultiSelect from "@/components/form/hp-multi-select.vue";
 import HpAddInterviewCard from "@/components/hp-add-interview-card.vue";
 // Hooks
@@ -76,15 +79,18 @@ const props = defineProps({
   },
 });
 
+const isInterviewsLoading = ref(true);
+
+const filter = ref({ search: "", skills: [], jobLevels: [] });
+
+const skillOptions = ref([]);
+
 const { handleSkillSearch } = useSkillSearch();
 const { jobLevels } = useConstants();
 
 const jobLevelOptions = computed(() => {
   return jobLevels.value.map((j) => j.name);
 });
-const skillOptions = ref([]);
-const selectedSkills = ref([]);
-
 const searchFunction = async (value) => {
   skillOptions.value = await handleSkillSearch(value);
 };
@@ -99,7 +105,7 @@ onMounted(async () => {
   await getTemplates.get();
 
   templates.value = getTemplates.data.value.templates;
-
+  isInterviewsLoading.value = false;
   setBreadcrumbs([
     {
       label: "Openings",
@@ -146,15 +152,6 @@ const availableTemplateList = computed(() => {
     );
   });
 });
-
-const handleAddToInterview = async (template) => {
-  const postRole = usePost(`openings/${route.params.openingRef}/templates`);
-  const payload = {
-    template: template.reference,
-  };
-  await postRole.post(payload);
-  router.push(`/opening/${route.params.openingRef}/edit`);
-};
 </script>
 
 <style lang="scss">
@@ -164,6 +161,11 @@ const handleAddToInterview = async (template) => {
   justify-content: center;
   max-width: 840px;
   margin: auto;
+  &__spinner {
+    margin-top: 26px;
+    display: flex;
+    justify-content: center;
+  }
   &__header {
     align-self: flex-start;
     margin-bottom: 24px;

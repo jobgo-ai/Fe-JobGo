@@ -26,7 +26,7 @@
           <div class="hp-multi-select__spinner" v-else-if="isLoading">
             <hp-spinner />
           </div>
-          <div v-else>Empty state</div>
+          <div v-else>No options</div>
         </ul>
       </template>
     </hp-dropdown>

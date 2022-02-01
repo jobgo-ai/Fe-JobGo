@@ -13,10 +13,12 @@ import { useRoute } from "vue-router";
 
 // Hooks
 import { useGet } from "@/hooks/useHttp";
+import useOpenings from "@/hooks/useOpenings";
 
-const opening = ref(null);
 const interview = ref(null);
 const route = useRoute();
+
+const { fetchOpening, opening } = useOpenings();
 
 watch(
   () => route.params.openingRef,
@@ -24,9 +26,7 @@ watch(
     if (!newOpeningRef) {
       return;
     }
-    const getOpening = useGet(`openings/${newOpeningRef}`);
-    await getOpening.get();
-    opening.value = getOpening.data.value.opening;
+    fetchOpening(newOpeningRef);
   },
   { immediate: true }
 );

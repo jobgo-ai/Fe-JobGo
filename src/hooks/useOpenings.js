@@ -21,7 +21,7 @@ const fetchOpenings = async (state = "active") => {
 };
 
 const fetchOpening = async (openingRef) => {
-  const getOpening = useGet(`openings/${newOpeningRef}`);
+  const getOpening = useGet(`openings/${openingRef}`);
   await getOpening.get();
   opening.value = getOpening.data.value.opening;
 };

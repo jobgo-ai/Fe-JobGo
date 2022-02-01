@@ -48,6 +48,7 @@
         <hp-button
           class="hp-opening-card__actions__button"
           icon="trash"
+          @handleClick="$emit('handleRemove', template.reference)"
         ></hp-button>
         <hp-button label="Edit interview"></hp-button>
       </div>
@@ -78,6 +79,8 @@ const props = defineProps({
     default: 0,
   },
 });
+
+const emits = defineEmits(["handleRemove"]);
 
 const route = useRoute();
 
