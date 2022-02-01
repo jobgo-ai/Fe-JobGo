@@ -355,6 +355,7 @@ const candidateList = computed(() => {
       }
     }
   }
+
   &__empty-state {
     margin-top: 40px;
     margin-bottom: 40px;
@@ -437,8 +438,7 @@ const candidateList = computed(() => {
   &__add-candidate {
     display: flex;
     justify-content: flex-end;
-    margin-bottom: 12px;
-    margin-top: -16px;
+    margin-bottom: 16px;
   }
 
   .candidate-list__flyout-transition {

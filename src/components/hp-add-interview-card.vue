@@ -18,38 +18,41 @@
       </div>
     </div>
     <div class="hp-add-opening-card__content" v-else>
-      <div class="hp-add-opening-card__badge-container">
-        <hp-badge icon="layers" :content="index"></hp-badge>
-        <hp-icon
-          class="hp-add-opening-card__badge-container__handle"
-          name="drag"
-          size="24"
-        ></hp-icon>
-      </div>
       <div class="hp-add-opening-card__name">{{ template.name }}</div>
-      <div class="hp-add-opening-card__fact">
-        <hp-icon
-          class="hp-add-opening-card__fact__icon"
-          name="chronometer"
-          :size="15"
-        ></hp-icon>
-        {{ secondsToMinutes(template.statistics.duration) }} minutes
-      </div>
-      <div class="hp-add-opening-card__fact">
-        <hp-icon
-          class="hp-add-opening-card__fact__icon"
-          name="questions"
-          :size="15"
-        ></hp-icon>
+      <div class="hp-add-opening-card__facts">
+        <div class="hp-add-opening-card__fact">
+          <hp-icon
+            class="hp-add-opening-card__fact__icon"
+            name="chronometer"
+            :size="15"
+          ></hp-icon>
+          {{ secondsToMinutes(template.statistics.duration) }} minutes
+        </div>
+        <div class="hp-add-opening-card__fact">
+          <hp-icon
+            class="hp-add-opening-card__fact__icon"
+            name="questions"
+            :size="15"
+          ></hp-icon>
 
-        {{ template.statistics.questions }} questions
+          {{ template.statistics.questions }} questions
+        </div>
+        <div class="hp-add-opening-card__fact">
+          <hp-icon
+            class="hp-add-opening-card__fact__icon"
+            name="skills"
+            :size="15"
+          ></hp-icon>
+
+          {{ template.statistics.skills.length }} evaluated skills
+        </div>
       </div>
       <div class="hp-add-opening-card__actions">
         <hp-button
           class="hp-add-opening-card__actions__button"
-          icon="trash"
+          label="Add to opening"
         ></hp-button>
-        <hp-button label="Edit interview"></hp-button>
+        <hp-button icon="eye"></hp-button>
       </div>
     </div>
   </li>
@@ -88,12 +91,14 @@ const secondsToMinutes = (seconds) => {
 
 <style lang="scss">
 .hp-add-opening-card {
-  height: 236px;
   width: 264px;
+  height: 208px;
   cursor: pointer;
   list-style: none;
   border-radius: $border-radius-lg;
   border: $border;
+  display: flex;
+  flex-direction: column;
   &__name {
     font-weight: 500;
     @include text-h5;
@@ -110,6 +115,10 @@ const secondsToMinutes = (seconds) => {
   }
   &__content {
     padding: 16px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
   }
   &__fact {
     display: flex;
