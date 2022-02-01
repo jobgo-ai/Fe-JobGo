@@ -6,6 +6,7 @@
     <div class="hp-input__input-container">
       <input
         v-bind="$attrs"
+        ref="inputRef"
         :disabled="isDisabled"
         :class="`hp-input__input hp-input__input--${variant}`"
         :name="name"
@@ -36,7 +37,7 @@
 
 <script setup>
 import HpIcon from "@/components/hp-icon.vue";
-import { computed } from "vue";
+import { computed, defineExpose, ref } from "vue";
 import { useField } from "vee-validate";
 
 const props = defineProps({
@@ -77,6 +78,9 @@ const props = defineProps({
 const emits = defineEmits(["update:modelValue"]);
 
 const { errorMessage, value: modelValue } = useField(props.name);
+
+const inputRef = ref(null);
+defineExpose({ inputRef });
 
 const containerClasses = computed(() => {
   return {

@@ -7,6 +7,7 @@
             v-model="search"
             variant="search"
             icon="search"
+            ref="searchInput"
             :name="name"
             placeholder="Search..."
             @input="handleAsyncSearch"
@@ -39,7 +40,7 @@
 
 <script setup>
 import { useField } from "vee-validate";
-import { computed, ref, defineExpose } from "vue";
+import { computed, ref, watchEffect } from "vue";
 import HpDropdown from "@/components/hp-dropdown.vue";
 import HpCheckbox from "@/components/hp-checkbox.vue";
 import HpInput from "@/components/form/hp-input.vue";
@@ -105,6 +106,19 @@ const {
 
 const search = ref("");
 const isLoading = ref(false);
+
+const searchInput = ref(null);
+
+watchEffect(
+  () => {
+    if (searchInput.value) {
+      searchInput.value.inputRef.focus();
+    }
+  },
+  {
+    flush: "post",
+  }
+);
 
 const computedLabel = computed(() => {
   return props.selectedMessage
