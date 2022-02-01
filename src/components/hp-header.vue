@@ -18,10 +18,22 @@
           <template #dropdown>
             <div class="hp-header__save-container__dropdown-container">
               <div class="hp-header__save-container__dropdown-container__item">
-                <hp-icon name="cog"></hp-icon>Save
+                <hp-icon
+                  class="
+                    hp-header__save-container__dropdown-container__item__icon
+                  "
+                  name="floppy"
+                ></hp-icon
+                >Save
               </div>
               <div class="hp-header__save-container__dropdown-container__item">
-                <hp-icon name="cog"></hp-icon>Save as template
+                <hp-icon
+                  class="
+                    hp-header__save-container__dropdown-container__item__icon
+                  "
+                  name="template"
+                ></hp-icon
+                >Save as template
               </div>
             </div>
           </template>
@@ -199,6 +211,17 @@ const { hasHeaderSaveButton } = useBreadcrumbs();
     &__dropdown-container {
       &__item {
         display: flex;
+        align-items: center;
+        padding: 8px;
+        border-radius: $border-radius-sm;
+        white-space: nowrap;
+        cursor: pointer;
+        &:hover {
+          background-color: var(--color-background-floating);
+        }
+        &__icon {
+          margin-right: 6px;
+        }
       }
     }
   }
