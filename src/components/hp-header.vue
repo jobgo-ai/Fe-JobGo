@@ -70,7 +70,9 @@
                 class="hp-header__dropdown__info__avatar"
               />
               <div class="hp-header__dropdown__info__name">
-                {{ user.firstName }} {{ user.lastName }}
+                <div class="hp-header__dropdown__personal-deets">
+                  {{ user.firstName }} {{ user.lastName }}
+                </div>
                 <div class="hp-header__dropdown__info__email">
                   {{ user.email }}
                 </div>

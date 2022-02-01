@@ -14,6 +14,17 @@
         Select a template or create a new one from scratch
       </div>
     </div>
+    <div class="add-interview__filter">
+      <hp-input name="search" variant="search" icon="search" label="Search" />
+      <hp-dropdown
+        class="add-interview__filter__dropdown"
+        label="Skills"
+      ></hp-dropdown>
+      <hp-dropdown
+        class="add-interview__filter__dropdown"
+        label="Experience levels"
+      ></hp-dropdown>
+    </div>
     <ol class="add-interview__interview-grid">
       <hp-add-interview-card isAddCard></hp-add-interview-card>
       <hp-add-interview-card
@@ -35,6 +46,7 @@ import * as yup from "yup";
 // Components
 import HpModal from "@/components/hp-modal.vue";
 import HpInput from "@/components/form/hp-input.vue";
+import HpDropdown from "@/components/hp-dropdown.vue";
 import HpAddInterviewCard from "@/components/hp-add-interview-card.vue";
 // Hooks
 import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
@@ -137,6 +149,15 @@ const handleAddToInterview = async (template) => {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     grid-gap: 24px;
+  }
+  &__filter {
+    display: flex;
+    &:first-child {
+      margin-right: 6px;
+    }
+    &__button {
+      width: 200px;
+    }
   }
 }
 </style>

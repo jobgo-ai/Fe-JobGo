@@ -44,9 +44,4 @@ Primary.args = {
   label: "Button",
 };
 
-export const Secondary = Template.bind({});
-Secondary.args = {
-  label: "whats up",
-};
-
 Primary.decorators = [vueRouter()];

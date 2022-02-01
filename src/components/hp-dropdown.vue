@@ -1,0 +1,218 @@
+<template>
+  <div class="hp-dropdown" :class="containerClasses">
+    <button
+      @click="isDropdownOpen = !isDropdownOpen"
+      class="hp-dropdown__button"
+      :class="buttonClasses"
+      :type="type ? type : 'button'"
+      :disabled="isDisabled"
+      @focus="isFocused = true"
+      @blur="isFocused = false"
+    >
+      <hp-icon
+        :class="iconClasses"
+        v-if="icon"
+        :name="icon"
+        :size="16"
+      ></hp-icon>
+      <div>{{ label }}</div>
+      <hp-spinner
+        class="hp-dropdown__button__spinner"
+        v-if="isLoading"
+        :size="14"
+        :mode="primary ? 'light' : 'dark'"
+      ></hp-spinner>
+      <hp-icon
+        class="hp-dropdown__button__chevron"
+        v-else
+        name="chevron-down"
+        :size="16"
+      ></hp-icon>
+    </button>
+    <transition name="hp-dropdown-flyout-transition">
+      <div class="hp-dropdown__flyout" v-if="isDropdownOpen">
+        <slot name="dropdown"></slot>
+      </div>
+    </transition>
+  </div>
+</template>
+
+<script setup>
+//Vendor
+import { computed, ref } from "vue";
+
+// Components
+import HpIcon from "@/components/hp-icon.vue";
+import HpSpinner from "@/components/hp-spinner.vue";
+
+const props = defineProps({
+  label: {
+    type: String,
+  },
+  icon: {
+    type: String,
+  },
+  type: {
+    type: String,
+    default: "button",
+  },
+  isLoading: {
+    type: Boolean,
+    default: false,
+  },
+  isDisabled: {
+    type: Boolean,
+    default: false,
+  },
+});
+
+const isDropdownOpen = ref(false);
+
+const isFocused = ref(false);
+
+const containerClasses = computed(() => {
+  return {
+    "hp-dropdown": true,
+    "hp-dropdown--focused": isFocused.value,
+  };
+});
+
+const buttonClasses = computed(() => {
+  return {
+    "hp-dropdown__button": true,
+    "hp-dropdown__button--disabled": props.isDisabled,
+    "hp-dropdown__button--button-icon": props.icon && !props.label,
+  };
+});
+
+const addonClasses = computed(() => {
+  return {
+    "hp-dropdown__button": true,
+    "hp-dropdown__button--disabled": props.isDisabled,
+  };
+});
+
+const iconClasses = computed(() => {
+  return {
+    "hp-dropdown__button__icon": true,
+    "hp-dropdown__button__icon--solo": !props.label,
+  };
+});
+</script>
+
+<div lang="scss" scoped>
+.hp-dropdown {
+  display: flex;
+  height: 32px;
+  position: relative;
+
+  &--focused {
+    border-radius: $border-radius-sm;
+    outline: var(--color-focus) solid 4px;
+    border-color: var(--color-accent-background);
+    filter: drop-shadow(0px 4px 8px rgba(33, 44, 51, 0.02))
+      drop-shadow(0px 0px 1px rgba(33, 44, 51, 0.02));
+
+    // Button primary
+    &:active:not([disabled]),
+    &:hover:not([disabled]) {
+      background-color: var(--color-accent-background);
+      box-shadow: 0px 4px 8px rgba(33, 44, 51, 0.02),
+        0px 0px 1px rgba(33, 44, 51, 0.02);
+    }
+
+    &:active:not([disabled]) {
+      border-color: var(--color-accent-background);
+    }
+  }
+
+  &--primary .hp-dropdown__button__icon--solo {
+    color: var(--color-accent-forground);
+  }
+
+  &__flyout {
+    @include flyout;
+    position: absolute;
+    padding: 4px 8px;
+    right: 0;
+    top: calc(100% + 6px);
+  }
+
+  // Default
+  &__button {
+    font-family: "Inter", sans-serif;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    padding: 6px 12px;
+    font-size: 14px;
+    background-color: var(--color-background);
+    color: var(--color-text-primary);
+    outline: none;
+    border: 1px solid var(--color-border);
+    border-radius: $border-radius-sm;
+    transition: border-color 0.15s cubic-bezier(0.17, 0.67, 0.83, 0.67);
+    filter: drop-shadow(0px 4px 8px rgba(33, 44, 51, 0.02))
+      drop-shadow(0px 0px 1px rgba(33, 44, 51, 0.02));
+
+    &__spinner {
+      margin-left: 8px;
+    }
+
+    &__chevron {
+      margin-left: 6px;
+    }
+
+    &__icon {
+      color: var(--color-text-secondary);
+      margin-right: 6px;
+      &--solo {
+        margin-right: 0;
+        margin-left: 0;
+        color: var(--color-text-primary);
+      }
+    }
+
+    &--button-icon {
+      padding: 6px;
+      color: var(--color-text-primary);
+    }
+
+    &--disabled {
+      color: var(--color-text-tertiary);
+      cursor: not-allowed;
+    }
+
+    &:active:not([disabled]),
+    &:hover:not([disabled]) {
+      background-color: var(--color-panel);
+      box-shadow: 0px 4px 8px rgba(33, 44, 51, 0.02),
+        0px 0px 1px rgba(33, 44, 51, 0.02);
+    }
+
+    &:active:not([disabled]) {
+      border-color: var(--color-border-subtle);
+    }
+  }
+  &__dropdown-content {
+    position: absolute;
+    @include flyout;
+    padding: 8px;
+    top: calc(100% + 12px);
+    right: 0;
+  }
+}
+
+.hp-dropdown-flyout-transition {
+  transform: translateY(0);
+}
+.hp-dropdown-flyout-transition-enter-active,
+.hp-dropdown-flyout-transition-leave-active {
+  transition: all 0.15s cubic-bezier(0.17, 0.67, 0.83, 0.67);
+}
+.hp-dropdown-flyout-transition-enter-from,
+.hp-dropdown-flyout-transition-leave-to {
+  opacity: 0;
+  transform: translateY(-10px);
+}
+</div>
