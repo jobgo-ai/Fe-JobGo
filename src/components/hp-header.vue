@@ -53,7 +53,7 @@
               size="sm"
               :user="user"
             />
-            <div v-if="!hasHeaderSaveButton">
+            <div class="hp-header__dropdown__deets" v-if="!hasHeaderSaveButton">
               {{ user.firstName }} {{ user.lastName }}
             </div>
           </div>
@@ -70,9 +70,7 @@
                 class="hp-header__dropdown__info__avatar"
               />
               <div class="hp-header__dropdown__info__name">
-                <div class="hp-header__dropdown__personal-deets">
-                  {{ user.firstName }} {{ user.lastName }}
-                </div>
+                <div>{{ user.firstName }} {{ user.lastName }}</div>
                 <div class="hp-header__dropdown__info__email">
                   {{ user.email }}
                 </div>
@@ -161,9 +159,11 @@ onClickOutside(dropdownTarget, (event) => {
   if (!isAccountMenuOpen.value) {
     return;
   }
+  console.log(event.target.className);
   if (event.target.className.includes("hp-header__dropdown")) {
     return;
   }
+  console.log("im here");
   isAccountMenuOpen.value = false;
 });
 
@@ -282,6 +282,10 @@ const { hasHeaderSaveButton } = useBreadcrumbs();
       0px 2px 6px rgba(33, 44, 51, 0.04), 0px 0px 1px rgba(33, 44, 51, 0.04);
     border-radius: $border-radius-lg;
     border: 1px solid var(--color-border-subtle);
+
+    &__personal-deets {
+      display: flex;
+    }
     &__options {
       padding: 8px;
       border-bottom: 1px dashed var(--color-border);
