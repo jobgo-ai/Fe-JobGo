@@ -5,6 +5,7 @@
     </label>
     <div class="hp-input__input-container">
       <input
+        v-bind="$attrs"
         :disabled="isDisabled"
         :class="`hp-input__input hp-input__input--${variant}`"
         :name="name"

@@ -153,6 +153,7 @@ const emit = defineEmits(["handleClick"]);
   display: inline-flex;
   height: 32px;
   position: relative;
+  z-index: 10;
 
   &--dropzone {
     width: 100%;

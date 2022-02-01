@@ -1,7 +1,7 @@
 <template>
-  <div class="hp-dropdown" :class="containerClasses">
+  <div ref="target" class="hp-dropdown" :class="containerClasses">
     <button
-      @click="isDropdownOpen = !isDropdownOpen"
+      @click="handleButtonClick"
       class="hp-dropdown__button"
       :class="buttonClasses"
       :type="type ? type : 'button'"
@@ -15,7 +15,7 @@
         :name="icon"
         :size="16"
       ></hp-icon>
-      <div>{{ label }}</div>
+      <div class="hp-dropdown__label">{{ label }}</div>
       <hp-spinner
         class="hp-dropdown__button__spinner"
         v-if="isLoading"
@@ -23,14 +23,16 @@
         :mode="primary ? 'light' : 'dark'"
       ></hp-spinner>
       <hp-icon
-        class="hp-dropdown__button__chevron"
+        :class="`hp-dropdown__button__chevron ${
+          isDropdownOpen && 'hp-dropdown__button__chevron--open'
+        }`"
         v-else
         name="chevron-down"
         :size="16"
       ></hp-icon>
     </button>
     <transition name="hp-dropdown-flyout-transition">
-      <div ref="target" class="hp-dropdown__flyout" v-if="true">
+      <div class="hp-dropdown__flyout" v-if="isDropdownOpen">
         <slot name="dropdown"></slot>
       </div>
     </transition>
@@ -67,15 +69,19 @@ const props = defineProps({
   },
 });
 
+const emits = defineEmits(["onChange"]);
+
 const isDropdownOpen = ref(false);
 const target = ref(null);
 const isFocused = ref(false);
 
+const handleButtonClick = () => {
+  isDropdownOpen.value = !isDropdownOpen.value;
+  emits("onChange", isDropdownOpen.value);
+};
+
 onClickOutside(target, (event) => {
   if (!isDropdownOpen.value) {
-    return;
-  }
-  if (event.target.className.includes("hp-dropdown")) {
     return;
   }
   isDropdownOpen.value = false;
@@ -147,6 +153,7 @@ const iconClasses = computed(() => {
     padding: 4px 8px;
     right: 0;
     top: calc(100% + 6px);
+    z-index: 1000;
   }
 
   // Default
@@ -173,6 +180,10 @@ const iconClasses = computed(() => {
 
     &__chevron {
       margin-left: 6px;
+      transition: transform 0.15s linear;
+      &--open {
+        transform: rotate(-180deg);
+      }
     }
 
     &__icon {

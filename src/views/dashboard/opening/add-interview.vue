@@ -22,14 +22,21 @@
         placeholder="Search by name"
       />
       <div class="add-interview__filter__dropdowns">
-        <hp-dropdown
+        <hp-multi-select
           class="add-interview__filter__dropdowns__dropdown"
           label="All Skills"
-        ></hp-dropdown>
-        <hp-dropdown
+          :options="skillOptions"
+          name="skills"
+          :onSearch="searchFunction"
+          v-model="selectedSkills"
+        ></hp-multi-select>
+        <hp-multi-select
+          :options="[]"
           class="add-interview__filter__dropdowns__dropdown"
           label="Experience levels"
-        ></hp-dropdown>
+          name="levels"
+          v-model="selectedSkills"
+        ></hp-multi-select>
       </div>
     </div>
     <ol class="add-interview__interview-grid">
@@ -53,9 +60,10 @@ import * as yup from "yup";
 // Components
 import HpModal from "@/components/hp-modal.vue";
 import HpInput from "@/components/form/hp-input.vue";
-import HpDropdown from "@/components/hp-dropdown.vue";
+import HpMultiSelect from "@/components/form/hp-multi-select.vue";
 import HpAddInterviewCard from "@/components/hp-add-interview-card.vue";
 // Hooks
+import useSkillSearch from "@/hooks/useSkillSearch";
 import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
 import { useGet, usePost } from "@/hooks/useHttp";
 
@@ -66,12 +74,22 @@ const props = defineProps({
   },
 });
 
+const { handleSkillSearch } = useSkillSearch();
+
+const skillOptions = ref([]);
+const selectedSkills = ref([]);
+
+const searchFunction = async (value) => {
+  skillOptions.value = await handleSkillSearch(value);
+};
+
 const templates = ref([]);
 const isAddInterviewModalOpen = ref(false);
 const { setBreadcrumbs } = useBreadcrumbs();
 
 onMounted(async () => {
   const getTemplates = useGet(`templates`);
+  skillOptions.value = await handleSkillSearch("");
   await getTemplates.get();
 
   templates.value = getTemplates.data.value.templates;

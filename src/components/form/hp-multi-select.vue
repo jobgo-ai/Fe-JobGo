@@ -1,12 +1,13 @@
 <template>
   <div class="hp-multi-select">
-    <hp-dropdown :label="computedLabel">
+    <hp-dropdown @onChange="handleDropdownChange" :label="computedLabel">
       <template v-slot:dropdown>
         <div class="hp-multi-select__flyout__search">
           <hp-input
             v-model="search"
             variant="search"
             icon="search"
+            :name="name"
             placeholder="Search..."
             @input="handleAsyncSearch"
           />
@@ -38,7 +39,7 @@
 
 <script setup>
 import { useField } from "vee-validate";
-import { computed, ref } from "vue";
+import { computed, ref, defineExpose } from "vue";
 import HpDropdown from "@/components/hp-dropdown.vue";
 import HpCheckbox from "@/components/hp-checkbox.vue";
 import HpInput from "@/components/form/hp-input.vue";
@@ -133,6 +134,12 @@ const validationListeners = computed(() => {
   };
 });
 
+const handleDropdownChange = (isOpen) => {
+  if (isOpen) {
+    const rect = searchInput.value;
+  }
+};
+
 const optionsList = computed(() => {
   if (!props.onSearch && search.value !== "") {
     return props.options.filter((item) => {
@@ -158,6 +165,7 @@ const handleChangeEmit = (change) => {
 .hp-multi-select {
   width: 100%;
   display: flex;
+  z-index: 100;
   &__spinner {
     display: flex;
     justify-content: center;
@@ -168,6 +176,7 @@ const handleChangeEmit = (change) => {
     border-radius: $border-radius-md;
     background-color: var(--color-background);
     padding: 0;
+    z-index: 1000;
     &__search {
       min-width: 256px;
       padding: 8px 8px 0px 8px;
