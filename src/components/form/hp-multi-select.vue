@@ -109,13 +109,18 @@ const computedLabel = computed(() => {
     : props.label;
 });
 
+let timeout = null;
+
 const handleAsyncSearch = async () => {
   if (!props.onSearch) {
     return;
   }
+  clearTimeout(timeout);
   isLoading.value = true;
-  await props.onSearch(search.value);
-  isLoading.value = false;
+  timeout = setTimeout(async () => {
+    await props.onSearch(search.value);
+    isLoading.value = false;
+  }, 500);
 };
 
 const validationListeners = computed(() => {
@@ -135,9 +140,7 @@ const validationListeners = computed(() => {
 });
 
 const handleDropdownChange = (isOpen) => {
-  if (isOpen) {
-    const rect = searchInput.value;
-  }
+  //todo figure out ref
 };
 
 const optionsList = computed(() => {
@@ -171,6 +174,7 @@ const handleChangeEmit = (change) => {
     justify-content: center;
     align-items: center;
     margin-top: 20px;
+    margin-bottom: 20px;
   }
   &__flyout {
     border-radius: $border-radius-md;
