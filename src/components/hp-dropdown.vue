@@ -30,7 +30,7 @@
       ></hp-icon>
     </button>
     <transition name="hp-dropdown-flyout-transition">
-      <div ref="target" class="hp-dropdown__flyout" v-if="isDropdownOpen">
+      <div ref="target" class="hp-dropdown__flyout" v-if="true">
         <slot name="dropdown"></slot>
       </div>
     </transition>

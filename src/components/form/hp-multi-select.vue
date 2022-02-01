@@ -1,29 +1,21 @@
 <template>
-  <div class="relative">
-    <Multiselect
-      :searchable="searchable"
-      :mode="mode"
-      :name="name"
-      :disabled="isDisabled"
-      v-model="inputValue"
-      :options="options"
-      :id="name"
-      :max="max"
-      :multipleLabel="handleMultipleLabels"
-      @change="handleChangeEmit"
-      v-on="validationListeners"
-      :canDeselect="canDeselect"
-      :canClear="canDeselect"
-      :placeholder="placeholder"
-      :closeOnSelect="closeOnSelect"
-      :minChars="1"
-      :delay="delay"
-      :resolveOnLoad="true"
-    >
-      <template v-if="selectedMessage" v-slot:multiplelabel="{ values }">
-        <div class="">{{ values.length }} {{ selectedMessage }}</div>
+  <div class="hp-multi-select">
+    <hp-dropdown label="All skills">
+      <template v-slot:dropdown>
+        <div class="hp-multi-select__flyout__search">
+          <hp-input variant="search" icon="search" placeholder="Search..." />
+        </div>
+        <ul class="hp-multi-select__flyout__options">
+          <li
+            class="hp-multi-select__flyout__options__option"
+            v-for="option in options"
+          >
+            {{ option.label }}
+            <hp-checkbox :checked="option.value" />
+          </li>
+        </ul>
       </template>
-    </Multiselect>
+    </hp-dropdown>
     <transition name="fade">
       <div v-if="errorMessage" class="">
         {{ errorMessage }}
@@ -33,9 +25,11 @@
 </template>
 
 <script setup>
-import Multiselect from "@vueform/multiselect";
 import { useField } from "vee-validate";
 import { computed } from "vue";
+import HpDropdown from "@/components/hp-dropdown.vue";
+import HpCheckbox from "@/components/hp-checkbox.vue";
+import HpInput from "@/components/form/hp-input.vue";
 
 const emits = defineEmits(["update:modelValue"]);
 const props = defineProps({
@@ -53,31 +47,11 @@ const props = defineProps({
   name: {
     type: String,
   },
-  delay: {
-    type: Number,
-    default: -1,
-  },
-  mode: {
-    type: String,
-    default: "single",
-  },
   isDisabled: {
     type: Boolean,
     default: false,
   },
-  searchable: {
-    type: Boolean,
-    default: true,
-  },
   multiple: {
-    type: Boolean,
-    default: false,
-  },
-  fullWidth: {
-    type: Boolean,
-    default: false,
-  },
-  canDeselect: {
     type: Boolean,
     default: false,
   },
@@ -89,7 +63,7 @@ const props = defineProps({
     type: Boolean,
     default: true,
   },
-  max: {
+  maxItemsSelected: {
     type: Number,
   },
 });
@@ -104,10 +78,10 @@ const {
   validateOnValueUpdate: false,
 });
 
-const handleMultipleLabels = (item) => {
-  const items = Object.keys(item).map((key) => item[key].label);
-  return items.join(", ");
-};
+// const handleMultipleLabels = (item) => {
+//   const items = Object.keys(item).map((key) => item[key].label);
+//   return items.join(", ");
+// };
 
 const validationListeners = computed(() => {
   if (!errorMessage.value) {
@@ -130,4 +104,32 @@ const handleChangeEmit = (change) => {
 };
 </script>
 
-<style src="@vueform/multiselect/themes/default.css"></style>
+<style lang="scss">
+.hp-multi-select {
+  width: 100%;
+  display: flex;
+  &__flyout {
+    border-radius: $border-radius-md;
+    background-color: var(--color-background);
+    padding: 0;
+    &__search {
+      min-width: 256px;
+      padding: 8px 8px 0px 8px;
+      border-bottom: 1px dashed var(--color-border);
+    }
+    &__options {
+      padding: 8px;
+      &__option {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 8px;
+        border-radius: $border-radius-sm;
+        &:hover {
+          background-color: var(--color-forground-floating);
+        }
+      }
+    }
+  }
+}
+</style>

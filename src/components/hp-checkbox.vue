@@ -35,11 +35,11 @@ const props = defineProps({
   align-items: center;
   position: relative;
   padding-left: 20px;
-  height: 18px;
+  height: 16px;
   &__icon {
     position: absolute;
-    top: 1px;
-    left: 1px;
+    top: 0px;
+    left: -1px;
     z-index: 1;
     color: var(--color-accent-forground);
     pointer-events: none;
@@ -54,8 +54,8 @@ input[type="checkbox"] {
       position: absolute;
       left: 0;
       top: 1px;
-      width: 16px;
-      height: 16px;
+      width: 12px;
+      height: 12px;
       border: 2px solid var(--color-text-tertiary);
       background: var(--color-background);
       border-radius: 4px;
