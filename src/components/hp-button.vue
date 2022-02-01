@@ -35,7 +35,10 @@
     >
       <hp-icon :name="dropdownIcon" :size="14" />
     </button>
-    <div v-if="hasDropdown" class="hp-button__dropdown-content">
+    <div
+      v-if="hasDropdown && isDropdownOpen"
+      class="hp-button__dropdown-content"
+    >
       <slot name="dropdown"></slot>
     </div>
   </div>
