@@ -1,43 +1,90 @@
 <template>
-  <div>
-    <h2>Create question</h2>
+  <div class="new-question">
+    <div class="new-question__header">
+      <h2 class="new-question__title">Create question</h2>
+      <p class="new-question__subtitle">
+        This is the question prompt, it is important that this is readable
+      </p>
+    </div>
     <form @submit.prevent="onSubmit">
-      <hp-input label="Add question" name="content"></hp-input>
-      <hp-input label="Duration" name="duration"></hp-input>
-      <hp-multi-select
-        label="Skills"
-        mode="tags"
-        :max="3"
-        fullWidth
-        name="skills"
-        :delay="100"
-        :canDeselect="true"
-        :options="searchSkills"
-      ></hp-multi-select>
-      <hp-multi-input />
-      <hp-button type="submit" label="Create"></hp-button>
+      <div class="new-question__question">
+        <hp-input name="content" placeholder="Type the question"></hp-input>
+      </div>
+      <div class="new-question__guidelines">
+        <div class="new-question__label">Guidelines</div>
+        <div class="new-question__sublabel">
+          Describe what you would see in a perfect answer
+        </div>
+        <hp-multi-input />
+      </div>
+      <div class="new-question__duration">
+        <div class="new-question__duration__labels">
+          <div class="new-question__label">Duration time</div>
+          <div class="new-question__sublabel">
+            Expected duration, in minutes
+          </div>
+        </div>
+        <hp-counter name="duration" />
+      </div>
+      <div class="new-question__dropdowns">
+        <div class="new-question__duration__labels">
+          <div class="new-question__label">Duration time</div>
+          <div class="new-question__sublabel">
+            Expected duration, in minutes
+          </div>
+        </div>
+        <hp-multi-select
+          class="add-interview__filter__dropdowns__dropdown"
+          label="All Skills"
+          :options="skillOptions"
+          name="skills"
+          searchable
+          :onSearch="searchFunction"
+          v-model="skills"
+        ></hp-multi-select>
+      </div>
     </form>
   </div>
 </template>
 
 <script setup>
 //Vendor
-import { ref } from "vue";
+import { ref, computed, onMounted } from "vue";
 import { useForm } from "vee-validate";
 import * as yup from "yup";
 import { useRoute } from "vue-router";
 
 //Components
 import HpInput from "@/components/form/hp-input.vue";
+import HpCounter from "@/components/hp-counter.vue";
 import HpMultiSelect from "@/components/form/hp-multi-select.vue";
 import HpMultiInput from "@/components/form/hp-multi-input.vue";
-import HpButton from "@/components/hp-button.vue";
 
-//Hooks
-import { usePost } from "@/hooks/useHttp";
+// Hooks
 import useSkillSearch from "@/hooks/useSkillSearch";
+import useConstants from "@/hooks/useConstants";
+import { usePost } from "@/hooks/useHttp";
 
 const emits = defineEmits(["updateList"]);
+
+const skillOptions = ref([]);
+
+const skills = ref([]);
+const levels = ref([]);
+
+const { handleSkillSearch } = useSkillSearch();
+const { jobLevels } = useConstants();
+
+const jobLevelOptions = computed(() => {
+  return jobLevels.value.map((j) => j.name);
+});
+const searchFunction = async (value) => {
+  skillOptions.value = await handleSkillSearch(value);
+};
+
+onMounted(async () => {
+  skillOptions.value = await handleSkillSearch("");
+});
 
 const route = useRoute();
 
@@ -75,6 +122,60 @@ const onSubmit = handleSubmit(async (values) => {
   });
   emits("updateList");
 });
-
-const isAddNewOpeningModalOpen = ref(false);
 </script>
+
+<style lang="scss">
+.new-question {
+  display: flex;
+  flex-direction: column;
+  &__header {
+    margin-bottom: 16px;
+  }
+  &__title {
+    @include text-h4;
+    font-weight: 500;
+  }
+  &__subtitle {
+    @include text-h5;
+    color: var(--color-text-secondary);
+  }
+  &__question {
+    border-bottom: 1px dashed var(--color-border);
+    margin-bottom: 16px;
+  }
+  &__label {
+    font-weight: 500;
+    @include text-h5;
+  }
+  &__sublabel {
+    @include text-h5;
+    font-weight: 300;
+    color: var(--color-text-secondary);
+  }
+  &__guidelines {
+    padding-bottom: 16px;
+    border-bottom: 1px dashed var(--color-border);
+    margin-bottom: 16px;
+  }
+  &__duration {
+    display: flex;
+    justify-content: space-between;
+    align-content: center;
+    padding-bottom: 16px;
+    border-bottom: 1px dashed var(--color-border);
+    &__labels {
+      display: flex;
+      flex-direction: column;
+    }
+  }
+  &__dropdowns {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-content: center;
+    padding-bottom: 16px;
+    padding-top: 16px;
+    border-bottom: 1px dashed var(--color-border);
+  }
+}
+</style>

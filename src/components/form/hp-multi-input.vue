@@ -1,29 +1,36 @@
 <template>
-  <div class="">
+  <div class="hp-multi-input">
     <draggable
       v-model="internalValue"
       tag="transition-group"
+      v-bind="dragOptions"
+      @start="drag = true"
+      @end="drag = false"
       item-key="id"
-      handle=".handle"
+      handle=".hp-multi-input__input-container__icon"
       @change="handleDragChange"
     >
       <template #item="{ element, index }">
-        <div class="handle">
-          <div>
-            <input
-              :disabled="isDisabled"
-              :value="element.text"
-              :name="`guidelines-${index}`"
-              :placeholder="placeholder"
-              @input="handleInput($event, index)"
-              @keydown="handleKeydown(index)"
-              :id="index"
-              :maxlength="maxChars"
-            />
-            <div v-if="maxChars">{{ element.text.length }}/{{ maxChars }}</div>
-          </div>
-          <hp-button tabIndex="-1"> </hp-button>
-          <hp-button label="remove item" @handleClick="removeItem(element)">
+        <div class="hp-multi-input__input-container">
+          <hp-icon
+            class="hp-multi-input__input-container__icon"
+            name="drag"
+          ></hp-icon>
+          <input
+            class="hp-multi-input__input-container__input"
+            :disabled="isDisabled"
+            :value="element.text"
+            :name="`guidelines-${index}`"
+            @input="handleInput($event, index)"
+            @keydown="handleKeydown(index)"
+            :id="index"
+            :maxlength="maxChars"
+          />
+          <hp-button
+            class="hp-multi-input__button"
+            icon="trash"
+            @handleClick="removeItem(element)"
+          >
           </hp-button>
         </div>
       </template>
@@ -31,7 +38,9 @@
     <hp-button
       :isDisabled="maxItems <= internalValue.length"
       @handleClick="handleAddItem"
-      label="add guideline"
+      dropzone
+      icon="plus"
+      label="Add guideline"
     ></hp-button>
   </div>
 </template>
@@ -39,8 +48,9 @@
 <script setup>
 import draggable from "vuedraggable";
 import { v4 as uuidv4 } from "uuid";
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import HpButton from "@/components/hp-button.vue";
+import HpIcon from "@/components/hp-icon.vue";
 
 const props = defineProps({
   modelValue: {
@@ -71,6 +81,17 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+});
+
+const drag = ref(false);
+
+const dragOptions = computed(() => {
+  return {
+    animation: 200,
+    group: "description",
+    disabled: false,
+    ghostClass: "ghost",
+  };
 });
 
 const emit = defineEmits(["update:modelValue"]);
@@ -123,7 +144,60 @@ const handleKeydown = (index) => {
 };
 </script>
 
-<style>
+<style lang="scss">
+.hp-multi-input {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  margin-top: 6px;
+  &__input-container {
+    display: flex;
+    align-items: center;
+    background-color: var(--color-panel);
+    border: $border;
+    width: 100%;
+    padding: 6px;
+    border-radius: $border-radius-sm;
+    margin-bottom: 6px;
+
+    &__input {
+      background-color: var(--color-background);
+      border: 1px solid var(--color-border);
+      border-radius: $border-radius-sm;
+      padding: 8px 8px 8px 12px;
+      line-height: 36px;
+      max-height: 32px;
+      flex-grow: 1;
+      transition: border-color 0.15s cubic-bezier(0.17, 0.67, 0.83, 0.67);
+      color: var(--color-text-primary);
+      &--search {
+        background-color: var(--color-underground);
+        max-height: 32px;
+      }
+      &::placeholder {
+        color: var(--color-text-secondary);
+      }
+      &:focus:not([disabled]),
+      &:active:not([disabled]) {
+        outline: $outline;
+        border: 1px solid var(--color-accent-background);
+      }
+    }
+
+    &__icon {
+      margin-right: 16px;
+      cursor: grab;
+    }
+  }
+  &__input {
+    width: 100%;
+  }
+  &__button {
+    margin-left: 12px;
+    color: var(--color-forground-negative);
+  }
+}
+
 .list-item {
   display: inline-block;
   margin-right: 10px;

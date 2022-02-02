@@ -71,6 +71,7 @@ if (currentTheme) {
   --color-background-negative: rgba(181, 97, 80, 0.08);
   --color-border-negative: rgba(181, 97, 80, 0.32);
   --color-forground-negative: #b56150;
+  --color-error: #bd6455;
   --color-focus: #343c55;
   --color-background-floating: #242c30;
   --color-forground-floating: #363e42;

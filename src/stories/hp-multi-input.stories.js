@@ -11,7 +11,7 @@ const Template = (args) => ({
   setup() {
     return { args };
   },
-  template: `<div>
+  template: `<div style="max-width:300px">
     <hp-multi-input name="multi-input" />
   </div>`,
 });
