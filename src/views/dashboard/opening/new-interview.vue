@@ -7,10 +7,8 @@
 import { ref } from "vue";
 import { useForm } from "vee-validate";
 import * as yup from "yup";
-
 //Views
 // TODO: Make this a router vue
-import Questions from "@/views/dashboard/opening/questions/questions.vue";
 
 //Components
 import HpBreadcrumbs from "@/components/hp-breadcrumbs.vue";

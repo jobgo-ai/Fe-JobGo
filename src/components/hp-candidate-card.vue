@@ -28,7 +28,10 @@
           :content="candidate.opening.statistics.candidateScore"
         ></hp-badge>
       </div>
-      <div class="hp-candidate-card__interview-ticks">
+      <div
+        v-if="candidate.opening.templates.length > 0"
+        class="hp-candidate-card__interview-ticks"
+      >
         <div
           :class="[
             `hp-candidate-card__interview-tick`,
@@ -103,7 +106,6 @@ const calculateColor = (score, avgScore) => {
   &__info {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 8px;
     &__details__detail {
       font-weight: 500;
       color: var(--color-text-primary);
@@ -114,6 +116,7 @@ const calculateColor = (score, avgScore) => {
     }
   }
   &__interview-ticks {
+    margin-top: 8px;
     display: flex;
   }
   &__interview-tick {

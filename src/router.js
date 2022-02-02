@@ -19,7 +19,7 @@ import InterviewResults from "@/views/dashboard/openings/interview-results.vue";
 import Opening from "@/views/dashboard/opening/opening.vue";
 import EditOpening from "@/views/dashboard/opening/edit-opening.vue";
 import AddInterview from "@/views/dashboard/opening/add-interview.vue";
-import ViewInterview from "@/views/dashboard/opening/view-interview.vue";
+import NewInterview from "@/views/dashboard/opening/new-interview.vue";
 import EditInterview from "@/views/dashboard/opening/edit-interview.vue";
 import CompareCandidates from "@/views/dashboard/opening/compare-candidates.vue";
 
@@ -49,14 +49,14 @@ const routes = [
             component: AddInterview,
           },
           {
+            path: "edit/add-interview/new",
+            name: "add-interview",
+            component: NewInterview,
+          },
+          {
             path: "edit/edit-interview/:interviewRef",
             name: "edit-interview",
             component: EditInterview,
-          },
-          {
-            path: "view/view-interview/:interviewRef",
-            name: "view-interview",
-            component: ViewInterview,
           },
           {
             path: "compare",
