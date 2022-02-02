@@ -59,6 +59,7 @@ watch(
     top: 0;
     right: 0;
     width: 33%;
+    max-width: 480px;
     height: 100%;
     background-color: var(--color-background);
     padding: 20px;

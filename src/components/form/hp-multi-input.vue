@@ -26,12 +26,11 @@
             :id="index"
             :maxlength="maxChars"
           />
-          <hp-button
+          <hp-icon
             class="hp-multi-input__button"
-            icon="trash"
-            @handleClick="removeItem(element)"
-          >
-          </hp-button>
+            @click="removeItem(element)"
+            name="trash"
+          ></hp-icon>
         </div>
       </template>
     </draggable>
@@ -194,6 +193,8 @@ const handleKeydown = (index) => {
   }
   &__button {
     margin-left: 12px;
+    margin-right: 6px;
+    cursor: pointer;
     color: var(--color-forground-negative);
   }
 }

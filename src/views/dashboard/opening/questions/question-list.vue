@@ -41,7 +41,11 @@
         />
       </form>
     </div>
-    <ol class="question-list__list-container">
+    <ol
+      ref="listContainer"
+      :style="{ height: `${listContainerMaxHeight}px` }"
+      class="question-list__list-container"
+    >
       <hp-question-card
         :question="question"
         :key="question.id"
@@ -69,6 +73,9 @@ import useConstants from "@/hooks/useConstants";
 
 const emits = defineEmits(["handleTabChange"]);
 
+const listContainer = ref(null);
+const listContainerMaxHeight = ref(200);
+
 const filter = ref({ search: "", skills: [], jobLevels: [] });
 
 const skillOptions = ref([]);
@@ -89,6 +96,9 @@ const limit = 20;
 
 onMounted(async () => {
   skillOptions.value = await handleSkillSearch("");
+  console.log(listContainer.value.getBoundingClientRect().top);
+  listContainerMaxHeight.value =
+    window.innerHeight - listContainer.value.getBoundingClientRect().top;
 });
 
 watch(
@@ -140,6 +150,8 @@ const addToInterview = async (reference) => {
 
 <style lang="scss" scoped>
 .question-list {
+  display: flex;
+  flex-direction: column;
   &__header {
     margin-bottom: 16px;
   }
@@ -166,8 +178,9 @@ const addToInterview = async (reference) => {
     }
   }
   &__list-container {
-    max-height: 600px;
-    overflow-y: scroll;
+    flex-grow: 1;
+    padding-bottom: 56px;
+    overflow: scroll;
     &::-webkit-scrollbar {
       width: 0px;
     }

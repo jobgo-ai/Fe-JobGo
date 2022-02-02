@@ -29,7 +29,6 @@ const currentComponent = computed(() => {
 
 <style lang="scss">
 .questions {
-  max-width: 480px;
 }
 .question-component-transition-enter-active,
 .question-component-transition-leave-active {

@@ -218,6 +218,7 @@ const onSubmit = handleSubmit(async (values) => {
     padding: 16px;
     right: 0;
     width: 33%;
+    max-width: 480px;
     border-top: 1px dashed var(--color-border);
   }
 }
