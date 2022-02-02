@@ -6,16 +6,9 @@
         This is the question prompt, it is important that this is readable
       </p>
     </div>
-    <form @submit.prevent="onSubmit">
+    <form @submit.prevent="onSubmit" class="new-question__form">
       <div class="new-question__question">
         <hp-input name="content" placeholder="Type the question"></hp-input>
-      </div>
-      <div class="new-question__guidelines">
-        <div class="new-question__label">Guidelines</div>
-        <div class="new-question__sublabel">
-          Describe what you would see in a perfect answer
-        </div>
-        <hp-multi-input name="guidelines" />
       </div>
       <div class="new-question__duration">
         <div class="new-question__duration__labels">
@@ -57,7 +50,17 @@
           v-model="levels"
         ></hp-tagger>
       </div>
+      <div class="new-question__guidelines">
+        <div class="new-question__label">Guidelines</div>
+        <div class="new-question__sublabel">
+          Describe what you would see in a perfect answer
+        </div>
+        <hp-multi-input name="guidelines" />
+      </div>
     </form>
+    <div class="new-question__actions">
+      <hp-button primary label="Create question" @handleClick="onSubmit" />
+    </div>
   </div>
 </template>
 
@@ -71,6 +74,7 @@ import { useRoute } from "vue-router";
 //Components
 import HpInput from "@/components/form/hp-input.vue";
 import HpCounter from "@/components/hp-counter.vue";
+import HpButton from "@/components/hp-button.vue";
 import HpTagger from "@/components/form/hp-tagger.vue";
 import HpMultiInput from "@/components/form/hp-multi-input.vue";
 
@@ -142,6 +146,8 @@ const onSubmit = handleSubmit(async (values) => {
 .new-question {
   display: flex;
   flex-direction: column;
+  max-height: calc(100vh - 100px);
+  overflow: scroll;
   &__header {
     margin-bottom: 16px;
   }
@@ -167,8 +173,8 @@ const onSubmit = handleSubmit(async (values) => {
     color: var(--color-text-secondary);
   }
   &__guidelines {
+    padding-top: 16px;
     padding-bottom: 16px;
-    border-bottom: 1px dashed var(--color-border);
     margin-bottom: 16px;
   }
   &__duration {
@@ -191,6 +197,18 @@ const onSubmit = handleSubmit(async (values) => {
     padding-bottom: 16px;
     padding-top: 16px;
     border-bottom: 1px dashed var(--color-border);
+  }
+  &__actions {
+    display: flex;
+    justify-content: end;
+    background-color: var(--color-background);
+    z-index: 1000;
+    position: fixed;
+    bottom: 0;
+    padding: 16px;
+    right: 0;
+    width: 33%;
+    border-top: 1px dashed var(--color-border);
   }
 }
 </style>

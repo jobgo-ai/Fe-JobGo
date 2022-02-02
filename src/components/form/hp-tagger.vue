@@ -1,6 +1,6 @@
 <template>
   <div class="hp-tagger" ref="target">
-    <div class="hp-tagger__target" @click="isFlyoutOpen = true">
+    <div class="hp-tagger__target" @click="handleOpenFlyout">
       <div class="hp-tagger__target__button">
         <hp-icon
           :class="`
@@ -12,7 +12,13 @@
         <div v-if="isValueEmpty">{{ label }}</div>
       </div>
       <transition name="hp-tagger-flyout-transition">
-        <div class="hp-tagger__flyout" v-if="isFlyoutOpen">
+        <div
+          :style="{
+            top: `${flyoutTop}px`,
+          }"
+          class="hp-tagger__flyout"
+          v-if="isFlyoutOpen"
+        >
           <div v-if="searchable" class="hp-tagger__flyout__search">
             <hp-input
               v-model="search"
@@ -58,7 +64,7 @@
 
 <script setup>
 import { useField } from "vee-validate";
-import { computed, ref, watchEffect } from "vue";
+import { computed, ref, watch, watchEffect } from "vue";
 import HpCheckbox from "@/components/hp-checkbox.vue";
 import HpInput from "@/components/form/hp-input.vue";
 import HpSpinner from "@/components/hp-spinner.vue";
@@ -215,6 +221,17 @@ const handleChangeEmit = (change) => {
   }
   emits("update:modelValue", newValue);
 };
+
+const handleOpenFlyout = () => {
+  isFlyoutOpen.value = true;
+  flyoutTop.value = target.value.getBoundingClientRect().top;
+};
+import { useElementBounding } from "@vueuse/core";
+const { top } = useElementBounding(target);
+const flyoutTop = ref(0);
+watch(top, (newValue) => {
+  flyoutTop.value = newValue;
+});
 </script>
 
 <style lang="scss">
@@ -248,7 +265,6 @@ const handleChangeEmit = (change) => {
     }
   }
   &__target {
-    position: relative;
     &__button {
       display: flex;
       cursor: pointer;
@@ -281,7 +297,7 @@ const handleChangeEmit = (change) => {
     z-index: 1000;
     position: absolute;
     right: calc(100% + 10px);
-    transform: translateY(-50%);
+    transform: translatey(-50%);
     &__search {
       padding: 8px 8px 0px 8px;
       border-bottom: 1px dashed var(--color-border);
