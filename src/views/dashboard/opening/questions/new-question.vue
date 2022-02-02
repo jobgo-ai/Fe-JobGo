@@ -1,5 +1,8 @@
 <template>
   <div class="new-question">
+    <div class="new-question__back" @click="emits('handleTabChange')">
+      <hp-icon name="arrow-left"></hp-icon>Back
+    </div>
     <div class="new-question__header">
       <h2 class="new-question__title">Create question</h2>
       <p class="new-question__subtitle">
@@ -76,6 +79,7 @@ import HpInput from "@/components/form/hp-input.vue";
 import HpCounter from "@/components/hp-counter.vue";
 import HpButton from "@/components/hp-button.vue";
 import HpTagger from "@/components/form/hp-tagger.vue";
+import HpIcon from "@/components/hp-icon.vue";
 import HpMultiInput from "@/components/form/hp-multi-input.vue";
 
 // Hooks
@@ -83,7 +87,7 @@ import useSkillSearch from "@/hooks/useSkillSearch";
 import useConstants from "@/hooks/useConstants";
 import { usePost } from "@/hooks/useHttp";
 
-const emits = defineEmits(["updateList"]);
+const emits = defineEmits(["handleTabChange"]);
 
 const skillOptions = ref([]);
 
@@ -148,6 +152,12 @@ const onSubmit = handleSubmit(async (values) => {
   flex-direction: column;
   max-height: calc(100vh - 100px);
   overflow: scroll;
+  &__back {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    margin-bottom: 16px;
+  }
   &__header {
     margin-bottom: 16px;
   }

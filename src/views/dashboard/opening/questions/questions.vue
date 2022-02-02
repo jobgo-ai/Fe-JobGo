@@ -1,21 +1,19 @@
 <template>
   <div class="questions">
-    <question-list
-      @updateList="emits('updateQuestionList')"
-      v-if="isCurrentViewQuestionList"
-      @handleTabChange="isCurrentViewQuestionList = !isCurrentViewQuestionList"
-    />
-    <new-question
-      @updateList="emits('updateQuestionList')"
-      @handleTabChange="isCurrentViewQuestionList = !isCurrentViewQuestionList"
-      v-if="!isCurrentViewQuestionList"
-    />
+    <transition name="question-component-transition" mode="out-in">
+      <component
+        :is="currentComponent"
+        @handleTabChange="
+          isCurrentViewQuestionList = !isCurrentViewQuestionList
+        "
+      ></component>
+    </transition>
   </div>
 </template>
 
 <script setup>
 // Vendor
-import { ref } from "vue";
+import { ref, computed } from "vue";
 
 // Views
 import QuestionList from "@/views/dashboard/opening/questions/question-list.vue";
@@ -23,10 +21,24 @@ import NewQuestion from "@/views/dashboard/opening/questions/new-question.vue";
 
 const isCurrentViewQuestionList = ref(true);
 const emits = defineEmits(["updateQuestionList"]);
+
+const currentComponent = computed(() => {
+  return isCurrentViewQuestionList.value ? QuestionList : NewQuestion;
+});
 </script>
 
 <style lang="scss">
 .questions {
   max-width: 480px;
+}
+.question-component-transition-enter-active,
+.question-component-transition-leave-active {
+  transition: opacity 0.15s linear;
+}
+
+.question-component-transition-enter-from,
+.question-component-transition-leave-to {
+  transform: translateX(30px);
+  opacity: 0;
 }
 </style>
