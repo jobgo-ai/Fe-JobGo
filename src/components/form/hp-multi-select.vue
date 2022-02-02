@@ -92,6 +92,10 @@ const props = defineProps({
   label: {
     type: String,
   },
+  standalone: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const {
@@ -102,6 +106,7 @@ const {
 } = useField(props.name, undefined, {
   initialValue: props.modelValue,
   validateOnValueUpdate: false,
+  standalone: props.standalone,
 });
 
 const search = ref("");

@@ -1,49 +1,53 @@
 <template>
-  <div class="edit-interview">
+  <div>
     <hp-drawer
       :isOpen="isAddQuestionDrawerOpen"
       @close="isAddQuestionDrawerOpen = false"
     >
-      <questions @updateQuestionList="fetchInterview"
-    /></hp-drawer>
-    <form @submit.prevent="handleContextFormSave" v-if="interview?.reference">
-      <h2 class="edit-interview__title">Edit interview</h2>
-      <p class="edit-interview__subtitle">
-        Design the template by editing ceremonies and interview questions.
-      </p>
-      <hp-input label="Name" name="name"></hp-input>
-      <div>
-        <div class="edit-interview__ceremony">
-          <div class="edit-interview__ceremony__header">
-            <div>
-              <h3 class="edit-interview__ceremony__header__title">Warmup</h3>
-              <p class="edit-interview__ceremony__header__subtitle">
-                Set warmup instructions and expected duration
-              </p>
+      <questions v-if="isAddQuestionDrawerOpen" />
+    </hp-drawer>
+    <div class="edit-interview">
+      <form @submit.prevent="handleContextFormSave" v-if="interview?.reference">
+        <h2 class="edit-interview__title">Edit interview</h2>
+        <p class="edit-interview__subtitle">
+          Design the template by editing ceremonies and interview questions.
+        </p>
+        <hp-input label="Name" name="name"></hp-input>
+        <div>
+          <div class="edit-interview__ceremony">
+            <div class="edit-interview__ceremony__header">
+              <div>
+                <h3 class="edit-interview__ceremony__header__title">Warmup</h3>
+                <p class="edit-interview__ceremony__header__subtitle">
+                  Set warmup instructions and expected duration
+                </p>
+              </div>
+              <hp-counter name="ceremony.warmup.duration" />
             </div>
-            <hp-counter name="ceremony.warmup.duration" />
+            <div>
+              <hp-textarea :rows="6" name="ceremony.warmup.content" />
+            </div>
           </div>
-          <div>
-            <hp-textarea :rows="6" name="ceremony.warmup.content" />
+          <div
+            class="edit-interview__ceremony edit-interview__ceremony--cooldown"
+          >
+            <div class="edit-interview__ceremony__header">
+              <div>
+                <h3 class="edit-interview__ceremony__header__title">
+                  Cooldown
+                </h3>
+                <p class="edit-interview__ceremony__header__subtitle">
+                  Set Cooldown instructions and expected duration
+                </p>
+              </div>
+              <hp-counter name="ceremony.cooldown.duration" />
+            </div>
+            <div>
+              <hp-textarea :rows="6" name="ceremony.cooldown.content" />
+            </div>
           </div>
         </div>
-        <div
-          class="edit-interview__ceremony edit-interview__ceremony--cooldown"
-        >
-          <div class="edit-interview__ceremony__header">
-            <div>
-              <h3 class="edit-interview__ceremony__header__title">Cooldown</h3>
-              <p class="edit-interview__ceremony__header__subtitle">
-                Set Cooldown instructions and expected duration
-              </p>
-            </div>
-            <hp-counter name="ceremony.cooldown.duration" />
-          </div>
-          <div>
-            <hp-textarea :rows="6" name="ceremony.cooldown.content" />
-          </div>
-        </div>
-      </div>
+      </form>
       <h3 class="edit-interview__ceremony__header__title">Questions</h3>
       <hp-button
         class="edit-interview__questions-button"
@@ -58,7 +62,7 @@
           {{ question.content }}
         </li>
       </ol>
-    </form>
+    </div>
   </div>
 </template>
 

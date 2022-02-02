@@ -73,11 +73,17 @@ const props = defineProps({
     type: String,
     value: "normal",
   },
+  standalone: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const emits = defineEmits(["update:modelValue"]);
 
-const { errorMessage, value: modelValue } = useField(props.name);
+const { errorMessage, value: modelValue } = useField(props.name, "", {
+  standalone: props.standalone,
+});
 
 const inputRef = ref(null);
 defineExpose({ inputRef });

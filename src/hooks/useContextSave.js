@@ -17,6 +17,7 @@ export default function (metaReference, onSubmit) {
   const dirtyChange = computed(() => metaReference?.value?.dirty);
 
   watch(dirtyChange, () => {
+    console.log(metaReference.value.initialValues);
     isDirty.value = dirtyChange.value;
   });
 

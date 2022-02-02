@@ -5,31 +5,41 @@
       <p class="question-list__subtitle">
         Select a template or create your own questions.
       </p>
-      <hp-input
-        class="question-list__search"
-        name="search"
-        variant="search"
-        icon="search"
-      />
-      <div class="question-list__filters">
-        <hp-multi-select
-          class="question-list__filters__dropdown"
-          label="Skills"
-          :options="skillOptions"
-          name="skills"
-          searchable
-          :onSearch="searchFunction"
-          v-model="filter.skills"
-        ></hp-multi-select>
-        <hp-multi-select
-          :options="jobLevelOptions"
-          class="question-list__filters__dropdown"
-          label="Experience levels"
-          name="levels"
-          v-model="filter.jobLevels"
-        ></hp-multi-select>
-      </div>
-      <hp-button dropzone icon="plus" label="Start from scratch" />
+      <form>
+        <hp-input
+          class="question-list__search"
+          name="search"
+          variant="search"
+          icon="search"
+          standalone
+        />
+        <div class="question-list__filters">
+          <hp-multi-select
+            class="question-list__filters__dropdown"
+            label="Skills"
+            :options="skillOptions"
+            name="skills"
+            searchable
+            standalone
+            :onSearch="searchFunction"
+            v-model="filter.skills"
+          ></hp-multi-select>
+          <hp-multi-select
+            :options="jobLevelOptions"
+            class="question-list__filters__dropdown"
+            label="Experience levels"
+            standalone
+            name="levels"
+            v-model="filter.jobLevels"
+          ></hp-multi-select>
+        </div>
+        <hp-button
+          dropzone
+          icon="plus"
+          label="Start from scratch"
+          @handleClick="$emit('handleTabChange')"
+        />
+      </form>
     </div>
     <ol class="question-list__list-container">
       <hp-question-card
@@ -56,6 +66,8 @@ import HpQuestionCard from "@/components/hp-question-card.vue";
 import { useGet, usePost } from "@/hooks/useHttp";
 import useSkillSearch from "@/hooks/useSkillSearch";
 import useConstants from "@/hooks/useConstants";
+
+const emits = defineEmits(["handleTabChange"]);
 
 const filter = ref({ search: "", skills: [], jobLevels: [] });
 
