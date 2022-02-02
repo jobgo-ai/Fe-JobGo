@@ -15,7 +15,7 @@
         <div class="new-question__sublabel">
           Describe what you would see in a perfect answer
         </div>
-        <hp-multi-input />
+        <hp-multi-input name="guidelines" />
       </div>
       <div class="new-question__duration">
         <div class="new-question__duration__labels">
@@ -28,20 +28,34 @@
       </div>
       <div class="new-question__dropdowns">
         <div class="new-question__duration__labels">
-          <div class="new-question__label">Duration time</div>
+          <div class="new-question__label">Skills</div>
           <div class="new-question__sublabel">
-            Expected duration, in minutes
+            What does this question measure? Max of 3 skills.
           </div>
         </div>
-        <hp-multi-select
-          class="add-interview__filter__dropdowns__dropdown"
-          label="All Skills"
+        <hp-tagger
+          label="Skills"
           :options="skillOptions"
           name="skills"
           searchable
           :onSearch="searchFunction"
           v-model="skills"
-        ></hp-multi-select>
+        ></hp-tagger>
+      </div>
+      <div class="new-question__dropdowns">
+        <div class="new-question__duration__labels">
+          <div class="new-question__label">Levels</div>
+          <div class="new-question__sublabel">
+            Which candidate seniority levels can this question be used for?
+          </div>
+        </div>
+        <hp-tagger
+          label="Levels"
+          :options="jobLevelOptions"
+          name="skills"
+          searchable
+          v-model="levels"
+        ></hp-tagger>
       </div>
     </form>
   </div>
@@ -57,7 +71,7 @@ import { useRoute } from "vue-router";
 //Components
 import HpInput from "@/components/form/hp-input.vue";
 import HpCounter from "@/components/hp-counter.vue";
-import HpMultiSelect from "@/components/form/hp-multi-select.vue";
+import HpTagger from "@/components/form/hp-tagger.vue";
 import HpMultiInput from "@/components/form/hp-multi-input.vue";
 
 // Hooks
@@ -166,6 +180,7 @@ const onSubmit = handleSubmit(async (values) => {
     &__labels {
       display: flex;
       flex-direction: column;
+      margin-bottom: 16px;
     }
   }
   &__dropdowns {

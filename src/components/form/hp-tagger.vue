@@ -42,6 +42,17 @@
         </div>
       </transition>
     </div>
+    <div class="hp-tagger__tagged-skills">
+      <div v-for="item in modelValue" class="hp-tagger__tagged-skills__skill">
+        <div class="hp-tagger__tagged-skills__skill__label">{{ item }}</div>
+        <div
+          class="hp-tagger__tagged-skills__skill__icon"
+          @click="handleChangeEmit(item)"
+        >
+          <hp-icon name="cross" :size="16" />
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -120,7 +131,7 @@ const {
 const search = ref("");
 const isLoading = ref(false);
 const searchInput = ref(null);
-const isFlyoutOpen = ref(true);
+const isFlyoutOpen = ref(false);
 const target = ref(null);
 
 onClickOutside(target, (event) => {
@@ -210,12 +221,39 @@ const handleChangeEmit = (change) => {
 .hp-tagger {
   display: flex;
   z-index: 90;
+  &__tagged-skills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    &__skill {
+      background-color: var(--color-border-subtle);
+      border: $border;
+      border-radius: $border-radius-sm;
+      display: flex;
+      white-space: nowrap;
+      &__icon {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 4px;
+        border-left: 1px solid var(--color-border);
+        cursor: pointer;
+      }
+      &__label {
+        padding: 4px 8px;
+        @include text-h6;
+        font-weight: 500;
+        color: var(--color-text-secondary);
+      }
+    }
+  }
   &__target {
     position: relative;
     &__button {
       display: flex;
       cursor: pointer;
       align-items: center;
+      margin-right: 6px;
       border: 1px dashed var(--color-border);
       border-radius: $border-radius-sm;
       padding: 6px;
@@ -242,9 +280,8 @@ const handleChangeEmit = (change) => {
     padding: 0;
     z-index: 1000;
     position: absolute;
-    left: calc(100% + 10px);
-    top: 100%;
-    transform: translateY(-100%);
+    right: calc(100% + 10px);
+    transform: translateY(-50%);
     &__search {
       padding: 8px 8px 0px 8px;
       border-bottom: 1px dashed var(--color-border);
@@ -273,7 +310,7 @@ const handleChangeEmit = (change) => {
 }
 
 .hp-tagger-flyout-transition {
-  transform: translateY(-100%);
+  transform: translateY(-50%);
 }
 .hp-tagger-flyout-transition-enter-active,
 .hp-tagger-flyout-transition-leave-active {
@@ -282,6 +319,6 @@ const handleChangeEmit = (change) => {
 .hp-tagger-flyout-transition-enter-from,
 .hp-tagger-flyout-transition-leave-to {
   opacity: 0;
-  transform: translateY(calc(-100% - 10px));
+  transform: translateY(calc(-50% - 10px));
 }
 </style>
