@@ -1,42 +1,86 @@
 <template>
-  <div>
-    wsaodosaofdosa
-    <ol>
-      <li
-        class="question"
+  <div class="question-list">
+    <div class="question-list__header">
+      <h2 class="question-list__title">Add question</h2>
+      <p class="question-list__subtitle">
+        Select a template or create your own questions.
+      </p>
+      <hp-input
+        class="question-list__search"
+        name="search"
+        variant="search"
+        icon="search"
+      />
+      <div class="question-list__filters">
+        <hp-multi-select
+          class="question-list__filters__dropdown"
+          label="Skills"
+          :options="skillOptions"
+          name="skills"
+          searchable
+          :onSearch="searchFunction"
+          v-model="filter.skills"
+        ></hp-multi-select>
+        <hp-multi-select
+          :options="jobLevelOptions"
+          class="question-list__filters__dropdown"
+          label="Experience levels"
+          name="levels"
+          v-model="filter.jobLevels"
+        ></hp-multi-select>
+      </div>
+      <hp-button dropzone icon="plus" label="Start from scratch" />
+    </div>
+    <ol class="question-list__list-container">
+      <hp-question-card
+        :question="question"
+        :key="question.id"
         v-for="question in questions"
-        :key="question.reference"
-      >
-        {{ question.content }}
-        <hp-button
-          label="add to interview"
-          @handleClick="addToInterview(question.reference)"
-        ></hp-button>
-      </li>
+      ></hp-question-card>
     </ol>
   </div>
 </template>
 
 <script setup>
 // Vendor
-import { ref, watch, reactive } from "vue";
+import { ref, watch, computed, onMounted } from "vue";
 import { useRoute } from "vue-router";
-//Components
+
+// Components
 import HpButton from "@/components/hp-button.vue";
+import HpInput from "@/components/form/hp-input.vue";
+import HpMultiSelect from "@/components/form/hp-multi-select.vue";
+import HpQuestionCard from "@/components/hp-question-card.vue";
+
 // Hooks
 import { useGet, usePost } from "@/hooks/useHttp";
+import useSkillSearch from "@/hooks/useSkillSearch";
+import useConstants from "@/hooks/useConstants";
+
+const filter = ref({ search: "", skills: [], jobLevels: [] });
+
+const skillOptions = ref([]);
+
+const { handleSkillSearch } = useSkillSearch();
+const { jobLevels } = useConstants();
+
+const jobLevelOptions = computed(() => {
+  return jobLevels.value.map((j) => j.name);
+});
+const searchFunction = async (value) => {
+  skillOptions.value = await handleSkillSearch(value);
+};
 
 let next = null;
 const questions = ref([]);
-const filters = reactive({
-  search: "",
-  skills: [],
-  experience: [],
-});
 const limit = 20;
 
+onMounted(async () => {
+  skillOptions.value = await handleSkillSearch("");
+});
+
 watch(
-  () => filters,
+  () => filter.value,
   () => {
     getQuestions();
   },
@@ -49,14 +93,14 @@ const getUrl = (loadingMore) => {
   if (loadingMore) {
     params.append("offset", next);
   }
-  if (filters.experience.length > 0) {
-    params.append("job-levels", filters.experience.join(","));
+  if (filter.value.jobLevels.length > 0) {
+    params.append("job-levels", filter.value.experience.join(","));
   }
-  if (filters.skills.length > 0) {
-    params.append("skills", filters.skills.join(","));
+  if (filter.value.skills.length > 0) {
+    params.append("skills", filter.value.skills.join(","));
   }
-  if (filters.search !== "") {
-    params.append("search", filters.search);
+  if (filter.value.search !== "") {
+    params.append("search", filter.value.search);
   }
   return `${url}?${params.toString()}`;
 };
@@ -83,8 +127,38 @@ const addToInterview = async (reference) => {
 </script>
 
 <style lang="scss" scoped>
-.question {
-  background: black;
-  color: white;
+.question-list {
+  &__header {
+    margin-bottom: 16px;
+  }
+  &__title {
+    @include text-h4;
+    font-weight: 500;
+  }
+  &__subtitle {
+    @include text-h5;
+    color: var(--color-text-secondary);
+  }
+  &__search {
+    margin-top: 16px;
+  }
+  &__filters {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 16px;
+    padding-bottom: 16px;
+    margin-bottom: 16px;
+    border-bottom: 1px dashed var(--color-border);
+    &__dropdown {
+      display: flex;
+    }
+  }
+  &__list-container {
+    max-height: 600px;
+    overflow-y: scroll;
+    &::-webkit-scrollbar {
+      width: 0px;
+    }
+  }
 }
 </style>

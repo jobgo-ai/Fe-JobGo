@@ -16,30 +16,29 @@
     </div>
     <div class="add-interview__filter">
       <hp-input
+        class="add-interview__filter__search"
         name="search"
         variant="search"
         icon="search"
         v-model="filter.search"
         placeholder="Search by name"
       />
-      <div class="add-interview__filter__dropdowns">
-        <hp-multi-select
-          class="add-interview__filter__dropdowns__dropdown"
-          label="All Skills"
-          :options="skillOptions"
-          name="skills"
-          searchable
-          :onSearch="searchFunction"
-          v-model="filter.skills"
-        ></hp-multi-select>
-        <hp-multi-select
-          :options="jobLevelOptions"
-          class="add-interview__filter__dropdowns__dropdown"
-          label="Experience levels"
-          name="levels"
-          v-model="filter.jobLevels"
-        ></hp-multi-select>
-      </div>
+      <hp-multi-select
+        class="add-interview__filter__dropdowns__dropdown"
+        label="All Skills"
+        :options="skillOptions"
+        name="skills"
+        searchable
+        :onSearch="searchFunction"
+        v-model="filter.skills"
+      ></hp-multi-select>
+      <hp-multi-select
+        :options="jobLevelOptions"
+        class="add-interview__filter__dropdowns__dropdown"
+        label="Experience levels"
+        name="levels"
+        v-model="filter.jobLevels"
+      ></hp-multi-select>
     </div>
     <ol v-if="!isInterviewsLoading" class="add-interview__interview-grid">
       <hp-add-interview-card isAddCard></hp-add-interview-card>
@@ -185,14 +184,14 @@ const availableTemplateList = computed(() => {
     grid-gap: 24px;
   }
   &__filter {
-    display: flex;
-    align-items: flex-end;
-    margin-bottom: 24px;
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 16px;
     &__dropdowns {
       display: flex;
-      margin-bottom: 8px;
       &__dropdown {
-        margin-left: 12px;
+        margin-bottom: 6px;
       }
     }
   }

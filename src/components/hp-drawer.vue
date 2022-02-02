@@ -1,11 +1,17 @@
 <template>
   <teleport to="body">
-    <div v-if="isOpen">
-      <div class="drawer__overlay" @click="emits('close')"></div>
-      <div class="drawer__drawer">
+    <transition name="hp-drawer-overlay-transition">
+      <div
+        v-if="isOpen"
+        class="hp-drawer__overlay"
+        @click="emits('close')"
+      ></div>
+    </transition>
+    <transition name="hp-drawer-transition">
+      <div v-if="isOpen" class="hp-drawer__drawer">
         <slot></slot>
       </div>
-    </div>
+    </transition>
   </teleport>
 </template>
 
@@ -37,7 +43,7 @@ watch(
 .drawer-open {
   overflow: hidden;
 }
-.drawer {
+.hp-drawer {
   &__overlay {
     position: fixed;
     top: 0;
@@ -45,6 +51,7 @@ watch(
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.5);
+    z-index: 90;
   }
 
   &__drawer {
@@ -53,8 +60,31 @@ watch(
     right: 0;
     width: 33%;
     height: 100%;
-    background-color: #fff;
+    background-color: var(--color-background);
     padding: 20px;
+    z-index: 100;
   }
+}
+
+.hp-drawer-overlay-transition-enter-active,
+.hp-drawer-overlay-transition-leave-active {
+  transition: opacity 0.15s cubic-bezier(0.17, 0.67, 0.83, 0.67);
+}
+.hp-drawer-overlay-transition-enter-from,
+.hp-drawer-overlay-transition-leave-to {
+  opacity: 0;
+}
+
+.hp-drawer-transition {
+  transform: translateX(0) translateY(0);
+}
+.hp-drawer-transition-enter-active,
+.hp-drawer-transition-leave-active {
+  transition: all 0.15s cubic-bezier(0.17, 0.67, 0.83, 0.67);
+}
+.hp-drawer-transition-enter-from,
+.hp-drawer-transition-leave-to {
+  opacity: 0;
+  transform: translateX(100%);
 }
 </style>

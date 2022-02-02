@@ -105,6 +105,9 @@ const containerClasses = computed(() => {
     width: 100%;
     transition: border-color 0.15s cubic-bezier(0.17, 0.67, 0.83, 0.67);
     color: var(--color-text-primary);
+    &::-webkit-scrollbar {
+      display: none;
+    }
     &::placeholder {
       color: var(--color-text-secondary);
     }

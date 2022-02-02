@@ -1,5 +1,5 @@
 <template>
-  <div ref="target" class="hp-dropdown" :class="containerClasses">
+  <div ref="target" :class="containerClasses">
     <button
       @click="handleButtonClick"
       class="hp-dropdown__button"
@@ -122,6 +122,7 @@ const iconClasses = computed(() => {
   display: flex;
   height: 32px;
   position: relative;
+  width: 100%;
 
   &--focused {
     border-radius: $border-radius-sm;
@@ -160,6 +161,7 @@ const iconClasses = computed(() => {
   &__button {
     font-family: "Inter", sans-serif;
     display: flex;
+    width: 100%;
     align-items: center;
     cursor: pointer;
     padding: 6px 12px;
@@ -179,7 +181,7 @@ const iconClasses = computed(() => {
     }
 
     &__chevron {
-      margin-left: 6px;
+      margin-left: auto;
       transition: transform 0.15s linear;
       &--open {
         transform: rotate(-180deg);
@@ -197,7 +199,6 @@ const iconClasses = computed(() => {
     }
 
     &--button-icon {
-      padding: 6px;
       color: var(--color-text-primary);
     }
 

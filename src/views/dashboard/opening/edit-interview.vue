@@ -1,7 +1,10 @@
 <template>
   <div class="edit-interview">
-    <hp-drawer :isOpen="isAddQuestionDrawerOpen"
-      ><questions @updateQuestionList="fetchInterview"
+    <hp-drawer
+      :isOpen="isAddQuestionDrawerOpen"
+      @close="isAddQuestionDrawerOpen = false"
+    >
+      <questions @updateQuestionList="fetchInterview"
     /></hp-drawer>
     <form @submit.prevent="handleContextFormSave" v-if="interview?.reference">
       <h2 class="edit-interview__title">Edit interview</h2>
