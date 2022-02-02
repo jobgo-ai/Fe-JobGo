@@ -5,19 +5,11 @@
     </label>
     <div :class="containerClasses">
       <div class="hp-counter__container">
-        <button
-          class="hp-counter__container__button"
-          type="button"
-          @click="handleCountDecrement"
-          @focus="isInputFocused = true"
-          @blur="isInputFocused = false"
-        >
-          <hp-icon
-            class="hp-counter__container__icon"
-            :size="14"
-            name="minus"
-          ></hp-icon>
-        </button>
+        <hp-icon
+          class="hp-counter__container__icon"
+          :size="16"
+          name="chronometer"
+        ></hp-icon>
         <div class="hp-counter__container__count">
           <input
             type="number"
@@ -28,19 +20,7 @@
             @blur="isInputFocused = false"
           />
         </div>
-        <button
-          type="button"
-          class="hp-counter__container__button"
-          @click="handleCountIncrement"
-          @focus="isInputFocused = true"
-          @blur="isInputFocused = false"
-        >
-          <hp-icon
-            class="hp-counter__container__icon"
-            :size="14"
-            name="plus"
-          ></hp-icon>
-        </button>
+        <hp-badge class="hp-counter__container__badge" content="min"></hp-badge>
       </div>
     </div>
   </div>
@@ -48,6 +28,7 @@
 
 <script setup>
 import HpIcon from "@/components/hp-icon.vue";
+import HpBadge from "@/components/hp-badge.vue";
 
 // Vendor
 import { ref, computed } from "vue";
@@ -73,15 +54,6 @@ const props = defineProps({
 const isInputFocused = ref(false);
 
 const { errorMessage, value: modelValue } = useField(props.name);
-
-const handleCountIncrement = () => {
-  modelValue.value++;
-  emits("update:modelValue", modelValue.value);
-};
-const handleCountDecrement = () => {
-  modelValue.value--;
-  emits("update:modelValue", modelValue.value);
-};
 
 const containerClasses = computed(() => {
   return {
@@ -129,7 +101,7 @@ const containerClasses = computed(() => {
     }
     &__input {
       width: 100%;
-      max-width: 20px;
+      max-width: 22px;
       border: none;
       outline: none;
       background-color: var(--color-background);
@@ -168,11 +140,7 @@ const containerClasses = computed(() => {
       }
     }
     &__icon {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translateY(-50%) translateX(-50%);
-      color: var(--color-text-primary);
+      color: var(--color-text-secondary);
     }
   }
 }

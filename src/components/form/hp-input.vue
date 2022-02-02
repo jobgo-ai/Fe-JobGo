@@ -37,7 +37,7 @@
 
 <script setup>
 import HpIcon from "@/components/hp-icon.vue";
-import { computed, defineExpose, ref } from "vue";
+import { computed, ref } from "vue";
 import { useField } from "vee-validate";
 
 const props = defineProps({

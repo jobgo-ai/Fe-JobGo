@@ -1,7 +1,7 @@
 <template>
   <div>
     <router-view v-slot="{ Component }">
-      <component :opening="opening" :is="Component" />
+      <component v-if="opening.reference" :opening="opening" :is="Component" />
     </router-view>
   </div>
 </template>
@@ -26,7 +26,7 @@ watch(
     if (!newOpeningRef) {
       return;
     }
-    fetchOpening(newOpeningRef);
+    await fetchOpening(newOpeningRef);
   },
   { immediate: true }
 );

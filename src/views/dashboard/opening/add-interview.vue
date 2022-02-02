@@ -104,8 +104,6 @@ onMounted(async () => {
   skillOptions.value = await handleSkillSearch("");
   await getTemplates.get();
 
-  templates.value = getTemplates.data.value.templates;
-  isInterviewsLoading.value = false;
   setBreadcrumbs([
     {
       label: "Openings",
@@ -120,6 +118,9 @@ onMounted(async () => {
       to: `/opening/${props.opening.reference}/view/add-interview`,
     },
   ]);
+
+  templates.value = getTemplates.data.value.templates;
+  isInterviewsLoading.value = false;
 });
 
 const schema = yup.object({

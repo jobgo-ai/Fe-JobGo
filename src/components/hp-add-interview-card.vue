@@ -12,8 +12,9 @@
       </div>
       <div>
         <hp-button
-          :to="`/opening/${route.params.openingRef}/edit/add-interview`"
           label="Start from scratch"
+          @handleClick="handleCreateInterview"
+          :isLoading="isCreatingInterview"
         ></hp-button>
       </div>
     </div>
@@ -64,7 +65,7 @@
 import { ref } from "vue";
 import HpButton from "@/components/hp-button.vue";
 import HpIcon from "@/components/hp-icon.vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { usePost } from "@/hooks/useHttp";
 import useToast from "@/hooks/useToast";
 import useOpenings from "@/hooks/useOpenings";
@@ -88,7 +89,9 @@ const props = defineProps({
 });
 
 const isLoading = ref(false);
+const isCreatingInterview = ref(false);
 
+const router = useRouter();
 const route = useRoute();
 
 const { setToast } = useToast();
@@ -98,12 +101,24 @@ const secondsToMinutes = (seconds) => {
   return Math.floor(seconds / 60);
 };
 
+const handleCreateInterview = async () => {
+  isCreatingInterview.value = true;
+  const postInterview = usePost("templates");
+  await postInterview.post({
+    template: { name: "New Interview", jobLevels: [] },
+  });
+  const url = `/opening/${route.params.openingRef}/edit/edit-interview/${postInterview.data.value.template.reference}`;
+  router.push(url);
+  isCreatingInterview.value = false;
+};
+
 const handleAddToInterview = async () => {
   isLoading.value = true;
   const postOpening = usePost(`openings/${route.params.openingRef}/templates`);
   const payload = {
     template: props.template.reference,
   };
+
   await postOpening.post(payload);
   await fetchOpening(route.params.openingRef);
   isLoading.value = false;

@@ -1,18 +1,27 @@
 <template>
-  <div>
+  <div class="edit-interview">
     <hp-drawer :isOpen="isAddQuestionDrawerOpen"
       ><questions @updateQuestionList="fetchInterview"
     /></hp-drawer>
     <form @submit.prevent="onSubmit" v-if="interview?.reference">
-      <div>Edit interview</div>
+      <h2 class="edit-interview__title">Edit interview</h2>
+      <p class="edit-interview__subtitle">
+        Design the template by editing ceremonies and interview questions.
+      </p>
       <hp-input label="Name" name="name"></hp-input>
-      <hp-input label="Description" name="description"></hp-input>
       <div>
-        <div>
-          <h3>Warmup</h3>
+        <div class="edit-interview__ceremony">
+          <div class="edit-interview__ceremony__header">
+            <div>
+              <h3 class="edit-interview__ceremony__header__title">Warmup</h3>
+              <p class="edit-interview__ceremony__header__subtitle">
+                Set warmup instructions and expected duration
+              </p>
+            </div>
+            <hp-counter name="ceremony.warmup.duration" />
+          </div>
           <div>
             <hp-textarea name="ceremony.warmup.content" />
-            <hp-counter name="ceremony.warmup.duration" />
           </div>
         </div>
         <div>
@@ -47,7 +56,6 @@ import { useRoute } from "vue-router";
 import * as yup from "yup";
 
 //Views
-// TODO: Make this a router vue
 import Questions from "@/views/dashboard/opening/questions/questions.vue";
 
 //Components
@@ -59,6 +67,14 @@ import HpTextarea from "@/components/form/hp-textarea.vue";
 
 //Hooks
 import { usePut, useGet } from "@/hooks/useHttp";
+import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
+
+const props = defineProps({
+  opening: {
+    type: Object,
+    required: true,
+  },
+});
 
 const route = useRoute();
 const isAddQuestionDrawerOpen = ref(false);
@@ -68,7 +84,7 @@ const putInterview = usePut(`templates/${route.params.interviewRef}`);
 
 const schema = yup.object({
   name: yup.string().required("Interview name is required"),
-  description: yup.string(),
+  description: yup.string().nullable(),
   ceremony: yup.object({
     cooldown: yup.object({
       content: yup.string(),
@@ -95,6 +111,25 @@ const fetchInterview = async () => {
 onMounted(async () => {
   await fetchInterview();
   setValues(interview.value);
+  const { setBreadcrumbs } = useBreadcrumbs();
+  setBreadcrumbs([
+    {
+      label: "Openings",
+      to: "/openings",
+    },
+    {
+      label: props.opening.name,
+      to: `/opening/${props.opening.reference}/edit`,
+    },
+    {
+      label: "Add interview",
+      to: `/opening/${props.opening.reference}/view/add-interview`,
+    },
+    {
+      to: `/opening/${props.opening.reference}/view/add-interview/new`,
+      label: "New",
+    },
+  ]);
 });
 
 const onSubmit = handleSubmit(async (values) => {
@@ -104,3 +139,34 @@ const onSubmit = handleSubmit(async (values) => {
   });
 });
 </script>
+
+<styles lang="scss">
+.edit-interview {
+  max-width: 552px;
+  margin: auto;
+  &__title {
+    @include text-h2;
+    font-weight: 600;
+  }
+  &__subtitle {
+    @include text-h5;
+    color: var(--color-text-secondary);
+    margin-bottom: 32px;
+  }
+  &__ceremony {
+    &__header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+      &__title {
+        @include text-h5;
+        font-weight: 500;
+      }
+      &__subtitle {
+        color: var(--color-text-secondary);
+      }
+    }
+  }
+}
+</styles>
