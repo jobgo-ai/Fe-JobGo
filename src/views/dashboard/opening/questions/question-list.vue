@@ -96,7 +96,6 @@ const limit = 20;
 
 onMounted(async () => {
   skillOptions.value = await handleSkillSearch("");
-  console.log(listContainer.value.getBoundingClientRect().top);
   listContainerMaxHeight.value =
     window.innerHeight - listContainer.value.getBoundingClientRect().top;
 });
