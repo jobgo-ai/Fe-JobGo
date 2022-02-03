@@ -20,10 +20,10 @@
             v-for="option in optionsList"
             @click="handleChangeEmit(option)"
           >
-            {{ option }}
+            {{ option.label }}
             <hp-checkbox
               class="hp-multi-select__checkbox"
-              :checked="modelValue.includes(option)"
+              :checked="modelValue.find((o) => o.value === option.value)"
             />
           </li>
           <div class="hp-multi-select__spinner" v-else-if="isLoading">
@@ -180,8 +180,8 @@ const optionsList = computed(() => {
 
 const handleChangeEmit = (change) => {
   let newValue = [...props.modelValue];
-  if (newValue.includes(change)) {
-    newValue = newValue.filter((item) => item !== change);
+  if (newValue.find((v) => v.value === change.value)) {
+    newValue = newValue.filter((item) => item.value !== change.value);
   } else {
     newValue.push(change);
   }

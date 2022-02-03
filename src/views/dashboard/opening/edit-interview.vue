@@ -4,9 +4,12 @@
       :isOpen="isAddQuestionDrawerOpen"
       @close="isAddQuestionDrawerOpen = false"
     >
-      <questions v-if="isAddQuestionDrawerOpen" />
+      <questions
+        :handleClose="() => (isAddQuestionDrawerOpen = false)"
+        v-if="isAddQuestionDrawerOpen"
+      />
     </hp-drawer>
-    <div class="edit-interview" v-if="!isLoading">
+    <div class="edit-interview" v-if="!isInterviewLoading">
       <form @submit.prevent="handleContextFormSave">
         <h2 class="edit-interview__title">Edit interview</h2>
         <p class="edit-interview__subtitle">
@@ -49,6 +52,15 @@
         </div>
       </form>
       <h3 class="edit-interview__ceremony__header__title">Questions</h3>
+      <ol>
+        <li
+          class="edit-interview__question-card"
+          v-for="question in interview.questions"
+          :key="question"
+        >
+          {{ question.content }}
+        </li>
+      </ol>
       <hp-button
         class="edit-interview__questions-button"
         @handleClick="isAddQuestionDrawerOpen = true"
@@ -57,13 +69,23 @@
         icon="plus"
         dropzone
       ></hp-button>
-      <ol>
-        <li v-for="question in interview.questions" :key="question">
-          {{ question.content }}
-        </li>
-      </ol>
     </div>
     <hp-spinner v-else size="24" content />
+    <teleport to="#teleport-target-header">
+      <!-- <hp-button
+        class="edit-openings__teleport-button"
+        icon="trash"
+        @handleClick="archiveOpening"
+      ></hp-button> -->
+      <hp-button
+        label="Save"
+        type="submit"
+        primary
+        :isLoading="isSaving"
+        @handleClick="onSubmit"
+        :isDisabled="!meta.dirty"
+      ></hp-button>
+    </teleport>
   </div>
 </template>
 
@@ -86,9 +108,11 @@ import HpTextarea from "@/components/form/hp-textarea.vue";
 import HpSpinner from "@/components/hp-spinner.vue";
 
 //Hooks
-import { usePut, useGet } from "@/hooks/useHttp";
+import { usePut } from "@/hooks/useHttp";
 import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
 import useContextSave from "@/hooks/useContextSave";
+import useToast from "@/hooks/useToast";
+import useInterviews from "@/hooks/useInterviews";
 
 const props = defineProps({
   opening: {
@@ -97,12 +121,13 @@ const props = defineProps({
   },
 });
 
-const isLoading = ref(true);
+const isSaving = ref(false);
 const route = useRoute();
 const isAddQuestionDrawerOpen = ref(false);
-const interview = ref({});
-
+const { interview, fetchInterview, isInterviewLoading } = useInterviews();
 const putInterview = usePut(`templates/${route.params.interviewRef}`);
+
+const { setToast } = useToast();
 
 const schema = yup.object({
   name: yup.string().required("Interview name is required"),
@@ -119,20 +144,13 @@ const schema = yup.object({
   }),
 });
 
-const fetchInterview = async () => {
-  isLoading.value = true;
-  const getInterview = useGet(`templates/${route.params.interviewRef}`);
-  await getInterview.get();
-  interview.value = getInterview.data.value.template;
-};
-
 const { handleSubmit, resetForm, meta } = useForm({
   validationSchema: schema,
   initialValues: interview.value,
 });
 
 onMounted(async () => {
-  await fetchInterview();
+  await fetchInterview(route.params.interviewRef);
   resetForm({ touched: false, values: interview.value });
   const { setBreadcrumbs } = useBreadcrumbs();
   setBreadcrumbs(
@@ -156,14 +174,21 @@ onMounted(async () => {
     ],
     true
   );
-  isLoading.value = false;
 });
 
 const onSubmit = handleSubmit(async (values) => {
+  isSaving.value = true;
   const formattedQuestions = values?.questions.map((q) => q.reference) || [];
   await putInterview.put({
     template: { ...values, jobLevels: [], questions: formattedQuestions },
   });
+  isSaving.value = false;
+  setToast({
+    type: "positive",
+    title: "Well done!",
+    message: "Interview updated",
+  });
+  resetForm({ touched: false, values: putInterview.data.value.template });
 });
 
 const { handleContextFormSave } = useContextSave(meta, onSubmit);
@@ -203,6 +228,9 @@ const { handleContextFormSave } = useContextSave(meta, onSubmit);
         color: var(--color-text-secondary);
       }
     }
+  }
+  &__question-card {
+    @include flyout;
   }
 }
 </styles>

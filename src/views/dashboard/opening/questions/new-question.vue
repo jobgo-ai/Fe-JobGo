@@ -47,7 +47,7 @@
         </div>
         <hp-tagger
           label="Levels"
-          :options="jobLevelOptions"
+          :options="jobLevels"
           name="levels"
           v-model="levels"
         ></hp-tagger>
@@ -96,9 +96,6 @@ const levels = ref([]);
 const { handleSkillSearch } = useSkillSearch();
 const { jobLevels } = useConstants();
 
-const jobLevelOptions = computed(() => {
-  return jobLevels.value.map((j) => j.name);
-});
 const searchFunction = async (value) => {
   skillOptions.value = await handleSkillSearch(value);
 };

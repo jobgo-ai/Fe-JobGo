@@ -63,6 +63,7 @@
       <hp-button
         label="Save"
         type="submit"
+        primary
         :isLoading="isSaving"
         @handleClick="onSubmit"
         :isDisabled="!meta.dirty"

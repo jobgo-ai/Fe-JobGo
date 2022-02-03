@@ -24,7 +24,7 @@
 import HpIcon from "@/components/hp-icon.vue";
 const props = defineProps({
   checked: {
-    type: Boolean,
+    type: [Boolean, Object],
   },
 });
 </script>

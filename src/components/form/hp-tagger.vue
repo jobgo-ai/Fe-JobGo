@@ -37,7 +37,7 @@
               v-for="option in optionsList"
               @click="handleChangeEmit(option)"
             >
-              {{ option }}
+              {{ option.label }}
               <hp-checkbox
                 class="hp-tagger__checkbox"
                 :checked="modelValue.includes(option)"
@@ -338,6 +338,7 @@ watch(top, (newValue) => {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    padding-bottom: 12px;
   }
 }
 

@@ -3,6 +3,7 @@
     <transition name="question-component-transition" mode="out-in">
       <component
         :is="currentComponent"
+        :handleClose="handleClose"
         @handleTabChange="
           isCurrentViewQuestionList = !isCurrentViewQuestionList
         "
@@ -18,6 +19,12 @@ import { ref, computed } from "vue";
 // Views
 import QuestionList from "@/views/dashboard/opening/questions/question-list.vue";
 import NewQuestion from "@/views/dashboard/opening/questions/new-question.vue";
+
+const props = defineProps({
+  handleClose: {
+    type: Function,
+  },
+});
 
 const isCurrentViewQuestionList = ref(true);
 const emits = defineEmits(["updateQuestionList"]);

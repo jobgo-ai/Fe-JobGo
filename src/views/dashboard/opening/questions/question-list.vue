@@ -11,6 +11,7 @@
           name="search"
           variant="search"
           icon="search"
+          v-model="search"
           standalone
         />
         <div class="question-list__filters">
@@ -46,11 +47,22 @@
       :style="{ height: `${listContainerMaxHeight}px` }"
       class="question-list__list-container"
     >
-      <hp-question-card
-        :question="question"
-        :key="question.id"
-        v-for="question in questions"
-      ></hp-question-card>
+      <div v-if="!isQuestionsLoading && questions.length > 0">
+        <hp-question-card
+          :question="question"
+          :key="question.id"
+          v-for="question in questions"
+          @handleAddToInterview="addToInterview"
+        ></hp-question-card>
+      </div>
+      <div
+        class="question-list__empty-state"
+        v-if="!isQuestionsLoading && questions.length === 0"
+      >
+        <empty-state />
+        No questions found
+      </div>
+      <hp-spinner content size="24" v-if="isQuestionsLoading" />
     </ol>
   </div>
 </template>
@@ -59,24 +71,40 @@
 // Vendor
 import { ref, watch, computed, onMounted } from "vue";
 import { useRoute } from "vue-router";
+import { useDebounce } from "@vueuse/core";
 
 // Components
 import HpButton from "@/components/hp-button.vue";
 import HpInput from "@/components/form/hp-input.vue";
 import HpMultiSelect from "@/components/form/hp-multi-select.vue";
 import HpQuestionCard from "@/components/hp-question-card.vue";
+import HpSpinner from "@/components/hp-spinner.vue";
+import EmptyState from "@/assets/abstracts/empty-state.svg";
 
 // Hooks
 import { useGet, usePost } from "@/hooks/useHttp";
 import useSkillSearch from "@/hooks/useSkillSearch";
 import useConstants from "@/hooks/useConstants";
+const props = defineProps({
+  handleClose: {
+    type: Function,
+    required: true,
+  },
+});
 
 const emits = defineEmits(["handleTabChange"]);
 
+const isQuestionsLoading = ref(true);
 const listContainer = ref(null);
 const listContainerMaxHeight = ref(200);
 
-const filter = ref({ search: "", skills: [], jobLevels: [] });
+const search = ref("");
+
+const filter = ref({
+  search: useDebounce(search, 300),
+  skills: [],
+  jobLevels: [],
+});
 
 const skillOptions = ref([]);
 
@@ -84,8 +112,9 @@ const { handleSkillSearch } = useSkillSearch();
 const { jobLevels } = useConstants();
 
 const jobLevelOptions = computed(() => {
-  return jobLevels.value.map((j) => j.name);
+  return jobLevels.value.map((j) => ({ label: j.name, value: j.slug }));
 });
+
 const searchFunction = async (value) => {
   skillOptions.value = await handleSkillSearch(value);
 };
@@ -115,10 +144,12 @@ const getUrl = (loadingMore) => {
     params.append("offset", next);
   }
   if (filter.value.jobLevels.length > 0) {
-    params.append("job-levels", filter.value.experience.join(","));
+    const onlySlugs = filter.value.jobLevels.map((j) => j.value);
+    params.append("job-levels", onlySlugs.join(","));
   }
   if (filter.value.skills.length > 0) {
-    params.append("skills", filter.value.skills.join(","));
+    const onlySlugs = filter.value.skills.map((s) => s.value);
+    params.append("skills", onlySlugs.join(","));
   }
   if (filter.value.search !== "") {
     params.append("search", filter.value.search);
@@ -127,23 +158,26 @@ const getUrl = (loadingMore) => {
 };
 
 const getQuestions = async () => {
+  isQuestionsLoading.value = true;
   questions.value = [];
   const { data, get } = useGet(getUrl(false));
   await get();
   next = data.value.next;
   questions.value = data.value.questions;
+  isQuestionsLoading.value = false;
 };
 getQuestions();
 
 const route = useRoute();
 
-const addToInterview = async (reference) => {
+const addToInterview = async (question) => {
   const postTemplateQuestion = usePost(
     `templates/${route.params.interviewRef}/questions`
   );
   await postTemplateQuestion.post({
-    question: reference,
+    question: question.reference,
   });
+  props.handleClose();
 };
 </script>
 
@@ -184,6 +218,15 @@ const addToInterview = async (reference) => {
     &::-webkit-scrollbar {
       width: 0px;
     }
+  }
+  &__empty-state {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: 200px;
+    margin-top: 24px;
+    color: var(--color-text-secondary);
   }
 }
 </style>

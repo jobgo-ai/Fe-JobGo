@@ -33,6 +33,7 @@
       <hp-button
         class="hp-question-card__actions__button"
         label="Add question"
+        @handleClick="$emit('handleAddToInterview', question)"
       ></hp-button
       ><hp-button icon="eye"></hp-button>
     </div>
@@ -40,13 +41,8 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
 import HpButton from "@/components/hp-button.vue";
 import HpIcon from "@/components/hp-icon.vue";
-import { useRoute, useRouter } from "vue-router";
-import { usePost } from "@/hooks/useHttp";
-import useToast from "@/hooks/useToast";
-import useOpenings from "@/hooks/useOpenings";
 const props = defineProps({
   question: {
     type: Object,
@@ -54,34 +50,11 @@ const props = defineProps({
   },
 });
 
-const isLoading = ref(false);
-const isCreatingInterview = ref(false);
-
-const router = useRouter();
-const route = useRoute();
-
-const { setToast } = useToast();
-const { fetchOpening } = useOpenings();
+const emits = defineEmits(["handleAddToInterview"]);
 
 const secondsToMinutes = (seconds) => {
   return Math.floor(seconds / 60);
 };
-
-// const handleAddToInterview = async () => {
-//   isLoading.value = true;
-//   const postOpening = usePost(`openings/${route.params.openingRef}/templates`);
-//   const payload = {
-//     template: props.template.reference,
-//   };
-
-//   await postOpening.post(payload);
-//   await fetchOpening(route.params.openingRef);
-//   isLoading.value = false;
-//   setToast({
-//     type: "positive",
-//     title: "Well done!",
-//     message: "Interview added to role",
-//   });
 </script>
 
 <style lang="scss">
