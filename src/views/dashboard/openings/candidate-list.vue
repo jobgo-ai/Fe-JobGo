@@ -137,7 +137,7 @@
             ></hp-candidate-card>
           </ol>
           <div class="candidate-list__empty-state" v-else>
-            <empty-state />
+            <empty-state class="candidate-list__empty-state__image" />
             <div class="candidate-list__empty-state__text--primary">
               Hello? Is anybody there?
             </div>
@@ -370,6 +370,9 @@ const candidateList = computed(() => {
       color: var(--color-text-primary);
       font-weight: 500;
       margin-bottom: 2px;
+    }
+    &__image {
+      height: 180px;
     }
   }
 
