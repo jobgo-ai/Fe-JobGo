@@ -1,5 +1,5 @@
 <template>
-  <div class="hp-spinner">
+  <div :class="`hp-spinner ${content && 'hp-spinner--content'}`">
     <span
       :class="`hp-spinner__spinner hp-spinner__spinner--${mode}`"
       :style="{ width: `${size}px`, height: `${size}px` }"
@@ -17,12 +17,21 @@ const props = defineProps({
     type: String,
     default: "dark",
   },
+  content: {
+    type: Boolean,
+    default: false,
+  },
 });
 </script>
 
 <style lang="scss">
 .hp-spinner {
   display: flex;
+  &--content {
+    margin-top: 26px;
+    display: flex;
+    justify-content: center;
+  }
   &__spinner {
     border-radius: 50%;
     animation: spin 1s linear infinite;

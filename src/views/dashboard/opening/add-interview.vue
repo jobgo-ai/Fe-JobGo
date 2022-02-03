@@ -48,7 +48,7 @@
         v-for="template in availableTemplateList"
       ></hp-add-interview-card>
     </ol>
-    <hp-spinner v-else size="24" class="add-interview__spinner" />
+    <hp-spinner content size="24" />
   </div>
 </template>
 
@@ -161,11 +161,6 @@ const availableTemplateList = computed(() => {
   justify-content: center;
   max-width: 840px;
   margin: auto;
-  &__spinner {
-    margin-top: 26px;
-    display: flex;
-    justify-content: center;
-  }
   &__header {
     align-self: flex-start;
     margin-bottom: 24px;
