@@ -43,7 +43,9 @@
             <div class="hp-tagger__spinner" v-else-if="isLoading">
               <hp-spinner />
             </div>
-            <div v-else>No options</div>
+            <div class="hp-tagger__empty-state" v-else>
+              <EmptyState /> No options
+            </div>
           </ul>
         </div>
       </transition>
@@ -69,6 +71,7 @@ import HpCheckbox from "@/components/hp-checkbox.vue";
 import HpInput from "@/components/form/hp-input.vue";
 import HpSpinner from "@/components/hp-spinner.vue";
 import HpIcon from "@/components/hp-icon.vue";
+import EmptyState from "@/assets/abstracts/empty-state.svg";
 import { onClickOutside } from "@vueuse/core";
 
 const emits = defineEmits(["update:modelValue"]);
@@ -90,7 +93,7 @@ const props = defineProps({
   onSearch: {
     type: Function,
     required: false,
-    default: null,
+    default: () => {},
   },
   isDisabled: {
     type: Boolean,
@@ -222,15 +225,16 @@ const handleChangeEmit = (change) => {
   emits("update:modelValue", newValue);
 };
 
+const magicNumber = 60;
 const handleOpenFlyout = () => {
   isFlyoutOpen.value = true;
-  flyoutTop.value = target.value.getBoundingClientRect().top;
+  flyoutTop.value = target.value.getBoundingClientRect().top - magicNumber;
 };
+const flyoutTop = ref(0);
 import { useElementBounding } from "@vueuse/core";
 const { top } = useElementBounding(target);
-const flyoutTop = ref(0);
 watch(top, (newValue) => {
-  flyoutTop.value = newValue;
+  flyoutTop.value = newValue - magicNumber;
 });
 </script>
 
@@ -297,7 +301,7 @@ watch(top, (newValue) => {
     z-index: 1000;
     position: absolute;
     right: calc(100% + 10px);
-    transform: translatey(-50%);
+    transform: translate3d(0, 0, 0);
     &__search {
       padding: 8px 8px 0px 8px;
       border-bottom: 1px dashed var(--color-border);
@@ -322,6 +326,12 @@ watch(top, (newValue) => {
         }
       }
     }
+  }
+  &__empty-state {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
   }
 }
 

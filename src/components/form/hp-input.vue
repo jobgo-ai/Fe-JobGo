@@ -169,6 +169,7 @@ const containerClasses = computed(() => {
     &--search {
       background-color: var(--color-underground);
       max-height: 32px;
+      line-height: 32px;
     }
     &::placeholder {
       color: var(--color-text-secondary);

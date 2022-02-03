@@ -35,7 +35,7 @@ const Template = (args) => ({
     };
     return { args, options, values, searchFunction };
   },
-  template: `<div style="margin-left:200px; margin-top:400px;">
+  template: `<div style="margin-left:200px; margin-top:400px; position:relative;">
     <hp-tagger v-model="values" searchable label="Skills" :options="options" name="multi-select" />
   </div>`,
 });

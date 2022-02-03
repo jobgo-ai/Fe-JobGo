@@ -48,7 +48,7 @@
         <hp-tagger
           label="Levels"
           :options="jobLevelOptions"
-          name="skills"
+          name="levels"
           searchable
           v-model="levels"
         ></hp-tagger>
