@@ -59,6 +59,8 @@
         label="Save"
         type="submit"
         primary
+        :isLoading="isSaving"
+        @handleClick="onSubmit"
         :isDisabled="!meta.dirty"
       ></hp-button>
     </teleport>
@@ -94,6 +96,7 @@ const router = useRouter();
 const templates = ref([]);
 const opening = ref({});
 const isLoading = ref(true);
+const isSaving = ref(false);
 const drag = ref(false);
 
 const { setBreadcrumbs } = useBreadcrumbs();
@@ -138,6 +141,7 @@ const handleRemoveInterview = (templateReference) => {
 };
 
 const onSubmit = handleSubmit(async (values) => {
+  isSaving.value = true;
   const putOpening = usePut(`openings/${route.params.openingRef}`);
   await putOpening.put({
     opening: {
@@ -145,6 +149,7 @@ const onSubmit = handleSubmit(async (values) => {
       templates: values.templates.map((t) => t.reference),
     },
   });
+  isSaving.value = false;
   opening.value = putOpening.data.value.opening;
   resetForm({ touched: false, values: opening.value });
   setToast({
