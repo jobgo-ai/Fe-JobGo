@@ -9,6 +9,16 @@
         v-if="isAddQuestionDrawerOpen"
       />
     </hp-drawer>
+    <hp-drawer
+      :isOpen="isEditQuestionDrawerOpen"
+      @close="isEditQuestionDrawerOpen = false"
+    >
+      <new-question
+        :handleClose="() => (isEditQuestionDrawerOpen = false)"
+        :question="isEditQuestionDrawerOpen"
+        v-if="isEditQuestionDrawerOpen"
+      />
+    </hp-drawer>
     <teleport to="#teleport-target-header">
       <hp-button
         label="Save"
@@ -92,7 +102,7 @@
                   <hp-button
                     class="edit-interview__question-card__actions__button"
                     label="Edit question"
-                    :to="`/FIGURE IT OUT`"
+                    @handleClick="isEditQuestionDrawerOpen = element"
                   ></hp-button
                   ><hp-button
                     @handleClick="handleRemoveQuestion"
@@ -127,6 +137,7 @@ import draggable from "vuedraggable";
 
 //Views
 import Questions from "@/views/dashboard/opening/questions/questions.vue";
+import NewQuestion from "@/views/dashboard/opening/questions/new-question.vue";
 
 //Components
 import HpInput from "@/components/form/hp-input.vue";
@@ -157,6 +168,7 @@ const isLoading = ref(true);
 const isSaving = ref(false);
 const route = useRoute();
 const isAddQuestionDrawerOpen = ref(false);
+const isEditQuestionDrawerOpen = ref(false);
 const { interview, fetchInterview, isInterviewLoading } = useInterviews();
 const putInterview = usePut(`templates/${route.params.interviewRef}`);
 
@@ -220,12 +232,8 @@ onMounted(async () => {
         to: `/opening/${props.opening.reference}/edit`,
       },
       {
-        label: "Add interview",
-        to: `/opening/${props.opening.reference}/edit/add-interview`,
-      },
-      {
         to: `/opening/${props.opening.reference}/edit/edit-interview/${route.params.interviewRef}`,
-        label: "Edit interview",
+        label: interview.value.name,
       },
     ],
     true

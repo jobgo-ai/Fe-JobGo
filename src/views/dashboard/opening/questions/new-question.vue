@@ -1,6 +1,10 @@
 <template>
   <div class="new-question">
-    <div class="new-question__back" @click="emits('handleTabChange')">
+    <div
+      v-if="!question"
+      class="new-question__back"
+      @click="emits('handleTabChange')"
+    >
       <hp-icon name="arrow-left"></hp-icon>Back
     </div>
     <div class="new-question__header">
@@ -92,6 +96,12 @@ import useSkillSearch from "@/hooks/useSkillSearch";
 import useConstants from "@/hooks/useConstants";
 import { usePost } from "@/hooks/useHttp";
 
+const props = defineProps({
+  question: {
+    type: Object,
+  },
+});
+
 const emits = defineEmits(["handleTabChange"]);
 
 const skillOptions = ref([]);
@@ -124,9 +134,15 @@ const schema = yup.object({
   guidelines: yup.array(),
 });
 
+let initialValues = {};
+
+if (props.question) {
+  console.log(props.question);
+}
+
 const { handleSubmit, meta } = useForm({
   validationSchema: schema,
-  initialValues: { content: "", duration: "" },
+  initialValues: initialValues,
 });
 
 const { searchSkills } = useSkillSearch();

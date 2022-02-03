@@ -46,11 +46,14 @@
       </div>
       <div class="hp-opening-card__actions">
         <hp-button
+          label="Edit interview"
           class="hp-opening-card__actions__button"
+          :to="`/opening/${route.params.openingRef}/edit/edit-interview/${template.reference}`"
+        ></hp-button>
+        <hp-button
           icon="trash"
           @handleClick="$emit('handleRemove', template.reference)"
         ></hp-button>
-        <hp-button label="Edit interview"></hp-button>
       </div>
     </div>
   </li>
