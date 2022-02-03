@@ -98,6 +98,14 @@ const templates = ref([]);
 const isAddInterviewModalOpen = ref(false);
 const { setBreadcrumbs } = useBreadcrumbs();
 
+const fetchTemplates = async () => {
+  isInterviewsLoading.value = true;
+  const getTemplates = useGet(`templates`);
+  await getTemplates.get();
+  templates.value = getTemplates.data.value.templates;
+  isInterviewsLoading.value = false;
+};
+
 onMounted(async () => {
   const getTemplates = useGet(`templates`);
   skillOptions.value = await handleSkillSearch("");
@@ -144,6 +152,12 @@ const onSubmit = handleSubmit(async (values) => {
     );
   }
 });
+
+const onDelete = async (template) => {
+  const deleteInterview = useDelete(`templates/${template.reference}`);
+  await deleteInterview.remove();
+  await fetchTemplates();
+};
 
 const availableTemplateList = computed(() => {
   return templates.value.filter((template) => {

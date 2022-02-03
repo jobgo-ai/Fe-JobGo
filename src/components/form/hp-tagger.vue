@@ -336,7 +336,6 @@ watch(top, (newValue) => {
 }
 
 .hp-tagger-flyout-transition {
-  transform: translateY(-50%);
 }
 .hp-tagger-flyout-transition-enter-active,
 .hp-tagger-flyout-transition-leave-active {
@@ -345,6 +344,6 @@ watch(top, (newValue) => {
 .hp-tagger-flyout-transition-enter-from,
 .hp-tagger-flyout-transition-leave-to {
   opacity: 0;
-  transform: translateY(calc(-50% - 10px));
+  transform: translateY(-10px);
 }
 </style>
