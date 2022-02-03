@@ -6,8 +6,8 @@
     >
       <questions v-if="isAddQuestionDrawerOpen" />
     </hp-drawer>
-    <div class="edit-interview">
-      <form @submit.prevent="handleContextFormSave" v-if="interview?.reference">
+    <div class="edit-interview" v-if="!isLoading">
+      <form @submit.prevent="handleContextFormSave">
         <h2 class="edit-interview__title">Edit interview</h2>
         <p class="edit-interview__subtitle">
           Design the template by editing ceremonies and interview questions.
@@ -63,6 +63,7 @@
         </li>
       </ol>
     </div>
+    <hp-spinner v-else size="24" content />
   </div>
 </template>
 
@@ -82,6 +83,7 @@ import HpButton from "@/components/hp-button.vue";
 import HpCounter from "@/components/hp-counter.vue";
 import HpDrawer from "@/components/hp-drawer.vue";
 import HpTextarea from "@/components/form/hp-textarea.vue";
+import HpSpinner from "@/components/hp-spinner.vue";
 
 //Hooks
 import { usePut, useGet } from "@/hooks/useHttp";
@@ -95,6 +97,7 @@ const props = defineProps({
   },
 });
 
+const isLoading = ref(true);
 const route = useRoute();
 const isAddQuestionDrawerOpen = ref(false);
 const interview = ref({});
@@ -116,16 +119,17 @@ const schema = yup.object({
   }),
 });
 
-const { handleSubmit, resetForm, meta } = useForm({
-  validationSchema: schema,
-  initialValues: interview.value,
-});
-
 const fetchInterview = async () => {
+  isLoading.value = true;
   const getInterview = useGet(`templates/${route.params.interviewRef}`);
   await getInterview.get();
   interview.value = getInterview.data.value.template;
 };
+
+const { handleSubmit, resetForm, meta } = useForm({
+  validationSchema: schema,
+  initialValues: interview.value,
+});
 
 onMounted(async () => {
   await fetchInterview();
@@ -143,15 +147,16 @@ onMounted(async () => {
       },
       {
         label: "Add interview",
-        to: `/opening/${props.opening.reference}/view/add-interview`,
+        to: `/opening/${props.opening.reference}/edit/add-interview`,
       },
       {
-        to: `/opening/${props.opening.reference}/view/add-interview/new`,
-        label: "New",
+        to: `/opening/${props.opening.reference}/edit/edit-interview/${route.params.interviewRef}`,
+        label: "Edit interview",
       },
     ],
     true
   );
+  isLoading.value = false;
 });
 
 const onSubmit = handleSubmit(async (values) => {
