@@ -47,7 +47,7 @@
         </div>
         <hp-tagger
           label="Levels"
-          :options="jobLevels"
+          :options="jobLevelOptions"
           name="levels"
           v-model="levels"
         ></hp-tagger>
@@ -61,7 +61,12 @@
       </div>
     </form>
     <div class="new-question__actions">
-      <hp-button primary label="Create question" @handleClick="onSubmit" />
+      <hp-button
+        :isDisabled="!meta.dirty"
+        primary
+        label="Create question"
+        @handleClick="onSubmit"
+      />
     </div>
   </div>
 </template>
@@ -96,6 +101,10 @@ const levels = ref([]);
 const { handleSkillSearch } = useSkillSearch();
 const { jobLevels } = useConstants();
 
+const jobLevelOptions = computed(() => {
+  return jobLevels.value.map((j) => ({ label: j.name, value: j.slug }));
+});
+
 const searchFunction = async (value) => {
   skillOptions.value = await handleSkillSearch(value);
 };
@@ -108,10 +117,13 @@ const route = useRoute();
 
 const schema = yup.object({
   content: yup.string().required("A question is required"),
-  duration: yup.string(),
+  duration: yup.number(),
+  skills: yup.array().required(),
+  levels: yup.array(),
+  guidelines: yup.array(),
 });
 
-const { handleSubmit } = useForm({
+const { handleSubmit, meta } = useForm({
   validationSchema: schema,
   initialValues: { content: "", duration: "" },
 });

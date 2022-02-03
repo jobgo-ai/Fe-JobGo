@@ -9,90 +9,99 @@
         v-if="isAddQuestionDrawerOpen"
       />
     </hp-drawer>
-    <div class="edit-interview" v-if="!isInterviewLoading">
-      <form @submit.prevent="handleContextFormSave">
-        <h2 class="edit-interview__title">Edit interview</h2>
-        <p class="edit-interview__subtitle">
-          Design the template by editing ceremonies and interview questions.
-        </p>
-        <hp-input label="Name" name="name"></hp-input>
-        <div>
-          <div class="edit-interview__ceremony">
-            <div class="edit-interview__ceremony__header">
-              <div>
-                <h3 class="edit-interview__ceremony__header__title">Warmup</h3>
-                <p class="edit-interview__ceremony__header__subtitle">
-                  Set warmup instructions and expected duration
-                </p>
+    <div class="edit-interview" v-if="!isInterviewLoading && !isLoading">
+      <div class="edit-interview__container">
+        <form @submit.prevent="handleContextFormSave">
+          <h2 class="edit-interview__title">Edit interview</h2>
+          <p class="edit-interview__subtitle">
+            Design the template by editing ceremonies and interview questions.
+          </p>
+          <hp-input label="Name" name="name"></hp-input>
+          <div>
+            <div class="edit-interview__ceremony">
+              <div class="edit-interview__ceremony__header">
+                <div>
+                  <h3 class="edit-interview__ceremony__header__title">
+                    Warmup
+                  </h3>
+                  <p class="edit-interview__ceremony__header__subtitle">
+                    Set warmup instructions and expected duration
+                  </p>
+                </div>
+                <hp-counter name="ceremony.warmup.duration" />
               </div>
-              <hp-counter name="ceremony.warmup.duration" />
+              <div>
+                <hp-textarea :rows="6" name="ceremony.warmup.content" />
+              </div>
             </div>
-            <div>
-              <hp-textarea :rows="6" name="ceremony.warmup.content" />
+            <div
+              class="
+                edit-interview__ceremony edit-interview__ceremony--cooldown
+              "
+            >
+              <div class="edit-interview__ceremony__header">
+                <div>
+                  <h3 class="edit-interview__ceremony__header__title">
+                    Cooldown
+                  </h3>
+                  <p class="edit-interview__ceremony__header__subtitle">
+                    Set Cooldown instructions and expected duration
+                  </p>
+                </div>
+                <hp-counter name="ceremony.cooldown.duration" />
+              </div>
+              <div>
+                <hp-textarea :rows="6" name="ceremony.cooldown.content" />
+              </div>
             </div>
           </div>
-          <div
-            class="edit-interview__ceremony edit-interview__ceremony--cooldown"
+        </form>
+        <h3 class="edit-interview__ceremony__header__title">Questions</h3>
+        <ol>
+          <draggable
+            v-model="interview.questions"
+            tag="transition-group"
+            item-key="reference"
+            handle=".edit-interview__handle"
+            @change="handleDragChange"
+            v-bind="dragOptions"
+            @start="drag = true"
+            @end="drag = false"
           >
-            <div class="edit-interview__ceremony__header">
-              <div>
-                <h3 class="edit-interview__ceremony__header__title">
-                  Cooldown
-                </h3>
-                <p class="edit-interview__ceremony__header__subtitle">
-                  Set Cooldown instructions and expected duration
-                </p>
-              </div>
-              <hp-counter name="ceremony.cooldown.duration" />
-            </div>
-            <div>
-              <hp-textarea :rows="6" name="ceremony.cooldown.content" />
-            </div>
-          </div>
-        </div>
-      </form>
-      <h3 class="edit-interview__ceremony__header__title">Questions</h3>
-      <ol>
-        <draggable
-          v-model="interview.questions"
-          tag="transition-group"
-          item-key="reference"
-          handle=".edit-interview__handle"
-          @change="handleDragChange"
-          v-bind="dragOptions"
-          @start="drag = true"
-          @end="drag = false"
-        >
-          <template #item="{ element, index }">
-            <li class="edit-interview__question-card" :key="index">
-              <div class="edit-interview__question-card__container">
-                <hp-badge icon="questions" :content="index + 1" />
-                <hp-icon name="drag" class="edit-interview__handle"></hp-icon>
-              </div>
-              <div class="edit-interview__question-card__content">
-                {{ element.content }}
-              </div>
-              <hp-question-card-stats :question="element" />
-              <div class="edit-interview__question-card__actions">
-                <hp-button
-                  class="edit-interview__question-card__actions__button"
-                  label="Add question"
-                  @handleClick="$emit('handleAddToInterview', question)"
-                ></hp-button
-                ><hp-button icon="eye"></hp-button>
-              </div>
-            </li>
-          </template>
-        </draggable>
-      </ol>
-      <hp-button
-        class="edit-interview__questions-button"
-        @handleClick="isAddQuestionDrawerOpen = true"
-        label="Add question"
-        type="button"
-        icon="plus"
-        dropzone
-      ></hp-button>
+            <template #item="{ element, index }">
+              <li class="edit-interview__question-card" :key="index">
+                <div class="edit-interview__question-card__container">
+                  <hp-badge icon="questions" :content="index + 1" />
+                  <hp-icon name="drag" class="edit-interview__handle"></hp-icon>
+                </div>
+                <div class="edit-interview__question-card__content">
+                  {{ element.content }}
+                </div>
+                <hp-question-card-stats :question="element" />
+                <div class="edit-interview__question-card__actions">
+                  <hp-button
+                    class="edit-interview__question-card__actions__button"
+                    label="Edit question"
+                    :to="`/FIGURE IT OUT`"
+                  ></hp-button
+                  ><hp-button
+                    @handleClick="handleRemoveQuestion"
+                    icon="trash"
+                  ></hp-button>
+                </div>
+              </li>
+            </template>
+          </draggable>
+        </ol>
+        <hp-button
+          class="edit-interview__questions-button"
+          @handleClick="isAddQuestionDrawerOpen = true"
+          label="Add question"
+          type="button"
+          icon="plus"
+          dropzone
+        ></hp-button>
+      </div>
     </div>
     <hp-spinner v-else size="24" content />
     <teleport to="#teleport-target-header">
@@ -107,7 +116,7 @@
         primary
         :isLoading="isSaving"
         @handleClick="onSubmit"
-        :isDisabled="meta.dirty"
+        :isDisabled="!meta.dirty"
       ></hp-button>
     </teleport>
   </div>
@@ -149,6 +158,7 @@ const props = defineProps({
   },
 });
 
+const isLoading = ref(true);
 const isSaving = ref(false);
 const route = useRoute();
 const isAddQuestionDrawerOpen = ref(false);
@@ -170,11 +180,12 @@ const schema = yup.object({
       duration: yup.number(),
     }),
   }),
+  questions: yup.array(),
 });
 
-const { handleSubmit, resetForm, meta } = useForm({
+const { handleSubmit, resetForm, meta, setFieldValue } = useForm({
   validationSchema: schema,
-  initialValues: interview.value,
+  validateOnMount: false,
 });
 
 const onSubmit = handleSubmit(async (values) => {
@@ -189,7 +200,11 @@ const onSubmit = handleSubmit(async (values) => {
     title: "Well done!",
     message: "Interview updated",
   });
-  resetForm({ touched: false, values: putInterview.data.value.template });
+  resetForm({
+    touched: false,
+    dirty: false,
+    values: putInterview.data.value.template,
+  });
 });
 
 useContextSave(meta);
@@ -197,6 +212,7 @@ useContextSave(meta);
 onMounted(async () => {
   await fetchInterview(route.params.interviewRef);
   resetForm({ touched: false, values: interview.value });
+
   const { setBreadcrumbs } = useBreadcrumbs();
   setBreadcrumbs(
     [
@@ -219,6 +235,7 @@ onMounted(async () => {
     ],
     true
   );
+  isLoading.value = false;
 });
 
 const dragOptions = computed(() => {
@@ -231,17 +248,24 @@ const dragOptions = computed(() => {
 });
 
 const handleDragChange = () => {
-  console.log("drag change");
-  //setFieldValue("interview", interview.value);
+  setFieldValue("questions", interview.value.questions);
+};
+
+const handleRemoveQuestion = () => {
+  console.log("hello");
 };
 </script>
 
 <styles lang="scss">
 .edit-interview {
-  max-width: 552px;
-  margin: auto;
-  height: 100vh;
-  overflow: auto;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  &__container {
+    display: flex;
+    flex-direction: column;
+    max-width: 552px;
+  }
   &::-webkit-scrollbar {
     display: none;
   }
@@ -271,6 +295,7 @@ const handleDragChange = () => {
       &__title {
         @include text-h5;
         font-weight: 500;
+        margin-bottom: 16px;
       }
       &__subtitle {
         color: var(--color-text-secondary);

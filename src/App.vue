@@ -84,12 +84,14 @@ if (currentTheme) {
 
 * {
   box-sizing: border-box;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 html {
   color: var(--color-text-primary);
   background-color: var(--color-background);
-  overflow: hidden;
   font-size: 14px;
   line-height: 20px;
 }

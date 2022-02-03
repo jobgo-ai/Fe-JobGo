@@ -49,7 +49,7 @@
         @handleDelete="onDeleteTemplate"
       ></hp-add-interview-card>
     </ol>
-    <hp-spinner content size="24" />
+    <hp-spinner v-if="isInterviewsLoading" content size="24" />
   </div>
 </template>
 
@@ -89,8 +89,9 @@ const { handleSkillSearch } = useSkillSearch();
 const { jobLevels } = useConstants();
 
 const jobLevelOptions = computed(() => {
-  return jobLevels.value.map((j) => j.name);
+  return jobLevels.value.map((j) => ({ label: j.name, value: j.slug }));
 });
+
 const searchFunction = async (value) => {
   skillOptions.value = await handleSkillSearch(value);
 };
@@ -192,6 +193,7 @@ const availableTemplateList = computed(() => {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     grid-gap: 24px;
+    margin-bottom: 64px;
   }
   &__filter {
     display: grid;

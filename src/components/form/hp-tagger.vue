@@ -40,7 +40,7 @@
               {{ option.label }}
               <hp-checkbox
                 class="hp-tagger__checkbox"
-                :checked="modelValue.includes(option)"
+                :checked="modelValue.find((v) => v.value === option.value)"
               />
             </li>
             <div class="hp-tagger__spinner" v-else-if="isLoading">
@@ -55,7 +55,9 @@
     </div>
     <div class="hp-tagger__tagged-skills">
       <div v-for="item in modelValue" class="hp-tagger__tagged-skills__skill">
-        <div class="hp-tagger__tagged-skills__skill__label">{{ item }}</div>
+        <div class="hp-tagger__tagged-skills__skill__label">
+          {{ item.label }}
+        </div>
         <div
           class="hp-tagger__tagged-skills__skill__icon"
           @click="handleChangeEmit(item)"
@@ -220,11 +222,12 @@ const isValueEmpty = computed(() => {
 
 const handleChangeEmit = (change) => {
   let newValue = [...props.modelValue];
-  if (newValue.includes(change)) {
-    newValue = newValue.filter((item) => item !== change);
+  if (newValue.find((v) => v.value === change.value)) {
+    newValue = newValue.filter((item) => item.value !== change.value);
   } else {
     newValue.push(change);
   }
+  console.log(newValue);
   emits("update:modelValue", newValue);
 };
 
@@ -284,6 +287,7 @@ watch(top, (newValue) => {
       border-radius: $border-radius-sm;
       padding: 6px;
       color: var(--color-text-secondary);
+      height: 28px;
       &__icon {
         margin-right: 6px;
       }
