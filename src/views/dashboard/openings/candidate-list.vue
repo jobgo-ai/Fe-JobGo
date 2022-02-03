@@ -333,29 +333,6 @@ const candidateList = computed(() => {
     color: var(--color-text-secondary);
   }
 
-  &__stats {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px dashed var(--color-border);
-    margin-top: 16px;
-    padding-bottom: 24px;
-
-    &__stat {
-      display: flex;
-      align-items: center;
-      color: var(--color-text-primary);
-      &__number {
-        font-weight: 600;
-        margin-right: 2px;
-      }
-      &__icon {
-        color: var(--color-text-secondary);
-        margin-right: 4px;
-      }
-    }
-  }
-
   &__empty-state {
     margin-top: 40px;
     margin-bottom: 40px;

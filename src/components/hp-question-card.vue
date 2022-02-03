@@ -3,32 +3,7 @@
     <div class="hp-question-card__content">
       {{ question.content }}
     </div>
-    <div class="hp-question-card__stats">
-      <div class="hp-question-card__stats__stat">
-        <hp-icon
-          class="hp-question-card__stats__stat__icon"
-          name="chronometer"
-        ></hp-icon>
-        {{ question.duration / 60 }}
-        Minutes
-      </div>
-      <div class="hp-question-card__stats__stat">
-        <hp-icon
-          class="hp-question-card__stats__stat__icon"
-          name="skills"
-        ></hp-icon>
-        {{ question.jobLevels.length }}
-        Levels
-      </div>
-      <div class="hp-question-card__stats__stat">
-        <hp-icon
-          class="hp-question-card__stats__stat__icon"
-          name="skills"
-        ></hp-icon>
-        {{ question.skills.length }}
-        Skills
-      </div>
-    </div>
+    <hp-question-card-stats :question="question" />
     <div class="hp-question-card__actions">
       <hp-button
         class="hp-question-card__actions__button"
@@ -42,7 +17,7 @@
 
 <script setup>
 import HpButton from "@/components/hp-button.vue";
-import HpIcon from "@/components/hp-icon.vue";
+import HpQuestionCardStats from "@/components/hp-question-card-stats.vue";
 const props = defineProps({
   question: {
     type: Object,
@@ -51,10 +26,6 @@ const props = defineProps({
 });
 
 const emits = defineEmits(["handleAddToInterview"]);
-
-const secondsToMinutes = (seconds) => {
-  return Math.floor(seconds / 60);
-};
 </script>
 
 <style lang="scss">
@@ -88,6 +59,7 @@ const secondsToMinutes = (seconds) => {
   &__actions {
     display: flex;
     align-items: center;
+    padding-top: 16px;
     &__button {
       margin-right: 6px;
     }

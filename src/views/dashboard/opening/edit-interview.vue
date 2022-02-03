@@ -53,13 +53,37 @@
       </form>
       <h3 class="edit-interview__ceremony__header__title">Questions</h3>
       <ol>
-        <li
-          class="edit-interview__question-card"
-          v-for="question in interview.questions"
-          :key="question"
+        <draggable
+          v-model="interview.questions"
+          tag="transition-group"
+          item-key="reference"
+          handle=".edit-interview__handle"
+          @change="handleDragChange"
+          v-bind="dragOptions"
+          @start="drag = true"
+          @end="drag = false"
         >
-          {{ question.content }}
-        </li>
+          <template #item="{ element, index }">
+            <li class="edit-interview__question-card" :key="index">
+              <div class="edit-interview__question-card__container">
+                <hp-badge icon="questions" :content="index + 1" />
+                <hp-icon name="drag" class="edit-interview__handle"></hp-icon>
+              </div>
+              <div class="edit-interview__question-card__content">
+                {{ element.content }}
+              </div>
+              <hp-question-card-stats :question="element" />
+              <div class="edit-interview__question-card__actions">
+                <hp-button
+                  class="edit-interview__question-card__actions__button"
+                  label="Add question"
+                  @handleClick="$emit('handleAddToInterview', question)"
+                ></hp-button
+                ><hp-button icon="eye"></hp-button>
+              </div>
+            </li>
+          </template>
+        </draggable>
       </ol>
       <hp-button
         class="edit-interview__questions-button"
@@ -83,7 +107,7 @@
         primary
         :isLoading="isSaving"
         @handleClick="onSubmit"
-        :isDisabled="!meta.dirty"
+        :isDisabled="meta.dirty"
       ></hp-button>
     </teleport>
   </div>
@@ -91,10 +115,11 @@
 
 <script setup>
 //Vendor
-import { onMounted, ref } from "vue";
+import { onMounted, ref, computed } from "vue";
 import { useForm } from "vee-validate";
 import { useRoute } from "vue-router";
 import * as yup from "yup";
+import draggable from "vuedraggable";
 
 //Views
 import Questions from "@/views/dashboard/opening/questions/questions.vue";
@@ -103,9 +128,12 @@ import Questions from "@/views/dashboard/opening/questions/questions.vue";
 import HpInput from "@/components/form/hp-input.vue";
 import HpButton from "@/components/hp-button.vue";
 import HpCounter from "@/components/hp-counter.vue";
+import HpIcon from "@/components/hp-icon.vue";
+import HpBadge from "@/components/hp-badge.vue";
 import HpDrawer from "@/components/hp-drawer.vue";
 import HpTextarea from "@/components/form/hp-textarea.vue";
 import HpSpinner from "@/components/hp-spinner.vue";
+import HpQuestionCardStats from "@/components/hp-question-card-stats.vue";
 
 //Hooks
 import { usePut } from "@/hooks/useHttp";
@@ -149,6 +177,23 @@ const { handleSubmit, resetForm, meta } = useForm({
   initialValues: interview.value,
 });
 
+const onSubmit = handleSubmit(async (values) => {
+  isSaving.value = true;
+  const formattedQuestions = values?.questions.map((q) => q.reference) || [];
+  await putInterview.put({
+    template: { ...values, jobLevels: [], questions: formattedQuestions },
+  });
+  isSaving.value = false;
+  setToast({
+    type: "positive",
+    title: "Well done!",
+    message: "Interview updated",
+  });
+  resetForm({ touched: false, values: putInterview.data.value.template });
+});
+
+useContextSave(meta);
+
 onMounted(async () => {
   await fetchInterview(route.params.interviewRef);
   resetForm({ touched: false, values: interview.value });
@@ -176,28 +221,30 @@ onMounted(async () => {
   );
 });
 
-const onSubmit = handleSubmit(async (values) => {
-  isSaving.value = true;
-  const formattedQuestions = values?.questions.map((q) => q.reference) || [];
-  await putInterview.put({
-    template: { ...values, jobLevels: [], questions: formattedQuestions },
-  });
-  isSaving.value = false;
-  setToast({
-    type: "positive",
-    title: "Well done!",
-    message: "Interview updated",
-  });
-  resetForm({ touched: false, values: putInterview.data.value.template });
+const dragOptions = computed(() => {
+  return {
+    animation: 200,
+    group: "description",
+    disabled: false,
+    ghostClass: "ghost",
+  };
 });
 
-const { handleContextFormSave } = useContextSave(meta, onSubmit);
+const handleDragChange = () => {
+  console.log("drag change");
+  //setFieldValue("interview", interview.value);
+};
 </script>
 
 <styles lang="scss">
 .edit-interview {
   max-width: 552px;
   margin: auto;
+  height: 100vh;
+  overflow: auto;
+  &::-webkit-scrollbar {
+    display: none;
+  }
   &__title {
     @include text-h2;
     font-weight: 600;
@@ -209,6 +256,7 @@ const { handleContextFormSave } = useContextSave(meta, onSubmit);
   }
   &__questions-button {
     margin-top: 16px;
+    margin-bottom: 200px;
   }
   &__ceremony {
     &--cooldown {
@@ -231,6 +279,47 @@ const { handleContextFormSave } = useContextSave(meta, onSubmit);
   }
   &__question-card {
     @include flyout;
+    margin-bottom: 16px;
+    &__container {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+    &__content {
+      @include text-h5;
+      font-weight: 500;
+      margin-bottom: 16px;
+    }
+    &__actions {
+      display: flex;
+      align-items: center;
+      margin-top: 16px;
+      &__button {
+        margin-right: 6px;
+      }
+    }
   }
+  &__handle {
+    cursor: grab;
+  }
+}
+
+.flip-list-move {
+  transition: transform 0.5s;
+}
+.no-move {
+  transition: transform 0s;
+}
+.ghost {
+  opacity: 0.5;
+}
+.list-group {
+  min-height: 20px;
+}
+.list-group-item {
+  cursor: move;
+}
+.list-group-item i {
+  cursor: pointer;
 }
 </styles>
