@@ -5,39 +5,7 @@
       <hp-breadcrumbs />
     </div>
     <div class="hp-header__right">
-      <div class="hp-header__save-container">
-        <hp-button
-          v-if="hasHeaderSaveButton"
-          primary
-          :isLoading="isContextFormSaving"
-          :isDisabled="!isContextFormDirty"
-          @handleClick="handleContextFormSave"
-          label="Save"
-        >
-          <template #dropdown>
-            <div class="hp-header__save-container__dropdown-container">
-              <div class="hp-header__save-container__dropdown-container__item">
-                <hp-icon
-                  class="
-                    hp-header__save-container__dropdown-container__item__icon
-                  "
-                  name="floppy"
-                ></hp-icon
-                >Save
-              </div>
-              <div class="hp-header__save-container__dropdown-container__item">
-                <hp-icon
-                  class="
-                    hp-header__save-container__dropdown-container__item__icon
-                  "
-                  name="template"
-                ></hp-icon
-                >Save as template
-              </div>
-            </div>
-          </template>
-        </hp-button>
-      </div>
+      <div id="teleport-target-header" class="hp-header__save-container"></div>
       <div
         class="hp-header__dropdown-container"
         ref="dropdownTarget"
@@ -139,11 +107,10 @@ import { onClickOutside } from "@vueuse/core";
 import HpAvatar from "@/components/hp-avatar.vue";
 import HpIcon from "@/components/hp-icon.vue";
 import HpSwitch from "@/components/hp-switch.vue";
-import HpButton from "@/components/hp-button.vue";
 import HpBreadcrumbs from "@/components/hp-breadcrumbs.vue";
+import useContextSave from "@/hooks/useContextSave";
 // Hooks
 import useAuth from "@/hooks/useAuth";
-import useContextSave from "@/hooks/useContextSave";
 import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
 // Svg
 import Logo from "@/assets/logo.svg";
@@ -163,11 +130,10 @@ onClickOutside(dropdownTarget, (event) => {
   isAccountMenuOpen.value = false;
 });
 
-const { handleContextFormSave, isContextFormDirty, isContextFormSaving } =
-  useContextSave();
+const { isDirty } = useContextSave();
 
 const promptAreYouSure = (e) => {
-  if (!isContextFormDirty.value) {
+  if (!isDirty.value) {
     return undefined;
   }
 

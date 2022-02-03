@@ -2,11 +2,26 @@ import { createApp } from "vue";
 import App from "./App.vue";
 import router from "./router";
 import useAuth from "@/hooks/useAuth";
+import useContextSave from "@/hooks/useContextSave";
 
 const app = createApp(App);
 
 // Router before each
 router.beforeEach(async (to, from, next) => {
+  const { isDirty, clearIsDirty } = useContextSave();
+  if (isDirty.value) {
+    const dialogText =
+      "You have unsaved changes, are you sure you want to leave?";
+    const confirm = window.confirm(dialogText);
+    if (!confirm) {
+      next(false);
+      return;
+    }
+    if (confirm) {
+      clearIsDirty();
+    }
+  }
+
   if (to.meta.title) {
     document.title = "Beta" + ` | ${to.meta.title}`;
   } else {

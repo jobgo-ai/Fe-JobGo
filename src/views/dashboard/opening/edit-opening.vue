@@ -54,6 +54,14 @@
         </draggable>
       </div>
     </div>
+    <teleport to="#teleport-target-header">
+      <hp-button
+        label="Save"
+        type="submit"
+        primary
+        :isDisabled="!meta.dirty"
+      ></hp-button>
+    </teleport>
   </form>
   <div class="edit-openings__spinner" v-else>
     <hp-spinner size="24"></hp-spinner>
@@ -183,7 +191,7 @@ onMounted(async () => {
   }
 });
 
-const { handleContextFormSave } = useContextSave(meta, onSubmit);
+useContextSave(meta);
 
 const archiveOpening = async () => {
   const putOpening = usePut(`openings/${route.params.openingRef}/state`);
