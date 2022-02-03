@@ -151,6 +151,7 @@ const addToInterview = async (reference) => {
 .question-list {
   display: flex;
   flex-direction: column;
+  padding: 16px;
   &__header {
     margin-bottom: 16px;
   }

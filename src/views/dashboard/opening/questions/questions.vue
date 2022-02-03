@@ -32,7 +32,7 @@ const currentComponent = computed(() => {
 }
 .question-component-transition-enter-active,
 .question-component-transition-leave-active {
-  transition: opacity 0.15s linear;
+  transition: transform 0.15s linear, opacity 0.15s linear;
 }
 
 .question-component-transition-enter-from,

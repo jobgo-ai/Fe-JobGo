@@ -214,6 +214,8 @@ const emit = defineEmits(["handleClick"]);
     filter: drop-shadow(0px 4px 8px rgba(33, 44, 51, 0.02))
       drop-shadow(0px 0px 1px rgba(33, 44, 51, 0.02));
 
+    -webkit-appearance: none !important;
+
     &__spinner {
       margin-left: 8px;
     }

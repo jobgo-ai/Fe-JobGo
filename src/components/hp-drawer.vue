@@ -62,7 +62,6 @@ watch(
     max-width: 480px;
     height: 100%;
     background-color: var(--color-background);
-    padding: 20px;
     z-index: 100;
   }
 }

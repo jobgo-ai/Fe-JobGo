@@ -150,8 +150,12 @@ const onSubmit = handleSubmit(async (values) => {
 .new-question {
   display: flex;
   flex-direction: column;
-  max-height: calc(100vh - 100px);
-  overflow: scroll;
+  max-height: calc(100vh - 64px);
+  overflow-y: scroll;
+  padding: 16px;
+  &::-webkit-scrollbar {
+    display: none;
+  }
   &__back {
     display: flex;
     align-items: center;
