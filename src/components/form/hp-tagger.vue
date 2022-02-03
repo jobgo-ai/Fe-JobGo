@@ -169,12 +169,6 @@ watchEffect(
   }
 );
 
-const computedLabel = computed(() => {
-  return props.selectedMessage
-    ? `${props.modelValue.length} ${props.selectedMessage}`
-    : props.label;
-});
-
 let timeout = null;
 
 const handleAsyncSearch = async () => {
@@ -233,7 +227,7 @@ const handleChangeEmit = (change) => {
     }
     newValue.push(change);
   }
-  console.log(newValue);
+  inputValue.value = newValue;
   emits("update:modelValue", newValue);
 };
 

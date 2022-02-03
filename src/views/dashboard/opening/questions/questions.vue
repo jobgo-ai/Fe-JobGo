@@ -35,8 +35,6 @@ const currentComponent = computed(() => {
 </script>
 
 <style lang="scss">
-.questions {
-}
 .question-component-transition-enter-active,
 .question-component-transition-leave-active {
   transition: transform 0.15s linear, opacity 0.15s linear;

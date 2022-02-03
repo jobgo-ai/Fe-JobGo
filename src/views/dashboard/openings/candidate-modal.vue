@@ -11,6 +11,7 @@
         <hp-input
           placeholder="Enter candidate name"
           label="Name"
+          ref="nameInput"
           :isDisabled="isArchivingCandidate || isUpdatingCandidate"
           name="name"
         ></hp-input>
@@ -48,7 +49,7 @@
 </template>
 
 <script setup>
-import { computed, ref } from "vue";
+import { computed, ref, watchEffect } from "vue";
 import * as yup from "yup";
 import { useForm } from "vee-validate";
 import { useRoute, useRouter } from "vue-router";
@@ -80,6 +81,19 @@ const emits = defineEmits(["close"]);
 const isUpdatingCandidate = ref(false);
 const isArchivingCandidate = ref(false);
 const isAddNew = props.candidate.name === "";
+
+const nameInput = ref(null);
+
+watchEffect(
+  () => {
+    if (nameInput.value) {
+      nameInput.value.inputRef.focus();
+    }
+  },
+  {
+    flush: "post",
+  }
+);
 
 const { setToast } = useToast();
 

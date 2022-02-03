@@ -22,7 +22,6 @@
             :value="element.text"
             :name="`guidelines-${index}`"
             @input="handleInput($event, index)"
-            @keydown="handleKeydown(index)"
             :id="index"
             :maxlength="maxChars"
           />
@@ -45,6 +44,7 @@
 </template>
 
 <script setup>
+import { useField } from "vee-validate";
 import draggable from "vuedraggable";
 import { v4 as uuidv4 } from "uuid";
 import { ref, computed } from "vue";
@@ -82,6 +82,8 @@ const props = defineProps({
   },
 });
 
+const { errorMessage, value: formValue } = useField(props.name);
+
 const drag = ref(false);
 
 const dragOptions = computed(() => {
@@ -117,6 +119,7 @@ const emitChange = (change) => {
     "update:modelValue",
     change.map((i) => i.text).filter((i) => i)
   );
+  formValue.value = internalValue.value.map((i) => i.text);
 };
 
 const handleInput = (event, index) => {

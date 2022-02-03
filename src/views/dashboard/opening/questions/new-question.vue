@@ -8,7 +8,7 @@
       <hp-icon name="arrow-left"></hp-icon>Back
     </div>
     <div class="new-question__header">
-      <h2 class="new-question__title">Create question</h2>
+      <h2 class="new-question__title">{{ content.title }}</h2>
       <p class="new-question__subtitle">
         This is the question prompt, it is important that this is readable
       </p>
@@ -53,7 +53,7 @@
         <hp-tagger
           label="Levels"
           :options="jobLevelOptions"
-          name="levels"
+          name="jobLevels"
           v-model="levels"
         ></hp-tagger>
       </div>
@@ -64,15 +64,16 @@
         </div>
         <hp-multi-input name="guidelines" />
       </div>
+      <div class="new-question__actions">
+        <hp-button
+          :isDisabled="!meta.dirty"
+          primary
+          type="submit"
+          :isLoading="isSaving"
+          :label="content.action"
+        />
+      </div>
     </form>
-    <div class="new-question__actions">
-      <hp-button
-        :isDisabled="!meta.dirty"
-        primary
-        label="Create question"
-        @handleClick="onSubmit"
-      />
-    </div>
   </div>
 </template>
 
@@ -94,7 +95,9 @@ import HpMultiInput from "@/components/form/hp-multi-input.vue";
 // Hooks
 import useSkillSearch from "@/hooks/useSkillSearch";
 import useConstants from "@/hooks/useConstants";
-import { usePost } from "@/hooks/useHttp";
+import useInterviews from "@/hooks/useInterviews";
+import useToast from "@/hooks/useToast";
+import { usePost, usePut } from "@/hooks/useHttp";
 
 const props = defineProps({
   question: {
@@ -102,7 +105,14 @@ const props = defineProps({
   },
 });
 
-const emits = defineEmits(["handleTabChange"]);
+const content = props.question
+  ? {
+      title: "Edit question",
+      action: "Edit question",
+    }
+  : { title: "Create question", action: "Create question" };
+
+const emits = defineEmits(["handleTabChange", "handleClose"]);
 
 const skillOptions = ref([]);
 
@@ -111,6 +121,8 @@ const levels = ref([]);
 
 const { handleSkillSearch } = useSkillSearch();
 const { jobLevels } = useConstants();
+
+const isSaving = ref(false);
 
 const jobLevelOptions = computed(() => {
   return jobLevels.value.map((j) => ({ label: j.name, value: j.slug }));
@@ -137,7 +149,24 @@ const schema = yup.object({
 let initialValues = {};
 
 if (props.question) {
-  console.log(props.question);
+  skills.value = props.question.skills.map((s) => ({
+    label: s.name,
+    value: s.slug,
+  }));
+
+  levels.value = props.question.jobLevels.map((s) => ({
+    label: s.name,
+    value: s.slug,
+  }));
+
+  const formattedInitialValues = {
+    content: props.question.content,
+    duration: props.question.duration / 60,
+    guidelines: props.question.guidelines || [],
+    skills: skills.value,
+    jobLevels: levels.value,
+  };
+  initialValues = formattedInitialValues;
 }
 
 const { handleSubmit, meta } = useForm({
@@ -145,29 +174,44 @@ const { handleSubmit, meta } = useForm({
   initialValues: initialValues,
 });
 
-const { searchSkills } = useSkillSearch();
-const postQuestion = usePost("questions");
+const { fetchInterview } = useInterviews();
+
+const { setToast } = useToast();
+
 const onSubmit = handleSubmit(async (values) => {
+  isSaving.value = true;
   const formattedValues = {
     ...values,
     scoring: "likert",
     type: "open",
-    duration: (values.duration * 60).toFixed(),
-    guidelines: [],
-    skills: values.skills ? values.skills : [],
-    jobLevels: [],
+    duration: values.duration * 60,
+    jobLevels: values.jobLevels.map((l) => l.value),
+    skills: values.skills.map((s) => s.value),
   };
 
-  await postQuestion.post({
-    question: { ...formattedValues, templates: [route.params.interviewRef] },
+  const putQuestion = usePut(`questions/${props.question.reference}`);
+  await putQuestion.put({
+    question: { ...formattedValues },
   });
-  const postTemplateQuestion = usePost(
-    `templates/${route.params.interviewRef}/questions`
-  );
-  await postTemplateQuestion.post({
-    question: postQuestion.data.value.question.reference,
+  await fetchInterview(route.params.interviewRef);
+  isSaving.value = false;
+  emits("handleClose");
+  setToast({
+    type: "positive",
+    title: "Well done!",
+    message: `Question edited successfully`,
   });
-  emits("updateList");
+
+  // const postQuestion = usePost("questions");
+  // await postQuestion.post({
+  //   question: { ...formattedValues, templates: [route.params.interviewRef] },
+  // });
+  // const postTemplateQuestion = usePost(
+  //   `templates/${route.params.interviewRef}/questions`
+  // );
+  // await postTemplateQuestion.post({
+  //   question: postQuestion.data.value.question.reference,
+  // });
 });
 </script>
 

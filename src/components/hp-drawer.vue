@@ -20,7 +20,7 @@ import { watch } from "vue";
 const emits = defineEmits(["close"]);
 const props = defineProps({
   isOpen: {
-    type: Boolean,
+    type: [Boolean, Object],
     default: false,
   },
 });

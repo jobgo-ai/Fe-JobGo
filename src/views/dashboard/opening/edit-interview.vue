@@ -14,7 +14,7 @@
       @close="isEditQuestionDrawerOpen = false"
     >
       <new-question
-        :handleClose="() => (isEditQuestionDrawerOpen = false)"
+        @handleClose="() => (isEditQuestionDrawerOpen = false)"
         :question="isEditQuestionDrawerOpen"
         v-if="isEditQuestionDrawerOpen"
       />
