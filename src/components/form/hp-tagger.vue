@@ -129,6 +129,9 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  max: {
+    type: Number,
+  },
 });
 
 const {
@@ -225,6 +228,9 @@ const handleChangeEmit = (change) => {
   if (newValue.find((v) => v.value === change.value)) {
     newValue = newValue.filter((item) => item.value !== change.value);
   } else {
+    if (props.max && newValue.length >= props.max) {
+      return;
+    }
     newValue.push(change);
   }
   console.log(newValue);

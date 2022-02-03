@@ -36,6 +36,7 @@
           searchable
           :onSearch="searchFunction"
           v-model="skills"
+          :max="3"
         ></hp-tagger>
       </div>
       <div class="new-question__dropdowns">
