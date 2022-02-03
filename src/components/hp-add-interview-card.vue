@@ -56,6 +56,11 @@
           @handleClick="handleAddToInterview"
         ></hp-button>
         <hp-button icon="eye"></hp-button>
+        <hp-button
+          class="hp-add-opening-card__actions__button"
+          @handleClick="emits('handleDelete', template.reference)"
+          icon="trash"
+        ></hp-button>
       </div>
     </div>
   </li>
@@ -87,6 +92,8 @@ const props = defineProps({
     default: 0,
   },
 });
+
+const emits = defineEmits(["handleDelete"]);
 
 const isLoading = ref(false);
 const isCreatingInterview = ref(false);

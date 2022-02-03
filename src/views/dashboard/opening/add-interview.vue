@@ -46,6 +46,7 @@
         :template="template"
         :key="template.reference"
         v-for="template in availableTemplateList"
+        @handleDelete="onDeleteTemplate"
       ></hp-add-interview-card>
     </ol>
     <hp-spinner content size="24" />
@@ -69,7 +70,7 @@ import HpAddInterviewCard from "@/components/hp-add-interview-card.vue";
 import useSkillSearch from "@/hooks/useSkillSearch";
 import useConstants from "@/hooks/useConstants";
 import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
-import { useGet, usePost } from "@/hooks/useHttp";
+import { useGet, usePost, useDelete } from "@/hooks/useHttp";
 
 const props = defineProps({
   opening: {
@@ -153,8 +154,8 @@ const onSubmit = handleSubmit(async (values) => {
   }
 });
 
-const onDelete = async (template) => {
-  const deleteInterview = useDelete(`templates/${template.reference}`);
+const onDeleteTemplate = async (template) => {
+  const deleteInterview = useDelete(`templates/${template}`);
   await deleteInterview.remove();
   await fetchTemplates();
 };

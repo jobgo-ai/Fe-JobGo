@@ -21,7 +21,10 @@
             @click="handleChangeEmit(option)"
           >
             {{ option }}
-            <hp-checkbox :checked="modelValue.includes(option)" />
+            <hp-checkbox
+              class="hp-multi-select__checkbox"
+              :checked="modelValue.includes(option)"
+            />
           </li>
           <div class="hp-multi-select__spinner" v-else-if="isLoading">
             <hp-spinner />
@@ -191,6 +194,9 @@ const handleChangeEmit = (change) => {
   width: 100%;
   display: flex;
   z-index: 90;
+  &__checkbox {
+    pointer-events: none;
+  }
   &__spinner {
     display: flex;
     justify-content: center;

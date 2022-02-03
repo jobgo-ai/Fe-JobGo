@@ -38,7 +38,10 @@
               @click="handleChangeEmit(option)"
             >
               {{ option }}
-              <hp-checkbox :checked="modelValue.includes(option)" />
+              <hp-checkbox
+                class="hp-tagger__checkbox"
+                :checked="modelValue.includes(option)"
+              />
             </li>
             <div class="hp-tagger__spinner" v-else-if="isLoading">
               <hp-spinner />
@@ -242,6 +245,9 @@ watch(top, (newValue) => {
 .hp-tagger {
   display: flex;
   z-index: 90;
+  &__checkbox {
+    pointer-events: none;
+  }
   &__tagged-skills {
     display: flex;
     flex-wrap: wrap;
