@@ -56,9 +56,13 @@
     </div>
     <teleport to="#teleport-target-header">
       <hp-button
+        class="edit-openings__teleport-button"
+        icon="trash"
+        @handleClick="archiveOpening"
+      ></hp-button>
+      <hp-button
         label="Save"
         type="submit"
-        primary
         :isLoading="isSaving"
         @handleClick="onSubmit"
         :isDisabled="!meta.dirty"
@@ -86,6 +90,7 @@ import HpSpinner from "@/components/hp-spinner.vue";
 import HpImageSelector from "@/components/form/hp-image-selector.vue";
 import MicCheck from "@/assets/abstracts/mic-check.svg";
 // hooks
+import useOpenings from "@/hooks/useOpenings";
 import useToast from "@/hooks/useToast";
 import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
 import useContextSave from "@/hooks/useContextSave";
@@ -101,6 +106,8 @@ const drag = ref(false);
 
 const { setBreadcrumbs } = useBreadcrumbs();
 const { setToast } = useToast();
+
+const { fetchOpenings } = useOpenings();
 
 const schema = yup.object({
   name: yup.string().required("Opening name is required"),
@@ -203,6 +210,7 @@ const archiveOpening = async () => {
   await putOpening.put({
     state: "archived",
   });
+  await fetchOpenings();
   router.push("/openings");
   // const deleteOpening = useDelete(`openings/${route.params.openingRef}`);
   // await deleteOpening.remove();
@@ -220,6 +228,9 @@ const currentSplash = defineAsyncComponent(() =>
 .edit-openings {
   display: grid;
   grid-template-columns: 30% auto;
+  &__teleport-button {
+    margin-right: 6px;
+  }
   &__spinner {
     display: flex;
     align-items: center;

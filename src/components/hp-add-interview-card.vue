@@ -55,12 +55,20 @@
           :isLoading="isLoading"
           @handleClick="handleAddToInterview"
         ></hp-button>
-        <hp-button icon="eye"></hp-button>
         <hp-button
+          class="hp-add-opening-card__actions__button"
+          icon="eye"
+        ></hp-button>
+        <hp-button
+          class="hp-add-opening-card__actions__button"
+          :to="`/opening/${route.params.openingRef}/edit/edit-interview/${template.reference}`"
+          icon="pencil"
+        ></hp-button>
+        <!-- <hp-button
           class="hp-add-opening-card__actions__button"
           @handleClick="emits('handleDelete', template.reference)"
           icon="trash"
-        ></hp-button>
+        ></hp-button> -->
       </div>
     </div>
   </li>

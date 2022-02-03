@@ -187,6 +187,8 @@ const { hasHeaderSaveButton } = useBreadcrumbs();
     padding-right: 16px;
     border-right: $border;
     margin-right: 8px;
+    display: flex;
+    align-items: center;
     &__dropdown-container {
       &__item {
         display: flex;
