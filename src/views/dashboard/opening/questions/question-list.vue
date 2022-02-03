@@ -84,6 +84,7 @@ import EmptyState from "@/assets/abstracts/empty-state.svg";
 // Hooks
 import { useGet, usePost } from "@/hooks/useHttp";
 import useSkillSearch from "@/hooks/useSkillSearch";
+import useInterviews from "@/hooks/useInterviews";
 import useConstants from "@/hooks/useConstants";
 const props = defineProps({
   handleClose: {
@@ -99,6 +100,8 @@ const listContainer = ref(null);
 const listContainerMaxHeight = ref(200);
 
 const search = ref("");
+
+const { setInterview } = useInterviews();
 
 const filter = ref({
   search: useDebounce(search, 300),
@@ -177,6 +180,7 @@ const addToInterview = async (question) => {
   await postTemplateQuestion.post({
     question: question.reference,
   });
+  setInterview(postTemplateQuestion.data.value.template);
   props.handleClose();
 };
 </script>

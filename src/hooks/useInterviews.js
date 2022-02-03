@@ -4,6 +4,10 @@ import { useGet } from "./useHttp";
 const isInterviewLoading = ref(true);
 const interview = ref([]);
 
+const setInterview = (newInterview) => {
+  interview.value = newInterview;
+};
+
 const fetchInterview = async (interviewRef) => {
   isInterviewLoading.value = true;
   const getInterview = useGet(`templates/${interviewRef}`);
@@ -17,5 +21,6 @@ export default () => {
     isInterviewLoading,
     interview,
     fetchInterview,
+    setInterview,
   };
 };

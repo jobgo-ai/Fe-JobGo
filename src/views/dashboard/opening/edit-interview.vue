@@ -10,11 +10,6 @@
       />
     </hp-drawer>
     <teleport to="#teleport-target-header">
-      <!-- <hp-button
-        class="edit-openings__teleport-button"
-        icon="trash"
-        @handleClick="archiveOpening"
-      ></hp-button> -->
       <hp-button
         label="Save"
         type="submit"
@@ -72,7 +67,7 @@
           </div>
         </form>
         <h3 class="edit-interview__ceremony__header__title">Questions</h3>
-        <ol>
+        <ol class="edit-interview__question-cards">
           <draggable
             v-model="interview.questions"
             tag="transition-group"
@@ -296,12 +291,14 @@ const handleRemoveQuestion = () => {
       &__title {
         @include text-h5;
         font-weight: 500;
-        margin-bottom: 16px;
       }
       &__subtitle {
         color: var(--color-text-secondary);
       }
     }
+  }
+  &__question-cards {
+    padding-top: 16px;
   }
   &__question-card {
     @include flyout;
