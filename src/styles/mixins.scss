@@ -37,3 +37,10 @@
   z-index: 100;
   background-color: var(--color-background);
 }
+
+@mixin pageContainer {
+  max-width: 840px;
+  margin: auto;
+  overflow: auto;
+  height: calc(100vh - 90px);
+}

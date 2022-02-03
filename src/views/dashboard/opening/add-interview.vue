@@ -172,11 +172,7 @@ const availableTemplateList = computed(() => {
 
 <style lang="scss">
 .add-interview {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  max-width: 840px;
-  margin: auto;
+  @include pageContainer;
   &__header {
     align-self: flex-start;
     margin-bottom: 24px;

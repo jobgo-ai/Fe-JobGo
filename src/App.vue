@@ -94,6 +94,7 @@ html {
   background-color: var(--color-background);
   font-size: 14px;
   line-height: 20px;
+  overflow: hidden;
 }
 
 ol,

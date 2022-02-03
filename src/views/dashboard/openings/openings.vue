@@ -103,13 +103,9 @@ const handleOpeningCardClick = (opening) => {
   }
 };
 
-onUnmounted(async () => {
-  document.documentElement.style.overflow = "auto";
-});
+onUnmounted(async () => {});
 
 onMounted(async () => {
-  // For overflow on transitions
-  document.documentElement.style.overflow = "hidden";
   // Checks for openingRef in route params
   if (route.params.openingRef) {
     // Sets selected opening to openingRef in route params

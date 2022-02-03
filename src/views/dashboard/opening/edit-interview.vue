@@ -9,6 +9,21 @@
         v-if="isAddQuestionDrawerOpen"
       />
     </hp-drawer>
+    <teleport to="#teleport-target-header">
+      <!-- <hp-button
+        class="edit-openings__teleport-button"
+        icon="trash"
+        @handleClick="archiveOpening"
+      ></hp-button> -->
+      <hp-button
+        label="Save"
+        type="submit"
+        primary
+        :isLoading="isSaving"
+        @handleClick="onSubmit"
+        :isDisabled="!meta.dirty"
+      ></hp-button>
+    </teleport>
     <div class="edit-interview" v-if="!isInterviewLoading && !isLoading">
       <div class="edit-interview__container">
         <form @submit.prevent="handleContextFormSave">
@@ -104,21 +119,6 @@
       </div>
     </div>
     <hp-spinner v-else size="24" content />
-    <teleport to="#teleport-target-header">
-      <!-- <hp-button
-        class="edit-openings__teleport-button"
-        icon="trash"
-        @handleClick="archiveOpening"
-      ></hp-button> -->
-      <hp-button
-        label="Save"
-        type="submit"
-        primary
-        :isLoading="isSaving"
-        @handleClick="onSubmit"
-        :isDisabled="!meta.dirty"
-      ></hp-button>
-    </teleport>
   </div>
 </template>
 
@@ -258,13 +258,14 @@ const handleRemoveQuestion = () => {
 
 <styles lang="scss">
 .edit-interview {
+  @include pageContainer;
   display: flex;
-  justify-content: center;
-  width: 100%;
+  flex-direction: column;
   &__container {
     display: flex;
     flex-direction: column;
     max-width: 552px;
+    align-self: center;
   }
   &::-webkit-scrollbar {
     display: none;
