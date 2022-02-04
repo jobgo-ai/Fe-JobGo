@@ -1,10 +1,14 @@
 <template>
   <router-view></router-view>
   <hp-toast />
+  <div class="mobile-warning">
+    <hp-mobile-warning />
+  </div>
 </template>
 
 <script setup>
 import HpToast from "@/components/hp-toast.vue";
+import HpMobileWarning from "@/components/hp-mobile-warning.vue";
 
 const currentTheme = localStorage.getItem("theme")
   ? localStorage.getItem("theme")
@@ -13,10 +17,20 @@ const currentTheme = localStorage.getItem("theme")
 if (currentTheme) {
   document.documentElement.setAttribute("data-theme", currentTheme);
 }
+
+if (
+  window.matchMedia &&
+  window.matchMedia("(prefers-color-scheme: dark)").matches
+) {
+  document.documentElement.setAttribute("data-theme", "dark");
+}
 </script>
 
 <style lang="scss">
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap");
+
+.mobile-warning {
+}
 
 :root {
   font-family: "Inter", sans-serif;

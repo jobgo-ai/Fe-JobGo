@@ -153,7 +153,34 @@
                   interview.interview.started && !interview.interview.terminated
                 "
               >
-                in progress
+                <div class="candidate-details__interview-grid__item__icon-text">
+                  <hp-icon
+                    class="
+                      candidate-details__interview-grid__item__icon-text__icon
+                    "
+                    name="chronometer"
+                    :size="15"
+                  ></hp-icon>
+                  {{ secondsToMinutes(interview.statistics.duration) }} minutes
+                </div>
+                <div class="candidate-details__interview-grid__item__icon-text">
+                  <hp-icon
+                    class="
+                      candidate-details__interview-grid__item__icon-text__icon
+                    "
+                    name="chronometer"
+                    :size="15"
+                  ></hp-icon>
+
+                  Started
+                  {{ formatMinutesAgo(interview.interview.started) }} minutes
+                  ago
+                </div>
+                <hp-button
+                  :href="calculateInterviewLink(interview)"
+                  label="Got to interview"
+                  class="candidate-details__interview-grid__item__actions"
+                ></hp-button>
               </div>
               <div v-else>
                 <div class="candidate-details__interview-grid__item__icon-text">
@@ -297,6 +324,15 @@ const skillList = computed(() => {
   );
 });
 
+const formatMinutesAgo = (date) => {
+  const date1 = DateTime.fromISO(date);
+  const date2 = DateTime.fromISO(DateTime.now());
+
+  const diff = date1.diff(date2, ["hours", "minutes"]);
+
+  return (diff.toObject().minutes * -1).toFixed(0);
+};
+
 const formatDate = (date) => {
   return DateTime.fromISO(date).toFormat("dd LLL, yyyy");
 };
@@ -310,6 +346,8 @@ const createClasses = (interview) => {
     "candidate-details__interview-grid__item": true,
     "candidate-details__interview-grid__item--terminated":
       interview.interview.terminated,
+    "candidate-details__interview-grid__item--in-progress":
+      interview.interview.started && !interview.interview.terminated,
   };
 };
 

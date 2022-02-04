@@ -31,9 +31,9 @@ const props = defineProps({
 <style lang="scss">
 .hp-badge {
   display: inline-flex;
-  background-color: var(--color-panel);
+  background-color: inherit;
   color: var(--color-text-secondary);
-  border: 1px solid var(--color-border-subtle);
+  border: 1px solid var(--color-border);
   display: inline-flex;
   align-items: center;
   justify-content: center;
