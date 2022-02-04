@@ -9,8 +9,6 @@
     "build-storybook": "build-storybook"
   },
   "dependencies": {
-    "@vueform/multiselect": "^2.3.1",
-    "@vueform/toggle": "^2.0.1",
     "@vueuse/core": "^7.5.3",
     "luxon": "^2.3.0",
     "uuid": "^3.4.0",

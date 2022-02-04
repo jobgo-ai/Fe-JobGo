@@ -389,7 +389,7 @@ const copyInterview = (interview) => {
       navigator.clipboard.writeText(interviewLink);
       setToast({
         type: "positive",
-        title: "Well done!",
+        title: "Copy that!",
         message: `Interview link copied to clipboard`,
       });
     }
