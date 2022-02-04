@@ -78,7 +78,7 @@ const containerClasses = computed(() => {
       }
     }
     &--focused {
-      outline: $outline;
+      outline: 4px solid var(--color-focus);
       .hp-counter__container {
         border: 1px solid var(--color-accent-background);
       }

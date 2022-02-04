@@ -78,7 +78,7 @@ const containerClasses = computed(() => {
       }
       &:focus:not([disabled]),
       &:active:not([disabled]) {
-        outline: $outline;
+        outline: 4px solid var(--color-focus);
         border: 1px solid var(--color-error);
       }
     }
@@ -113,7 +113,7 @@ const containerClasses = computed(() => {
     }
     &:focus:not([disabled]),
     &:active:not([disabled]) {
-      outline: $outline;
+      outline: 4px solid var(--color-focus);
       border: 1px solid var(--color-accent-background);
     }
   }

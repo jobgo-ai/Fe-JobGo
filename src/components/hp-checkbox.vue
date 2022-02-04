@@ -72,7 +72,7 @@ input[type="checkbox"] {
   & + .hp-checkbox__label {
     &:focus {
       &::before {
-        outline: $outline;
+        outline: 4px solid var(--color-focus);
       }
     }
     &:hover {

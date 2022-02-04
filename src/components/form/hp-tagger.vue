@@ -1,16 +1,17 @@
 <template>
   <div class="hp-tagger" ref="target">
     <div class="hp-tagger__target" @click="handleOpenFlyout">
-      <div class="hp-tagger__target__button">
+      <button type="button" tabIndex="0" class="hp-tagger__target__button">
         <hp-icon
           :class="`
+          hp-tagger__target__button__add-icon
             ${isValueEmpty && 'hp-tagger__target__button__icon'}
           `"
           name="plus"
           size="14"
         ></hp-icon>
         <div v-if="isValueEmpty">{{ label }}</div>
-      </div>
+      </button>
       <transition name="hp-tagger-flyout-transition">
         <div
           :style="{
@@ -267,6 +268,7 @@ watch(top, (newValue) => {
         justify-content: center;
         align-items: center;
         padding: 4px;
+        color: var(--color-text-secondary);
         border-left: 1px solid var(--color-border);
         cursor: pointer;
       }
@@ -289,6 +291,10 @@ watch(top, (newValue) => {
       padding: 6px;
       color: var(--color-text-secondary);
       height: 28px;
+      background-color: var(--color-background);
+      &:focus {
+        outline: 4px solid var(--color-focus);
+      }
       &__icon {
         margin-right: 6px;
       }

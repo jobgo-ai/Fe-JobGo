@@ -181,7 +181,7 @@ const handleKeydown = (index) => {
       }
       &:focus:not([disabled]),
       &:active:not([disabled]) {
-        outline: $outline;
+        outline: 4px solid var(--color-focus);
         border: 1px solid var(--color-accent-background);
       }
     }
