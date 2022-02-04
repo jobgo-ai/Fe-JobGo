@@ -208,6 +208,7 @@ const emit = defineEmits(["handleClick"]);
     background-color: var(--color-background);
     color: var(--color-text-primary);
     outline: none;
+    white-space: nowrap;
     border: 1px solid var(--color-border);
     border-radius: $border-radius-sm;
     transition: border-color 0.15s cubic-bezier(0.17, 0.67, 0.83, 0.67);

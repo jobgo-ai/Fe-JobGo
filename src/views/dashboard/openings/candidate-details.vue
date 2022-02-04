@@ -149,6 +149,9 @@
                 </div>
               </div>
               <div
+                class="
+                  candidate-details__interview-grid__item__progress-wrapper
+                "
                 v-else-if="
                   interview.interview.started && !interview.interview.terminated
                 "
@@ -158,10 +161,10 @@
                     class="
                       candidate-details__interview-grid__item__icon-text__icon
                     "
-                    name="chronometer"
+                    name="loader"
                     :size="15"
                   ></hp-icon>
-                  {{ secondsToMinutes(interview.statistics.duration) }} minutes
+                  In progress
                 </div>
                 <div class="candidate-details__interview-grid__item__icon-text">
                   <hp-icon

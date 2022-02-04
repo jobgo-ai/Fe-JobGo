@@ -157,6 +157,7 @@ const onSubmit = handleSubmit(async (values) => {
       templates: values.templates.map((t) => t.reference),
     },
   });
+  fetchOpenings();
   isSaving.value = false;
   opening.value = putOpening.data.value.opening;
   resetForm({ touched: false, values: opening.value });
