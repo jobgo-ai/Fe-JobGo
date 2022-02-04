@@ -15,7 +15,11 @@
     </div>
     <form @submit.prevent="onSubmit" class="new-question__form">
       <div class="new-question__question">
-        <hp-input name="content" placeholder="Type the question"></hp-input>
+        <hp-input
+          ref="questionInputRef"
+          name="content"
+          placeholder="Type the question"
+        ></hp-input>
       </div>
       <div class="new-question__duration">
         <div class="new-question__duration__labels">
@@ -79,7 +83,7 @@
 
 <script setup>
 //Vendor
-import { ref, computed, onMounted } from "vue";
+import { ref, computed, onMounted, watch, watchEffect } from "vue";
 import { useForm } from "vee-validate";
 import * as yup from "yup";
 import { useRoute } from "vue-router";
@@ -123,6 +127,13 @@ const { handleSkillSearch } = useSkillSearch();
 const { jobLevels } = useConstants();
 
 const isSaving = ref(false);
+
+const questionInputRef = ref(null);
+watchEffect(() => {
+  if (questionInputRef.value) {
+    questionInputRef.value.inputRef.focus();
+  }
+});
 
 const jobLevelOptions = computed(() => {
   return jobLevels.value.map((j) => ({ label: j.name, value: j.slug }));

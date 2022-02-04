@@ -160,16 +160,11 @@ onClickOutside(target, (event) => {
   isFlyoutOpen.value = false;
 });
 
-watchEffect(
-  () => {
-    if (searchInput.value) {
-      searchInput.value.inputRef.focus();
-    }
-  },
-  {
-    flush: "post",
+watchEffect(() => {
+  if (searchInput.value) {
+    searchInput.value.inputRef.focus();
   }
-);
+});
 
 let timeout = null;
 
@@ -353,8 +348,6 @@ watch(top, (newValue) => {
   }
 }
 
-.hp-tagger-flyout-transition {
-}
 .hp-tagger-flyout-transition-enter-active,
 .hp-tagger-flyout-transition-leave-active {
   transition: all 0.15s cubic-bezier(0.17, 0.67, 0.83, 0.67);

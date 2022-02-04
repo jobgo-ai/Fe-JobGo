@@ -84,16 +84,11 @@ const isAddNew = props.candidate.name === "";
 
 const nameInput = ref(null);
 
-watchEffect(
-  () => {
-    if (nameInput.value) {
-      nameInput.value.inputRef.focus();
-    }
-  },
-  {
-    flush: "post",
+watchEffect(() => {
+  if (nameInput.value) {
+    nameInput.value.inputRef.focus();
   }
-);
+});
 
 const { setToast } = useToast();
 

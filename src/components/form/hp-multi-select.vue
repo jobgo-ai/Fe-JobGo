@@ -117,16 +117,11 @@ const isLoading = ref(false);
 
 const searchInput = ref(null);
 
-watchEffect(
-  () => {
-    if (searchInput.value) {
-      searchInput.value.inputRef.focus();
-    }
-  },
-  {
-    flush: "post",
+watchEffect(() => {
+  if (searchInput.value) {
+    searchInput.value.inputRef.focus();
   }
-);
+});
 
 const computedLabel = computed(() => {
   return props.selectedMessage
