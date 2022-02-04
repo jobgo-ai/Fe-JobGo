@@ -84,10 +84,6 @@ const styles = computed(() => {
       color: var(--color-text-primary);
       background-color: white;
     }
-
-    &:focus {
-      outline: 4px solid var(--color-focus);
-    }
   }
   &__background {
     border-radius: 8px;
