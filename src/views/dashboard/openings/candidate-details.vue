@@ -49,7 +49,9 @@
               </div>
               <div class="candidate-details__overview__score__average-score">
                 The average score is
-                {{ candidate.opening.statistics.averageOpeningScore }}
+                {{
+                  candidate.opening.statistics.averageOpeningScore.toFixed(2)
+                }}
                 <hp-icon name="arrow-top"></hp-icon>
               </div>
             </div>
@@ -145,7 +147,10 @@
                   {{ formatDate(interview.interview.terminated) }}
                 </div>
                 <div class="candidate-details__interview-grid__item__actions">
-                  <hp-button label="View full results"></hp-button>
+                  <hp-button
+                    label="View full results"
+                    :to="`/opening/${route.params.openingRef}/results/${interview.interview.token}`"
+                  ></hp-button>
                 </div>
               </div>
               <div
@@ -461,7 +466,7 @@ const calculateInterviewLink = (interview) => {
       height: 100%;
     }
     &__score {
-      border: 1px solid #ccc;
+      border: 1px solid var(--color-border);
       border-radius: $border-radius-lg;
       height: 232px;
       font-size: 14px;
