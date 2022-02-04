@@ -20,12 +20,12 @@ import EmptyState from "@/assets/abstracts/empty-state.svg";
   width: 100%;
   height: 100%;
   background-color: var(--color-background);
-  color: var(--color-accent-forground);
+  color: var(--color-text-primary);
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  font-size: 16px;
+  font-size: 18px;
   z-index: 1000;
   padding: 24px;
 

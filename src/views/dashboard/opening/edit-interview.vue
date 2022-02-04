@@ -102,6 +102,7 @@
             Design the template by editing ceremonies and interview questions.
           </p>
           <hp-input label="Name" name="name"></hp-input>
+          <hp-input label="Description" name="description"></hp-input>
           <div>
             <div class="edit-interview__ceremony">
               <div class="edit-interview__ceremony__header">
