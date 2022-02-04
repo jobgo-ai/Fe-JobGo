@@ -82,6 +82,19 @@ if (currentTheme) {
   --color-spinner-bullet: rgba(255, 255, 255, 1);
 }
 
+.flyout-transition {
+  transform: translateY(0);
+}
+.flyout-transition-enter-active,
+.flyout-transition-leave-active {
+  transition: all 0.15s cubic-bezier(0.17, 0.67, 0.83, 0.67);
+}
+.flyout-transition-enter-from,
+.flyout-transition-leave-to {
+  opacity: 0;
+  transform: translateY(-10px);
+}
+
 * {
   box-sizing: border-box;
   &::-webkit-scrollbar {

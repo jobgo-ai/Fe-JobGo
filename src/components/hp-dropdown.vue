@@ -31,7 +31,7 @@
         :size="16"
       ></hp-icon>
     </button>
-    <transition name="hp-dropdown-flyout-transition">
+    <transition name="flyout-transition">
       <div class="hp-dropdown__flyout" v-if="isDropdownOpen">
         <slot name="dropdown"></slot>
       </div>
@@ -225,18 +225,5 @@ const iconClasses = computed(() => {
     top: calc(100% + 12px);
     right: 0;
   }
-}
-
-.hp-dropdown-flyout-transition {
-  transform: translateY(0);
-}
-.hp-dropdown-flyout-transition-enter-active,
-.hp-dropdown-flyout-transition-leave-active {
-  transition: all 0.15s cubic-bezier(0.17, 0.67, 0.83, 0.67);
-}
-.hp-dropdown-flyout-transition-enter-from,
-.hp-dropdown-flyout-transition-leave-to {
-  opacity: 0;
-  transform: translateY(-10px);
 }
 </div>

@@ -19,6 +19,72 @@
       />
     </hp-drawer>
     <teleport to="#teleport-target-header">
+      <div class="edit-interview__overview-button">
+        <hp-button
+          @handleClick="isOverviewFlyoutOpen = !isOverviewFlyoutOpen"
+          icon="file"
+        >
+        </hp-button>
+        <transition name="flyout-transition">
+          <div
+            v-if="isOverviewFlyoutOpen"
+            class="edit-interview__overview-button__flyout"
+          >
+            <div class="edit-interview__overview-button__flyout__header">
+              Overview
+            </div>
+            <div class="edit-interview__overview-button__flyout__stats">
+              <div class="edit-interview__overview-button__flyout__stats__stat">
+                <hp-icon
+                  class="
+                    edit-interview__overview-button__flyout__stats__stat__icon
+                  "
+                  name="chronometer"
+                ></hp-icon>
+                <div
+                  class="
+                    edit-interview__overview-button__flyout__stats__stat__text
+                  "
+                >
+                  {{ interview.statistics.duration / 60 }} minutes
+                </div>
+              </div>
+              <div class="edit-interview__overview-button__flyout__stats__stat">
+                <hp-icon
+                  class="
+                    edit-interview__overview-button__flyout__stats__stat__icon
+                  "
+                  name="questions"
+                ></hp-icon>
+                <div
+                  class="
+                    edit-interview__overview-button__flyout__stats__stat__text
+                  "
+                >
+                  {{ interview.statistics.questions }} questions
+                </div>
+              </div>
+            </div>
+            <div class="edit-interview__overview-button__flyout__header">
+              Top skills evaluated
+              <ol class="edit-interview__overview-button__skills">
+                <li
+                  class="edit-interview__overview-button__skills__skill"
+                  v-for="skill in interview.statistics.skills"
+                >
+                  {{ skill.value.name }}
+                  <hp-badge
+                    class="
+                      edit-interview__overview-button__skills__skill__badge
+                    "
+                    :content="skill.quantity"
+                  ></hp-badge>
+                </li>
+              </ol>
+            </div>
+          </div>
+        </transition>
+      </div>
       <hp-button
         label="Save"
         type="submit"
@@ -166,6 +232,7 @@ const props = defineProps({
 const isLoading = ref(true);
 const isSaving = ref(false);
 const route = useRoute();
+const isOverviewFlyoutOpen = ref(false);
 const isAddQuestionDrawerOpen = ref(false);
 const isEditQuestionDrawerOpen = ref(false);
 const { interview, fetchInterview, isInterviewLoading, setInterview } =
@@ -351,6 +418,63 @@ const handleNewQuestionClose = () => {
   }
   &__handle {
     cursor: grab;
+  }
+
+  &__overview-button {
+    margin-right: 6px;
+    position: relative;
+    &__skills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 16px;
+      &__skill {
+        border: 1px solid var(--color-border);
+        background-color: var(--color-panel);
+        padding: 6px;
+        border-radius: $border-radius-sm;
+        white-space: nowrap;
+        &__badge {
+          margin-left: 12px;
+        }
+      }
+    }
+    &__flyout {
+      @include flyout;
+      position: absolute;
+      right: 0;
+      top: calc(100% + 6px);
+      &__header {
+        color: var(--color-text-secondary);
+        font-weight: 500;
+        @include text-h5;
+        padding-bottom: 12px;
+      }
+      &__stats {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-gap: 16px;
+        padding-bottom: 16px;
+        border-bottom: 1px dashed var(--color-border);
+        margin-bottom: 16px;
+        &__stat {
+          border-radius: $border-radius-sm;
+          border: $border;
+          padding: 4px;
+          display: flex;
+          align-content: center;
+          align-items: center;
+          padding: 8px;
+          &__icon {
+            color: var(--color-text-secondary);
+            margin-right: 6px;
+          }
+          &__text {
+            white-space: nowrap;
+          }
+        }
+      }
+    }
   }
 }
 

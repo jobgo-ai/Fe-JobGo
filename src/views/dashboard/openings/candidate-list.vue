@@ -92,7 +92,7 @@
                   name="chevron-down"
                 ></hp-icon>
               </div>
-              <transition name="candidate-list__flyout-transition">
+              <transition name="flyout-transition">
                 <div v-if="isFlyoutOpen" class="candidate-list__flyout">
                   <ol class="candidate-list__flyout__items">
                     <li
@@ -442,19 +442,6 @@ const candidateList = computed(() => {
     display: flex;
     justify-content: flex-end;
     margin-bottom: 16px;
-  }
-
-  .candidate-list__flyout-transition {
-    transform: translateY(0);
-  }
-  .candidate-list__flyout-transition-enter-active,
-  .candidate-list__flyout-transition-leave-active {
-    transition: all 0.15s cubic-bezier(0.17, 0.67, 0.83, 0.67);
-  }
-  .candidate-list__flyout-transition-enter-from,
-  .candidate-list__flyout-transition-leave-to {
-    opacity: 0;
-    transform: translateY(-10px);
   }
 }
 </style>

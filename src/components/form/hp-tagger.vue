@@ -12,7 +12,7 @@
         ></hp-icon>
         <div v-if="isValueEmpty">{{ label }}</div>
       </button>
-      <transition name="hp-tagger-flyout-transition">
+      <transition name="flyout-transition">
         <div
           :style="{
             top: `${flyoutTop}px`,
@@ -346,15 +346,5 @@ watch(top, (newValue) => {
     align-items: center;
     padding-bottom: 12px;
   }
-}
-
-.hp-tagger-flyout-transition-enter-active,
-.hp-tagger-flyout-transition-leave-active {
-  transition: all 0.15s cubic-bezier(0.17, 0.67, 0.83, 0.67);
-}
-.hp-tagger-flyout-transition-enter-from,
-.hp-tagger-flyout-transition-leave-to {
-  opacity: 0;
-  transform: translateY(-10px);
 }
 </style>
