@@ -3,6 +3,7 @@
     <component
       :is="computedTag"
       :to="to"
+      :href="href"
       @click="emit('handleClick')"
       class="hp-button__button"
       :class="buttonClasses"
@@ -102,10 +103,9 @@ const computedTag = computed(() => {
     return "router-link";
   }
 
-  // In case we want a as well
-  // if (props.href !== undefined && props.href !== null) {
-  //   return "a";
-  // }
+  if (props.href !== undefined && props.href !== null) {
+    return "a";
+  }
 
   return "button";
 });

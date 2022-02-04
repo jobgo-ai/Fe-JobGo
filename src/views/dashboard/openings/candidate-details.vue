@@ -181,17 +181,23 @@
                   class="candidate-details__interview-grid__item__actions"
                   v-if="isNextAction(interview, opening.templates)"
                 >
-                  <hp-button primary label="Start interview"></hp-button>
+                  <hp-button
+                    :href="calculateInterviewLink(interview)"
+                    primary
+                    label="Start interview"
+                  ></hp-button>
                   <hp-button
                     class="
                       candidate-details__interview-grid__item__actions--icon
                     "
                     icon="copy"
+                    @click="copyInterview(interview)"
                   ></hp-button>
                 </div>
                 <div
                   class="candidate-details__interview-grid__item__actions"
                   v-else
+                  @click="copyInterview(interview)"
                 >
                   <hp-button icon="copy" label="Copy link"></hp-button>
                 </div>
@@ -210,13 +216,17 @@
 </template>
 
 <script setup>
-import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
+// Vendor
 import { onMounted, watch, ref, computed } from "vue";
 import { useRoute } from "vue-router";
 import { DateTime } from "luxon";
 
+// Hooks
 import useCandidates from "@/hooks/useCandidates";
+import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
+import useToast from "@/hooks/useToast";
 
+// Components
 import HpButton from "@/components/hp-button.vue";
 import HpBadge from "@/components/hp-badge.vue";
 import HpIcon from "@/components/hp-icon.vue";
@@ -242,6 +252,8 @@ const route = useRoute();
 const isEditCandidateModalOpen = ref(false);
 const opening = ref({});
 const URL = import.meta.env.VITE_INTERVIEW_URL;
+
+const { setToast } = useToast();
 
 const getCandidateDetails = async () => {
   await fetchCandidate(route.query.candidate);
@@ -323,6 +335,27 @@ const completedTemplates = computed(() => {
   return candidate.value.opening.templates.filter((t) => t.interview.terminated)
     .length;
 });
+
+const copyInterview = (interview) => {
+  const interviewLink = `${URL}/${interview.interview.token}`;
+  navigator.permissions.query({ name: "clipboard-write" }).then((result) => {
+    if (result.state == "granted" || result.state == "prompt") {
+      navigator.clipboard.writeText(interviewLink);
+      setToast({
+        type: "positive",
+        title: "Well done!",
+        message: `Interview link copied to clipboard`,
+      });
+    }
+  });
+};
+
+const calculateInterviewLink = (interview) => {
+  const URL = `${import.meta.env.VITE_INTERVIEW_URL}/token/${
+    interview?.interview?.token
+  }`;
+  return URL;
+};
 </script>
 
 <style scoped lang="scss">
