@@ -162,7 +162,7 @@
                 <div class="edit-interview__question-card__content">
                   {{ element.content }}
                 </div>
-                <hp-question-card-stats :question="element" />
+                <hp-question-card-stats hasTooltips :question="element" />
                 <div class="edit-interview__question-card__actions">
                   <hp-button
                     class="edit-interview__question-card__actions__button"

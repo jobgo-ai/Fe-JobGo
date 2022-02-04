@@ -15,6 +15,11 @@
       ></hp-icon>
       {{ question.jobLevels.length }}
       Levels
+      <hp-info-circle
+        class="hp-question-card-stats__stats__stat__info-circle"
+        v-if="hasTooltips && question.jobLevels.length > 0"
+        :content="question.jobLevels.map((level) => level.name).join(', ')"
+      ></hp-info-circle>
     </div>
     <div class="hp-question-card-stats__stats__stat">
       <hp-icon
@@ -23,21 +28,31 @@
       ></hp-icon>
       {{ question.skills.length }}
       Skills
+      <hp-info-circle
+        class="hp-question-card-stats__stats__stat__info-circle"
+        :content="question.skills.map((level) => level.name).join(', ')"
+        v-if="hasTooltips && question.skills.length > 0"
+      ></hp-info-circle>
     </div>
   </div>
 </template>
 
 <script setup>
 import HpIcon from "@/components/hp-icon.vue";
+import HpInfoCircle from "@/components/hp-info-circle.vue";
 const props = defineProps({
   question: {
     type: Object,
     required: true,
   },
+  hasTooltips: {
+    type: Boolean,
+    default: false,
+  },
 });
 </script>
 
-<swag lang="scss">
+<style lang="scss">
 .hp-question-card-stats {
   display: flex;
   &__stats {
@@ -60,7 +75,10 @@ const props = defineProps({
         color: var(--color-text-secondary);
         margin-right: 4px;
       }
+      &__info-circle {
+        margin-left: 6px;
+      }
     }
   }
 }
-</swag>
+</style>
