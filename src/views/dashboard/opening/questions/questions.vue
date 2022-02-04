@@ -4,6 +4,7 @@
       <component
         :is="currentComponent"
         :handleClose="handleClose"
+        @handleClose="handleClose"
         @handleTabChange="
           isCurrentViewQuestionList = !isCurrentViewQuestionList
         "

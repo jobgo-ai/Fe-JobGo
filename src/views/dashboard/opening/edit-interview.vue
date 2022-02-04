@@ -14,9 +14,8 @@
       @close="isEditQuestionDrawerOpen = false"
     >
       <new-question
-        @handleClose="() => (isEditQuestionDrawerOpen = false)"
+        @handleClose="handleNewQuestionClose"
         :question="isEditQuestionDrawerOpen"
-        v-if="isEditQuestionDrawerOpen"
       />
     </hp-drawer>
     <teleport to="#teleport-target-header">
@@ -105,7 +104,7 @@
                     @handleClick="isEditQuestionDrawerOpen = element"
                   ></hp-button
                   ><hp-button
-                    @handleClick="handleRemoveQuestion"
+                    @handleClick="handleRemoveQuestion(element)"
                     icon="trash"
                   ></hp-button>
                 </div>
@@ -169,7 +168,8 @@ const isSaving = ref(false);
 const route = useRoute();
 const isAddQuestionDrawerOpen = ref(false);
 const isEditQuestionDrawerOpen = ref(false);
-const { interview, fetchInterview, isInterviewLoading } = useInterviews();
+const { interview, fetchInterview, isInterviewLoading, setInterview } =
+  useInterviews();
 const putInterview = usePut(`templates/${route.params.interviewRef}`);
 
 const { setToast } = useToast();
@@ -254,8 +254,27 @@ const handleDragChange = () => {
   setFieldValue("questions", interview.value.questions);
 };
 
-const handleRemoveQuestion = () => {
-  console.log("hello");
+const handleRemoveQuestion = async (template) => {
+  const putInterview = usePut(`templates/${route.params.interviewRef}`);
+
+  await putInterview.put({
+    template: {
+      ...interview.value,
+      questions: interview.value.questions
+        .map((q) => q.reference)
+        .filter((q) => q !== template.reference),
+    },
+  });
+  setInterview(putInterview.data.value.template);
+  setToast({
+    type: "positive",
+    title: "Well done!",
+    message: "Interview updated",
+  });
+};
+
+const handleNewQuestionClose = () => {
+  isEditQuestionDrawerOpen.value = null;
 };
 </script>
 

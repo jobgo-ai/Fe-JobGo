@@ -26,6 +26,7 @@
               icon="search"
               ref="searchInput"
               :name="name"
+              standalone
               placeholder="Search..."
               @input="handleAsyncSearch"
             />

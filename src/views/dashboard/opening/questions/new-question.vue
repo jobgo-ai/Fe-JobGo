@@ -141,7 +141,7 @@ const route = useRoute();
 const schema = yup.object({
   content: yup.string().required("A question is required"),
   duration: yup.number(),
-  skills: yup.array().required(),
+  skills: yup.array().nullable(),
   levels: yup.array(),
   guidelines: yup.array(),
 });
@@ -174,7 +174,7 @@ const { handleSubmit, meta } = useForm({
   initialValues: initialValues,
 });
 
-const { fetchInterview } = useInterviews();
+const { fetchInterview, setInterview } = useInterviews();
 
 const { setToast } = useToast();
 
@@ -189,29 +189,37 @@ const onSubmit = handleSubmit(async (values) => {
     skills: values.skills.map((s) => s.value),
   };
 
-  const putQuestion = usePut(`questions/${props.question.reference}`);
-  await putQuestion.put({
-    question: { ...formattedValues },
-  });
-  await fetchInterview(route.params.interviewRef);
-  isSaving.value = false;
+  if (props.question?.reference) {
+    const putQuestion = usePut(`questions/${props.question.reference}`);
+    await putQuestion.put({
+      question: { ...formattedValues },
+    });
+    await fetchInterview(route.params.interviewRef);
+    setToast({
+      type: "positive",
+      title: "Well done!",
+      message: `Question edited successfully`,
+    });
+  } else {
+    const postQuestion = usePost("questions");
+    await postQuestion.post({
+      question: { ...formattedValues, templates: [route.params.interviewRef] },
+    });
+    const postTemplateQuestion = usePost(
+      `templates/${route.params.interviewRef}/questions`
+    );
+    await postTemplateQuestion.post({
+      question: postQuestion.data.value.question.reference,
+    });
+    setInterview(postTemplateQuestion.data.value.template);
+    setToast({
+      type: "positive",
+      title: "Well done!",
+      message: `Question created and added to interview`,
+    });
+  }
   emits("handleClose");
-  setToast({
-    type: "positive",
-    title: "Well done!",
-    message: `Question edited successfully`,
-  });
-
-  // const postQuestion = usePost("questions");
-  // await postQuestion.post({
-  //   question: { ...formattedValues, templates: [route.params.interviewRef] },
-  // });
-  // const postTemplateQuestion = usePost(
-  //   `templates/${route.params.interviewRef}/questions`
-  // );
-  // await postTemplateQuestion.post({
-  //   question: postQuestion.data.value.question.reference,
-  // });
+  isSaving.value = false;
 });
 </script>
 
