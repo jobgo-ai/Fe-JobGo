@@ -1,1 +1,7 @@
-<template><div>Settings</div></template>
+<template>
+  <div></div>
+</template>
+
+<script></script>
+
+<styles lang="scss"></styles>
