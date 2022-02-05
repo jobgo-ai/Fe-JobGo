@@ -1,0 +1,84 @@
+<template>
+  <div class="hp-question-card-stats">
+    <div class="hp-question-card-stats__stats__stat">
+      <hp-icon
+        class="hp-question-card-stats__stats__stat__icon"
+        name="chronometer"
+      ></hp-icon>
+      {{ question.duration / 60 }}
+      Minutes
+    </div>
+    <div class="hp-question-card-stats__stats__stat">
+      <hp-icon
+        class="hp-question-card-stats__stats__stat__icon"
+        name="skills"
+      ></hp-icon>
+      {{ question.jobLevels.length }}
+      Levels
+      <hp-info-circle
+        class="hp-question-card-stats__stats__stat__info-circle"
+        v-if="hasTooltips && question.jobLevels.length > 0"
+        :content="question.jobLevels.map((level) => level.name).join(', ')"
+      ></hp-info-circle>
+    </div>
+    <div class="hp-question-card-stats__stats__stat">
+      <hp-icon
+        class="hp-question-card-stats__stats__stat__icon"
+        name="skills"
+      ></hp-icon>
+      {{ question.skills.length }}
+      Skills
+      <hp-info-circle
+        class="hp-question-card-stats__stats__stat__info-circle"
+        :content="question.skills.map((level) => level.name).join(', ')"
+        v-if="hasTooltips && question.skills.length > 0"
+      ></hp-info-circle>
+    </div>
+  </div>
+</template>
+
+<script setup>
+import HpIcon from "@/components/hp-icon.vue";
+import HpInfoCircle from "@/components/hp-info-circle.vue";
+const props = defineProps({
+  question: {
+    type: Object,
+    required: true,
+  },
+  hasTooltips: {
+    type: Boolean,
+    default: false,
+  },
+});
+</script>
+
+<style lang="scss">
+.hp-question-card-stats {
+  display: flex;
+  &__stats {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px dashed var(--color-border);
+    margin-top: 16px;
+    padding-bottom: 24px;
+    &__stat {
+      display: flex;
+      align-items: center;
+      color: var(--color-text-primary);
+      margin-right: 12px;
+      &__number {
+        font-weight: 600;
+        margin-right: 2px;
+      }
+      &__icon {
+        color: var(--color-text-secondary);
+        margin-right: 4px;
+      }
+      &__info-circle {
+        margin-left: 6px;
+      }
+    }
+  }
+}
+</style>
