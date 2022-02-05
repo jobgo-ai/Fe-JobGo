@@ -23,6 +23,7 @@ import EditInterview from "@/views/dashboard/opening/edit-interview.vue";
 import CompareCandidates from "@/views/dashboard/opening/compare-candidates.vue";
 
 const routes = [
+  { path: "/", redirect: "/openings" },
   {
     path: "/",
     component: Layout,
