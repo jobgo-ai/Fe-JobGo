@@ -217,11 +217,11 @@ import HpSpinner from "@/components/hp-spinner.vue";
 import HpQuestionCardStats from "@/components/hp-question-card-stats.vue";
 
 //Hooks
-import { usePut } from "@/hooks/useHttp";
-import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
-import useContextSave from "@/hooks/useContextSave";
-import useToast from "@/hooks/useToast";
-import useInterviews from "@/hooks/useInterviews";
+import { usePut } from "@/composables/useHttp";
+import { useBreadcrumbs } from "@/composables/useBreadcrumbs";
+import useContextSave from "@/composables/useContextSave";
+import useToast from "@/composables/useToast";
+import useInterviews from "@/composables/useInterviews";
 
 const props = defineProps({
   opening: {

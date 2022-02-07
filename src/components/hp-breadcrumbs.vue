@@ -18,7 +18,7 @@
 
 <script setup>
 import HpIcon from "@/components/hp-icon.vue";
-import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
+import { useBreadcrumbs } from "@/composables/useBreadcrumbs";
 
 const { crumbs } = useBreadcrumbs();
 </script>

@@ -7,7 +7,7 @@ export default {
   argTypes: {},
 };
 
-import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
+import { useBreadcrumbs } from "@/composables/useBreadcrumbs";
 const Template = (args) => ({
   components: { HpHeader },
   setup() {

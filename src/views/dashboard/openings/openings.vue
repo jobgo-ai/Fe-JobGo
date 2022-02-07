@@ -69,9 +69,9 @@ import { useRoute, useRouter } from "vue-router";
 import { onMounted, onUnmounted } from "vue";
 
 // Hooks
-import { usePost } from "@/hooks/useHttp";
-import useOpenings from "@/hooks/useOpenings";
-import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
+import { usePost } from "@/composables/useHttp";
+import useOpenings from "@/composables/useOpenings";
+import { useBreadcrumbs } from "@/composables/useBreadcrumbs";
 
 // Views
 import CandidateList from "@/views/dashboard/openings/candidate-list.vue";

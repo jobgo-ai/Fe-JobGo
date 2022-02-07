@@ -14,7 +14,7 @@
 import { onMounted } from "vue";
 
 //  Hooks
-import useConstants from "@/hooks/useConstants";
+import useConstants from "@/composables/useConstants";
 
 // Components
 import HpHeader from "@/components/hp-header.vue";

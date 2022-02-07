@@ -19,10 +19,10 @@ import { useForm } from "vee-validate";
 //Components
 import HpInput from "@/components/form/hp-input.vue";
 import HpButton from "@/components/hp-button.vue";
-import useAuth from "@/hooks/useAuth";
+import useAuth from "@/composables/useAuth";
 
 //Hooks
-import { usePost } from "@/hooks/useHttp";
+import { usePost } from "@/composables/useHttp";
 
 const schema = yup.object().shape({
   email: yup

@@ -183,7 +183,7 @@ import HpCandidateCard from "@/components/hp-candidate-card.vue";
 import EmptyState from "@/assets/abstracts/empty-state.svg";
 
 // Hooks
-import useCandidates from "@/hooks/useCandidates.js";
+import useCandidates from "@/composables/useCandidates.js";
 
 const props = defineProps({
   isCandidateDetailsOpen: {

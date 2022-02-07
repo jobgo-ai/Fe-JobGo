@@ -77,9 +77,9 @@ import HpButton from "@/components/hp-button.vue";
 import HpSwitch from "@/components/hp-switch.vue";
 
 // Hooks
-import { usePut } from "@/hooks/useHttp";
-import useAuth from "@/hooks/useAuth";
-import useToast from "@/hooks/useToast";
+import { usePut } from "@/composables/useHttp";
+import useAuth from "@/composables/useAuth";
+import useToast from "@/composables/useToast";
 
 const { user } = useAuth();
 

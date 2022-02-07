@@ -60,10 +60,10 @@ import HpButton from "@/components/hp-button.vue";
 import HpTooltip from "@/components/hp-tooltip.vue";
 
 // Hooks
-import { usePost, usePut } from "@/hooks/useHttp";
-import useCandidates from "@/hooks/useCandidates";
-import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
-import useToast from "@/hooks/useToast";
+import { usePost, usePut } from "@/composables/useHttp";
+import useCandidates from "@/composables/useCandidates";
+import { useBreadcrumbs } from "@/composables/useBreadcrumbs";
+import useToast from "@/composables/useToast";
 
 const props = defineProps({
   opening: {

@@ -97,11 +97,11 @@ import HpIcon from "@/components/hp-icon.vue";
 import HpMultiInput from "@/components/form/hp-multi-input.vue";
 
 // Hooks
-import useSkillSearch from "@/hooks/useSkillSearch";
-import useConstants from "@/hooks/useConstants";
-import useInterviews from "@/hooks/useInterviews";
-import useToast from "@/hooks/useToast";
-import { usePost, usePut } from "@/hooks/useHttp";
+import useSkillSearch from "@/composables/useSkillSearch";
+import useConstants from "@/composables/useConstants";
+import useInterviews from "@/composables/useInterviews";
+import useToast from "@/composables/useToast";
+import { usePost, usePut } from "@/composables/useHttp";
 
 const props = defineProps({
   question: {

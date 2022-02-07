@@ -7,7 +7,7 @@ export default {
 };
 
 import { ref } from "vue";
-import useSkillSearch from "@/hooks/useSkillSearch";
+import useSkillSearch from "@/composables/useSkillSearch";
 
 const Template = (args) => ({
   components: { HpTagger },

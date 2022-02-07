@@ -96,10 +96,10 @@ import HpAvatar from "@/components/hp-avatar.vue";
 import HpIcon from "@/components/hp-icon.vue";
 import HpSwitch from "@/components/hp-switch.vue";
 import HpBreadcrumbs from "@/components/hp-breadcrumbs.vue";
-import useContextSave from "@/hooks/useContextSave";
+import useContextSave from "@/composables/useContextSave";
 // Hooks
-import useAuth from "@/hooks/useAuth";
-import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
+import useAuth from "@/composables/useAuth";
+import { useBreadcrumbs } from "@/composables/useBreadcrumbs";
 // Svg
 import Logo from "@/assets/logo.svg";
 

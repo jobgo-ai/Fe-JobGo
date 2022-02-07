@@ -1,4 +1,4 @@
-import useToast from "../hooks/useToast";
+import useToast from "../composables/useToast";
 import HpToast from "../components/hp-toast.vue";
 
 export default {

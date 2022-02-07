@@ -1,8 +1,8 @@
 import { createApp } from "vue";
 import App from "./App.vue";
 import router from "./router";
-import useAuth from "@/hooks/useAuth";
-import useContextSave from "@/hooks/useContextSave";
+import useAuth from "@/composables/useAuth";
+import useContextSave from "@/composables/useContextSave";
 
 const app = createApp(App);
 

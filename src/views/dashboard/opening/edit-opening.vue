@@ -91,11 +91,11 @@ import HpSpinner from "@/components/hp-spinner.vue";
 import HpImageSelector from "@/components/form/hp-image-selector.vue";
 import MicCheck from "@/assets/abstracts/mic-check.svg";
 // hooks
-import useOpenings from "@/hooks/useOpenings";
-import useToast from "@/hooks/useToast";
-import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
-import useContextSave from "@/hooks/useContextSave";
-import { useGet, usePut } from "@/hooks/useHttp";
+import useOpenings from "@/composables/useOpenings";
+import useToast from "@/composables/useToast";
+import { useBreadcrumbs } from "@/composables/useBreadcrumbs";
+import useContextSave from "@/composables/useContextSave";
+import { useGet, usePut } from "@/composables/useHttp";
 
 const route = useRoute();
 const router = useRouter();

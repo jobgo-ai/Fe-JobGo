@@ -82,10 +82,10 @@ import HpSpinner from "@/components/hp-spinner.vue";
 import EmptyState from "@/assets/abstracts/empty-state.svg";
 
 // Hooks
-import { useGet, usePost } from "@/hooks/useHttp";
-import useSkillSearch from "@/hooks/useSkillSearch";
-import useInterviews from "@/hooks/useInterviews";
-import useConstants from "@/hooks/useConstants";
+import { useGet, usePost } from "@/composables/useHttp";
+import useSkillSearch from "@/composables/useSkillSearch";
+import useInterviews from "@/composables/useInterviews";
+import useConstants from "@/composables/useConstants";
 const props = defineProps({
   handleClose: {
     type: Function,

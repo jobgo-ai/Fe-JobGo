@@ -1,4 +1,4 @@
-import { useGet } from "@/hooks/useHttp";
+import { useGet } from "@/composables/useHttp";
 
 export default function useSkillSearch() {
   const handleSkillSearch = (query) => {

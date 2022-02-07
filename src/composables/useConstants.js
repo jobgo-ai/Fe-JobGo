@@ -1,5 +1,5 @@
 import { reactive, toRefs } from "vue";
-import { useGet } from "@/hooks/useHttp";
+import { useGet } from "@/composables/useHttp";
 
 const constants = reactive({
   competencies: [],

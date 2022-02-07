@@ -42,7 +42,7 @@
 
 <script setup>
 import HpIcon from "@/components/hp-icon.vue";
-import useToast from "@/hooks/useToast.js";
+import useToast from "@/composables/useToast.js";
 const { toastQueue, dismissToast } = useToast();
 </script>
 

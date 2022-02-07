@@ -12,8 +12,8 @@ import { ref, watch } from "vue";
 import { useRoute } from "vue-router";
 
 // Hooks
-import { useGet } from "@/hooks/useHttp";
-import useOpenings from "@/hooks/useOpenings";
+import { useGet } from "@/composables/useHttp";
+import useOpenings from "@/composables/useOpenings";
 
 const interview = ref(null);
 const route = useRoute();

@@ -257,9 +257,9 @@ import { useRoute } from "vue-router";
 import { DateTime } from "luxon";
 
 // Hooks
-import useCandidates from "@/hooks/useCandidates";
-import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
-import useToast from "@/hooks/useToast";
+import useCandidates from "@/composables/useCandidates";
+import { useBreadcrumbs } from "@/composables/useBreadcrumbs";
+import useToast from "@/composables/useToast";
 
 // Components
 import HpButton from "@/components/hp-button.vue";

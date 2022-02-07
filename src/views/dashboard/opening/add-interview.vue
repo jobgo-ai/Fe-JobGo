@@ -67,10 +67,10 @@ import HpSpinner from "@/components/hp-spinner.vue";
 import HpMultiSelect from "@/components/form/hp-multi-select.vue";
 import HpAddInterviewCard from "@/components/hp-add-interview-card.vue";
 // Hooks
-import useSkillSearch from "@/hooks/useSkillSearch";
-import useConstants from "@/hooks/useConstants";
-import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
-import { useGet, usePost, useDelete } from "@/hooks/useHttp";
+import useSkillSearch from "@/composables/useSkillSearch";
+import useConstants from "@/composables/useConstants";
+import { useBreadcrumbs } from "@/composables/useBreadcrumbs";
+import { useGet, usePost, useDelete } from "@/composables/useHttp";
 
 const props = defineProps({
   opening: {

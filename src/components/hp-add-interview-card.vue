@@ -79,9 +79,9 @@ import { ref } from "vue";
 import HpButton from "@/components/hp-button.vue";
 import HpIcon from "@/components/hp-icon.vue";
 import { useRoute, useRouter } from "vue-router";
-import { usePost } from "@/hooks/useHttp";
-import useToast from "@/hooks/useToast";
-import useOpenings from "@/hooks/useOpenings";
+import { usePost } from "@/composables/useHttp";
+import useToast from "@/composables/useToast";
+import useOpenings from "@/composables/useOpenings";
 const props = defineProps({
   opening: {
     type: Object,

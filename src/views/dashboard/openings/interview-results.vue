@@ -117,8 +117,8 @@ import HpBadge from "@/components/hp-badge.vue";
 import HpQuestionCardStats from "@/components/hp-question-card-stats.vue";
 
 // Hooks
-import { useGet } from "@/hooks/useHttp";
-import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
+import { useGet } from "@/composables/useHttp";
+import { useBreadcrumbs } from "@/composables/useBreadcrumbs";
 
 const props = defineProps({
   opening: {
