@@ -100,6 +100,7 @@ const listContainer = ref(null);
 const listContainerMaxHeight = ref(200);
 
 const search = ref("");
+const route = useRoute();
 
 const { setInterview } = useInterviews();
 
@@ -157,6 +158,10 @@ const getUrl = (loadingMore) => {
   if (filter.value.search !== "") {
     params.append("search", filter.value.search);
   }
+  if (route.params.interviewRef) {
+    params.append("exclude-template", [route.params.interviewRef]);
+  }
+
   return `${url}?${params.toString()}`;
 };
 
@@ -170,8 +175,6 @@ const getQuestions = async () => {
   isQuestionsLoading.value = false;
 };
 getQuestions();
-
-const route = useRoute();
 
 const addToInterview = async (question) => {
   const postTemplateQuestion = usePost(
