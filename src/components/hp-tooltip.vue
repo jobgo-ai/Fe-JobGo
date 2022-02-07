@@ -24,13 +24,13 @@ const handleHoverOut = () => {
   clearTimeout(timeout);
   timeout = setTimeout(() => {
     isHovered.value = false;
-  }, 350);
+  }, 150);
 };
 const handleHoverEnter = () => {
   clearTimeout(timeout);
   timeout = setTimeout(() => {
     isHovered.value = true;
-  }, 350);
+  }, 150);
 };
 </script>
 

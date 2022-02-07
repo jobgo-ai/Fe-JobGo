@@ -39,8 +39,10 @@
 }
 
 @mixin pageContainer {
-  max-width: 840px;
+  max-width: 848px;
   margin: auto;
+  padding-left: 4px;
+  padding-right: 4px;
   overflow: auto;
   height: calc(100vh - 90px);
 }

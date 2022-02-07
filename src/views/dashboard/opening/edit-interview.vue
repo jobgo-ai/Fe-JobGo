@@ -46,7 +46,7 @@
                     edit-interview__overview-button__flyout__stats__stat__text
                   "
                 >
-                  {{ interview.statistics.duration / 60 }} minutes
+                  {{ (interview.statistics.duration / 60).toFixed(0) }} minutes
                 </div>
               </div>
               <div class="edit-interview__overview-button__flyout__stats__stat">

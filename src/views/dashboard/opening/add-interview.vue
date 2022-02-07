@@ -55,7 +55,7 @@
 
 <script setup>
 // Vendor
-import { onMounted, ref, computed } from "vue";
+import { onMounted, ref, computed, watch } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import { useForm } from "vee-validate";
 import * as yup from "yup";
@@ -100,9 +100,37 @@ const templates = ref([]);
 const isAddInterviewModalOpen = ref(false);
 const { setBreadcrumbs } = useBreadcrumbs();
 
+watch(
+  () => filter.value,
+  () => {
+    fetchTemplates();
+  },
+  { deep: true }
+);
+
+const getUrl = (loadingMore) => {
+  let url = `templates`;
+  var params = new URLSearchParams([["limit", 20]]);
+  if (loadingMore) {
+    params.append("offset", next);
+  }
+  if (filter.value.jobLevels.length > 0) {
+    const onlySlugs = filter.value.jobLevels.map((j) => j.value);
+    params.append("job-levels", onlySlugs.join(","));
+  }
+  if (filter.value.skills.length > 0) {
+    const onlySlugs = filter.value.skills.map((s) => s.value);
+    params.append("skills", onlySlugs.join(","));
+  }
+  if (filter.value.search !== "") {
+    params.append("search", filter.value.search);
+  }
+  return `${url}?${params.toString()}`;
+};
+
 const fetchTemplates = async () => {
   isInterviewsLoading.value = true;
-  const getTemplates = useGet(`templates`);
+  const getTemplates = useGet(getUrl());
   await getTemplates.get();
   templates.value = getTemplates.data.value.templates;
   isInterviewsLoading.value = false;
