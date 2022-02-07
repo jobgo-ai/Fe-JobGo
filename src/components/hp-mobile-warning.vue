@@ -1,8 +1,7 @@
 <template>
   <div class="hp-mobile-warning">
     <p class="hp-mobile-warning__text">
-      We is vewy sowwy, we have our developer monkies working on it vewy hawd,
-      pwease use the desktop version UwU
+      We are working hard on mobile, should be ready soon
     </p>
     <empty-state></empty-state>
   </div>
