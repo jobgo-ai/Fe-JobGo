@@ -383,7 +383,7 @@ const completedTemplates = computed(() => {
 });
 
 const copyInterview = (interview) => {
-  const interviewLink = `${URL}/${interview.interview.token}`;
+  const interviewLink = `${URL}/token/${interview.interview.token}`;
   navigator.permissions.query({ name: "clipboard-write" }).then((result) => {
     if (result.state == "granted" || result.state == "prompt") {
       navigator.clipboard.writeText(interviewLink);
