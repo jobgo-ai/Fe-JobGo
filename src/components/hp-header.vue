@@ -57,18 +57,6 @@
                 />
                 Account Settings
               </router-link>
-              <router-link
-                @click="isAccountMenuOpen = false"
-                tag="div"
-                to="/change-password"
-                class="hp-header__dropdown__options__option"
-              >
-                <hp-icon
-                  name="locked"
-                  class="hp-header__dropdown__options__option__icon"
-                />
-                Change password
-              </router-link>
             </div>
             <div class="hp-header__dropdown__options">
               <div
