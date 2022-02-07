@@ -28,7 +28,7 @@
       </div>
       <hp-switch
         @click.prevent="handleDarkModeToggle"
-        v-model:checked="darkmode"
+        v-model:checked="isDarkmode"
       />
     </div>
     <div class="settings__card">
@@ -79,11 +79,12 @@ import HpSwitch from "@/components/hp-switch.vue";
 import { usePut } from "@/composables/useHttp";
 import useAuth from "@/composables/useAuth";
 import useToast from "@/composables/useToast";
+import useDarkMode from "@/composables/useDarkMode";
 
 const { user } = useAuth();
 
 const { setToast } = useToast();
-const darkmode = ref(localStorage.getItem("theme") === "dark");
+const { isDarkmode, handleDarkModeToggle } = useDarkMode();
 const isNameDirty = ref(false);
 
 const schema = yup.object().shape({
@@ -140,17 +141,6 @@ const onSubmit = handleSubmit(async (values) => {
     resetForm();
   }
 });
-
-const handleDarkModeToggle = () => {
-  darkmode.value = !darkmode.value;
-  if (darkmode.value) {
-    document.documentElement.setAttribute("data-theme", "dark");
-    localStorage.setItem("theme", "dark");
-  } else {
-    document.documentElement.setAttribute("data-theme", "light");
-    localStorage.setItem("theme", "light");
-  }
-};
 </script>
 
 <styles lang="scss">

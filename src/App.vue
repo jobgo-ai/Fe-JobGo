@@ -8,21 +8,6 @@
 
 <script setup>
 import HpToast from "@/components/hp-toast.vue";
-import HpMobileWarning from "@/components/hp-mobile-warning.vue";
-
-const hasDarkModePreference =
-  window.matchMedia &&
-  window.matchMedia("(prefers-color-scheme: dark)").matches;
-
-const currentTheme = localStorage.getItem("theme")
-  ? localStorage.getItem("theme")
-  : null;
-
-if (currentTheme) {
-  document.documentElement.setAttribute("data-theme", currentTheme);
-} else if (hasDarkModePreference) {
-  document.documentElement.setAttribute("data-theme", "dark");
-}
 </script>
 
 <style lang="scss">

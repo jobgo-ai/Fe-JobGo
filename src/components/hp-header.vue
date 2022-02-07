@@ -73,7 +73,7 @@
                   />
                   Dark mode
                 </div>
-                <hp-switch v-model:checked="darkmode" />
+                <hp-switch v-model:checked="isDarkmode" />
               </div>
             </div>
             <div @click="handleLogout" class="hp-header__dropdown__options">
@@ -99,6 +99,7 @@ import HpBreadcrumbs from "@/components/hp-breadcrumbs.vue";
 import useContextSave from "@/composables/useContextSave";
 // Composables
 import useAuth from "@/composables/useAuth";
+import useDarkMode from "@/composables/useDarkMode";
 import { useBreadcrumbs } from "@/composables/useBreadcrumbs";
 // Svg
 import Logo from "@/assets/logo.svg";
@@ -106,7 +107,8 @@ import Logo from "@/assets/logo.svg";
 const { logout } = useAuth();
 const router = useRouter();
 
-const darkmode = ref(localStorage.getItem("theme") === "dark");
+const { isDarkmode, handleDarkModeToggle } = useDarkMode();
+
 const dropdownTarget = ref(null);
 const isAccountMenuOpen = ref(false);
 
@@ -141,17 +143,6 @@ const { user } = useAuth();
 const handleLogout = () => {
   logout();
   router.push("/login");
-};
-
-const handleDarkModeToggle = () => {
-  darkmode.value = !darkmode.value;
-  if (darkmode.value) {
-    document.documentElement.setAttribute("data-theme", "dark");
-    localStorage.setItem("theme", "dark");
-  } else {
-    document.documentElement.setAttribute("data-theme", "light");
-    localStorage.setItem("theme", "light");
-  }
 };
 
 const dropdownClasses = computed(() => {
