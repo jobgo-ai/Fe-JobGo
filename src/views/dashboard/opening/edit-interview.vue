@@ -214,7 +214,7 @@ import HpBadge from "@/components/hp-badge.vue";
 import HpDrawer from "@/components/hp-drawer.vue";
 import HpTextarea from "@/components/form/hp-textarea.vue";
 import HpSpinner from "@/components/hp-spinner.vue";
-import HpQuestionCardStats from "@/components/hp-question-card-stats.vue";
+import HpQuestionCardStats from "@/components/cards/hp-question-card-stats.vue";
 
 //Hooks
 import { usePut } from "@/composables/useHttp";

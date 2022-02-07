@@ -114,7 +114,7 @@ import { DateTime } from "luxon";
 //Components
 import HpIcon from "@/components/hp-icon.vue";
 import HpBadge from "@/components/hp-badge.vue";
-import HpQuestionCardStats from "@/components/hp-question-card-stats.vue";
+import HpQuestionCardStats from "@/components/cards/hp-question-card-stats.vue";
 
 // Composables
 import { useGet } from "@/composables/useHttp";

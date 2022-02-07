@@ -179,7 +179,7 @@ import HpInput from "@/components/form/hp-input.vue";
 import HpButton from "@/components/hp-button.vue";
 import HpIcon from "@/components/hp-icon.vue";
 import HpSpinner from "@/components/hp-spinner.vue";
-import HpCandidateCard from "@/components/hp-candidate-card.vue";
+import HpCandidateCard from "@/components/cards/hp-candidate-card.vue";
 import EmptyState from "@/assets/abstracts/empty-state.svg";
 
 // Composables

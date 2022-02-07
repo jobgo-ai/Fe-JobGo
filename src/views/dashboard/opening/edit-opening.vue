@@ -83,7 +83,7 @@ import { useForm } from "vee-validate";
 import draggable from "vuedraggable";
 import * as yup from "yup";
 //components
-import HpInterviewCard from "@/components/hp-interview-card.vue";
+import HpInterviewCard from "@/components/cards/hp-interview-card.vue";
 import HpInput from "@/components/form/hp-input.vue";
 import HpButton from "@/components/hp-button.vue";
 import HpTextarea from "@/components/form/hp-textarea.vue";

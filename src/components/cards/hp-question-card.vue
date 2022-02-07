@@ -17,7 +17,7 @@
 
 <script setup>
 import HpButton from "@/components/hp-button.vue";
-import HpQuestionCardStats from "@/components/hp-question-card-stats.vue";
+import HpQuestionCardStats from "@/components/cards/hp-question-card-stats.vue";
 const props = defineProps({
   question: {
     type: Object,

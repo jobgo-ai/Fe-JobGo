@@ -65,7 +65,7 @@ import HpModal from "@/components/hp-modal.vue";
 import HpInput from "@/components/form/hp-input.vue";
 import HpSpinner from "@/components/hp-spinner.vue";
 import HpMultiSelect from "@/components/form/hp-multi-select.vue";
-import HpAddInterviewCard from "@/components/hp-add-interview-card.vue";
+import HpAddInterviewCard from "@/components/cards/hp-add-interview-card.vue";
 // Composables
 import useSkillSearch from "@/composables/useSkillSearch";
 import useConstants from "@/composables/useConstants";

@@ -14,9 +14,38 @@
         <hp-button label="Create new"></hp-button>
       </div>
     </div>
-    <div class="hp-opening-card__archived-header" v-if="isArchived">
-      <hp-abstract-avatar :abstractKey="opening.artwork" />
-      <hp-button label="Restore"> </hp-button>
+    <div class="hp-opening-card__archived" v-if="isArchived">
+      <div class="hp-opening-card__archived-header">
+        <hp-abstract-avatar :abstractKey="opening.artwork" />
+        <hp-button
+          @handleClick="$emit('unarchiveOpening', opening)"
+          label="Restore"
+        >
+        </hp-button>
+      </div>
+      <div class="hp-opening-card__content">
+        <h4 class="hp-opening-card__content__name">{{ opening.name }}</h4>
+        <div class="hp-opening-card__content__description">
+          {{ opening.description }}
+        </div>
+        <div class="hp-opening-card__content__badges">
+          <hp-badge
+            icon="layers"
+            class="hp-opening-card__content__badges__badge"
+            :content="opening.statistics.templates"
+          ></hp-badge>
+          <hp-badge
+            icon="skills"
+            class="hp-opening-card__content__badges__badge"
+            :content="opening.statistics.skills.length"
+          ></hp-badge>
+          <hp-badge
+            icon="candidates"
+            class="hp-opening-card__content__badges__badge"
+            :content="opening.statistics.candidates"
+          ></hp-badge>
+        </div>
+      </div>
     </div>
     <div
       class="hp-opening-card__content-container"
@@ -36,7 +65,6 @@
         <div class="hp-opening-card__content__description">
           {{ opening.description }}
         </div>
-
         <div class="hp-opening-card__content__badges">
           <hp-badge
             icon="layers"
@@ -84,9 +112,11 @@ const props = defineProps({
   },
 });
 
+const emits = defineEmits(["unarchiveOpening"]);
+
 const splash = defineAsyncComponent(() =>
   import(
-    /* @vite-ignore */ `../assets/abstracts/covers/cover_${props.opening.artwork}.svg`
+    /* @vite-ignore */ `../../assets/abstracts/covers/cover_${props.opening.artwork}.svg`
   )
 );
 
@@ -153,6 +183,10 @@ const containerClasses = computed(() => {
         margin-right: 6px;
       }
     }
+  }
+  &__archived {
+    display: flex;
+    flex-direction: column;
   }
   &__archived-header {
     display: flex;

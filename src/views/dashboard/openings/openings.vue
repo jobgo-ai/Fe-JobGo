@@ -48,7 +48,8 @@
               @click="handleOpeningCardClick(opening)"
               :key="opening.reference"
               :opening="opening"
-              :isArchived="state === 'Archived'"
+              @unarchiveOpening="handleUnarchiveOpening"
+              :isArchived="state === 'archived'"
             >
             </hp-opening-card>
           </ol>
@@ -69,7 +70,8 @@ import { useRoute, useRouter } from "vue-router";
 import { onMounted, onUnmounted } from "vue";
 
 // Composables
-import { usePost } from "@/composables/useHttp";
+import { usePost, usePut } from "@/composables/useHttp";
+import useToast from "@/composables/useToast";
 import useOpenings from "@/composables/useOpenings";
 import { useBreadcrumbs } from "@/composables/useBreadcrumbs";
 
@@ -79,7 +81,7 @@ import CandidateDetails from "@/views/dashboard/openings/candidate-details.vue";
 
 // Components
 import HpTabs from "@/components/hp-tabs.vue";
-import HpOpeningCard from "@/components/hp-opening-card.vue";
+import HpOpeningCard from "@/components/cards/hp-opening-card.vue";
 import HpSpinner from "@/components/hp-spinner.vue";
 
 const route = useRoute();
@@ -88,6 +90,7 @@ const selectedOpening = ref({});
 const isCandidateDetailsOpen = ref(route.query.candidate);
 const isCandidateListOpen = ref(route.params.openingRef);
 const state = ref("active");
+const { setToast } = useToast();
 
 const { fetchOpenings, openings, isOpeningsLoading } = useOpenings();
 const { setBreadcrumbs } = useBreadcrumbs();
@@ -196,6 +199,19 @@ watch(state, async () => {
   }
   await fetchOpenings(state.value);
 });
+
+const handleUnarchiveOpening = async (opening) => {
+  const putOpening = usePut(`openings/${opening.reference}/state`);
+  await putOpening.put({
+    state: "active",
+  });
+  await fetchOpenings();
+  setToast({
+    message: "Opening unarchived",
+    type: "success",
+  });
+  router.push(`/openings/${opening.reference}`);
+};
 </script>
 
 <style lang="scss" scoped>
