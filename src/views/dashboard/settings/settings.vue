@@ -56,7 +56,8 @@
           :onClick="onSubmit"
           label="Save changes"
           primary
-          :isDisabled="!meta.valid"
+          :isLoading="putUser.loading.value"
+          :isDisabled="!meta.valid || putUser.loading.value"
         ></hp-button>
       </form>
     </div>
@@ -119,8 +120,9 @@ const { handleSubmit, meta, resetForm, setFieldError } = useForm({
   },
 });
 
+const putUser = usePut("self/password");
+
 const onSubmit = handleSubmit(async (values) => {
-  const putUser = usePut("self/password");
   await putUser.put({
     password: {
       current: values.currentPassword,
@@ -130,14 +132,14 @@ const onSubmit = handleSubmit(async (values) => {
 
   if (putUser.error.value) {
     setFieldError("currentPassword", "Current password is incorrect");
+  } else {
+    setToast({
+      type: "positive",
+      title: "New password, new you!",
+      message: "Your password has been changed successfully",
+    });
+    resetForm();
   }
-
-  setToast({
-    type: "positive",
-    title: "New password, new you!",
-    message: "Your password has been changed successfully",
-  });
-  resetForm();
 });
 
 const handleDarkModeToggle = () => {
