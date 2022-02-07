@@ -84,7 +84,7 @@ import useToast from "@/hooks/useToast";
 const { user } = useAuth();
 
 const { setToast } = useToast();
-const darkmode = ref(false);
+const darkmode = ref(localStorage.getItem("theme") === "dark");
 const isNameDirty = ref(false);
 
 const schema = yup.object().shape({
