@@ -13,6 +13,7 @@
         :type="type ? type : 'text'"
         :placeholder="placeholder"
         :value="modelValue"
+        maxlength="150"
         @input="
           (e) => {
             modelValue = e.target.value;
