@@ -1,4 +1,4 @@
-import HpCandidateCard from "../components/hp-candidate-card.vue";
+import HpCandidateCard from "../components/cards/hp-candidate-card.vue";
 import vueRouter from "storybook-vue3-router";
 
 export default {
@@ -36,8 +36,7 @@ const Template = (args) => ({
               author: {
                 reference: "nrvg1shn",
                 email: "nick@hireproof.io",
-                firstName: "Nick",
-                lastName: "Barth",
+                name: "Nick",
                 organization: { slug: "hireproof", name: "Hireproof" },
               },
             },
@@ -54,8 +53,7 @@ const Template = (args) => ({
               author: {
                 reference: "nrvg1shn",
                 email: "nick@hireproof.io",
-                firstName: "Nick",
-                lastName: "Barth",
+                name: "Nick",
                 organization: { slug: "hireproof", name: "Hireproof" },
               },
             },
@@ -72,8 +70,7 @@ const Template = (args) => ({
               author: {
                 reference: "nrvg1shn",
                 email: "nick@hireproof.io",
-                firstName: "Nick",
-                lastName: "Barth",
+                name: "Nick",
                 organization: { slug: "hireproof", name: "Hireproof" },
               },
             },
@@ -87,8 +84,7 @@ const Template = (args) => ({
           author: {
             reference: "nrvg1shn",
             email: "nick@hireproof.io",
-            firstName: "Nick",
-            lastName: "Barth",
+            name: "Nick",
             organization: { slug: "hireproof", name: "Hireproof" },
           },
         },
@@ -120,8 +116,7 @@ const Template = (args) => ({
               author: {
                 reference: "nrvg1shn",
                 email: "nick@hireproof.io",
-                firstName: "Nick",
-                lastName: "Barth",
+                name: "Nick",
                 organization: { slug: "hireproof", name: "Hireproof" },
               },
             },
@@ -138,8 +133,7 @@ const Template = (args) => ({
               author: {
                 reference: "nrvg1shn",
                 email: "nick@hireproof.io",
-                firstName: "Nick",
-                lastName: "Barth",
+                name: "Nick",
                 organization: { slug: "hireproof", name: "Hireproof" },
               },
             },
@@ -156,8 +150,7 @@ const Template = (args) => ({
               author: {
                 reference: "nrvg1shn",
                 email: "nick@hireproof.io",
-                firstName: "Nick",
-                lastName: "Barth",
+                name: "Nick",
                 organization: { slug: "hireproof", name: "Hireproof" },
               },
             },
@@ -171,8 +164,7 @@ const Template = (args) => ({
           author: {
             reference: "nrvg1shn",
             email: "nick@hireproof.io",
-            firstName: "Nick",
-            lastName: "Barth",
+            name: "Nick",
             organization: { slug: "hireproof", name: "Hireproof" },
           },
         },
@@ -204,8 +196,7 @@ const Template = (args) => ({
               author: {
                 reference: "nrvg1shn",
                 email: "nick@hireproof.io",
-                firstName: "Nick",
-                lastName: "Barth",
+                name: "Nick",
                 organization: { slug: "hireproof", name: "Hireproof" },
               },
             },
@@ -222,8 +213,7 @@ const Template = (args) => ({
               author: {
                 reference: "nrvg1shn",
                 email: "nick@hireproof.io",
-                firstName: "Nick",
-                lastName: "Barth",
+                name: "Nick",
                 organization: { slug: "hireproof", name: "Hireproof" },
               },
             },
@@ -240,8 +230,7 @@ const Template = (args) => ({
               author: {
                 reference: "nrvg1shn",
                 email: "nick@hireproof.io",
-                firstName: "Nick",
-                lastName: "Barth",
+                name: "Nick",
                 organization: { slug: "hireproof", name: "Hireproof" },
               },
             },
@@ -297,8 +286,7 @@ const Template = (args) => ({
           author: {
             reference: "nrvg1shn",
             email: "nick@hireproof.io",
-            firstName: "Nick",
-            lastName: "Barth",
+            name: "Nick",
             organization: { slug: "hireproof", name: "Hireproof" },
           },
         },
@@ -330,8 +318,7 @@ const Template = (args) => ({
               author: {
                 reference: "nrvg1shn",
                 email: "nick@hireproof.io",
-                firstName: "Nick",
-                lastName: "Barth",
+                name: "Nick",
                 organization: { slug: "hireproof", name: "Hireproof" },
               },
             },
@@ -348,8 +335,7 @@ const Template = (args) => ({
               author: {
                 reference: "nrvg1shn",
                 email: "nick@hireproof.io",
-                firstName: "Nick",
-                lastName: "Barth",
+                name: "Nick",
                 organization: { slug: "hireproof", name: "Hireproof" },
               },
             },
@@ -366,8 +352,7 @@ const Template = (args) => ({
               author: {
                 reference: "nrvg1shn",
                 email: "nick@hireproof.io",
-                firstName: "Nick",
-                lastName: "Barth",
+                name: "Nick",
                 organization: { slug: "hireproof", name: "Hireproof" },
               },
             },
@@ -381,8 +366,7 @@ const Template = (args) => ({
           author: {
             reference: "nrvg1shn",
             email: "nick@hireproof.io",
-            firstName: "Nick",
-            lastName: "Barth",
+            name: "Nick",
             organization: { slug: "hireproof", name: "Hireproof" },
           },
         },

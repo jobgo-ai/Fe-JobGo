@@ -8,6 +8,7 @@
 
 <script setup>
 import HpToast from "@/components/hp-toast.vue";
+import HpMobileWarning from "@/components/hp-mobile-warning.vue";
 </script>
 
 <style lang="scss">

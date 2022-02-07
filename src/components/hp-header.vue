@@ -26,7 +26,7 @@
               :user="user"
             />
             <div class="hp-header__dropdown__deets" v-if="!hasHeaderSaveButton">
-              {{ user.firstName }} {{ user.lastName }}
+              {{ user.name }}
             </div>
           </div>
         </div>
@@ -38,7 +38,7 @@
                 class="hp-header__dropdown__info__avatar"
               />
               <div class="hp-header__dropdown__info__name">
-                <div>{{ user.firstName }} {{ user.lastName }}</div>
+                <div>{{ user.name }}</div>
                 <div class="hp-header__dropdown__info__email">
                   {{ user.email }}
                 </div>

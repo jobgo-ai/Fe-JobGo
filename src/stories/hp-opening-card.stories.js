@@ -1,4 +1,4 @@
-import HpOpeningCard from "../components/hp-opening-card.vue";
+import HpOpeningCard from "../components/cards/hp-opening-card.vue";
 import vueRouter from "storybook-vue3-router";
 
 export default {
@@ -58,8 +58,7 @@ const Template = (args) => ({
       author: {
         reference: "nrvg1shn",
         email: "nick@hireproof.io",
-        firstName: "nick@hireproof.io",
-        lastName: null,
+        name: "Nick",
         organization: { slug: "hireproof", name: "Hireproof" },
       },
     };

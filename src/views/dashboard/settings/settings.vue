@@ -116,7 +116,7 @@ const handleNameChange = () => {
 const { handleSubmit, meta, resetForm, setFieldError } = useForm({
   validationSchema: schema,
   initialValues: {
-    name: user.value.firstName + " " + user.value.lastName,
+    name: user.value.name,
   },
 });
 
