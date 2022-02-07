@@ -50,7 +50,7 @@
               <div class="candidate-details__overview__score__average-score">
                 The average score is
                 {{
-                  candidate.opening.statistics.averageOpeningScore.toFixed(2)
+                  candidate.opening.statistics.averageOpeningScore?.toFixed(2)
                 }}
                 <hp-icon name="arrow-top"></hp-icon>
               </div>
