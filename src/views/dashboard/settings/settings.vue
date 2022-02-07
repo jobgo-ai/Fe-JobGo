@@ -130,7 +130,7 @@ const onSubmit = handleSubmit(async (values) => {
     },
   });
 
-  if (putUser.error.value) {
+  if (putUser.error.value.error) {
     setFieldError("currentPassword", "Current password is incorrect");
   } else {
     setToast({
