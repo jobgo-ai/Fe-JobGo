@@ -69,7 +69,6 @@
 import { ref } from "vue";
 import * as yup from "yup";
 import { useForm } from "vee-validate";
-import { useRouter } from "vue-router";
 
 // Components
 import HpInput from "@/components/form/hp-input.vue";
