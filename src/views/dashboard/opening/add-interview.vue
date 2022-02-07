@@ -45,7 +45,7 @@
       <hp-add-interview-card
         :template="template"
         :key="template.reference"
-        v-for="template in availableTemplateList"
+        v-for="template in templates"
         @handleDelete="onDeleteTemplate"
       ></hp-add-interview-card>
     </ol>
@@ -125,6 +125,10 @@ const getUrl = (loadingMore) => {
   if (filter.value.search !== "") {
     params.append("search", filter.value.search);
   }
+
+  if (route.params.openingRef) {
+    params.append("exclude-opening", [route.params.openingRef]);
+  }
   return `${url}?${params.toString()}`;
 };
 
@@ -137,7 +141,7 @@ const fetchTemplates = async () => {
 };
 
 onMounted(async () => {
-  const getTemplates = useGet(`templates`);
+  const getTemplates = useGet(getUrl());
   skillOptions.value = await handleSkillSearch("");
   await getTemplates.get();
 
@@ -188,14 +192,6 @@ const onDeleteTemplate = async (template) => {
   await deleteInterview.remove();
   await fetchTemplates();
 };
-
-const availableTemplateList = computed(() => {
-  return templates.value.filter((template) => {
-    return !props.opening.templates.some(
-      (t) => t.reference === template.reference
-    );
-  });
-});
 </script>
 
 <style lang="scss">
