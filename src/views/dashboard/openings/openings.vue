@@ -68,7 +68,7 @@ import { ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { onMounted, onUnmounted } from "vue";
 
-// Hooks
+// Composables
 import { usePost } from "@/composables/useHttp";
 import useOpenings from "@/composables/useOpenings";
 import { useBreadcrumbs } from "@/composables/useBreadcrumbs";

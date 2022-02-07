@@ -40,16 +40,14 @@ const handleHoverEnter = () => {
   padding: 12px 12px;
   border-radius: $border-radius-lg;
   left: 50%;
-  top: -50px;
+  bottom: 30px;
   z-index: 1000;
   transform: translateX(-50%);
   background-color: var(--color-tooltip);
   color: var(--color-accent-forground);
   filter: drop-shadow(0px 4px 8px rgba(33, 44, 51, 0.02))
     drop-shadow(0px 0px 1px rgba(33, 44, 51, 0.02));
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  max-width: 300px;
 
   &__container {
     position: relative;
@@ -57,7 +55,8 @@ const handleHoverEnter = () => {
     cursor: pointer;
   }
   &__content {
-    white-space: nowrap;
+    width: max-content;
+    max-width: 160px;
   }
 }
 

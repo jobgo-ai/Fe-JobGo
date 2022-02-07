@@ -81,7 +81,7 @@ import HpQuestionCard from "@/components/hp-question-card.vue";
 import HpSpinner from "@/components/hp-spinner.vue";
 import EmptyState from "@/assets/abstracts/empty-state.svg";
 
-// Hooks
+// Composables
 import { useGet, usePost } from "@/composables/useHttp";
 import useSkillSearch from "@/composables/useSkillSearch";
 import useInterviews from "@/composables/useInterviews";

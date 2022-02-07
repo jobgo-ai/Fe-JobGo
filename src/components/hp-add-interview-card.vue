@@ -46,6 +46,11 @@
           ></hp-icon>
 
           {{ template.statistics.skills.length }} evaluated skills
+          <hp-info-circle
+            class="hp-question-card-stats__stats__stat__info-circle"
+            v-if="template.statistics.skills.length > 0"
+            :content="formatSkills(template.statistics.skills)"
+          ></hp-info-circle>
         </div>
       </div>
       <div class="hp-add-opening-card__actions">
@@ -75,10 +80,14 @@
 </template>
 
 <script setup>
+// Vendor
 import { ref } from "vue";
+import { useRoute, useRouter } from "vue-router";
+// Components
 import HpButton from "@/components/hp-button.vue";
 import HpIcon from "@/components/hp-icon.vue";
-import { useRoute, useRouter } from "vue-router";
+import HpInfoCircle from "@/components/hp-info-circle.vue";
+// Composables
 import { usePost } from "@/composables/useHttp";
 import useToast from "@/composables/useToast";
 import useOpenings from "@/composables/useOpenings";
@@ -142,6 +151,10 @@ const handleAddToInterview = async () => {
     title: "Well done!",
     message: "Interview added to role",
   });
+};
+
+const formatSkills = (skills) => {
+  return skills.map((skill) => skill.value.name).join(", ");
 };
 </script>
 

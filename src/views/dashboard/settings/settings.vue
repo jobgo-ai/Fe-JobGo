@@ -76,7 +76,7 @@ import HpInput from "@/components/form/hp-input.vue";
 import HpButton from "@/components/hp-button.vue";
 import HpSwitch from "@/components/hp-switch.vue";
 
-// Hooks
+// Composables
 import { usePut } from "@/composables/useHttp";
 import useAuth from "@/composables/useAuth";
 import useToast from "@/composables/useToast";

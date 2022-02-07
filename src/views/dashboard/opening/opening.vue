@@ -11,7 +11,7 @@
 import { ref, watch } from "vue";
 import { useRoute } from "vue-router";
 
-// Hooks
+// Composables
 import { useGet } from "@/composables/useHttp";
 import useOpenings from "@/composables/useOpenings";
 

@@ -182,7 +182,7 @@ import HpSpinner from "@/components/hp-spinner.vue";
 import HpCandidateCard from "@/components/hp-candidate-card.vue";
 import EmptyState from "@/assets/abstracts/empty-state.svg";
 
-// Hooks
+// Composables
 import useCandidates from "@/composables/useCandidates.js";
 
 const props = defineProps({

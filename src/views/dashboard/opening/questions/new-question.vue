@@ -96,7 +96,7 @@ import HpTagger from "@/components/form/hp-tagger.vue";
 import HpIcon from "@/components/hp-icon.vue";
 import HpMultiInput from "@/components/form/hp-multi-input.vue";
 
-// Hooks
+// Composables
 import useSkillSearch from "@/composables/useSkillSearch";
 import useConstants from "@/composables/useConstants";
 import useInterviews from "@/composables/useInterviews";

@@ -256,7 +256,7 @@ import { onMounted, watch, ref, computed } from "vue";
 import { useRoute } from "vue-router";
 import { DateTime } from "luxon";
 
-// Hooks
+// Composables
 import useCandidates from "@/composables/useCandidates";
 import { useBreadcrumbs } from "@/composables/useBreadcrumbs";
 import useToast from "@/composables/useToast";

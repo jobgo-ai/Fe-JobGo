@@ -97,7 +97,7 @@ import HpIcon from "@/components/hp-icon.vue";
 import HpSwitch from "@/components/hp-switch.vue";
 import HpBreadcrumbs from "@/components/hp-breadcrumbs.vue";
 import useContextSave from "@/composables/useContextSave";
-// Hooks
+// Composables
 import useAuth from "@/composables/useAuth";
 import { useBreadcrumbs } from "@/composables/useBreadcrumbs";
 // Svg

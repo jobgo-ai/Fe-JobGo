@@ -59,7 +59,7 @@ import HpInput from "@/components/form/hp-input.vue";
 import HpButton from "@/components/hp-button.vue";
 import HpTooltip from "@/components/hp-tooltip.vue";
 
-// Hooks
+// Composables
 import { usePost, usePut } from "@/composables/useHttp";
 import useCandidates from "@/composables/useCandidates";
 import { useBreadcrumbs } from "@/composables/useBreadcrumbs";

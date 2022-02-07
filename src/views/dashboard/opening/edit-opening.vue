@@ -90,7 +90,7 @@ import HpTextarea from "@/components/form/hp-textarea.vue";
 import HpSpinner from "@/components/hp-spinner.vue";
 import HpImageSelector from "@/components/form/hp-image-selector.vue";
 import MicCheck from "@/assets/abstracts/mic-check.svg";
-// hooks
+// Composables
 import useOpenings from "@/composables/useOpenings";
 import useToast from "@/composables/useToast";
 import { useBreadcrumbs } from "@/composables/useBreadcrumbs";

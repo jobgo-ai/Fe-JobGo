@@ -19,7 +19,7 @@ import * as yup from "yup";
 import HpInput from "@/components/form/hp-input.vue";
 import HpButton from "@/components/hp-button.vue";
 
-// Hooks
+// Composables
 import { usePut } from "@/composables/useHttp";
 
 const props = defineProps({
