@@ -40,6 +40,10 @@ export default () => {
     state.error = undefined;
   };
 
+  const setUserDetails = (data) => {
+    state.user = data;
+  };
+
   const logout = () => {
     window.localStorage.removeItem(AUTH_KEY);
     state.token = null;
@@ -49,6 +53,7 @@ export default () => {
 
   return {
     setUser,
+    setUserDetails,
     logout,
     refreshToken,
     ...toRefs(state),

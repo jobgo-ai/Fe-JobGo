@@ -19,10 +19,10 @@ const props = defineProps({
 });
 
 const initials = computed(() => {
-  return props.user.name
-    .split(" ")
-    .map((word) => word[0])
-    .join("");
+  const letters = props.user.name.split(" ").map((word) => word[0]);
+  return letters.length > 1
+    ? letters[0] + letters[letters.length - 1]
+    : letters[0];
 });
 </script>
 

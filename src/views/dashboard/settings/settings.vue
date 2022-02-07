@@ -15,8 +15,8 @@
       <hp-button
         :onClick="handleNameChange"
         label="Save changes"
-        primary
         :isDisabled="!isNameDirty"
+        primary
       ></hp-button>
     </div>
     <div class="settings__card settings__card--flex">
@@ -56,8 +56,8 @@
           :onClick="onSubmit"
           label="Save changes"
           primary
-          :isLoading="putUser.loading.value"
-          :isDisabled="!meta.valid || putUser.loading.value"
+          :isLoading="putUserPassword.loading.value"
+          :isDisabled="!meta.valid || putUserPassword.loading.value"
         ></hp-button>
       </form>
     </div>
@@ -66,7 +66,7 @@
 
 <script setup>
 // Vendor
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import * as yup from "yup";
 import { useForm } from "vee-validate";
 
@@ -81,11 +81,10 @@ import useAuth from "@/composables/useAuth";
 import useToast from "@/composables/useToast";
 import useDarkMode from "@/composables/useDarkMode";
 
-const { user } = useAuth();
+const { user, setUserDetails } = useAuth();
 
 const { setToast } = useToast();
 const { isDarkmode, handleDarkModeToggle } = useDarkMode();
-const isNameDirty = ref(false);
 
 const schema = yup.object().shape({
   currentPassword: yup
@@ -109,28 +108,44 @@ const schema = yup.object().shape({
     .oneOf([yup.ref("password")], "Passwords do not match"),
 });
 
-const handleNameChange = () => {
-  console.log("name change");
+const handleNameChange = async () => {
+  const putUser = usePut("self");
+  await putUser.put({
+    self: {
+      name: values.name,
+    },
+  });
+  setUserDetails(putUser.data.value.self);
+
+  setToast({
+    type: "positive",
+    title: "New name, new you!",
+    message: "Your name has been successfully changed",
+  });
 };
 
-const { handleSubmit, meta, resetForm, setFieldError } = useForm({
+const { handleSubmit, meta, resetForm, setFieldError, values } = useForm({
   validationSchema: schema,
   initialValues: {
     name: user.value.name,
   },
 });
 
-const putUser = usePut("self/password");
+const isNameDirty = computed(() => {
+  return values.name !== user.value.name;
+});
+
+const putUserPassword = usePut("self/password");
 
 const onSubmit = handleSubmit(async (values) => {
-  await putUser.put({
+  await putUserPassword.put({
     password: {
       current: values.currentPassword,
       new: values.password,
     },
   });
 
-  if (putUser.error.value.error) {
+  if (putUserPassword.error.value.error) {
     setFieldError("currentPassword", "Current password is incorrect");
   } else {
     setToast({
