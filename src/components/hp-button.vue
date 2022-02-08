@@ -185,31 +185,6 @@ const emit = defineEmits(["handleClick"]);
       drop-shadow(0px 0px 1px rgba(33, 44, 51, 0.02));
   }
 
-  // Button primary
-  &--primary > .hp-button__button {
-    color: var(--color-accent-forground);
-    background-color: var(--color-accent-background);
-    border-color: var(--color-accent-background);
-    &--disabled {
-      border-color: var(--color-border);
-      background-color: var(--color-border);
-    }
-    &--addon {
-      color: var(--color-accent-forground);
-      opacity: 0.88;
-    }
-    &:active:not([disabled]),
-    &:hover:not([disabled]) {
-      background-color: var(--color-accent-background);
-      box-shadow: 0px 4px 8px rgba(33, 44, 51, 0.02),
-        0px 0px 1px rgba(33, 44, 51, 0.02);
-    }
-
-    &:active:not([disabled]) {
-      border-color: var(--color-accent-background);
-    }
-  }
-
   &--primary .hp-button__button__icon--solo {
     color: var(--color-accent-forground);
   }
@@ -233,6 +208,17 @@ const emit = defineEmits(["handleClick"]);
       drop-shadow(0px 0px 1px rgba(33, 44, 51, 0.02));
 
     -webkit-appearance: none !important;
+
+    &:active,
+    &:hover {
+      background-color: var(--color-panel);
+      box-shadow: 0px 4px 8px rgba(33, 44, 51, 0.02),
+        0px 0px 1px rgba(33, 44, 51, 0.02);
+    }
+
+    &:active {
+      border-color: var(--color-border-subtle);
+    }
 
     &__spinner {
       margin-left: 8px;
@@ -265,6 +251,15 @@ const emit = defineEmits(["handleClick"]);
     &--disabled {
       color: var(--color-text-tertiary);
       cursor: not-allowed;
+      &:active,
+      &:hover {
+        background-color: inherit;
+        box-shadow: none;
+      }
+
+      &:active {
+        border-color: var(--color-border-subtle);
+      }
     }
 
     &--dropdown {
@@ -280,17 +275,6 @@ const emit = defineEmits(["handleClick"]);
       color: var(--color-text-secondary);
     }
 
-    &:active:not([disabled]),
-    &:hover:not([disabled]) {
-      background-color: var(--color-panel);
-      box-shadow: 0px 4px 8px rgba(33, 44, 51, 0.02),
-        0px 0px 1px rgba(33, 44, 51, 0.02);
-    }
-
-    &:active:not([disabled]) {
-      border-color: var(--color-border-subtle);
-    }
-
     &--dropzone {
       background-color: inherit;
       border: 1px dashed var(--color-text-tertiary);
@@ -302,6 +286,29 @@ const emit = defineEmits(["handleClick"]);
         background-color: var(--color-background);
         border: 1px dashed var(--color-text-tertiary);
       }
+    }
+  }
+  &--primary > .hp-button__button {
+    color: var(--color-accent-forground);
+    background-color: var(--color-accent-background);
+    border-color: var(--color-accent-background);
+    &:active:not([disabled]),
+    &:hover:not([disabled]) {
+      background-color: var(--color-accent-background);
+      box-shadow: 0px 4px 8px rgba(33, 44, 51, 0.02),
+        0px 0px 1px rgba(33, 44, 51, 0.02);
+    }
+
+    &:active:not([disabled]) {
+      border-color: var(--color-accent-background);
+    }
+    &--disabled {
+      border-color: var(--color-border);
+      background-color: var(--color-border);
+    }
+    &--addon {
+      color: var(--color-accent-forground);
+      opacity: 0.88;
     }
   }
   &__dropdown-content {
