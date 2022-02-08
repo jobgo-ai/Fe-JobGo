@@ -5,29 +5,28 @@ const isInterviewLoading = ref(true);
 const interview = ref([]);
 
 const setInterview = (newInterview) => {
-  interview.value = newInterview;
+  const formattedInterview = {
+    ...newInterview,
+    ceremony: {
+      warmup: {
+        ...newInterview.ceremony.warmup,
+        duration: newInterview.ceremony.warmup.duration / 60,
+      },
+      cooldown: {
+        ...newInterview.ceremony.cooldown,
+        duration: newInterview.ceremony.cooldown.duration / 60,
+      },
+    },
+  };
+  interview.value = formattedInterview;
+  return formattedInterview;
 };
 
 const fetchInterview = async (interviewRef) => {
   isInterviewLoading.value = true;
   const getInterview = useGet(`templates/${interviewRef}`);
   await getInterview.get();
-  const formattedInterview = {
-    ...getInterview.data.value.template,
-    ceremony: {
-      warmup: {
-        ...getInterview.data.value.template.ceremony.warmup,
-        duration:
-          getInterview.data.value.template.ceremony.warmup.duration / 60,
-      },
-      cooldown: {
-        ...getInterview.data.value.template.ceremony.cooldown,
-        duration:
-          getInterview.data.value.template.ceremony.cooldown.duration / 60,
-      },
-    },
-  };
-  interview.value = formattedInterview;
+  setInterview(getInterview.data.value.template);
   isInterviewLoading.value = false;
 };
 

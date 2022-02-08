@@ -305,6 +305,7 @@ const onSubmit = handleSubmit(async (values) => {
     },
   });
   isSaving.value = false;
+  const formattedInterview = setInterview(putInterview.data.value.template);
   setToast({
     type: "positive",
     title: "Well done!",
@@ -313,7 +314,7 @@ const onSubmit = handleSubmit(async (values) => {
   resetForm({
     touched: false,
     dirty: false,
-    values: putInterview.data.value.template,
+    values: formattedInterview,
   });
 });
 
