@@ -192,6 +192,7 @@
                   <hp-button
                     @handleClick="handleRemoveQuestion(element)"
                     icon="trash"
+                    danger
                   ></hp-button>
                 </div>
               </li>

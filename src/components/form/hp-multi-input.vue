@@ -29,6 +29,7 @@
             class="hp-multi-input__button"
             @click="removeItem(element)"
             name="trash"
+            danger
           ></hp-icon>
         </div>
       </template>

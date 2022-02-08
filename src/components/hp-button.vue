@@ -74,6 +74,10 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  danger: {
+    type: Boolean,
+    default: false,
+  },
   hasDropdown: {
     type: Boolean,
     default: false,
@@ -142,6 +146,7 @@ const iconClasses = computed(() => {
   return {
     "hp-button__button__icon": true,
     "hp-button__button__icon--solo": !props.label,
+    "hp-button__button__icon--danger": props.danger,
   };
 });
 
@@ -229,6 +234,9 @@ const emit = defineEmits(["handleClick"]);
         margin-right: 0;
         margin-left: 0;
         color: var(--color-text-primary);
+      }
+      &--danger {
+        color: var(--color-error);
       }
     }
 

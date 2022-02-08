@@ -115,6 +115,7 @@
         <hp-button
           class="edit-openings__teleport-button"
           icon="trash"
+          danger
           @handleClick="archiveOpening"
         ></hp-button>
         <hp-button

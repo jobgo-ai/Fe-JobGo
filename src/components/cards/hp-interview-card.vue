@@ -72,6 +72,7 @@
         ></hp-button>
         <hp-button
           icon="trash"
+          danger
           @handleClick="$emit('handleRemove', template.reference)"
         ></hp-button>
       </div>
