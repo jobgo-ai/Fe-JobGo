@@ -85,8 +85,6 @@ const props = defineProps({
 
 const { errorMessage, value: formValue } = useField(props.name);
 
-console.log(formValue.value);
-
 const drag = ref(false);
 
 const dragOptions = computed(() => {

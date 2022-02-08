@@ -170,8 +170,6 @@ if (props.question) {
     value: s.slug,
   }));
 
-  console.log(props.question);
-
   const formattedInitialValues = {
     content: props.question.content,
     duration: props.question.duration / 60,
