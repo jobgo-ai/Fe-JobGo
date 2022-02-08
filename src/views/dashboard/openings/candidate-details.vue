@@ -324,9 +324,9 @@ watch(
 );
 
 const skillList = computed(() => {
-  return candidate.value?.opening?.statistics?.candidateSkillScores.map(
+  return candidate.value?.opening?.statistics?.candidateSkillScores?.map(
     (skill) => ({
-      label: skill.skill.name,
+      label: skill.name,
       value: skill.score.value?.toFixed(1) ?? "0.0",
     })
   );
