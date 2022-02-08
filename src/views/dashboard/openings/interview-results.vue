@@ -176,9 +176,11 @@ const handleArchiveInterview = async () => {
 };
 
 const interactionList = computed(() => {
-  return interview.value.interactions.filter((interaction) => {
-    return interaction.question.type?.slug === "open";
-  });
+  return interview.value.interactions
+    .filter((interaction) => {
+      return interaction.type === "question";
+    })
+    .map((i) => i.value);
 });
 </script>
 
