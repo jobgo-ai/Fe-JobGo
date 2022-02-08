@@ -137,7 +137,6 @@ const { setFieldValue, resetForm } = useForm({
 
 onMounted(async () => {
   await fetchInterview(props.template.reference);
-  console.log(interview.value);
   resetForm({ touched: false, values: interview.value });
 });
 </script>

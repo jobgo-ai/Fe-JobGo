@@ -10,11 +10,21 @@
       />
     </hp-drawer>
     <hp-drawer
+      :isOpen="isViewQuestionDrawerOpen"
+      @close="isViewQuestionDrawerOpen = false"
+    >
+      <view-question
+        :question="isViewQuestionDrawerOpen"
+        :handleClose="() => (isViewQuestionDrawerOpen = false)"
+        v-if="isViewQuestionDrawerOpen"
+      />
+    </hp-drawer>
+    <hp-drawer
       :isOpen="isEditQuestionDrawerOpen"
       @close="isEditQuestionDrawerOpen = false"
     >
-      <new-question
-        @handleClose="handleNewQuestionClose"
+      <edit-question
+        @handleClose="handleEditQuestionClose"
         :question="isEditQuestionDrawerOpen"
       />
     </hp-drawer>
@@ -174,6 +184,10 @@
                     @handleClick="handleRemoveQuestion(element)"
                     icon="trash"
                   ></hp-button>
+                  <hp-button
+                    @handleClick="isViewQuestionDrawerOpen = element"
+                    icon="eye"
+                  ></hp-button>
                 </div>
               </li>
             </template>
@@ -194,18 +208,19 @@
 </template>
 
 <script setup>
-//Vendor
+// Vendor
 import { onMounted, ref, computed } from "vue";
 import { useForm } from "vee-validate";
 import { useRoute } from "vue-router";
 import * as yup from "yup";
 import draggable from "vuedraggable";
 
-//Views
+// Views
 import Questions from "@/views/dashboard/opening/questions/questions.vue";
-import NewQuestion from "@/views/dashboard/opening/questions/new-question.vue";
+import EditQuestion from "@/views/dashboard/opening/questions/edit-question.vue";
+import ViewQuestion from "@/views/dashboard/opening/questions/view-question.vue";
 
-//Components
+// Components
 import HpInput from "@/components/form/hp-input.vue";
 import HpButton from "@/components/hp-button.vue";
 import HpCounter from "@/components/hp-counter.vue";
@@ -216,7 +231,7 @@ import HpTextarea from "@/components/form/hp-textarea.vue";
 import HpSpinner from "@/components/hp-spinner.vue";
 import HpQuestionCardStats from "@/components/cards/hp-question-card-stats.vue";
 
-//Hooks
+// Composables
 import { usePut } from "@/composables/useHttp";
 import { useBreadcrumbs } from "@/composables/useBreadcrumbs";
 import useContextSave from "@/composables/useContextSave";
@@ -235,6 +250,7 @@ const isSaving = ref(false);
 const route = useRoute();
 const isOverviewFlyoutOpen = ref(false);
 const isAddQuestionDrawerOpen = ref(false);
+const isViewQuestionDrawerOpen = ref(false);
 const isEditQuestionDrawerOpen = ref(false);
 const { interview, fetchInterview, isInterviewLoading, setInterview } =
   useInterviews();
@@ -341,7 +357,7 @@ const handleRemoveQuestion = async (template) => {
   });
 };
 
-const handleNewQuestionClose = () => {
+const handleEditQuestionClose = () => {
   isEditQuestionDrawerOpen.value = null;
 };
 </script>

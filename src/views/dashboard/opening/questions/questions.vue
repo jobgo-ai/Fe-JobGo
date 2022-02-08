@@ -19,7 +19,7 @@ import { ref, computed } from "vue";
 
 // Views
 import QuestionList from "@/views/dashboard/opening/questions/question-list.vue";
-import NewQuestion from "@/views/dashboard/opening/questions/new-question.vue";
+import EditQuestion from "@/views/dashboard/opening/questions/edit-question.vue";
 
 const props = defineProps({
   handleClose: {
@@ -31,7 +31,7 @@ const isCurrentViewQuestionList = ref(true);
 const emits = defineEmits(["updateQuestionList"]);
 
 const currentComponent = computed(() => {
-  return isCurrentViewQuestionList.value ? QuestionList : NewQuestion;
+  return isCurrentViewQuestionList.value ? QuestionList : EditQuestion;
 });
 </script>
 

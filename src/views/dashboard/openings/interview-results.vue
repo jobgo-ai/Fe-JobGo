@@ -180,7 +180,6 @@ const interactionList = computed(() => {
     return interaction.question.type?.slug === "open";
   });
 });
-console.log(interactionList);
 </script>
 
 <swag lang="scss">

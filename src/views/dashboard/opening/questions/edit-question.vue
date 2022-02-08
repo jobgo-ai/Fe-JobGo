@@ -1,39 +1,39 @@
 <template>
-  <div class="new-question">
+  <div class="edit-question">
     <div
       v-if="!question"
-      class="new-question__back"
+      class="edit-question__back"
       @click="emits('handleTabChange')"
     >
       <hp-icon name="arrow-left"></hp-icon>Back
     </div>
-    <div class="new-question__header">
-      <h2 class="new-question__title">{{ content.title }}</h2>
-      <p class="new-question__subtitle">
+    <div class="edit-question__header">
+      <h2 class="edit-question__title">{{ content.title }}</h2>
+      <p class="edit-question__subtitle">
         This is the question prompt, it is important that this is readable
       </p>
     </div>
-    <form @submit.prevent="onSubmit" class="new-question__form">
-      <div class="new-question__question">
+    <form @submit.prevent="onSubmit" class="edit-question__form">
+      <div class="edit-question__question">
         <hp-input
           ref="questionInputRef"
           name="content"
           placeholder="Type the question"
         ></hp-input>
       </div>
-      <div class="new-question__duration">
-        <div class="new-question__duration__labels">
-          <div class="new-question__label">Duration time</div>
-          <div class="new-question__sublabel">
+      <div class="edit-question__duration">
+        <div class="edit-question__duration__labels">
+          <div class="edit-question__label">Duration time</div>
+          <div class="edit-question__sublabel">
             Expected duration, in minutes
           </div>
         </div>
         <hp-counter name="duration" />
       </div>
-      <div class="new-question__dropdowns">
-        <div class="new-question__duration__labels">
-          <div class="new-question__label">Skills</div>
-          <div class="new-question__sublabel">
+      <div class="edit-question__dropdowns">
+        <div class="edit-question__duration__labels">
+          <div class="edit-question__label">Skills</div>
+          <div class="edit-question__sublabel">
             What does this question measure? Max of 3 skills.
           </div>
         </div>
@@ -47,10 +47,10 @@
           :max="3"
         ></hp-tagger>
       </div>
-      <div class="new-question__dropdowns">
-        <div class="new-question__duration__labels">
-          <div class="new-question__label">Levels</div>
-          <div class="new-question__sublabel">
+      <div class="edit-question__dropdowns">
+        <div class="edit-question__duration__labels">
+          <div class="edit-question__label">Levels</div>
+          <div class="edit-question__sublabel">
             Which candidate seniority levels can this question be used for?
           </div>
         </div>
@@ -61,14 +61,14 @@
           v-model="levels"
         ></hp-tagger>
       </div>
-      <div class="new-question__guidelines">
-        <div class="new-question__label">Guidelines</div>
-        <div class="new-question__sublabel">
+      <div class="edit-question__guidelines">
+        <div class="edit-question__label">Guidelines</div>
+        <div class="edit-question__sublabel">
           Describe what you would see in a perfect answer
         </div>
         <hp-multi-input name="guidelines" />
       </div>
-      <div class="new-question__actions">
+      <div class="edit-question__actions">
         <hp-button
           :isDisabled="!meta.dirty"
           primary
@@ -235,7 +235,7 @@ const onSubmit = handleSubmit(async (values) => {
 </script>
 
 <style lang="scss">
-.new-question {
+.edit-question {
   display: flex;
   flex-direction: column;
   max-height: calc(100vh - 64px);
