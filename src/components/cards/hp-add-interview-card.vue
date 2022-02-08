@@ -137,14 +137,14 @@ const { setToast } = useToast();
 const { fetchOpening } = useOpenings();
 
 const secondsToMinutes = (seconds) => {
-  return Math.floor(seconds / 60);
+  return Math.floor(seconds * 60);
 };
 
 const handleCreateInterview = async () => {
   isCreatingInterview.value = true;
   const postInterview = usePost("templates");
   await postInterview.post({
-    template: { name: "New Interview", jobLevels: [] },
+    template: { name: "New Interview" },
   });
   const url = `/opening/${route.params.openingRef}/edit/edit-interview/${postInterview.data.value.template.reference}`;
   router.push(url);

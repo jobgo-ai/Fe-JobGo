@@ -101,7 +101,7 @@
         primary
         :isLoading="isSaving"
         @handleClick="onSubmit"
-        :isDisabled="!meta.dirty"
+        :isDisabled="!meta.dirty || !meta.valid"
       ></hp-button>
     </teleport>
     <div class="edit-interview" v-if="!isInterviewLoading && !isLoading">
@@ -270,11 +270,11 @@ const schema = yup.object({
   ceremony: yup.object({
     cooldown: yup.object({
       content: yup.string(),
-      duration: yup.number(),
+      duration: yup.number().min(0).max(60),
     }),
     warmup: yup.object({
       content: yup.string(),
-      duration: yup.number(),
+      duration: yup.number().min(0).max(60),
     }),
   }),
   questions: yup.array(),
@@ -289,7 +289,20 @@ const onSubmit = handleSubmit(async (values) => {
   isSaving.value = true;
   const formattedQuestions = values?.questions.map((q) => q.reference) || [];
   await putInterview.put({
-    template: { ...values, jobLevels: [], questions: formattedQuestions },
+    template: {
+      ...values,
+      questions: formattedQuestions,
+      ceremony: {
+        warmup: {
+          ...values.ceremony.warmup,
+          duration: values.ceremony.warmup.duration * 60,
+        },
+        cooldown: {
+          ...values.ceremony.cooldown,
+          duration: values.ceremony.cooldown.duration * 60,
+        },
+      },
+    },
   });
   isSaving.value = false;
   setToast({

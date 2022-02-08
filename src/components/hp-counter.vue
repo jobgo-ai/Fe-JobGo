@@ -49,6 +49,14 @@ const props = defineProps({
   isDisabled: {
     type: String,
   },
+  min: {
+    type: Number,
+    default: 0,
+  },
+  max: {
+    type: Number,
+    default: 60,
+  },
 });
 
 const isInputFocused = ref(false);

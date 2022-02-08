@@ -12,7 +12,22 @@ const fetchInterview = async (interviewRef) => {
   isInterviewLoading.value = true;
   const getInterview = useGet(`templates/${interviewRef}`);
   await getInterview.get();
-  interview.value = getInterview.data.value.template;
+  const formattedInterview = {
+    ...getInterview.data.value.template,
+    ceremony: {
+      warmup: {
+        ...getInterview.data.value.template.ceremony.warmup,
+        duration:
+          getInterview.data.value.template.ceremony.warmup.duration / 60,
+      },
+      cooldown: {
+        ...getInterview.data.value.template.ceremony.cooldown,
+        duration:
+          getInterview.data.value.template.ceremony.cooldown.duration / 60,
+      },
+    },
+  };
+  interview.value = formattedInterview;
   isInterviewLoading.value = false;
 };
 

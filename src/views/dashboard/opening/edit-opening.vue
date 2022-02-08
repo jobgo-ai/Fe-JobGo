@@ -130,7 +130,7 @@
           primary
           :isLoading="isSaving"
           @handleClick="onSubmit"
-          :isDisabled="!meta.dirty"
+          :isDisabled="!meta.dirty || !meta.valid"
         ></hp-button>
       </teleport>
     </form>
@@ -281,9 +281,6 @@ const archiveOpening = async () => {
   });
   await fetchOpenings();
   router.push("/openings");
-  // const deleteOpening = useDelete(`openings/${route.params.openingRef}`);
-  // await deleteOpening.remove();
-  // router.push("/openings");
 };
 
 const currentSplash = defineAsyncComponent(() =>

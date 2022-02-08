@@ -70,7 +70,7 @@
       </div>
       <div class="edit-question__actions">
         <hp-button
-          :isDisabled="!meta.dirty"
+          :isDisabled="!meta.dirty || !meta.valid"
           primary
           type="submit"
           :isLoading="isSaving"
