@@ -49,7 +49,7 @@
             v-model="templates"
             tag="transition-group"
             item-key="reference"
-            handle=".hp-opening-card__badge-container__handle"
+            handle=".hp-interview-card__badge-container__handle"
             @change="handleDragChange"
             v-bind="dragOptions"
             @start="drag = true"
