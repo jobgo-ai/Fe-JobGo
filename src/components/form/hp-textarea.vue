@@ -99,7 +99,7 @@ const containerClasses = computed(() => {
   }
   &__input {
     resize: none;
-    background-color: var(--color-background);
+    background-color: inherit;
     border: 1px solid var(--color-border);
     border-radius: $border-radius-sm;
     padding: 12px 16px;

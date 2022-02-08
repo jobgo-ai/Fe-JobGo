@@ -197,7 +197,7 @@ const emit = defineEmits(["handleClick"]);
     cursor: pointer;
     padding: 6px 16px;
     font-size: 14px;
-    background-color: var(--color-background);
+    background-color: inherit;
     color: var(--color-text-primary);
     outline: none;
     white-space: nowrap;

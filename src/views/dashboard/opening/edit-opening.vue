@@ -18,13 +18,14 @@
             label="Cover"
             name="artwork"
           ></hp-image-selector>
-          <hp-button
-            class="edit-openings__edit-container__archive"
-            icon="trash"
-            label="Archive opening"
-            danger
-            @handleClick="archiveOpening"
-          ></hp-button>
+          <div class="edit-openings__edit-container__archive">
+            <hp-button
+              icon="trash"
+              label="Archive opening"
+              danger
+              @handleClick="archiveOpening"
+            ></hp-button>
+          </div>
         </div>
       </div>
       <div class="edit-openings__empty-state" v-if="templates.length === 0">
