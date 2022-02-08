@@ -1,5 +1,6 @@
 <template>
   <div v-if="!isInterviewLoading" class="view-interview">
+    <h2 class="view-interview__title">{{ interview.name }}</h2>
     <div class="view-interview__header">Overview</div>
     <div class="view-interview__stats">
       <div class="view-interview__stats__stat">
@@ -36,50 +37,55 @@
         </li>
       </ol>
     </div>
-    <div class="view-interview__ceremony view-interview__ceremony--warmup">
-      <div class="view-interview__ceremony__header">
-        <h3 class="view-interview__header">Warmup</h3>
-        <hp-badge
-          icon="chronometer"
-          :content="(interview.ceremony.warmup.duration / 60).toFixed(0)"
-        ></hp-badge>
+    <div class="view-interview__scroll-container">
+      <div class="view-interview__ceremony view-interview__ceremony--warmup">
+        <div class="view-interview__ceremony__header">
+          <h3 class="view-interview__header">Warmup</h3>
+          <hp-badge
+            icon="chronometer"
+            :content="(interview.ceremony.warmup.duration / 60).toFixed(0)"
+          ></hp-badge>
+        </div>
+        <div class="view-interview__ceremony__textarea">
+          {{ interview.ceremony.warmup.content }}
+        </div>
       </div>
-      <div class="view-interview__ceremony__textarea">
-        {{ interview.ceremony.warmup.content }}
+      <div class="view-interview__ceremony view-interview__ceremony--cooldown">
+        <div class="view-interview__ceremony__header">
+          <h3 class="view-interview__header">Cooldown</h3>
+          <hp-badge
+            icon="chronometer"
+            :content="(interview.ceremony.cooldown.duration / 60).toFixed(0)"
+          ></hp-badge>
+        </div>
+        <div class="view-interview__ceremony__textarea">
+          {{ interview.ceremony.cooldown.content }}
+        </div>
       </div>
-    </div>
-    <div class="view-interview__ceremony view-interview__ceremony--cooldown">
-      <div class="view-interview__ceremony__header">
-        <h3 class="view-interview__header">Cooldown</h3>
-        <hp-badge
-          icon="chronometer"
-          :content="(interview.ceremony.cooldown.duration / 60).toFixed(0)"
-        ></hp-badge>
-      </div>
-      <div class="view-interview__ceremony__textarea">
-        {{ interview.ceremony.cooldown.content }}
-      </div>
-    </div>
-    <div class="view-interview__questions">
-      <h3 class="view-interview__header">Questions</h3>
-      <ol class="view-interview__question-container">
-        <li
-          class="view-interview__question"
-          v-for="question in interview.questions"
-        >
-          <div class="view-interview__question__header">
-            <div class="view-interview__question__textarea">
-              {{ question.content }}
+      <div
+        class="view-interview__questions"
+        v-if="interview.questions.length > 0"
+      >
+        <h3 class="view-interview__header">Questions</h3>
+        <ol class="view-interview__question-container">
+          <li
+            class="view-interview__question"
+            v-for="question in interview.questions"
+          >
+            <div class="view-interview__question__header">
+              <div class="view-interview__question__textarea">
+                {{ question.content }}
+              </div>
+              <hp-badge
+                class="view-interview__question__badge"
+                icon="chronometer"
+                :content="(question.duration / 60).toFixed(0)"
+              >
+              </hp-badge>
             </div>
-            <hp-badge
-              class="view-interview__question__badge"
-              icon="chronometer"
-              :content="(question.duration / 60).toFixed(0)"
-            >
-            </hp-badge>
-          </div>
-        </li>
-      </ol>
+          </li>
+        </ol>
+      </div>
     </div>
   </div>
 </template>
@@ -142,6 +148,10 @@ onMounted(async () => {
   height: 100vh;
   display: flex;
   flex-direction: column;
+  &__title {
+    font-weight: bold;
+    margin-bottom: 6px;
+  }
   &__header {
     color: var(--color-text-secondary);
     font-weight: 500;
@@ -178,6 +188,8 @@ onMounted(async () => {
     flex-wrap: wrap;
     gap: 6px;
     margin-top: 16px;
+    padding-bottom: 16px;
+    border-bottom: 1px dashed var(--color-border);
     &__skill {
       border: 1px solid var(--color-border);
       background-color: var(--color-panel);
@@ -193,7 +205,6 @@ onMounted(async () => {
     margin-top: 16px;
     &--warmup {
       padding-top: 16px;
-      border-top: 1px dashed var(--color-border);
     }
     &--cooldown {
       margin-bottom: 16px;
@@ -214,15 +225,18 @@ onMounted(async () => {
       background-color: var(--color-panel);
     }
   }
-  &__questions {
-    border-top: 1px dashed var(--color-border);
-    padding-top: 16px;
-    flex-grow: 1;
-    padding-bottom: 56px;
+  &__scroll-container {
     overflow: scroll;
+    flex-grow: 1;
     &::-webkit-scrollbar {
       width: 0px;
     }
+  }
+  &__questions {
+    border-top: 1px dashed var(--color-border);
+    padding-top: 16px;
+    padding-bottom: 56px;
+    overflow: scroll;
     &__title {
       margin-bottom: 16px;
       font-weight: 500;

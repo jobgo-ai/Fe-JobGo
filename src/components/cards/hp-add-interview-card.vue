@@ -1,5 +1,11 @@
 <template>
   <li class="hp-add-opening-card">
+    <hp-drawer
+      @close="isViewInterviewDrawerOpen = false"
+      :isOpen="isViewInterviewDrawerOpen"
+    >
+      <view-interview :template="template" />
+    </hp-drawer>
     <div class="hp-add-opening-card__add-new" v-if="isAddCard">
       <div>
         <div class="hp-add-opening-card__add-new__icon-container">
@@ -63,6 +69,7 @@
         <hp-button
           class="hp-add-opening-card__actions__button"
           icon="eye"
+          @handleClick="isViewInterviewDrawerOpen = true"
         ></hp-button>
         <hp-button
           class="hp-add-opening-card__actions__button"
@@ -83,14 +90,20 @@
 // Vendor
 import { ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
+
 // Components
 import HpButton from "@/components/hp-button.vue";
 import HpIcon from "@/components/hp-icon.vue";
 import HpInfoCircle from "@/components/hp-info-circle.vue";
+import HpDrawer from "@/components/hp-drawer.vue";
+
 // Composables
 import { usePost } from "@/composables/useHttp";
 import useToast from "@/composables/useToast";
 import useOpenings from "@/composables/useOpenings";
+
+// Views
+import ViewInterview from "@/views/dashboard/opening/view-interview.vue";
 
 const props = defineProps({
   opening: {
@@ -115,6 +128,7 @@ const emits = defineEmits(["handleDelete"]);
 
 const isLoading = ref(false);
 const isCreatingInterview = ref(false);
+const isViewInterviewDrawerOpen = ref(false);
 
 const router = useRouter();
 const route = useRoute();
