@@ -55,6 +55,62 @@
       </div>
     </div>
     <teleport to="#teleport-target-header">
+      <div
+        class="
+          edit-openings__teleport-button
+          edit-openings__teleport-button--overview
+        "
+      >
+        <hp-button
+          @handleClick="isOverviewFlyoutOpen = !isOverviewFlyoutOpen"
+          icon="file"
+        >
+        </hp-button>
+        <transition name="flyout-transition">
+          <div
+            v-if="isOverviewFlyoutOpen"
+            class="edit-interview__overview-button__flyout"
+          >
+            <div class="edit-interview__overview-button__flyout__header">
+              Overview
+            </div>
+            <div class="edit-interview__overview-button__flyout__header">
+              Levels
+              <ol class="edit-interview__overview-button__skills">
+                <li
+                  class="edit-interview__overview-button__skills__skill"
+                  v-for="level in opening.statistics.jobLevels"
+                >
+                  {{ level.value.name }}
+                  <hp-badge
+                    class="
+                      edit-interview__overview-button__skills__skill__badge
+                    "
+                    :content="level.quantity"
+                  ></hp-badge>
+                </li>
+              </ol>
+            </div>
+            <div class="edit-interview__overview-button__flyout__header">
+              Top skills evaluated
+              <ol class="edit-interview__overview-button__skills">
+                <li
+                  class="edit-interview__overview-button__skills__skill"
+                  v-for="skill in opening.statistics.skills"
+                >
+                  {{ skill.value.name }}
+                  <hp-badge
+                    class="
+                      edit-interview__overview-button__skills__skill__badge
+                    "
+                    :content="skill.quantity"
+                  ></hp-badge>
+                </li>
+              </ol>
+            </div>
+          </div>
+        </transition>
+      </div>
       <hp-button
         class="edit-openings__teleport-button"
         icon="trash"
@@ -90,6 +146,7 @@ import HpTextarea from "@/components/form/hp-textarea.vue";
 import HpSpinner from "@/components/hp-spinner.vue";
 import HpImageSelector from "@/components/form/hp-image-selector.vue";
 import MicCheck from "@/assets/abstracts/mic-check.svg";
+import HpBadge from "@/components/hp-badge.vue";
 // Composables
 import useOpenings from "@/composables/useOpenings";
 import useToast from "@/composables/useToast";
@@ -101,6 +158,7 @@ const route = useRoute();
 const router = useRouter();
 const templates = ref([]);
 const opening = ref({});
+const isOverviewFlyoutOpen = ref(false);
 const isLoading = ref(true);
 const isSaving = ref(false);
 const drag = ref(false);
@@ -232,6 +290,9 @@ const currentSplash = defineAsyncComponent(() =>
   grid-template-columns: 30% auto;
   &__teleport-button {
     margin-right: 6px;
+    &--overview {
+      position: relative;
+    }
   }
   &__spinner {
     display: flex;
