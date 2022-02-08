@@ -117,19 +117,4 @@ const { toastQueue, dismissToast } = useToast();
   opacity: 0;
   transform: translateX(30px);
 }
-
-// .toast-animation-list-enter {
-//   opacity: 0;
-//   transform: translateX(50px);
-// }
-
-// .toast-animation-list-enter-to {
-//   opacity: 1;
-//   transform: translateX(0);
-// }
-
-// .toast-animation-list-leave-to {
-//   opacity: 0;
-//   transform: translateX(50px);
-// }
 </styles>
