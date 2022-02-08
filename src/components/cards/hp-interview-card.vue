@@ -43,6 +43,15 @@
         ></hp-icon>
 
         {{ template.statistics.questions }} questions
+        <hp-info-circle
+          class="hp-question-card-stats__stats__stat__info-circle"
+          :content="
+            template.statistics.skills
+              .map((skill) => skill.value.name)
+              .join(', ')
+          "
+          v-if="template.statistics.skills.length > 0"
+        ></hp-info-circle>
       </div>
       <div class="hp-opening-card__actions">
         <hp-button
@@ -63,6 +72,7 @@
 import HpButton from "@/components/hp-button.vue";
 import HpBadge from "@/components/hp-badge.vue";
 import HpIcon from "@/components/hp-icon.vue";
+import HpInfoCircle from "@/components/hp-info-circle.vue";
 import { useRoute } from "vue-router";
 const props = defineProps({
   opening: {
@@ -119,6 +129,7 @@ const secondsToMinutes = (seconds) => {
   }
   &__fact {
     display: flex;
+    flex-direction: row;
     align-items: center;
     margin-bottom: 8px;
     &__icon {
