@@ -13,7 +13,18 @@
           </p>
           <hp-input label="Name" name="name"></hp-input>
           <hp-textarea label="Description" name="description"></hp-textarea>
-          <hp-image-selector label="Cover" name="artwork"></hp-image-selector>
+          <hp-image-selector
+            class="edit-openings__edit-container__cover-selector"
+            label="Cover"
+            name="artwork"
+          ></hp-image-selector>
+          <hp-button
+            class="edit-openings__edit-container__archive"
+            icon="trash"
+            label="Archive opening"
+            danger
+            @handleClick="archiveOpening"
+          ></hp-button>
         </div>
       </div>
       <div class="edit-openings__empty-state" v-if="templates.length === 0">
@@ -112,12 +123,6 @@
             </div>
           </transition>
         </div>
-        <hp-button
-          class="edit-openings__teleport-button"
-          icon="trash"
-          danger
-          @handleClick="archiveOpening"
-        ></hp-button>
         <hp-button
           label="Save"
           type="submit"
@@ -307,7 +312,9 @@ const currentSplash = defineAsyncComponent(() =>
     background-color: var(--color-panel);
     padding: 24px;
     border-radius: $border-radius-lg;
-    min-height: 80vh;
+    height: 80vh;
+    display: flex;
+    flex-direction: column;
     &__title {
       @include text-h4;
       font-weight: 500;
@@ -317,6 +324,12 @@ const currentSplash = defineAsyncComponent(() =>
       margin: 0;
       color: var(--color-text-secondary);
       margin-bottom: 24px;
+    }
+    &__cover-selector {
+      flex-grow: 1;
+    }
+    &__archive {
+      display: flex;
     }
   }
   &__empty-state {

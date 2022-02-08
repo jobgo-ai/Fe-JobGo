@@ -14,11 +14,17 @@
     >
       <hp-icon
         :class="iconClasses"
-        v-if="icon"
+        v-if="icon && !iconRight"
         :name="icon"
         :size="16"
       ></hp-icon>
       <div>{{ label }}</div>
+      <hp-icon
+        :class="iconClasses"
+        v-if="icon && iconRight"
+        :name="icon"
+        :size="16"
+      ></hp-icon>
       <hp-spinner
         class="hp-button__button__spinner"
         v-if="isLoading"
@@ -74,10 +80,6 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
-  danger: {
-    type: Boolean,
-    default: false,
-  },
   hasDropdown: {
     type: Boolean,
     default: false,
@@ -95,6 +97,10 @@ const props = defineProps({
   },
   href: {
     type: String,
+  },
+  iconRight: {
+    type: Boolean,
+    default: false,
   },
 });
 
@@ -130,6 +136,7 @@ const buttonClasses = computed(() => {
     "hp-button__button--dropzone": props.dropzone,
     "hp-button__button--disabled": props.isDisabled,
     "hp-button__button--dropdown": props.hasDropdown,
+    "hp-button__button--primary": props.primary,
     "hp-button__button--button-icon": props.icon && !props.label,
   };
 });
@@ -146,7 +153,7 @@ const iconClasses = computed(() => {
   return {
     "hp-button__button__icon": true,
     "hp-button__button__icon--solo": !props.label,
-    "hp-button__button__icon--danger": props.danger,
+    "hp-button__button__icon--right": props.iconRight,
   };
 });
 
@@ -235,8 +242,10 @@ const emit = defineEmits(["handleClick"]);
         margin-left: 0;
         color: var(--color-text-primary);
       }
-      &--danger {
-        color: var(--color-error);
+      &--right {
+        margin-left: 10px;
+        margin-right: -6px;
+        color: var(--color-accent-forground);
       }
     }
 

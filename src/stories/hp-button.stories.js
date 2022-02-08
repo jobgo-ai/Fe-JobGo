@@ -30,7 +30,7 @@ const Template = (args) => ({
       <hp-button primary style="margin-right: 12px" @click="buttonIsLoading = !buttonIsLoading" label="Loading" :isLoading="buttonIsLoading" />
       <hp-button primary style="margin-right: 12px" :isDisabled="true" label="Disabled" />
       <hp-button primary style="margin-right: 12px" label="Dropdown" dropdownIcon="plus" :hasDropdown="true" />
-      <hp-button primary style="margin-right: 12px" label="Icon" icon="plus" />
+      <hp-button primary :iconRight="true" style="margin-right: 12px" label="Icon" icon="plus" />
       <hp-button primary style="margin-right: 12px" icon="plus" />
     </div>
     <div style="display:flex; width: 240px; margin-top:24px;">
