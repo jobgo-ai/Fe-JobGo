@@ -60,16 +60,18 @@
         ></hp-info-circle>
       </div>
       <div class="hp-opening-card__actions">
-        <hp-button
-          label="Edit interview"
-          class="hp-opening-card__actions__button"
-          :to="`/opening/${route.params.openingRef}/edit/edit-interview/${template.reference}`"
-        ></hp-button>
-        <hp-button
-          class="hp-opening-card__actions__button"
-          icon="eye"
-          @handleClick="isViewInterviewDrawerOpen = true"
-        ></hp-button>
+        <div class="hp-opening-card__actions__button-group">
+          <hp-button
+            label="Edit interview"
+            class="hp-opening-card__actions__button"
+            :to="`/opening/${route.params.openingRef}/edit/edit-interview/${template.reference}`"
+          ></hp-button>
+          <hp-button
+            class="hp-opening-card__actions__button"
+            icon="eye"
+            @handleClick="isViewInterviewDrawerOpen = true"
+          ></hp-button>
+        </div>
         <hp-button
           icon="trash"
           danger
@@ -163,6 +165,11 @@ const secondsToMinutes = (seconds) => {
     display: flex;
     align-items: center;
     margin-top: auto;
+    justify-content: space-between;
+    &__button-group {
+      display: flex;
+      align-items: center;
+    }
     &__button {
       margin-right: 6px;
     }

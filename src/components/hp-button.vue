@@ -102,6 +102,10 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  danger: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const isDropdownOpen = ref(false);
@@ -154,6 +158,7 @@ const iconClasses = computed(() => {
     "hp-button__button__icon": true,
     "hp-button__button__icon--solo": !props.label,
     "hp-button__button__icon--right": props.iconRight,
+    "hp-button__button__icon--danger": props.danger,
   };
 });
 
@@ -246,6 +251,9 @@ const emit = defineEmits(["handleClick"]);
         margin-left: 10px;
         margin-right: -6px;
         color: var(--color-accent-forground);
+      }
+      &--danger {
+        color: var(--color-error);
       }
     }
 
