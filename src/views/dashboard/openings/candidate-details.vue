@@ -232,9 +232,12 @@
                 <div
                   class="candidate-details__interview-grid__item__actions"
                   v-else
-                  @click="copyInterview(interview)"
                 >
-                  <hp-button icon="copy" label="Copy link"></hp-button>
+                  <hp-button
+                    @click="copyInterview(interview)"
+                    icon="copy"
+                    label="Copy link"
+                  ></hp-button>
                 </div>
               </div>
             </li>
