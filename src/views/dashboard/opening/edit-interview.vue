@@ -175,18 +175,23 @@
                 </div>
                 <hp-question-card-stats hasTooltips :question="element" />
                 <div class="edit-interview__question-card__actions">
+                  <div
+                    class="edit-interview__question-card__actions__button-group"
+                  >
+                    <hp-button
+                      class="edit-interview__question-card__actions__button"
+                      label="Edit question"
+                      @handleClick="isEditQuestionDrawerOpen = element"
+                    ></hp-button>
+                    <hp-button
+                      @handleClick="isViewQuestionDrawerOpen = element"
+                      class="edit-interview__question-card__actions__button"
+                      icon="eye"
+                    ></hp-button>
+                  </div>
                   <hp-button
-                    class="edit-interview__question-card__actions__button"
-                    label="Edit question"
-                    @handleClick="isEditQuestionDrawerOpen = element"
-                  ></hp-button
-                  ><hp-button
                     @handleClick="handleRemoveQuestion(element)"
                     icon="trash"
-                  ></hp-button>
-                  <hp-button
-                    @handleClick="isViewQuestionDrawerOpen = element"
-                    icon="eye"
                   ></hp-button>
                 </div>
               </li>
@@ -427,7 +432,12 @@ const handleEditQuestionClose = () => {
     &__actions {
       display: flex;
       align-items: center;
+      justify-content: space-between;
       margin-top: 16px;
+      &__button-group {
+        display: flex;
+        align-items: center;
+      }
       &__button {
         margin-right: 6px;
       }
