@@ -1,18 +1,18 @@
 <template>
-  <li class="hp-opening-card">
+  <li class="hp-interview-card">
     <hp-drawer
       @close="isViewInterviewDrawerOpen = false"
       :isOpen="isViewInterviewDrawerOpen"
     >
       <view-interview :template="template" />
     </hp-drawer>
-    <div class="hp-opening-card__add-new" v-if="isAddCard">
+    <div class="hp-interview-card__add-new" v-if="isAddCard">
       <div>
-        <div class="hp-opening-card__add-new__icon-container">
+        <div class="hp-interview-card__add-new__icon-container">
           <hp-icon :size="24" name="plus"></hp-icon>
         </div>
-        <p class="hp-opening-card__content__name">Add interview</p>
-        <p class="hp-opening-card__content__description">
+        <p class="hp-interview-card__content__name">Add interview</p>
+        <p class="hp-interview-card__content__description">
           Add new interview to the process
         </p>
       </div>
@@ -23,27 +23,27 @@
         ></hp-button>
       </div>
     </div>
-    <div class="hp-opening-card__content" v-else>
-      <div class="hp-opening-card__badge-container">
+    <div class="hp-interview-card__content" v-else>
+      <div class="hp-interview-card__badge-container">
         <hp-badge icon="layers" :content="index"></hp-badge>
         <hp-icon
-          class="hp-opening-card__badge-container__handle"
+          class="hp-interview-card__badge-container__handle"
           name="drag"
           size="24"
         ></hp-icon>
       </div>
-      <div class="hp-opening-card__name">{{ template.name }}</div>
-      <div class="hp-opening-card__fact">
+      <div class="hp-interview-card__name">{{ template.name }}</div>
+      <div class="hp-interview-card__fact">
         <hp-icon
-          class="hp-opening-card__fact__icon"
+          class="hp-interview-card__fact__icon"
           name="chronometer"
           :size="15"
         ></hp-icon>
         {{ secondsToMinutes(template.statistics.duration) }} minutes
       </div>
-      <div class="hp-opening-card__fact">
+      <div class="hp-interview-card__fact">
         <hp-icon
-          class="hp-opening-card__fact__icon"
+          class="hp-interview-card__fact__icon"
           name="questions"
           :size="15"
         ></hp-icon>
@@ -59,15 +59,15 @@
           v-if="template.statistics.skills.length > 0"
         ></hp-info-circle>
       </div>
-      <div class="hp-opening-card__actions">
-        <div class="hp-opening-card__actions__button-group">
+      <div class="hp-interview-card__actions">
+        <div class="hp-interview-card__actions__button-group">
           <hp-button
             label="Edit interview"
-            class="hp-opening-card__actions__button"
+            class="hp-interview-card__actions__button"
             :to="`/opening/${route.params.openingRef}/edit/edit-interview/${template.reference}`"
           ></hp-button>
           <hp-button
-            class="hp-opening-card__actions__button"
+            class="hp-interview-card__actions__button"
             icon="eye"
             @handleClick="isViewInterviewDrawerOpen = true"
           ></hp-button>
@@ -127,10 +127,9 @@ const secondsToMinutes = (seconds) => {
 </script>
 
 <style lang="scss">
-.hp-opening-card {
+.hp-interview-card {
   height: 236px;
   width: 264px;
-  cursor: pointer;
   list-style: none;
   border-radius: $border-radius-lg;
   border: $border;
@@ -150,6 +149,9 @@ const secondsToMinutes = (seconds) => {
   }
   &__content {
     padding: 16px;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
   }
   &__fact {
     display: flex;
