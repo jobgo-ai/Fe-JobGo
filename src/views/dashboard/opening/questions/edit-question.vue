@@ -170,10 +170,12 @@ if (props.question) {
     value: s.slug,
   }));
 
+  console.log(props.question);
+
   const formattedInitialValues = {
     content: props.question.content,
     duration: props.question.duration / 60,
-    guidelines: props.question.guidelines || [],
+    guidelines: props.question.guidelines,
     skills: skills.value,
     jobLevels: levels.value,
   };

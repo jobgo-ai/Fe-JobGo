@@ -85,6 +85,8 @@ const props = defineProps({
 
 const { errorMessage, value: formValue } = useField(props.name);
 
+console.log(formValue.value);
+
 const drag = ref(false);
 
 const dragOptions = computed(() => {
@@ -98,9 +100,9 @@ const dragOptions = computed(() => {
 
 const emit = defineEmits(["update:modelValue"]);
 const initialValue =
-  props.modelValue.length < 1
+  formValue.value.length < 1
     ? [{ id: uuidv4(), text: "" }]
-    : props.modelValue.map((i) => ({ text: i, id: uuidv4() }));
+    : formValue.value.map((i) => ({ text: i, id: uuidv4() }));
 
 const internalValue = ref(initialValue);
 
