@@ -1,5 +1,11 @@
 <template>
   <li class="hp-opening-card">
+    <hp-drawer
+      @close="isViewInterviewDrawerOpen = false"
+      :isOpen="isViewInterviewDrawerOpen"
+    >
+      <view-interview :template="template" />
+    </hp-drawer>
     <div class="hp-opening-card__add-new" v-if="isAddCard">
       <div>
         <div class="hp-opening-card__add-new__icon-container">
@@ -60,6 +66,11 @@
           :to="`/opening/${route.params.openingRef}/edit/edit-interview/${template.reference}`"
         ></hp-button>
         <hp-button
+          class="hp-opening-card__actions__button"
+          icon="eye"
+          @handleClick="isViewInterviewDrawerOpen = true"
+        ></hp-button>
+        <hp-button
           icon="trash"
           @handleClick="$emit('handleRemove', template.reference)"
         ></hp-button>
@@ -69,11 +80,19 @@
 </template>
 
 <script setup>
+// Vendor
+import { ref } from "vue";
+import { useRoute } from "vue-router";
+// Views
+import ViewInterview from "@/views/dashboard/opening/view-interview.vue";
+
+// Component
+import HpDrawer from "@/components/hp-drawer.vue";
 import HpButton from "@/components/hp-button.vue";
 import HpBadge from "@/components/hp-badge.vue";
 import HpIcon from "@/components/hp-icon.vue";
 import HpInfoCircle from "@/components/hp-info-circle.vue";
-import { useRoute } from "vue-router";
+
 const props = defineProps({
   opening: {
     type: Object,
@@ -94,6 +113,8 @@ const props = defineProps({
 });
 
 const emits = defineEmits(["handleRemove"]);
+
+const isViewInterviewDrawerOpen = ref(false);
 
 const route = useRoute();
 

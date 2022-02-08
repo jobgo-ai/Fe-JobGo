@@ -1,144 +1,146 @@
 <template>
-  <form
-    class="edit-openings"
-    v-if="!isLoading"
-    @submit.prevent="handleContextFormSave"
-  >
-    <div>
-      <div class="edit-openings__edit-container">
-        <h3 class="edit-openings__edit-container__title">Edit opening</h3>
-        <p class="edit-openings__edit-container__subtitle">
-          Main information for your openings
+  <div>
+    <form
+      class="edit-openings"
+      v-if="!isLoading"
+      @submit.prevent="handleContextFormSave"
+    >
+      <div>
+        <div class="edit-openings__edit-container">
+          <h3 class="edit-openings__edit-container__title">Edit opening</h3>
+          <p class="edit-openings__edit-container__subtitle">
+            Main information for your openings
+          </p>
+          <hp-input label="Name" name="name"></hp-input>
+          <hp-textarea label="Description" name="description"></hp-textarea>
+          <hp-image-selector label="Cover" name="artwork"></hp-image-selector>
+        </div>
+      </div>
+      <div class="edit-openings__empty-state" v-if="templates.length === 0">
+        <mic-check />
+        <p class="edit-openings__empty-state__title">Mic check! One, two...</p>
+        <p class="edit-openings__empty-state__subtitle">
+          Looking a bit empty here, please add an interview
         </p>
-        <hp-input label="Name" name="name"></hp-input>
-        <hp-textarea label="Description" name="description"></hp-textarea>
-        <hp-image-selector label="Cover" name="artwork"></hp-image-selector>
-      </div>
-    </div>
-    <div class="edit-openings__empty-state" v-if="templates.length === 0">
-      <mic-check />
-      <p class="edit-openings__empty-state__title">Mic check! One, two...</p>
-      <p class="edit-openings__empty-state__subtitle">
-        Looking a bit empty here, please add an interview
-      </p>
-      <hp-button
-        :to="`/opening/${route.params.openingRef}/edit/add-interview`"
-        label="Add interview"
-      ></hp-button>
-    </div>
-    <div class="edit-openings__interview-container" v-else>
-      <h2 class="edit-openings__interview-container__title">Interviews</h2>
-      <p class="edit-openings__interview-container__subtitle">
-        View and manage all interviews
-      </p>
-      <div class="edit-openings__interview-container__grid">
-        <hp-interview-card isAddCard></hp-interview-card>
-        <draggable
-          v-model="templates"
-          tag="transition-group"
-          item-key="reference"
-          handle=".hp-opening-card__badge-container__handle"
-          @change="handleDragChange"
-          v-bind="dragOptions"
-          @start="drag = true"
-          @end="drag = false"
-        >
-          <template #item="{ element, index }">
-            <hp-interview-card
-              :template="element"
-              :index="index + 1"
-              :key="element.reference"
-              @handleRemove="handleRemoveInterview"
-            ></hp-interview-card>
-          </template>
-        </draggable>
-      </div>
-    </div>
-    <teleport to="#teleport-target-header">
-      <div
-        class="
-          edit-openings__teleport-button
-          edit-openings__teleport-button--overview
-        "
-      >
         <hp-button
-          @handleClick="isOverviewFlyoutOpen = !isOverviewFlyoutOpen"
-          icon="file"
-        >
-        </hp-button>
-        <transition name="flyout-transition">
-          <div
-            v-if="isOverviewFlyoutOpen"
-            class="edit-interview__overview-button__flyout"
-          >
-            <div class="edit-interview__overview-button__flyout__header">
-              Overview
-            </div>
-            <div class="edit-interview__overview-button__flyout__header">
-              Levels
-              <ol class="edit-interview__overview-button__skills">
-                <li
-                  class="edit-interview__overview-button__skills__skill"
-                  v-for="level in opening.statistics.jobLevels"
-                >
-                  {{ level.value.name }}
-                  <hp-badge
-                    class="
-                      edit-interview__overview-button__skills__skill__badge
-                    "
-                    :content="level.quantity"
-                  ></hp-badge>
-                </li>
-              </ol>
-            </div>
-            <div class="edit-interview__overview-button__flyout__header">
-              Top skills evaluated
-              <ol class="edit-interview__overview-button__skills">
-                <li
-                  class="edit-interview__overview-button__skills__skill"
-                  v-for="skill in opening.statistics.skills"
-                >
-                  {{ skill.value.name }}
-                  <hp-badge
-                    class="
-                      edit-interview__overview-button__skills__skill__badge
-                    "
-                    :content="skill.quantity"
-                  ></hp-badge>
-                </li>
-              </ol>
-            </div>
-          </div>
-        </transition>
+          :to="`/opening/${route.params.openingRef}/edit/add-interview`"
+          label="Add interview"
+        ></hp-button>
       </div>
-      <hp-button
-        class="edit-openings__teleport-button"
-        icon="trash"
-        @handleClick="archiveOpening"
-      ></hp-button>
-      <hp-button
-        label="Save"
-        type="submit"
-        primary
-        :isLoading="isSaving"
-        @handleClick="onSubmit"
-        :isDisabled="!meta.dirty"
-      ></hp-button>
-    </teleport>
-  </form>
-  <div class="edit-openings__spinner" v-else>
-    <hp-spinner size="24"></hp-spinner>
+      <div class="edit-openings__interview-container" v-else>
+        <h2 class="edit-openings__interview-container__title">Interviews</h2>
+        <p class="edit-openings__interview-container__subtitle">
+          View and manage all interviews
+        </p>
+        <div class="edit-openings__interview-container__grid">
+          <hp-interview-card isAddCard></hp-interview-card>
+          <draggable
+            v-model="templates"
+            tag="transition-group"
+            item-key="reference"
+            handle=".hp-opening-card__badge-container__handle"
+            @change="handleDragChange"
+            v-bind="dragOptions"
+            @start="drag = true"
+            @end="drag = false"
+          >
+            <template #item="{ element, index }">
+              <hp-interview-card
+                :template="element"
+                :index="index + 1"
+                :key="element.reference"
+                @handleRemove="handleRemoveInterview"
+              ></hp-interview-card>
+            </template>
+          </draggable>
+        </div>
+      </div>
+      <teleport to="#teleport-target-header">
+        <div
+          class="
+            edit-openings__teleport-button
+            edit-openings__teleport-button--overview
+          "
+        >
+          <hp-button
+            @handleClick="isOverviewFlyoutOpen = !isOverviewFlyoutOpen"
+            icon="file"
+          >
+          </hp-button>
+          <transition name="flyout-transition">
+            <div
+              v-if="isOverviewFlyoutOpen"
+              class="edit-interview__overview-button__flyout"
+            >
+              <div class="edit-interview__overview-button__flyout__header">
+                Overview
+              </div>
+              <div class="edit-interview__overview-button__flyout__header">
+                Levels
+                <ol class="edit-interview__overview-button__skills">
+                  <li
+                    class="edit-interview__overview-button__skills__skill"
+                    v-for="level in opening.statistics.jobLevels"
+                  >
+                    {{ level.value.name }}
+                    <hp-badge
+                      class="
+                        edit-interview__overview-button__skills__skill__badge
+                      "
+                      :content="level.quantity"
+                    ></hp-badge>
+                  </li>
+                </ol>
+              </div>
+              <div class="edit-interview__overview-button__flyout__header">
+                Top skills evaluated
+                <ol class="edit-interview__overview-button__skills">
+                  <li
+                    class="edit-interview__overview-button__skills__skill"
+                    v-for="skill in opening.statistics.skills"
+                  >
+                    {{ skill.value.name }}
+                    <hp-badge
+                      class="
+                        edit-interview__overview-button__skills__skill__badge
+                      "
+                      :content="skill.quantity"
+                    ></hp-badge>
+                  </li>
+                </ol>
+              </div>
+            </div>
+          </transition>
+        </div>
+        <hp-button
+          class="edit-openings__teleport-button"
+          icon="trash"
+          @handleClick="archiveOpening"
+        ></hp-button>
+        <hp-button
+          label="Save"
+          type="submit"
+          primary
+          :isLoading="isSaving"
+          @handleClick="onSubmit"
+          :isDisabled="!meta.dirty"
+        ></hp-button>
+      </teleport>
+    </form>
+    <div class="edit-openings__spinner" v-else>
+      <hp-spinner size="24"></hp-spinner>
+    </div>
   </div>
 </template>
 
 <script setup>
-// vendor
+// Vendor
 import { onMounted, ref, defineAsyncComponent, computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useForm } from "vee-validate";
 import draggable from "vuedraggable";
 import * as yup from "yup";
-//components
+// Components
 import HpInterviewCard from "@/components/cards/hp-interview-card.vue";
 import HpInput from "@/components/form/hp-input.vue";
 import HpButton from "@/components/hp-button.vue";
