@@ -33,6 +33,7 @@
             v-if="!isAddNew"
             :isLoading="isArchivingCandidate"
             icon="archive"
+            danger
           ></hp-button>
           <template #content> Archive candidate </template>
         </hp-tooltip>

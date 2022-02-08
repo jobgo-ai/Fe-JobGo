@@ -93,6 +93,9 @@ const calculateColor = (score, avgScore) => {
   padding: 12px;
   margin-bottom: 12px;
   cursor: pointer;
+  &:focus {
+    background: red;
+  }
   &:hover {
     box-shadow: inset 0px 0px 4px rgba(33, 44, 51, 0.01),
       inset 0px 0px 48px rgba(33, 44, 51, 0.03);
