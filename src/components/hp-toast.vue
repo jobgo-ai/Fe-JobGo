@@ -1,5 +1,5 @@
 <template>
-  <transition-group class="hp-toast" tag="ol" name="list">
+  <transition-group class="hp-toast" tag="ol" name="toast-list">
     <li v-for="toast in toastQueue" :key="toast.id" class="hp-toast__content">
       <div class="hp-toast__content__container">
         <hp-icon
@@ -107,25 +107,29 @@ const { toastQueue, dismissToast } = useToast();
   }
 }
 
-.list-enter-active,
-.list-leave-active,
-.list-move {
-  transition: 0.15s cubic-bezier(0.59, 0.12, 0.34, 0.95);
-  transition-property: opacity, transform;
+.toast-list-move,
+.toast-list-enter-active,
+.toast-list-leave-active {
+  transition: all 0.15s cubic-bezier(0.59, 0.12, 0.34, 0.95);
 }
-
-.list-enter {
+.toast-list-enter-from,
+.toast-list-leave-to {
   opacity: 0;
-  transform: translateX(50px);
+  transform: translateX(30px);
 }
 
-.list-enter-to {
-  opacity: 1;
-  transform: translateX(0);
-}
+// .toast-animation-list-enter {
+//   opacity: 0;
+//   transform: translateX(50px);
+// }
 
-.list-leave-to {
-  opacity: 0;
-  transform: translateX(50px);
-}
+// .toast-animation-list-enter-to {
+//   opacity: 1;
+//   transform: translateX(0);
+// }
+
+// .toast-animation-list-leave-to {
+//   opacity: 0;
+//   transform: translateX(50px);
+// }
 </styles>
