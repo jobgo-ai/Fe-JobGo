@@ -137,7 +137,7 @@ const { setToast } = useToast();
 const { fetchOpening } = useOpenings();
 
 const secondsToMinutes = (seconds) => {
-  return Math.floor(seconds * 60);
+  return Math.floor(seconds / 60);
 };
 
 const handleCreateInterview = async () => {
