@@ -1,4 +1,4 @@
-import { ref, onUnmounted } from "vue";
+import { ref, onUnmounted, onMounted } from "vue";
 import { useGet } from "./useHttp";
 
 const isOpeningsLoading = ref(true);
@@ -27,6 +27,9 @@ const fetchOpening = async (openingRef) => {
 };
 
 export default () => {
+  onMounted(() => {
+    fetchOpenings();
+  });
   onUnmounted(() => {
     openings.value = [];
   });
