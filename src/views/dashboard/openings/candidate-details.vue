@@ -23,11 +23,6 @@
           </div>
           <div class="candidate-details__header__button-group">
             <hp-button
-              class="candidate-details__header__button-group__button"
-              label="Compare"
-              :to="`/opening/${route.params.openingRef}/compare`"
-            ></hp-button>
-            <hp-button
               @click="isEditCandidateModalOpen = true"
               icon="pencil"
             ></hp-button>

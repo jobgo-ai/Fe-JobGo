@@ -18,11 +18,6 @@
           <hp-abstract-avatar :abstractKey="opening.artwork" />
           <div class="candidate-list__header__button-group">
             <hp-button
-              :to="`/opening/${opening.reference}/compare`"
-              class="candidate-list__header__button-group__button"
-              label="Compare"
-            ></hp-button>
-            <hp-button
               :to="`/opening/${opening.reference}/edit`"
               icon="pencil"
             ></hp-button>

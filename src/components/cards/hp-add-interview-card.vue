@@ -168,7 +168,7 @@ const handleAddToInterview = async () => {
   setToast({
     type: "positive",
     title: "Well done!",
-    message: "Interview added to role",
+    message: "Interview added to opening",
   });
 };
 
