@@ -106,6 +106,10 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  destructive: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const isDropdownOpen = ref(false);
@@ -140,6 +144,7 @@ const buttonClasses = computed(() => {
     "hp-button__button--dropzone": props.dropzone,
     "hp-button__button--disabled": props.isDisabled,
     "hp-button__button--dropdown": props.hasDropdown,
+    "hp-button__button--destructive": props.destructive,
     "hp-button__button--primary": props.primary,
     "hp-button__button--button-icon": props.icon && !props.label,
   };
@@ -246,6 +251,28 @@ const emit = defineEmits(["handleClick"]);
     &--button-icon {
       padding: 6px;
       color: var(--color-text-primary);
+    }
+
+    &--destructive {
+      color: var(--color-accent-forground);
+      background-color: var(--color-error);
+      &:active,
+      &:hover {
+        background-color: var(--color-error);
+      }
+
+      &:active {
+        border-color: var(--color-border-subtle);
+      }
+
+      &.hp-button__button--disabled {
+        opacity: 0.7;
+        color: var(--color-accent-forground);
+        background-color: var(--color-error);
+        &:hover {
+          background-color: var(--color-error);
+        }
+      }
     }
 
     &--disabled {

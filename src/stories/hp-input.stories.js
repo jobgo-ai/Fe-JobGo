@@ -43,7 +43,7 @@ const Template = (args) => ({
       <hp-input name="name"  label="Prefilled Input" />
       <hp-input name="disabled" label="Disabled"  :isDisabled="true" />
       <hp-input name="error" label="Error"  />
-      <hp-input name="icon" icon="mail" label="Icons" />
+      <hp-input name="icon" icon="locked" label="Icons" />
       <hp-input name="search" variant="search" icon="search" label="Search" />
     </div>
   </div>`,

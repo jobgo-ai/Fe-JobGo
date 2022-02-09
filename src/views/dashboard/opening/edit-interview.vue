@@ -204,6 +204,11 @@
           icon="plus"
           dropzone
         ></hp-button>
+        <hp-danger-zone
+          class="edit-interview__danger-zone"
+          label="Delete interview template"
+          :onConfirm="handleDeleteInterviewTemplate"
+        ></hp-danger-zone>
       </div>
     </div>
     <hp-spinner v-else size="24" content />
@@ -214,7 +219,7 @@
 // Vendor
 import { onMounted, ref, computed } from "vue";
 import { useForm } from "vee-validate";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import * as yup from "yup";
 import draggable from "vuedraggable";
 
@@ -233,9 +238,10 @@ import HpDrawer from "@/components/hp-drawer.vue";
 import HpTextarea from "@/components/form/hp-textarea.vue";
 import HpSpinner from "@/components/hp-spinner.vue";
 import HpQuestionCardStats from "@/components/cards/hp-question-card-stats.vue";
+import HpDangerZone from "@/components/cards/hp-danger-zone-card.vue";
 
 // Composables
-import { usePut } from "@/composables/useHttp";
+import { usePut, useDelete } from "@/composables/useHttp";
 import { useBreadcrumbs } from "@/composables/useBreadcrumbs";
 import useContextSave from "@/composables/useContextSave";
 import useQuestionContext from "@/composables/useQuestionContext";
@@ -252,6 +258,7 @@ const props = defineProps({
 const isLoading = ref(true);
 const isSaving = ref(false);
 const route = useRoute();
+const router = useRouter();
 const isOverviewFlyoutOpen = ref(false);
 const isAddQuestionDrawerOpen = ref(false);
 const isViewQuestionDrawerOpen = ref(false);
@@ -386,6 +393,17 @@ const handleRemoveQuestion = async (template) => {
   });
 };
 
+const handleDeleteInterviewTemplate = async () => {
+  const deleteInterview = useDelete(`templates/${route.params.interviewRef}`);
+  await deleteInterview.remove();
+  router.push(`/opening/${route.params.openingRef}/edit`);
+  setToast({
+    type: "positive",
+    title: "It had to be done!",
+    message: "That nasty interview is finally gone",
+  });
+};
+
 const handleCloseEditDrawer = () => {
   const handleClose = () => {
     isEditQuestionDrawerOpen.value = false;
@@ -436,7 +454,7 @@ const handleCloseEditDrawer = () => {
   }
   &__questions-button {
     margin-top: 16px;
-    margin-bottom: 200px;
+    margin-bottom: 24px;
   }
   &__ceremony {
     &--cooldown {
@@ -546,6 +564,9 @@ const handleCloseEditDrawer = () => {
         }
       }
     }
+  }
+  &__danger-zone {
+    margin-bottom: 164px;
   }
 }
 

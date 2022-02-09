@@ -23,6 +23,8 @@ const Template = (args) => ({
       <hp-button style="margin-right: 12px" label="Dropdown" dropdownIcon="plus" :hasDropdown="true" />
       <hp-button style="margin-right: 12px" label="Icon" icon="plus" />
       <hp-button style="margin-right: 12px" icon="plus" />
+      <hp-button destructive label="Destructive" style="margin-right: 12px" v-bind="args"> </hp-button>
+      <hp-button destructive :isDisabled="true" label="Destructive" style="margin-right: 12px" v-bind="args"> </hp-button>
     </div>
     <div style="display:flex">
       <hp-button primary style="margin-right: 12px" v-bind="args"> </hp-button>
