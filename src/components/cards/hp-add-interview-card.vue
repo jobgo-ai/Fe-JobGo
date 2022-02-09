@@ -140,13 +140,21 @@ const secondsToMinutes = (seconds) => {
   return Math.floor(seconds / 60);
 };
 
+// Creates interview and adds to current opening
 const handleCreateInterview = async () => {
   isCreatingInterview.value = true;
   const postInterview = usePost("templates");
   await postInterview.post({
     template: { name: "New Interview" },
   });
+  console.log(postInterview.data.value);
+  const postOpening = usePost(`openings/${route.params.openingRef}/templates`);
+  const payload = {
+    template: postInterview.data.value.template.reference,
+  };
+  await postOpening.post(payload);
   const url = `/opening/${route.params.openingRef}/edit/edit-interview/${postInterview.data.value.template.reference}`;
+  await fetchOpening(route.params.openingRef);
   router.push(url);
   isCreatingInterview.value = false;
 };
