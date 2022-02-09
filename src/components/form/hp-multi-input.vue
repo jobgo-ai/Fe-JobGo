@@ -96,9 +96,11 @@ const dragOptions = computed(() => {
   };
 });
 
+console.log(formValue.value);
+
 const emit = defineEmits(["update:modelValue"]);
 const initialValue =
-  formValue.value.length < 1
+  !formValue.value || formValue.value.length < 1
     ? [{ id: uuidv4(), text: "" }]
     : formValue.value.map((i) => ({ text: i, id: uuidv4() }));
 
