@@ -77,6 +77,11 @@
         />
       </div>
     </form>
+    <hp-danger-zone
+      class="edit-interview__danger-zone"
+      label="Delete question template"
+      :onConfirm="handleDeleteQuestiontemplate"
+    ></hp-danger-zone>
   </div>
 </template>
 
@@ -92,15 +97,17 @@ import HpInput from "@/components/form/hp-input.vue";
 import HpCounter from "@/components/hp-counter.vue";
 import HpButton from "@/components/hp-button.vue";
 import HpTagger from "@/components/form/hp-tagger.vue";
+import HpDangerZone from "@/components/cards/hp-danger-zone-card.vue";
 import HpIcon from "@/components/hp-icon.vue";
 import HpMultiInput from "@/components/form/hp-multi-input.vue";
 
 // Composables
+import { hasEditPermission } from "@/composables/usePermissions.js";
 import useSkillSearch from "@/composables/useSkillSearch";
 import useConstants from "@/composables/useConstants";
 import useInterviews from "@/composables/useInterviews";
 import useToast from "@/composables/useToast";
-import { usePost, usePut } from "@/composables/useHttp";
+import { usePost, usePut, useDelete } from "@/composables/useHttp";
 import useQuestionContext from "@/composables/useQuestionContext";
 
 const props = defineProps({
@@ -246,6 +253,18 @@ const handleClose = () => {
   if (!meta.dirty && meta.valid) {
     emits("handleTabChange");
   }
+};
+
+const handleDeleteQuestiontemplate = async () => {
+  const deleteQuestion = useDelete(`questions/${props.question.reference}`);
+  await deleteQuestion.remove();
+  emits("handleClose");
+  await fetchInterview(route.params.interviewRef);
+  setToast({
+    type: "positive",
+    title: "Oh my!",
+    message: `That question is now in the trash bin`,
+  });
 };
 </script>
 

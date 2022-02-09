@@ -75,12 +75,8 @@
           class="hp-add-opening-card__actions__button"
           :to="`/opening/${route.params.openingRef}/edit/edit-interview/${template.reference}`"
           icon="pencil"
+          v-if="hasEditPermission(template)"
         ></hp-button>
-        <!-- <hp-button
-          class="hp-add-opening-card__actions__button"
-          @handleClick="emits('handleDelete', template.reference)"
-          icon="trash"
-        ></hp-button> -->
       </div>
     </div>
   </li>
@@ -98,6 +94,7 @@ import HpInfoCircle from "@/components/hp-info-circle.vue";
 import HpDrawer from "@/components/hp-drawer.vue";
 
 // Composables
+import { hasEditPermission } from "@/composables/usePermissions";
 import { usePost } from "@/composables/useHttp";
 import useToast from "@/composables/useToast";
 import useOpenings from "@/composables/useOpenings";

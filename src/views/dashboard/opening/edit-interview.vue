@@ -205,6 +205,7 @@
           dropzone
         ></hp-button>
         <hp-danger-zone
+          v-if="hasEditPermission(interview)"
           class="edit-interview__danger-zone"
           label="Delete interview template"
           :onConfirm="handleDeleteInterviewTemplate"
@@ -241,6 +242,7 @@ import HpQuestionCardStats from "@/components/cards/hp-question-card-stats.vue";
 import HpDangerZone from "@/components/cards/hp-danger-zone-card.vue";
 
 // Composables
+import { hasEditPermission } from "@/composables/usePermissions";
 import { usePut, useDelete } from "@/composables/useHttp";
 import { useBreadcrumbs } from "@/composables/useBreadcrumbs";
 import useContextSave from "@/composables/useContextSave";

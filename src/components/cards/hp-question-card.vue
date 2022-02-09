@@ -9,8 +9,7 @@
         class="hp-question-card__actions__button"
         label="Add question"
         @handleClick="$emit('handleAddToInterview', question)"
-      ></hp-button
-      ><hp-button icon="eye"></hp-button>
+      ></hp-button>
     </div>
   </li>
 </template>
