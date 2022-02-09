@@ -78,6 +78,7 @@
       </div>
     </form>
     <hp-danger-zone
+      v-if="isEdit"
       class="edit-interview__danger-zone"
       label="Delete question template"
       :onConfirm="handleDeleteQuestiontemplate"
@@ -116,7 +117,9 @@ const props = defineProps({
   },
 });
 
-const content = props.question
+const isEdit = props.question;
+
+const content = isEdit
   ? {
       title: "Edit question",
       action: "Edit question",

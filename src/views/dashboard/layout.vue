@@ -11,7 +11,7 @@
 
 <script setup>
 // Vendor
-import { onMounted } from "vue";
+import { onMounted, onUnmounted } from "vue";
 
 //  Hooks
 import useConstants from "@/composables/useConstants";
@@ -25,6 +25,7 @@ onMounted(() => {
   loadCompetencies();
   loadQuestionLevels();
 });
+onUnmounted(() => {});
 </script>
 
 <style lang="scss" scoped>
