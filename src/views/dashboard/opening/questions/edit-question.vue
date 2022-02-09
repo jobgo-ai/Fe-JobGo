@@ -18,13 +18,16 @@
         ></hp-input>
       </div>
       <div class="edit-question__duration">
-        <div class="edit-question__duration__labels">
-          <div class="edit-question__label">Duration time</div>
-          <div class="edit-question__sublabel">
-            Expected duration, in minutes
+        <div class="edit-question__duration__container">
+          <div class="edit-question__duration__labels">
+            <div class="edit-question__label">Duration time</div>
+            <div class="edit-question__sublabel">
+              Expected duration, in minutes
+            </div>
           </div>
+          <hp-counter name="duration" />
         </div>
-        <hp-counter name="duration" />
+        <div class="edit-question__duration__error">{{ errors.duration }}</div>
       </div>
       <div class="edit-question__dropdowns">
         <div class="edit-question__duration__labels">
@@ -79,7 +82,7 @@
 
 <script setup>
 //Vendor
-import { ref, computed, onMounted, watch, watchEffect } from "vue";
+import { ref, computed, onMounted, watchEffect } from "vue";
 import { useForm } from "vee-validate";
 import * as yup from "yup";
 import { useRoute } from "vue-router";
@@ -148,7 +151,12 @@ const route = useRoute();
 
 const schema = yup.object({
   content: yup.string().required("A question is required"),
-  duration: yup.number(),
+  duration: yup
+    .number()
+    .typeError("Duration must be a number")
+    .min(0)
+    .max(60)
+    .required("A duration is required"),
   skills: yup.array().nullable(),
   levels: yup.array(),
   guidelines: yup.array(),
@@ -177,15 +185,15 @@ if (props.question) {
   initialValues = formattedInitialValues;
 }
 
-const { handleSubmit, meta } = useForm({
+const { handleSubmit, meta, errors } = useForm({
   validationSchema: schema,
   initialValues: initialValues,
 });
 
+// State that interacts with parent to make sure we don't accidently close the modal
 const { clearIsDirty } = useQuestionContext(meta, "edit");
 
 const { fetchInterview, setInterview } = useInterviews();
-
 const { setToast } = useToast();
 
 const onSubmit = handleSubmit(async (values) => {
@@ -228,6 +236,8 @@ const onSubmit = handleSubmit(async (values) => {
       message: `Question created and added to interview`,
     });
   }
+
+  // Must clear dirty to handle close
   clearIsDirty();
   emits("handleClose");
   isSaving.value = false;
@@ -286,14 +296,22 @@ const handleClose = () => {
   }
   &__duration {
     display: flex;
-    justify-content: space-between;
-    align-content: center;
+    flex-direction: column;
     padding-bottom: 16px;
     border-bottom: 1px dashed var(--color-border);
+    &__container {
+      display: flex;
+      justify-content: space-between;
+      align-content: center;
+    }
     &__labels {
       display: flex;
       flex-direction: column;
       margin-bottom: 16px;
+    }
+    &__error {
+      color: var(--color-error);
+      font-weight: 500;
     }
   }
   &__dropdowns {

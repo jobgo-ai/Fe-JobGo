@@ -285,7 +285,8 @@ const { handleSubmit, resetForm, meta, setFieldValue } = useForm({
 
 const onSubmit = handleSubmit(async (values) => {
   isSaving.value = true;
-  const formattedQuestions = values?.questions.map((q) => q.reference) || [];
+  const formattedQuestions =
+    interview.value?.questions.map((q) => q.reference) || [];
   await putInterview.put({
     template: {
       ...values,
