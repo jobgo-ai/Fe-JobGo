@@ -1,10 +1,6 @@
 <template>
   <div class="edit-question">
-    <div
-      v-if="!question"
-      class="edit-question__back"
-      @click="emits('handleTabChange')"
-    >
+    <div v-if="!question" class="edit-question__back" @click="handleClose">
       <hp-icon name="arrow-left"></hp-icon>Back
     </div>
     <div class="edit-question__header">
@@ -102,6 +98,7 @@ import useConstants from "@/composables/useConstants";
 import useInterviews from "@/composables/useInterviews";
 import useToast from "@/composables/useToast";
 import { usePost, usePut } from "@/composables/useHttp";
+import useQuestionContext from "@/composables/useQuestionContext";
 
 const props = defineProps({
   question: {
@@ -185,6 +182,8 @@ const { handleSubmit, meta } = useForm({
   initialValues: initialValues,
 });
 
+const { clearIsDirty } = useQuestionContext(meta, "edit");
+
 const { fetchInterview, setInterview } = useInterviews();
 
 const { setToast } = useToast();
@@ -229,9 +228,15 @@ const onSubmit = handleSubmit(async (values) => {
       message: `Question created and added to interview`,
     });
   }
+  clearIsDirty();
   emits("handleClose");
   isSaving.value = false;
 });
+const handleClose = () => {
+  if (!meta.dirty && meta.valid) {
+    emits("handleTabChange");
+  }
+};
 </script>
 
 <style lang="scss">

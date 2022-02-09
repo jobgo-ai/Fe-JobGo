@@ -96,8 +96,6 @@ const dragOptions = computed(() => {
   };
 });
 
-console.log(formValue.value);
-
 const emit = defineEmits(["update:modelValue"]);
 const initialValue =
   !formValue.value || formValue.value.length < 1

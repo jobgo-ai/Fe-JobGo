@@ -1,12 +1,18 @@
 <template>
   <div>
-    <hp-drawer
-      :isOpen="isAddQuestionDrawerOpen"
-      @close="isAddQuestionDrawerOpen = false"
-    >
+    <hp-drawer :isOpen="isAddQuestionDrawerOpen" @close="handleCloseEditDrawer">
       <questions
-        :handleClose="() => (isAddQuestionDrawerOpen = false)"
+        :handleClose="handleCloseEditDrawer"
         v-if="isAddQuestionDrawerOpen"
+      />
+    </hp-drawer>
+    <hp-drawer
+      :isOpen="isEditQuestionDrawerOpen"
+      @close="handleCloseEditDrawer"
+    >
+      <edit-question
+        @handleClose="handleCloseEditDrawer"
+        :question="isEditQuestionDrawerOpen"
       />
     </hp-drawer>
     <hp-drawer
@@ -17,15 +23,6 @@
         :question="isViewQuestionDrawerOpen"
         :handleClose="() => (isViewQuestionDrawerOpen = false)"
         v-if="isViewQuestionDrawerOpen"
-      />
-    </hp-drawer>
-    <hp-drawer
-      :isOpen="isEditQuestionDrawerOpen"
-      @close="isEditQuestionDrawerOpen = false"
-    >
-      <edit-question
-        @handleClose="handleEditQuestionClose"
-        :question="isEditQuestionDrawerOpen"
       />
     </hp-drawer>
     <teleport to="#teleport-target-header">
@@ -241,6 +238,7 @@ import HpQuestionCardStats from "@/components/cards/hp-question-card-stats.vue";
 import { usePut } from "@/composables/useHttp";
 import { useBreadcrumbs } from "@/composables/useBreadcrumbs";
 import useContextSave from "@/composables/useContextSave";
+import useQuestionContext from "@/composables/useQuestionContext";
 import useToast from "@/composables/useToast";
 import useInterviews from "@/composables/useInterviews";
 
@@ -364,6 +362,16 @@ const handleRemoveQuestion = async (template) => {
   await putInterview.put({
     template: {
       ...interview.value,
+      ceremony: {
+        warmup: {
+          ...interview.value.ceremony.warmup,
+          duration: interview.value.ceremony.warmup.duration * 60,
+        },
+        cooldown: {
+          ...interview.value.ceremony.cooldown,
+          duration: interview.value.ceremony.cooldown.duration * 60,
+        },
+      },
       questions: interview.value.questions
         .map((q) => q.reference)
         .filter((q) => q !== template.reference),
@@ -377,8 +385,28 @@ const handleRemoveQuestion = async (template) => {
   });
 };
 
-const handleEditQuestionClose = () => {
-  isEditQuestionDrawerOpen.value = null;
+const handleCloseEditDrawer = () => {
+  const handleClose = () => {
+    isEditQuestionDrawerOpen.value = false;
+    isAddQuestionDrawerOpen.value = false;
+  };
+
+  const { isDirty, type, clearIsDirty } = useQuestionContext();
+
+  if (!isDirty.value) {
+    handleClose();
+  } else {
+    const dialogText =
+      "You have unsaved changes, are you sure you want to continue?";
+    const confirm = window.confirm(dialogText);
+    if (!confirm) {
+      return;
+    }
+    if (confirm) {
+      clearIsDirty();
+      handleClose();
+    }
+  }
 };
 </script>
 
