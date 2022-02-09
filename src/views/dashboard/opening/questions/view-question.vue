@@ -95,6 +95,7 @@ onMounted(async () => {
   }
   &__guideline {
     padding: 16px 12px;
+    margin-bottom: 16px;
     background: var(--color-panel);
     border: $border;
     border-radius: $border-radius-sm;
