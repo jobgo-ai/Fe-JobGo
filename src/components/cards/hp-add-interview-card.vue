@@ -147,7 +147,6 @@ const handleCreateInterview = async () => {
   await postInterview.post({
     template: { name: "New Interview" },
   });
-  console.log(postInterview.data.value);
   const postOpening = usePost(`openings/${route.params.openingRef}/templates`);
   const payload = {
     template: postInterview.data.value.template.reference,
