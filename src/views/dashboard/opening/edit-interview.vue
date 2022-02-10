@@ -176,6 +176,7 @@
                     class="edit-interview__question-card__actions__button-group"
                   >
                     <hp-button
+                      v-if="hasEditPermission(element)"
                       class="edit-interview__question-card__actions__button"
                       label="Edit question"
                       @handleClick="isEditQuestionDrawerOpen = element"
