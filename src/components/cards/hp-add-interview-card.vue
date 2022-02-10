@@ -66,19 +66,22 @@
           :isLoading="isLoading"
           @handleClick="handleAddToInterview"
         ></hp-button>
-        <hp-button
-          class="hp-add-opening-card__actions__button"
-          icon="eye"
-          tooltipLabel="View interview"
-          @handleClick="isViewInterviewDrawerOpen = true"
-        ></hp-button>
-        <hp-button
-          class="hp-add-opening-card__actions__button"
-          :to="`/opening/${route.params.openingRef}/edit/edit-interview/${template.reference}`"
-          icon="pencil"
-          tooltipLabel="Edit interview"
-          v-if="hasEditPermission(template)"
-        ></hp-button>
+        <hp-tooltip :delay="500" class="hp-add-opening-card__actions__button">
+          <hp-button
+            icon="eye"
+            @handleClick="isViewInterviewDrawerOpen = true"
+          ></hp-button>
+          <template #content>View interview</template>
+        </hp-tooltip>
+        <hp-tooltip :delay="500" class="hp-add-opening-card__actions__button">
+          <hp-button
+            :to="`/opening/${route.params.openingRef}/edit/edit-interview/${template.reference}`"
+            icon="pencil"
+            tooltipLabel="Edit interview"
+            v-if="hasEditPermission(template)"
+          ></hp-button>
+          <template #content>Edit interview</template>
+        </hp-tooltip>
       </div>
     </div>
   </li>
@@ -90,6 +93,7 @@ import { ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
 // Components
+import HpTooltip from "@/components/hp-tooltip.vue";
 import HpButton from "@/components/hp-button.vue";
 import HpIcon from "@/components/hp-icon.vue";
 import HpInfoCircle from "@/components/hp-info-circle.vue";

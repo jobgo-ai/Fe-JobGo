@@ -57,9 +57,9 @@ const handleHoverEnter = () => {
   padding: 12px 12px;
   border-radius: $border-radius-lg;
   left: 50%;
-  bottom: 30px;
+  top: -10px;
+  transform: translateX(-50%) translateY(-100%);
   z-index: 1000;
-  transform: translateX(-50%);
   background-color: var(--color-tooltip);
   color: var(--color-accent-forground);
   filter: drop-shadow(0px 4px 8px rgba(33, 44, 51, 0.02))
@@ -101,6 +101,6 @@ const handleHoverEnter = () => {
 .hp-tooltip-transition-enter-from,
 .hp-tooltip-transition-leave-to {
   opacity: 0;
-  transform: translateX(-50%) translateY(-5px) scale(0.9);
+  transform: translateX(-50%) translateY(-110%) scale(0.9);
 }
 </style>

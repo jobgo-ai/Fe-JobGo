@@ -67,19 +67,22 @@
             class="hp-interview-card__actions__button"
             :to="`/opening/${route.params.openingRef}/edit/edit-interview/${template.reference}`"
           ></hp-button>
-          <hp-button
-            class="hp-interview-card__actions__button"
-            icon="eye"
-            tooltipLabel="View interview"
-            @handleClick="isViewInterviewDrawerOpen = true"
-          ></hp-button>
+          <hp-tooltip :delay="500">
+            <hp-button
+              icon="eye"
+              @handleClick="isViewInterviewDrawerOpen = true"
+            ></hp-button>
+            <template #content>View interview</template>
+          </hp-tooltip>
         </div>
-        <hp-button
-          icon="trash"
-          danger
-          tooltipLabel="Remove interview"
-          @handleClick="$emit('handleRemove', template.reference)"
-        ></hp-button>
+        <hp-tooltip :delay="500">
+          <hp-button
+            icon="trash"
+            danger
+            @handleClick="$emit('handleRemove', template.reference)"
+          ></hp-button>
+          <template #content>Remove interview</template>
+        </hp-tooltip>
       </div>
     </div>
   </li>
@@ -89,12 +92,14 @@
 // Vendor
 import { ref } from "vue";
 import { useRoute } from "vue-router";
+
 // Views
 import ViewInterview from "@/views/dashboard/opening/view-interview.vue";
 
 // Component
 import HpDrawer from "@/components/hp-drawer.vue";
 import HpButton from "@/components/hp-button.vue";
+import HpTooltip from "@/components/hp-tooltip.vue";
 import HpBadge from "@/components/hp-badge.vue";
 import HpIcon from "@/components/hp-icon.vue";
 import HpInfoCircle from "@/components/hp-info-circle.vue";
