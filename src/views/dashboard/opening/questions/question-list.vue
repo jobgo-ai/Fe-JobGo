@@ -82,16 +82,20 @@ import HpSpinner from "@/components/hp-spinner.vue";
 import EmptyState from "@/assets/abstracts/empty-state.svg";
 
 // Composables
+import useToast from "@/composables/useToast";
 import { useGet, usePost } from "@/composables/useHttp";
 import useSkillSearch from "@/composables/useSkillSearch";
 import useInterviews from "@/composables/useInterviews";
 import useConstants from "@/composables/useConstants";
+
 const props = defineProps({
   handleClose: {
     type: Function,
     required: true,
   },
 });
+
+const { setToast } = useToast();
 
 const emits = defineEmits(["handleTabChange"]);
 
@@ -184,6 +188,11 @@ const addToInterview = async (question) => {
     question: question.reference,
   });
   setInterview(postTemplateQuestion.data.value.template);
+  setToast({
+    type: "positive",
+    title: "Well done!",
+    message: `Question added to interview`,
+  });
   props.handleClose();
 };
 </script>

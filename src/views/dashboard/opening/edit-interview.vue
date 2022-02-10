@@ -439,7 +439,7 @@ const handleCloseEditDrawer = () => {
   &__container {
     display: flex;
     flex-direction: column;
-    max-width: 552px;
+    width: 552px;
     align-self: center;
   }
   &::-webkit-scrollbar {
