@@ -93,7 +93,7 @@
         </transition>
       </div>
       <hp-button
-        label="Save"
+        label="Save changes"
         type="submit"
         primary
         :isLoading="isSaving"
