@@ -357,7 +357,7 @@ const handleDeleteQuestiontemplate = async () => {
     padding: 16px;
     right: 0;
     width: 33%;
-    max-width: 480px;
+    max-width: $drawer-max-width;
     border-top: 1px dashed var(--color-border);
   }
 }
