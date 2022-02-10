@@ -142,11 +142,12 @@
 
 <script setup>
 // Vendor
-import { onMounted, ref, defineAsyncComponent, computed } from "vue";
+import { onMounted, ref, computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useForm } from "vee-validate";
 import draggable from "vuedraggable";
 import * as yup from "yup";
+
 // Components
 import HpInterviewCard from "@/components/cards/hp-interview-card.vue";
 import HpInput from "@/components/form/hp-input.vue";
@@ -156,8 +157,8 @@ import HpSpinner from "@/components/hp-spinner.vue";
 import HpImageSelector from "@/components/form/hp-image-selector.vue";
 import MicCheck from "@/assets/abstracts/mic-check.svg";
 import HpBadge from "@/components/hp-badge.vue";
+
 // Composables
-import useOpenings from "@/composables/useOpenings";
 import useToast from "@/composables/useToast";
 import { useBreadcrumbs } from "@/composables/useBreadcrumbs";
 import useContextSave from "@/composables/useContextSave";
@@ -170,12 +171,9 @@ const opening = ref({});
 const isOverviewFlyoutOpen = ref(false);
 const isLoading = ref(true);
 const isSaving = ref(false);
-const drag = ref(false);
 
 const { setBreadcrumbs } = useBreadcrumbs();
 const { setToast } = useToast();
-
-const { fetchOpenings } = useOpenings();
 
 const schema = yup.object({
   name: yup.string().required("Opening name is required"),
@@ -280,12 +278,6 @@ const archiveOpening = async () => {
   });
   router.push("/openings");
 };
-
-const currentSplash = defineAsyncComponent(() =>
-  import(
-    /* @vite-ignore */ `../assets/abstracts/covers/cover_${props.opening.artwork}.svg`
-  )
-);
 </script>
 
 <style lang="scss" scoped>

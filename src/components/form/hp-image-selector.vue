@@ -17,7 +17,7 @@
               }`"
             >
               <component
-                :is="findCoverImage(index)"
+                :is="CoverDict[index]"
                 class="hp-image-selector__flyout__image"
                 role="img"
                 :alt="`abstract cover #${modelValue}`"
@@ -30,7 +30,7 @@
         <hp-icon name="image" :size="20" />
       </div>
       <component
-        :is="cover"
+        :is="CoverDict[modelValue]"
         class="hp-image-selector__wrapper__image"
         role="img"
         :alt="`abstract cover #${modelValue}`"
@@ -42,6 +42,31 @@
 <script setup>
 import { useField } from "vee-validate";
 import HpIcon from "@/components/hp-icon.vue";
+
+// Assets
+import Cover0 from "@/assets/abstracts/covers/cover_0.svg";
+import Cover1 from "@/assets/abstracts/covers/cover_1.svg";
+import Cover2 from "@/assets/abstracts/covers/cover_2.svg";
+import Cover3 from "@/assets/abstracts/covers/cover_3.svg";
+import Cover4 from "@/assets/abstracts/covers/cover_4.svg";
+import Cover5 from "@/assets/abstracts/covers/cover_5.svg";
+import Cover6 from "@/assets/abstracts/covers/cover_6.svg";
+import Cover7 from "@/assets/abstracts/covers/cover_7.svg";
+import Cover8 from "@/assets/abstracts/covers/cover_8.svg";
+import Cover9 from "@/assets/abstracts/covers/cover_9.svg";
+
+const CoverDict = {
+  0: Cover0,
+  1: Cover1,
+  2: Cover2,
+  3: Cover3,
+  4: Cover4,
+  5: Cover5,
+  6: Cover6,
+  7: Cover7,
+  8: Cover8,
+  9: Cover9,
+};
 
 import { defineAsyncComponent, ref, computed } from "vue";
 
@@ -77,23 +102,6 @@ onClickOutside(target, (event) => {
 const handleImageSelect = (index) => {
   modelValue.value = index;
 };
-
-const findCoverImage = (artwork) => {
-  return defineAsyncComponent(() =>
-    import(
-      /* @vite-ignore */ `../../assets/abstracts/covers/cover_${artwork}.svg`
-    )
-  );
-};
-
-const cover = computed(() => {
-  initialValue.value = modelValue.value;
-  return defineAsyncComponent(() =>
-    import(
-      /* @vite-ignore */ `../../assets/abstracts/covers/cover_${modelValue.value}.svg`
-    )
-  );
-});
 </script>
 
 <style lang="scss">
