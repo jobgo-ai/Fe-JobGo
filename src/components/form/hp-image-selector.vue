@@ -9,7 +9,7 @@
           </div>
           <div class="hp-image-selector__flyout__flyout-container">
             <div
-              v-for="(image, index) in Array(10).fill(0)"
+              v-for="(image, index) in Object.keys(CoverDict)"
               @click.prevent="handleImageSelect(index)"
               :class="`hp-image-selector__flyout__image-wrapper ${
                 modelValue == index &&
