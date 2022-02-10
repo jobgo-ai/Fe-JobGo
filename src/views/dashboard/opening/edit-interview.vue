@@ -75,18 +75,11 @@
             <div class="edit-interview__overview-button__flyout__header">
               Top skills evaluated
               <ol class="edit-interview__overview-button__skills">
-                <li
-                  class="edit-interview__overview-button__skills__skill"
+                <hp-badge-tag
                   v-for="skill in interview.statistics.skills"
-                >
-                  {{ skill.value.name }}
-                  <hp-badge
-                    class="
-                      edit-interview__overview-button__skills__skill__badge
-                    "
-                    :content="skill.quantity"
-                  ></hp-badge>
-                </li>
+                  :quantity="skill.quantity"
+                  :label="skill.value.name"
+                ></hp-badge-tag>
               </ol>
             </div>
           </div>
@@ -235,6 +228,7 @@ import HpInput from "@/components/form/hp-input.vue";
 import HpButton from "@/components/hp-button.vue";
 import HpCounter from "@/components/hp-counter.vue";
 import HpIcon from "@/components/hp-icon.vue";
+import HpBadgeTag from "@/components/hp-badge-tag.vue";
 import HpBadge from "@/components/hp-badge.vue";
 import HpDrawer from "@/components/hp-drawer.vue";
 import HpTextarea from "@/components/form/hp-textarea.vue";
@@ -519,23 +513,14 @@ const handleCloseEditDrawer = () => {
       display: flex;
       flex-wrap: wrap;
       gap: 6px;
-      margin-top: 16px;
-      &__skill {
-        border: 1px solid var(--color-border);
-        background-color: var(--color-panel);
-        padding: 6px;
-        border-radius: $border-radius-sm;
-        white-space: nowrap;
-        &__badge {
-          margin-left: 12px;
-        }
-      }
+      margin-top: 6px;
     }
     &__flyout {
       @include flyout;
       position: absolute;
       right: 0;
       top: calc(100% + 6px);
+      width: 600px;
       &__header {
         color: var(--color-text-secondary);
         font-weight: 500;
