@@ -22,6 +22,10 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  delay: {
+    type: Number,
+    default: 150,
+  },
 });
 
 const isHovered = ref(false);
@@ -43,7 +47,7 @@ const handleHoverEnter = () => {
   clearTimeout(timeout);
   timeout = setTimeout(() => {
     isHovered.value = true;
-  }, 150);
+  }, props.delay);
 };
 </script>
 

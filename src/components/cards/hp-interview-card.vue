@@ -70,12 +70,14 @@
           <hp-button
             class="hp-interview-card__actions__button"
             icon="eye"
+            tooltipLabel="View interview"
             @handleClick="isViewInterviewDrawerOpen = true"
           ></hp-button>
         </div>
         <hp-button
           icon="trash"
           danger
+          tooltipLabel="Remove interview"
           @handleClick="$emit('handleRemove', template.reference)"
         ></hp-button>
       </div>

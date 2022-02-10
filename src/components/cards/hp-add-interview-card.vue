@@ -69,12 +69,14 @@
         <hp-button
           class="hp-add-opening-card__actions__button"
           icon="eye"
+          tooltipLabel="View interview"
           @handleClick="isViewInterviewDrawerOpen = true"
         ></hp-button>
         <hp-button
           class="hp-add-opening-card__actions__button"
           :to="`/opening/${route.params.openingRef}/edit/edit-interview/${template.reference}`"
           icon="pencil"
+          tooltipLabel="Edit interview"
           v-if="hasEditPermission(template)"
         ></hp-button>
       </div>

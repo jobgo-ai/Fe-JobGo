@@ -1,5 +1,5 @@
 <template>
-  <hp-tooltip :isDisabled="!tooltipLabel">
+  <hp-tooltip :isDisabled="!tooltipLabel" :delay="500">
     <div class="hp-button" :class="containerClasses">
       <component
         :is="computedTag"
