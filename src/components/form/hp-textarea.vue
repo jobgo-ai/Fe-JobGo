@@ -11,7 +11,6 @@
       :disabled="isDisabled"
       v-on:input="modelValue = $event.target.value"
       :rows="rows"
-      maxlength="250"
     ></textarea>
     <transition name="hp-textarea__error-transition">
       <div class="hp-textarea__error" v-if="errorMessage">

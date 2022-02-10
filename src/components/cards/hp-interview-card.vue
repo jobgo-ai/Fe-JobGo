@@ -62,6 +62,7 @@
       <div class="hp-interview-card__actions">
         <div class="hp-interview-card__actions__button-group">
           <hp-button
+            v-if="hasEditPermission(template)"
             label="Edit interview"
             class="hp-interview-card__actions__button"
             :to="`/opening/${route.params.openingRef}/edit/edit-interview/${template.reference}`"
@@ -95,6 +96,9 @@ import HpButton from "@/components/hp-button.vue";
 import HpBadge from "@/components/hp-badge.vue";
 import HpIcon from "@/components/hp-icon.vue";
 import HpInfoCircle from "@/components/hp-info-circle.vue";
+
+// Composables
+import { hasEditPermission } from "@/composables/usePermissions.js";
 
 const props = defineProps({
   opening: {
