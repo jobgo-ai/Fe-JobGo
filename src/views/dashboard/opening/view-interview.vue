@@ -25,16 +25,11 @@
     <div class="view-interview__header">
       Top skills evaluated
       <ol class="view-interview__skills">
-        <li
-          class="view-interview__skills__skill"
+        <hp-badge-tag
           v-for="skill in interview.statistics.skills"
-        >
-          {{ skill.value.name }}
-          <hp-badge
-            class="view-interview__skills__skill__badge"
-            :content="skill.quantity"
-          ></hp-badge>
-        </li>
+          :quantity="skill.quantity"
+          :label="skill.value.name"
+        ></hp-badge-tag>
       </ol>
     </div>
     <div class="view-interview__scroll-container">
@@ -99,6 +94,7 @@ import * as yup from "yup";
 //Components
 import HpIcon from "@/components/hp-icon.vue";
 import HpBadge from "@/components/hp-badge.vue";
+import HpBadgeTag from "@/components/hp-badge-tag.vue";
 
 //Hooks
 import useInterviews from "@/composables/useInterviews";
@@ -189,16 +185,6 @@ onMounted(async () => {
     margin-top: 16px;
     padding-bottom: 16px;
     border-bottom: 1px dashed var(--color-border);
-    &__skill {
-      border: 1px solid var(--color-border);
-      background-color: var(--color-panel);
-      padding: 6px;
-      border-radius: $border-radius-sm;
-      white-space: nowrap;
-      &__badge {
-        margin-left: 12px;
-      }
-    }
   }
   &__ceremony {
     margin-top: 16px;
