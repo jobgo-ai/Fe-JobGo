@@ -11,7 +11,10 @@
         </p>
       </div>
       <div>
-        <hp-button label="Create new"></hp-button>
+        <hp-button
+          @handleClick="$emit('handleAddNew')"
+          label="Create new"
+        ></hp-button>
       </div>
     </div>
     <div class="hp-opening-card__archived" v-if="isArchived">
@@ -112,7 +115,7 @@ const props = defineProps({
   },
 });
 
-const emits = defineEmits(["unarchiveOpening"]);
+const emits = defineEmits(["unarchiveOpening, handleAddNew"]);
 
 const splash = defineAsyncComponent(() =>
   import(
@@ -123,6 +126,7 @@ const splash = defineAsyncComponent(() =>
 const containerClasses = computed(() => {
   return {
     "hp-opening-card": true,
+    "hp-opening-card--add-new": props.isAddCard,
     "hp-opening-card--selected": props.isSelected,
     "hp-opening-card--archived": props.isArchived,
   };
@@ -133,10 +137,13 @@ const containerClasses = computed(() => {
 .hp-opening-card {
   height: 236px;
   width: 264px;
-  cursor: pointer;
   list-style: none;
+  cursor: pointer;
   border-radius: $border-radius-lg;
   border: 1px solid var(--color-border);
+  &--add-new {
+    cursor: default;
+  }
   &--archived {
     cursor: default;
     .hp-opening-card__content {

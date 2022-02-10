@@ -38,7 +38,7 @@
           <ol v-if="!isOpeningsLoading" class="opening-list__grid">
             <hp-opening-card
               v-if="state === 'active'"
-              @click="handleNewOpening"
+              @handleAddNew="handleNewOpening"
               :isAddCard="true"
             >
             </hp-opening-card>
