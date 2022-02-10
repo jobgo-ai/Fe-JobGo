@@ -1,54 +1,57 @@
 <template>
-  <div class="hp-button" :class="containerClasses">
-    <component
-      :is="computedTag"
-      :to="to"
-      :href="href"
-      @click="emit('handleClick')"
-      class="hp-button__button"
-      :class="buttonClasses"
-      :type="type ? type : 'button'"
-      :disabled="isDisabled"
-      @focus="isFocused = true"
-      @blur="isFocused = false"
-    >
-      <hp-icon
-        :class="iconClasses"
-        v-if="icon && !iconRight"
-        :name="icon"
-        :size="16"
-      ></hp-icon>
-      <div>{{ label }}</div>
-      <hp-icon
-        :class="iconClasses"
-        v-if="icon && iconRight"
-        :name="icon"
-        :size="16"
-      ></hp-icon>
-      <hp-spinner
-        class="hp-button__button__spinner"
-        v-if="isLoading"
-        :size="14"
-        :mode="primary ? 'light' : 'dark'"
-      ></hp-spinner>
-    </component>
-    <button
-      @focus="isFocused = true"
-      @blur="isFocused = false"
-      :class="addonClasses"
-      :disabled="isDisabled"
-      v-if="hasDropdown"
-      @click="isDropdownOpen = !isDropdownOpen"
-    >
-      <hp-icon :name="dropdownIcon" :size="14" />
-    </button>
-    <div
-      v-if="hasDropdown && isDropdownOpen"
-      class="hp-button__dropdown-content"
-    >
-      <slot name="dropdown"></slot>
+  <hp-tooltip :isDisabled="!tooltipLabel">
+    <div class="hp-button" :class="containerClasses">
+      <component
+        :is="computedTag"
+        :to="to"
+        :href="href"
+        @click="emit('handleClick')"
+        class="hp-button__button"
+        :class="buttonClasses"
+        :type="type ? type : 'button'"
+        :disabled="isDisabled"
+        @focus="isFocused = true"
+        @blur="isFocused = false"
+      >
+        <hp-icon
+          :class="iconClasses"
+          v-if="icon && !iconRight"
+          :name="icon"
+          :size="16"
+        ></hp-icon>
+        <div>{{ label }}</div>
+        <hp-icon
+          :class="iconClasses"
+          v-if="icon && iconRight"
+          :name="icon"
+          :size="16"
+        ></hp-icon>
+        <hp-spinner
+          class="hp-button__button__spinner"
+          v-if="isLoading"
+          :size="14"
+          :mode="primary ? 'light' : 'dark'"
+        ></hp-spinner>
+      </component>
+      <button
+        @focus="isFocused = true"
+        @blur="isFocused = false"
+        :class="addonClasses"
+        :disabled="isDisabled"
+        v-if="hasDropdown"
+        @click="isDropdownOpen = !isDropdownOpen"
+      >
+        <hp-icon :name="dropdownIcon" :size="14" />
+      </button>
+      <div
+        v-if="hasDropdown && isDropdownOpen"
+        class="hp-button__dropdown-content"
+      >
+        <slot name="dropdown"></slot>
+      </div>
     </div>
-  </div>
+    <template #content> {{ tooltipLabel }} </template>
+  </hp-tooltip>
 </template>
 
 <script setup>
@@ -57,6 +60,7 @@ import { computed, ref } from "vue";
 // Components
 import HpIcon from "@/components/hp-icon.vue";
 import HpSpinner from "@/components/hp-spinner.vue";
+import HpTooltip from "@/components/hp-tooltip.vue";
 const props = defineProps({
   label: {
     type: String,
@@ -109,6 +113,10 @@ const props = defineProps({
   destructive: {
     type: Boolean,
     default: false,
+  },
+  tooltipLabel: {
+    type: String,
+    default: "",
   },
 });
 

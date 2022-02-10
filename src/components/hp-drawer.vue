@@ -60,7 +60,7 @@ watch(
     top: 0;
     right: 0;
     width: 33%;
-    max-width: 480px;
+    max-width: 580px;
     height: 100%;
     background-color: var(--color-background);
     z-index: 100;

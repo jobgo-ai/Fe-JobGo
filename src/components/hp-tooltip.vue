@@ -4,7 +4,7 @@
       <slot />
     </div>
     <transition name="hp-tooltip-transition">
-      <div v-if="isHovered" class="hp-tooltip">
+      <div v-if="isHovered && !isDisabled" class="hp-tooltip">
         <div class="hp__tooltip-arrow"></div>
         <div v-if="isHovered" class="hp-tooltip__content">
           <slot name="content" />
@@ -17,16 +17,29 @@
 <script setup>
 import { ref } from "vue";
 
+const props = defineProps({
+  isDisabled: {
+    type: Boolean,
+    default: false,
+  },
+});
+
 const isHovered = ref(false);
 
 let timeout = null;
 const handleHoverOut = () => {
+  if (props.isDisabled) {
+    return;
+  }
   clearTimeout(timeout);
   timeout = setTimeout(() => {
     isHovered.value = false;
   }, 150);
 };
 const handleHoverEnter = () => {
+  if (props.isDisabled) {
+    return;
+  }
   clearTimeout(timeout);
   timeout = setTimeout(() => {
     isHovered.value = true;
