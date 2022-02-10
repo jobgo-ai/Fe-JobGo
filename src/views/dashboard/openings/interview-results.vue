@@ -89,7 +89,7 @@
                 results__questions__container__header__little-badge--positive
               "
             >
-              {{ interaction.interaction.answer.value }} / 5
+              {{ interaction.interaction.answer?.value }} / 5
             </div>
           </div>
           <div class="results__questions__container__content">

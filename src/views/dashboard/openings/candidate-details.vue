@@ -23,6 +23,7 @@
           </div>
           <div class="candidate-details__header__button-group">
             <hp-button
+              label="Edit details"
               @click="isEditCandidateModalOpen = true"
               icon="pencil"
             ></hp-button>
