@@ -165,6 +165,7 @@ const handleAddToInterview = async () => {
   await postOpening.post(payload);
   await fetchOpening(route.params.openingRef);
   isLoading.value = false;
+  router.push(`/opening/${route.params.openingRef}/edit`);
   setToast({
     type: "positive",
     title: "Well done!",
