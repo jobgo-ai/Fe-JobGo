@@ -20,6 +20,7 @@
             <hp-button
               :to="`/opening/${opening.reference}/edit`"
               icon="pencil"
+              label="Edit opening"
             ></hp-button>
           </div>
         </div>

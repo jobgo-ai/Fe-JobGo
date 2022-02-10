@@ -172,7 +172,9 @@ const schema = yup.object({
   guidelines: yup.array(),
 });
 
-let initialValues = {};
+let initialValues = {
+  duration: 5,
+};
 
 if (props.question) {
   skills.value = props.question.skills.map((s) => ({
