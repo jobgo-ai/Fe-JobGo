@@ -95,14 +95,75 @@
       ></hp-button>
     </teleport>
     <div class="edit-interview" v-if="!isInterviewLoading && !isLoading">
-      <div class="edit-interview__container">
-        <form @submit.prevent="handleContextFormSave">
+      <form @submit.prevent="handleContextFormSave">
+        <div class="edit-interview__container">
           <h2 class="edit-interview__title">Edit interview</h2>
           <p class="edit-interview__subtitle">
             Design the template by editing ceremonies and interview questions.
           </p>
           <hp-input label="Name" name="name"></hp-input>
           <hp-input label="Description" name="description"></hp-input>
+          <h3 class="edit-interview__ceremony__header__title">Questions</h3>
+          <ol class="edit-interview__question-cards">
+            <draggable
+              v-model="interview.questions"
+              tag="transition-group"
+              item-key="reference"
+              handle=".edit-interview__handle"
+              @change="handleDragChange"
+              v-bind="dragOptions"
+              @start="drag = true"
+              @end="drag = false"
+            >
+              <template #item="{ element, index }">
+                <li class="edit-interview__question-card" :key="index">
+                  <div class="edit-interview__question-card__container">
+                    <hp-badge icon="questions" :content="index + 1" />
+                    <hp-icon
+                      name="drag"
+                      class="edit-interview__handle"
+                    ></hp-icon>
+                  </div>
+                  <div class="edit-interview__question-card__content">
+                    {{ element.content }}
+                  </div>
+                  <hp-question-card-stats hasTooltips :question="element" />
+                  <div class="edit-interview__question-card__actions">
+                    <div
+                      class="
+                        edit-interview__question-card__actions__button-group
+                      "
+                    >
+                      <hp-button
+                        v-if="hasEditPermission(element)"
+                        class="edit-interview__question-card__actions__button"
+                        label="Edit question"
+                        @handleClick="isEditQuestionDrawerOpen = element"
+                      ></hp-button>
+                      <hp-button
+                        @handleClick="isViewQuestionDrawerOpen = element"
+                        class="edit-interview__question-card__actions__button"
+                        icon="eye"
+                      ></hp-button>
+                    </div>
+                    <hp-button
+                      @handleClick="handleRemoveQuestion(element)"
+                      icon="trash"
+                      danger
+                    ></hp-button>
+                  </div>
+                </li>
+              </template>
+            </draggable>
+          </ol>
+          <hp-button
+            class="edit-interview__questions-button"
+            @handleClick="isAddQuestionDrawerOpen = true"
+            label="Add question"
+            type="button"
+            icon="plus"
+            dropzone
+          ></hp-button>
           <div>
             <div class="edit-interview__ceremony">
               <div class="edit-interview__ceremony__header">
@@ -141,70 +202,14 @@
               </div>
             </div>
           </div>
-        </form>
-        <h3 class="edit-interview__ceremony__header__title">Questions</h3>
-        <ol class="edit-interview__question-cards">
-          <draggable
-            v-model="interview.questions"
-            tag="transition-group"
-            item-key="reference"
-            handle=".edit-interview__handle"
-            @change="handleDragChange"
-            v-bind="dragOptions"
-            @start="drag = true"
-            @end="drag = false"
-          >
-            <template #item="{ element, index }">
-              <li class="edit-interview__question-card" :key="index">
-                <div class="edit-interview__question-card__container">
-                  <hp-badge icon="questions" :content="index + 1" />
-                  <hp-icon name="drag" class="edit-interview__handle"></hp-icon>
-                </div>
-                <div class="edit-interview__question-card__content">
-                  {{ element.content }}
-                </div>
-                <hp-question-card-stats hasTooltips :question="element" />
-                <div class="edit-interview__question-card__actions">
-                  <div
-                    class="edit-interview__question-card__actions__button-group"
-                  >
-                    <hp-button
-                      v-if="hasEditPermission(element)"
-                      class="edit-interview__question-card__actions__button"
-                      label="Edit question"
-                      @handleClick="isEditQuestionDrawerOpen = element"
-                    ></hp-button>
-                    <hp-button
-                      @handleClick="isViewQuestionDrawerOpen = element"
-                      class="edit-interview__question-card__actions__button"
-                      icon="eye"
-                    ></hp-button>
-                  </div>
-                  <hp-button
-                    @handleClick="handleRemoveQuestion(element)"
-                    icon="trash"
-                    danger
-                  ></hp-button>
-                </div>
-              </li>
-            </template>
-          </draggable>
-        </ol>
-        <hp-button
-          class="edit-interview__questions-button"
-          @handleClick="isAddQuestionDrawerOpen = true"
-          label="Add question"
-          type="button"
-          icon="plus"
-          dropzone
-        ></hp-button>
-        <hp-danger-zone
-          v-if="hasEditPermission(interview)"
-          class="edit-interview__danger-zone"
-          label="Delete interview template"
-          :onConfirm="handleDeleteInterviewTemplate"
-        ></hp-danger-zone>
-      </div>
+          <hp-danger-zone
+            v-if="hasEditPermission(interview)"
+            class="edit-interview__danger-zone"
+            label="Delete interview template"
+            :onConfirm="handleDeleteInterviewTemplate"
+          ></hp-danger-zone>
+        </div>
+      </form>
     </div>
     <hp-spinner v-else size="24" content />
   </div>
