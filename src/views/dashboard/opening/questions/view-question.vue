@@ -10,7 +10,7 @@
         />
       </div>
     </div>
-    <div class="view-question__section" v-if="question.guidelines">
+    <div class="view-question__section" v-if="question.guidelines.length > 0">
       <div class="view-question__header">Guidelines</div>
       <ol class="view-question__guidelines">
         <li
