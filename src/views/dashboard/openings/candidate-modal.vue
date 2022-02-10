@@ -114,7 +114,10 @@ const { setBreadcrumbs } = useBreadcrumbs();
 
 const schema = yup.object({
   name: yup.string().required("First name is required"),
-  email: yup.string().email("Email must be valid"),
+  email: yup
+    .string()
+    .required("Email is required")
+    .email("Email must be valid"),
 });
 
 const { handleSubmit } = useForm({
