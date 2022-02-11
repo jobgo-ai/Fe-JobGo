@@ -20,7 +20,7 @@
           ></hp-image-selector>
           <div class="edit-openings__edit-container__archive">
             <hp-button
-              icon="trash"
+              icon="archive"
               label="Archive opening"
               danger
               @handleClick="archiveOpening"

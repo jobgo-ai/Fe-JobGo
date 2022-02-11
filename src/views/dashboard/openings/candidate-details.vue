@@ -43,7 +43,10 @@
               <div class="candidate-details__overview__score__current">
                 Current score
               </div>
-              <div class="candidate-details__overview__score__average-score">
+              <div
+                v-if="candidate.opening.statistics.averageOpeningScore"
+                class="candidate-details__overview__score__average-score"
+              >
                 The average score is
                 {{
                   candidate.opening.statistics.averageOpeningScore?.toFixed(2)
