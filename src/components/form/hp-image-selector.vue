@@ -2,30 +2,6 @@
   <div ref="target" class="hp-image-selector">
     <div class="hp-image-selector__label">Cover</div>
     <div class="hp-image-selector__wrapper" @click="isFlyoutOpen = true">
-      <transition name="hp-image-selector-transition">
-        <div v-if="isFlyoutOpen" class="hp-image-selector__flyout">
-          <div class="hp-image-selector__flyout__flyout-label">
-            Select image
-          </div>
-          <div class="hp-image-selector__flyout__flyout-container">
-            <div
-              v-for="(image, index) in Object.keys(CoverDict)"
-              @click.prevent="handleImageSelect(index)"
-              :class="`hp-image-selector__flyout__image-wrapper ${
-                modelValue == index &&
-                'hp-image-selector__flyout__image-wrapper--selected'
-              }`"
-            >
-              <component
-                :is="CoverDict[index]"
-                class="hp-image-selector__flyout__image"
-                role="img"
-                :alt="`abstract cover #${modelValue}`"
-              />
-            </div>
-          </div>
-        </div>
-      </transition>
       <div class="hp-image-selector__wrapper__overlay">
         <hp-icon name="image" :size="20" />
       </div>
@@ -36,6 +12,28 @@
         :alt="`abstract cover #${modelValue}`"
       />
     </div>
+    <transition name="hp-image-selector-transition">
+      <div v-if="isFlyoutOpen" class="hp-image-selector__flyout">
+        <div class="hp-image-selector__flyout__flyout-label">Select image</div>
+        <div class="hp-image-selector__flyout__flyout-container">
+          <div
+            v-for="(image, index) in Object.keys(CoverDict)"
+            @click.prevent="handleImageSelect(index)"
+            :class="`hp-image-selector__flyout__image-wrapper ${
+              modelValue == index &&
+              'hp-image-selector__flyout__image-wrapper--selected'
+            }`"
+          >
+            <component
+              :is="CoverDict[index]"
+              class="hp-image-selector__flyout__image"
+              role="img"
+              :alt="`abstract cover #${modelValue}`"
+            />
+          </div>
+        </div>
+      </div>
+    </transition>
   </div>
 </template>
 
@@ -101,11 +99,13 @@ onClickOutside(target, (event) => {
 
 const handleImageSelect = (index) => {
   modelValue.value = index;
+  isFlyoutOpen.value = false;
 };
 </script>
 
 <style lang="scss">
 .hp-image-selector {
+  position: relative;
   &__label {
     font-weight: 500;
     margin-bottom: 8px;
@@ -115,7 +115,8 @@ const handleImageSelect = (index) => {
     @include flyout;
     position: absolute;
     left: 105%;
-    box-shadow: 0px 16px 24px rgba(33, 44, 51, 0.06),
+    top: -50%;
+    box-shadow: 0px 16px 24px rgba(45, 51, 54, 0.06),
       0px 2px 6px rgba(33, 44, 51, 0.04), 0px 0px 1px rgba(33, 44, 51, 0.04);
 
     &__image-wrapper {
@@ -123,6 +124,10 @@ const handleImageSelect = (index) => {
       border-radius: $border-radius-sm;
       padding: 4px;
       width: 154px;
+      cursor: pointer;
+      &:hover {
+        border-color: var(--color-accent-background);
+      }
       &--selected {
         border-color: var(--color-accent-background);
       }
