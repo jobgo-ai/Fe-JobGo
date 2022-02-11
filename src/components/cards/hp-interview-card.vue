@@ -49,6 +49,15 @@
         ></hp-icon>
 
         {{ template.statistics.questions }} questions
+      </div>
+      <div class="hp-interview-card__fact">
+        <hp-icon
+          class="hp-interview-card__fact__icon"
+          name="skills"
+          :size="15"
+        ></hp-icon>
+
+        {{ template.statistics.skills.length }} skills
         <hp-info-circle
           class="hp-question-card-stats__stats__stat__info-circle"
           :content="
