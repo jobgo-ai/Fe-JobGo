@@ -171,6 +171,7 @@ watch(
       if (openings.value.length > 0) {
         return;
       } else {
+        console.log("opening length > 0");
         await fetchOpenings();
       }
     }

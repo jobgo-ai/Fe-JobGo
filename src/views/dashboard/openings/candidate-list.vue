@@ -179,18 +179,17 @@ import HpCandidateCard from "@/components/cards/hp-candidate-card.vue";
 import EmptyState from "@/assets/abstracts/empty-state.svg";
 
 // Composables
-import useCandidates from "@/composables/useCandidates.js";
+import useCandidates from "@/composables/useCandidates";
+import useOpenings from "@/composables/useOpenings";
 
 const props = defineProps({
   isCandidateDetailsOpen: {
     type: String,
     default: null,
   },
-  opening: {
-    type: Object,
-    default: {},
-  },
 });
+
+const { opening, fetchOpening } = useOpenings();
 
 const { fetchCandidates, isCandidateListLoading, candidates, templateList } =
   useCandidates();
@@ -231,6 +230,7 @@ watch(
     if (!route.params.openingRef) {
       return;
     }
+    await fetchOpening(route.params.openingRef);
     await fetchCandidates(route.params.openingRef);
   },
   { immediate: true }

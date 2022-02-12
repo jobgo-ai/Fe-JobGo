@@ -27,12 +27,6 @@ const fetchOpening = async (openingRef) => {
 };
 
 export default () => {
-  onMounted(() => {
-    fetchOpenings();
-  });
-  onUnmounted(() => {
-    openings.value = [];
-  });
   return {
     fetchOpening,
     opening,

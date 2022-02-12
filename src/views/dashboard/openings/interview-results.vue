@@ -146,7 +146,7 @@ onMounted(async () => {
     },
     {
       label: props.opening.name,
-      to: `/opening/${props.opening.reference}/edit`,
+      to: `/openings/${props.opening.reference}?candidate=${interview.value.candidate.reference}`,
     },
     {
       label: interview.value.candidate.name,
@@ -331,7 +331,6 @@ const interactionList = computed(() => {
   }
 
   &__questions {
-    @include flyout;
     height: calc(100vh - 106px);
     padding-left: 24px;
     padding-right: 24px;
@@ -339,6 +338,8 @@ const interactionList = computed(() => {
     padding-bottom: 0px;
     width: 100%;
     background: var(--color-panel);
+    border-radius: $border-radius-lg;
+    border: $border;
 
     &__title {
       @include text-h5;
