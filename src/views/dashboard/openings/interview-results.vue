@@ -84,6 +84,7 @@
           <div class="results__questions__container__header">
             <hp-badge icon="questions" :content="index + 1" />
             <div
+              v-if="interaction.interaction?.answer"
               class="
                 results__questions__container__header__little-badge
                 results__questions__container__header__little-badge--positive
@@ -340,7 +341,7 @@ const interactionList = computed(() => {
     background: var(--color-panel);
     border-radius: $border-radius-lg;
     border: $border;
-
+    overflow: auto;
     &__title {
       @include text-h5;
       color: var(--color-text-primary);
