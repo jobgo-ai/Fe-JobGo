@@ -65,7 +65,7 @@ const route = useRoute();
 const isNextAction = (template, templates) => {
   const nextRef = templates.find((t) => {
     return !t.interview?.started;
-  }).interview?.token;
+  })?.interview?.token;
   return template.interview.token === nextRef;
 };
 

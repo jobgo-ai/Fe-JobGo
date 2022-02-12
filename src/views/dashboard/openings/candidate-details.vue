@@ -132,7 +132,7 @@
                     name="user"
                     :size="15"
                   ></hp-icon>
-                  {{ interview.interview.interviewer }}
+                  {{ interview.interview.interviewerName }}
                 </div>
                 <div class="candidate-details__interview-grid__item__icon-text">
                   <hp-icon
@@ -592,9 +592,9 @@ const calculateInterviewLink = (interview) => {
       }
     }
     &__actions {
-      padding-top: 22px;
-      display: flex;
       align-items: center;
+      display: inline-flex;
+      margin-top: 22px;
       &--icon {
         color: var(--color-text-primary);
         margin-left: 6px;
