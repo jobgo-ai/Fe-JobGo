@@ -8,7 +8,7 @@
     ></div>
     <button
       v-for="(item, index) in props.options"
-      @click="emits('update:modelValue', item)"
+      @click="emits('update:modelValue', item.value)"
       :class="`hp-tabs__option hp-tabs__option--${index}`"
       :ref="
         (el) => {
@@ -16,13 +16,18 @@
         }
       "
     >
-      {{ item }}
+      <hp-icon v-if="item.icon" :name="item.icon"></hp-icon>
+      <div v-if="item.label">
+        {{ item.label }}
+      </div>
     </button>
   </div>
 </template>
 
 <script setup>
 import { computed, ref } from "vue";
+
+import HpIcon from "@/components/hp-icon.vue";
 
 const emits = defineEmits(["update:modelValue"]);
 
@@ -34,22 +39,16 @@ const props = defineProps({
   options: {
     type: Array,
     default: () => {
-      return ["True", "False"];
+      return { label: "", value: "", icon: "" };
     },
   },
 });
 
 const optionRefs = ref([]);
 
-const correctIndex = computed(() => {
-  return props.options.findIndex((item) => {
-    return item.toLowerCase() === props.modelValue.toLowerCase();
-  });
-});
-
 const styles = computed(() => {
   const correctIndex = props.options.findIndex((item) => {
-    return item.toLowerCase() === props.modelValue.toLowerCase();
+    return item.value.toLowerCase() === props.modelValue.toLowerCase();
   });
   const width = optionRefs.value[correctIndex]?.clientWidth;
   const left = optionRefs.value[correctIndex]?.offsetLeft;
@@ -79,7 +78,7 @@ const styles = computed(() => {
     color: var(--color-text-secondary);
     border-radius: 10px / 12px;
     text-transform: capitalize;
-
+    display: flex;
     &--selected {
       color: var(--color-text-primary);
       background-color: white;
