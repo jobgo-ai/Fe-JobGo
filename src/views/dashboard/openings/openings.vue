@@ -5,7 +5,6 @@
         <candidate-list
           v-if="isCandidateListOpen"
           :isCandidateDetailsOpen="isCandidateDetailsOpen"
-          :opening="selectedOpening"
         />
       </transition>
     </div>
@@ -18,7 +17,6 @@
         <candidate-details
           v-if="isCandidateDetailsOpen"
           :isCandidateDetailsOpen="isCandidateDetailsOpen"
-          :opening="selectedOpening"
         ></candidate-details>
       </transition>
       <transition

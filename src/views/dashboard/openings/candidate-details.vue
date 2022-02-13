@@ -38,7 +38,10 @@
           >
             <div class="candidate-details__overview__score-container">
               <div class="candidate-details__overview__score__average">
-                {{ candidate.opening.statistics.candidateScore ?? "0.0" }}
+                {{
+                  candidate.opening.statistics.candidateScore.toFixed(2) ??
+                  "0.0"
+                }}
               </div>
               <div class="candidate-details__overview__score__current">
                 Current score
@@ -276,10 +279,6 @@ const props = defineProps({
   openings: {
     type: Array,
     default: [],
-  },
-  opening: {
-    type: Object,
-    default: {},
   },
 });
 

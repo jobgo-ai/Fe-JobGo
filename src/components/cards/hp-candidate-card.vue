@@ -25,7 +25,7 @@
               candidate.opening.statistics.averageOpeningScore
             )
           "
-          :content="candidate.opening.statistics.candidateScore"
+          :content="candidate.opening.statistics.candidateScore.toFixed(2)"
         ></hp-badge>
       </div>
       <div
