@@ -32,7 +32,10 @@
           </p>
           <hp-tabs
             class="openings__tabs"
-            :options="['active', 'archived']"
+            :options="[
+              { label: 'Active', value: 'active' },
+              { label: 'Archived', value: 'archived' },
+            ]"
             v-model="state"
           />
           <ol v-if="!isOpeningsLoading" class="opening-list__grid">
@@ -171,7 +174,6 @@ watch(
       if (openings.value.length > 0) {
         return;
       } else {
-        console.log("opening length > 0");
         await fetchOpenings();
       }
     }
