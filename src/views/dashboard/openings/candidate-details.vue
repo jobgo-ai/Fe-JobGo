@@ -39,7 +39,7 @@
             <div class="candidate-details__overview__score-container">
               <div class="candidate-details__overview__score__average">
                 {{
-                  candidate.opening.statistics.candidateScore.toFixed(2) ??
+                  candidate.opening.statistics.candidateScore?.toFixed(2) ??
                   "0.0"
                 }}
               </div>
