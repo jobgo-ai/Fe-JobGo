@@ -116,8 +116,13 @@
                   <hp-badge icon="layers" :content="index + 1"></hp-badge>
                   <hp-badge
                     v-if="interview.statistics.candidateScore"
-                    type="positive"
-                    :content="interview.statistics.candidateScore"
+                    :type="
+                      interview.statistics.averageTemplateScore >
+                      interview.statistics.candidateScore
+                        ? 'negative'
+                        : 'positive'
+                    "
+                    :content="interview.statistics.candidateScore.toFixed(2)"
                   ></hp-badge>
                 </div>
                 <div
