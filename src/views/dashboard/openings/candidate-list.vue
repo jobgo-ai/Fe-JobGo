@@ -140,7 +140,11 @@
             <div class="candidate-list__empty-state__text--secondary">
               Looking a tad empty, try adding a candidate
             </div>
-            <hp-button primary label="Add candidate"></hp-button>
+            <hp-button
+              @handleClick="isAddCandidateModalOpen = true"
+              primary
+              label="Add candidate"
+            ></hp-button>
           </div>
         </div>
         <hp-spinner
