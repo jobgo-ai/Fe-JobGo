@@ -150,6 +150,7 @@ import useToast from "@/composables/useToast";
 import { useBreadcrumbs } from "@/composables/useBreadcrumbs";
 import useContextSave from "@/composables/useContextSave";
 import { useGet, usePut } from "@/composables/useHttp";
+import useOpenings from "@/composables/useOpenings";
 
 const route = useRoute();
 const router = useRouter();
@@ -158,6 +159,8 @@ const opening = ref({});
 const isOverviewFlyoutOpen = ref(false);
 const isLoading = ref(true);
 const isSaving = ref(false);
+
+const { fetchOpenings } = useOpenings();
 
 const { setBreadcrumbs } = useBreadcrumbs();
 const { setToast } = useToast();
@@ -263,6 +266,7 @@ const archiveOpening = async () => {
   await putOpening.put({
     state: "archived",
   });
+  fetchOpenings();
   router.push("/openings");
 };
 </script>
