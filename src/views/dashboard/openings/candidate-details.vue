@@ -54,7 +54,14 @@
                 {{
                   candidate.opening.statistics.averageOpeningScore?.toFixed(2)
                 }}
-                <hp-icon name="arrow-top"></hp-icon>
+                <hp-icon
+                  v-if="
+                    candidate.opening.statistics.candidateScore >
+                    candidate.opening.statistics.averageOpeningScore
+                  "
+                  name="arrow-top"
+                ></hp-icon>
+                <hp-icon v-else name="arrow-down"></hp-icon>
               </div>
             </div>
           </div>
