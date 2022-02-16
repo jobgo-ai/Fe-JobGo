@@ -1,12 +1,30 @@
 <template>
   <div class="signin">
-    <hp-input name="email" label="username" />
-    <hp-input name="password" label="password" type="password" />
-    <hp-button
-      icon="diamond"
-      @handleClick="onSubmit"
-      label="Signin"
-    ></hp-button>
+    <div class="signin__logo"><Logo /></div>
+    <div class="signin__container">
+      <div class="signin__image-container"></div>
+      <p class="signin__subtitle">Welcome back!</p>
+      <h2 class="signin__title">Log into Hireproof</h2>
+      <hp-input name="email" placeholder="Type your email" label="Email" />
+      <div class="signin__password-container">
+        <hp-input
+          name="password"
+          placeholder="Enter your password"
+          label="Password"
+          type="password"
+        />
+        <router-link to="/forgot-password" class="signin__forgot-password"
+          >Forgot password</router-link
+        >
+      </div>
+      <div>
+        <hp-checkbox
+          v-model:checked="isPasswordRemembered"
+          name="rememberPassword"
+        />
+      </div>
+      <hp-button @handleClick="onSubmit" primary label="Continue"></hp-button>
+    </div>
   </div>
 </template>
 
@@ -20,6 +38,7 @@ import { useForm } from "vee-validate";
 import HpInput from "@/components/form/hp-input.vue";
 import HpButton from "@/components/hp-button.vue";
 import useAuth from "@/composables/useAuth";
+import Logo from "@/assets/logo.svg";
 
 //Hooks
 import { usePost } from "@/composables/useHttp";
@@ -56,9 +75,51 @@ const onSubmit = handleSubmit(async (values) => {
 
 <style lang="scss">
 .signin {
-  width: 600px;
-  margin: auto;
-  border: 1px solid gray;
-  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  &__subtitle {
+    @include text-h3;
+    font-weight: 500;
+    color: var(--color-text-secondary);
+  }
+  &__title {
+    @include text-h3;
+    font-weight: 500;
+    margin-bottom: 24px;
+  }
+  &__logo {
+    margin: auto;
+    margin-bottom: 48px;
+    margin-top: 64px;
+  }
+  &__container {
+    margin: auto;
+    padding: 24px;
+    width: 460px;
+    border: $border;
+    border-radius: $border-radius-md;
+    background-color: var(--color-background);
+    position: relative;
+  }
+  &__image-container {
+    display: flex;
+    background-image: url("../../assets/abstracts/decorations/illustration.svg");
+    position: absolute;
+    top: 50%;
+    height: 446px;
+    width: 588px;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    z-index: -1;
+  }
+  &__password-container {
+    position: relative;
+  }
+  &__forgot-password {
+    position: absolute;
+    right: 0;
+    top: 0;
+    @include text-h5;
+  }
 }
 </style>
