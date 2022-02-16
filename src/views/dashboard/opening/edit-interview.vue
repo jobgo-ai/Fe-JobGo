@@ -137,17 +137,28 @@
                       label="Edit question"
                       @handleClick="isEditQuestionDrawerOpen = element"
                     ></hp-button>
-                    <hp-button
-                      @handleClick="isViewQuestionDrawerOpen = element"
+                    <hp-tooltip
+                      :delay="500"
                       class="edit-interview__question-card__actions__button"
-                      icon="eye"
-                    ></hp-button>
+                    >
+                      <hp-button
+                        @handleClick="isViewQuestionDrawerOpen = element"
+                        icon="eye"
+                      ></hp-button>
+                      <template #content>View question</template>
+                    </hp-tooltip>
                   </div>
-                  <hp-button
-                    @handleClick="handleRemoveQuestion(element)"
-                    icon="trash"
-                    danger
-                  ></hp-button>
+                  <hp-tooltip
+                    :delay="500"
+                    class="edit-interview__question-card__actions__button"
+                  >
+                    <hp-button
+                      @handleClick="handleRemoveQuestion(element)"
+                      icon="trash"
+                      danger
+                    ></hp-button>
+                    <template #content>Remove question from interview</template>
+                  </hp-tooltip>
                 </div>
               </li>
             </template>
@@ -223,6 +234,7 @@ import ViewQuestion from "@/views/dashboard/opening/questions/view-question.vue"
 
 // Components
 import HpInput from "@/components/form/hp-input.vue";
+import HpTooltip from "@/components/hp-tooltip.vue";
 import HpButton from "@/components/hp-button.vue";
 import HpCounter from "@/components/hp-counter.vue";
 import HpIcon from "@/components/hp-icon.vue";

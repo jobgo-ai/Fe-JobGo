@@ -197,6 +197,7 @@ const formatSkills = (skills) => {
     font-weight: 500;
     @include text-h5;
     margin-bottom: 16px;
+    word-break: break-word;
   }
   &__badge-container {
     display: flex;
