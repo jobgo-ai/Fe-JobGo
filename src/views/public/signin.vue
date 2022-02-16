@@ -5,24 +5,26 @@
       <div class="signin__image-container"></div>
       <p class="signin__subtitle">Welcome back!</p>
       <h2 class="signin__title">Log into Hireproof</h2>
-      <hp-input name="email" placeholder="Type your email" label="Email" />
-      <div class="signin__password-container">
-        <hp-input
-          name="password"
-          placeholder="Enter your password"
-          label="Password"
-          type="password"
-        />
-        <router-link to="/forgot-password" class="signin__forgot-password"
-          >Forgot password</router-link
-        >
-      </div>
-      <hp-button
-        :isLoading="postLogin.loading.value"
-        @handleClick="onSubmit"
-        primary
-        label="Continue"
-      ></hp-button>
+      <form @submit="onSubmit">
+        <hp-input name="email" placeholder="Type your email" label="Email" />
+        <div class="signin__password-container">
+          <hp-input
+            name="password"
+            placeholder="Enter your password"
+            label="Password"
+            type="password"
+          />
+          <router-link to="/forgot-password" class="signin__forgot-password"
+            >Forgot password</router-link
+          >
+        </div>
+        <hp-button
+          :isLoading="postLogin.loading.value"
+          primary
+          type="submit"
+          label="Continue"
+        ></hp-button>
+      </form>
     </div>
     <div class="forgot-password__tos">
       <a

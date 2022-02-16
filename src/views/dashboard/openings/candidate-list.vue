@@ -35,7 +35,7 @@
               name="layers"
             ></hp-icon>
             <div class="candidate-list__stats__stat__number">
-              {{ opening.statistics.templates }}
+              {{ opening.templates?.length }}
             </div>
             Interviews
           </div>
@@ -202,6 +202,8 @@ const route = useRoute();
 const isAddCandidateModalOpen = ref(false);
 const isFlyoutOpen = ref(false);
 const dropdownTarget = ref(null);
+
+console.log(opening.value);
 
 const handleItemClick = (index) => {
   templateList.value = templateList.value.map((template, i) => {
