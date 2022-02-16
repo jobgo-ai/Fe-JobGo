@@ -81,10 +81,10 @@ const postChangePassword = usePost("self/reset-password");
 
 const handlePasswordReset = handleSubmit(async (values) => {
   const payload = {
-    self: {
-      password: values.password,
+    password: {
+      token: token,
+      new: values.password,
     },
-    token: token,
   };
   await postChangePassword.post(payload);
   router.push("/login");
