@@ -8,7 +8,7 @@ import Signup from "@/views/public/signup.vue";
 
 // Private
 import Layout from "@/views/dashboard/layout.vue";
-import ChangePassword from "@/views/dashboard/settings/change-password.vue";
+import ChangePassword from "@/views/public/change-password.vue";
 import Settings from "@/views/dashboard/settings/settings.vue";
 
 //Openings
@@ -70,11 +70,6 @@ const routes = [
         name: "settings",
         component: Settings,
       },
-      {
-        path: "change-password",
-        name: "change-password",
-        component: ChangePassword,
-      },
     ],
   },
   { path: "/:pathMatch(.*)*", name: "NotFound", component: NotFound },
@@ -98,6 +93,14 @@ const routes = [
     path: "/forgot-password",
     name: "forgot-password",
     component: ForgotPassword,
+    meta: {
+      public: true,
+    },
+  },
+  {
+    path: "/change-password",
+    name: "change-password",
+    component: ChangePassword,
     meta: {
       public: true,
     },

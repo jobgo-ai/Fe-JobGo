@@ -17,13 +17,21 @@
           >Forgot password</router-link
         >
       </div>
-      <div>
-        <hp-checkbox
-          v-model:checked="isPasswordRemembered"
-          name="rememberPassword"
-        />
-      </div>
       <hp-button @handleClick="onSubmit" primary label="Continue"></hp-button>
+    </div>
+    <div class="forgot-password__tos">
+      <a
+        href="https://www.hireproof.io/terms-of-service"
+        class="forgot-password__policy"
+      >
+        Terms of service
+      </a>
+      <a
+        href="https://www.hireproof.io/terms-of-service"
+        class="forgot-password__policy"
+      >
+        Privacy policy
+      </a>
     </div>
   </div>
 </template>
