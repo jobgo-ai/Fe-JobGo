@@ -8,6 +8,7 @@ const candidates = ref([]);
 const templateList = ref([]);
 
 const fetchCandidates = async (openingRef) => {
+  // This is super sketchy becareful in furture
   if (candidates.value[0]?.opening.reference === openingRef) {
     return;
   }
