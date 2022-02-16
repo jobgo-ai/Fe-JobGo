@@ -23,7 +23,7 @@
       <hp-button
         @handleClick="handlePasswordReset"
         primary
-        :isLoading="postChangePassword.loading === true"
+        :isLoading="postChangePassword.loading.value"
         :isDisabled="!meta.valid"
         label="Reset password"
       ></hp-button>

@@ -18,7 +18,7 @@
         >
       </div>
       <hp-button
-        :isLoading="postLogin.loading == true"
+        :isLoading="postLogin.loading.value"
         @handleClick="onSubmit"
         primary
         label="Continue"
