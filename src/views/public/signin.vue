@@ -45,6 +45,7 @@
 
 <script setup>
 // Vendor
+import { ref } from "vue";
 import { useRouter } from "vue-router";
 import * as yup from "yup";
 import { useForm } from "vee-validate";
@@ -67,7 +68,7 @@ const schema = yup.object().shape({
   password: yup.string().min(6).required().label("Password"),
 });
 
-const { handleSubmit, isSubmitting } = useForm({
+const { handleSubmit, isSubmitting, setFieldError } = useForm({
   validationSchema: schema,
   initialValues: { title: "", description: "" },
 });
@@ -84,6 +85,8 @@ const onSubmit = handleSubmit(async (values) => {
     const { setUser } = useAuth();
     setUser(postLogin.data.value, true);
     router.push("/openings");
+  } else {
+    setFieldError("password", "Invalid email or password");
   }
 });
 </script>
@@ -135,6 +138,10 @@ const onSubmit = handleSubmit(async (values) => {
     right: 0;
     top: 0;
     @include text-h5;
+  }
+  &__error {
+    color: var(--color-error);
+    margin-bottom: 16px;
   }
 }
 </style>
