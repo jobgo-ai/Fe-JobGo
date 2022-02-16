@@ -13,7 +13,7 @@
         <hp-button
           @handleClick="handlePasswordReset"
           primary
-          :isLoading="postChangePassword.loading.value"
+          :isLoading="postForgotPassword.loading.value"
           :isDisabled="!meta.valid"
           label="Reset password"
         ></hp-button>
@@ -74,10 +74,9 @@ const { handleSubmit, isSubmitting, meta } = useForm({
 });
 
 const isEmailSent = ref(false);
+const postForgotPassword = usePost("self/forgot-password");
 
 const handlePasswordReset = handleSubmit(async (values) => {
-  const postForgotPassword = usePost("self/forgot-password");
-
   const payload = {
     user: {
       email: values.email,

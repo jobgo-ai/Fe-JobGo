@@ -58,9 +58,11 @@ import Logo from "@/assets/logo.svg";
 
 //Hooks
 import { usePost } from "@/composables/useHttp";
+import useToast from "@/composables/useToast";
 
 const route = useRoute();
 const router = useRouter();
+const { setToast } = useToast();
 
 const token = route.query.token;
 
@@ -72,7 +74,7 @@ const schema = yup.object().shape({
     .oneOf([yup.ref("password")], "Passwords do not match"),
 });
 
-const { handleSubmit, isSubmitting, meta } = useForm({
+const { handleSubmit, isSubmitting, setFieldError, meta } = useForm({
   validationSchema: schema,
   initialValues: { password: "", password2: "" },
 });
@@ -88,6 +90,11 @@ const handlePasswordReset = handleSubmit(async (values) => {
   };
   await postChangePassword.post(payload);
   router.push("/login");
+  setToast({
+    type: "positive",
+    title: "Well done!",
+    message: `Your password has been updated`,
+  });
 });
 </script>
 
