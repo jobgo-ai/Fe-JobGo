@@ -1,13 +1,16 @@
 import { ref } from "vue";
 import { useGet } from "./useHttp";
 
-const isCandidateListLoading = ref(true);
+const isCandidateListLoading = ref(false);
 const isCandidateLoading = ref(true);
 const candidate = ref({});
 const candidates = ref([]);
 const templateList = ref([]);
 
 const fetchCandidates = async (openingRef) => {
+  if (candidates.value[0]?.opening.reference === openingRef) {
+    return;
+  }
   isCandidateListLoading.value = true;
   const getCandidates = useGet(`openings/${openingRef}/candidates`);
   await getCandidates.get();

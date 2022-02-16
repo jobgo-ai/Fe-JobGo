@@ -203,8 +203,6 @@ const isAddCandidateModalOpen = ref(false);
 const isFlyoutOpen = ref(false);
 const dropdownTarget = ref(null);
 
-console.log(opening.value);
-
 const handleItemClick = (index) => {
   templateList.value = templateList.value.map((template, i) => {
     if (i === index) {
@@ -236,8 +234,8 @@ watch(
     if (!route.params.openingRef) {
       return;
     }
-    await fetchOpening(route.params.openingRef);
-    await fetchCandidates(route.params.openingRef);
+    fetchCandidates(route.params.openingRef);
+    fetchOpening(route.params.openingRef);
   },
   { immediate: true }
 );
