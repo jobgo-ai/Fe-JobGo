@@ -13,7 +13,9 @@ const fetchCandidates = async (openingRef) => {
     return;
   }
   isCandidateListLoading.value = true;
-  const getCandidates = useGet(`openings/${openingRef}/candidates`);
+  const getCandidates = useGet(
+    `openings/${openingRef}/candidates?state=active`
+  );
   await getCandidates.get();
   candidates.value = getCandidates.data.value?.candidates.filter(
     (c) => c.state === "active"
