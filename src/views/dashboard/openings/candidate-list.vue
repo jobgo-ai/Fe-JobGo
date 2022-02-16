@@ -55,7 +55,7 @@
               name="candidates"
             ></hp-icon>
             <div class="candidate-list__stats__stat__number">
-              {{ opening.statistics.candidates }}
+              {{ opening.statistics.totalCandidates }}
             </div>
             Candidates
           </div>
