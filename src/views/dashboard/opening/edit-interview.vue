@@ -317,15 +317,31 @@ const onSubmit = handleSubmit(async (values) => {
     dirty: false,
     values: formattedInterview,
   });
+  setBreadcrumbs(
+    [
+      {
+        label: "Openings",
+        to: "/openings",
+      },
+      {
+        label: props.opening.name,
+        to: `/opening/${props.opening.reference}/edit`,
+      },
+      {
+        to: `/opening/${props.opening.reference}/edit/edit-interview/${route.params.interviewRef}`,
+        label: interview.value.name,
+      },
+    ],
+    true
+  );
 });
-
+const { setBreadcrumbs } = useBreadcrumbs();
 useContextSave(meta);
 
 onMounted(async () => {
   await fetchInterview(route.params.interviewRef);
   resetForm({ touched: false, values: interview.value });
 
-  const { setBreadcrumbs } = useBreadcrumbs();
   setBreadcrumbs(
     [
       {
