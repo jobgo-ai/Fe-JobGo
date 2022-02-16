@@ -13,12 +13,7 @@
         :type="type ? type : 'text'"
         :placeholder="placeholder"
         :value="modelValue"
-        @input="
-          (e) => {
-            modelValue = e.target.value;
-            $emit('update:modelValue', e.target.value);
-          }
-        "
+        v-on="validationListeners"
       />
       <hp-icon
         v-if="icon"
@@ -81,12 +76,43 @@ const props = defineProps({
 
 const emits = defineEmits(["update:modelValue"]);
 
-const { errorMessage, value: modelValue } = useField(props.name, "", {
+const {
+  errorMessage,
+  value: modelValue,
+  handleChange,
+} = useField(props.name, "", {
   standalone: props.standalone,
+  validateOnValueUpdate: false,
 });
 
 const inputRef = ref(null);
 defineExpose({ inputRef });
+
+const validationListeners = computed(() => {
+  // If the field is valid or have not been validated yet
+  // lazy
+  if (!errorMessage.value) {
+    return {
+      blur: handleChange,
+      change: handleChange,
+      // disable `shouldValidate` to avoid validating on input
+      input: (e) => {
+        if (props.standalone) {
+          modelValue = e.target.value;
+          emits("update:modelValue", e.target.value);
+        }
+        console.log("should not trigger");
+        handleChange(e, false);
+      },
+    };
+  } else {
+    return {
+      blur: handleChange,
+      change: handleChange,
+      input: handleChange, // only switched this
+    };
+  }
+});
 
 const containerClasses = computed(() => {
   return {
