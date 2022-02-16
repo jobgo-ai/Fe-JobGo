@@ -23,15 +23,22 @@
       <hp-button
         @handleClick="handlePasswordReset"
         primary
+        :isLoading="postChangePassword.loading === true"
         :isDisabled="!meta.valid"
         label="Reset password"
       ></hp-button>
     </div>
     <div class="forgot-password__tos">
-      <a href="www.google.com" class="forgot-password__policy">
+      <a
+        href="https://www.hireproof.io/terms-of-service"
+        class="forgot-password__policy"
+      >
         Terms of service
       </a>
-      <a href="www.google.com" class="forgot-password__policy">
+      <a
+        href="https://www.hireproof.io/terms-of-service"
+        class="forgot-password__policy"
+      >
         Privacy policy
       </a>
     </div>
@@ -50,7 +57,7 @@ import HpButton from "@/components/hp-button.vue";
 import Logo from "@/assets/logo.svg";
 
 //Hooks
-import { usePut } from "@/composables/useHttp";
+import { usePost } from "@/composables/useHttp";
 
 const route = useRoute();
 const router = useRouter();
@@ -70,7 +77,7 @@ const { handleSubmit, isSubmitting, meta } = useForm({
   initialValues: { password: "", password2: "" },
 });
 
-const postChangePassword = usePut("self/password");
+const postChangePassword = usePost("self/reset-password");
 
 const handlePasswordReset = handleSubmit(async (values) => {
   const payload = {
@@ -79,7 +86,7 @@ const handlePasswordReset = handleSubmit(async (values) => {
     },
     token: token,
   };
-  await postChangePassword.put(payload);
+  await postChangePassword.post(payload);
   router.push("/login");
 });
 </script>

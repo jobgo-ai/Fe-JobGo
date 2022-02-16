@@ -27,10 +27,16 @@
       Back to sign in
     </router-link>
     <div class="forgot-password__tos">
-      <a href="www.google.com" class="forgot-password__policy">
+      <a
+        href="https://www.hireproof.io/terms-of-service"
+        class="forgot-password__policy"
+      >
         Terms of service
       </a>
-      <a href="www.google.com" class="forgot-password__policy">
+      <a
+        href="https://www.hireproof.io/terms-of-service"
+        class="forgot-password__policy"
+      >
         Privacy policy
       </a>
     </div>

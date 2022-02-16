@@ -17,7 +17,12 @@
           >Forgot password</router-link
         >
       </div>
-      <hp-button @handleClick="onSubmit" primary label="Continue"></hp-button>
+      <hp-button
+        :isLoading="postLogin.loading === true"
+        @handleClick="onSubmit"
+        primary
+        label="Continue"
+      ></hp-button>
     </div>
     <div class="forgot-password__tos">
       <a
