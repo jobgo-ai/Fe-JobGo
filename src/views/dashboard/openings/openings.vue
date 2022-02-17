@@ -192,6 +192,7 @@ const handleNewOpening = async () => {
   if (postOpening.data.value) {
     router.push(`/opening/${postOpening.data.value.opening.reference}/edit`);
   }
+  fetchOpenings();
 };
 
 watch(state, async () => {

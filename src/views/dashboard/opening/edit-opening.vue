@@ -166,8 +166,12 @@ const { setBreadcrumbs } = useBreadcrumbs();
 const { setToast } = useToast();
 
 const schema = yup.object({
-  name: yup.string().required("Opening name is required"),
-  description: yup.string(),
+  name: yup
+    .string()
+    .required("Opening name is required")
+    .label("Opening name")
+    .max(240),
+  description: yup.string().label("Description").max(240),
   artwork: yup.number(),
   templates: yup.array(),
 });
@@ -220,6 +224,7 @@ const onSubmit = handleSubmit(async (values) => {
     title: "Well done!",
     message: `${putOpening.data.value.opening.name} updated`,
   });
+  fetchOpenings();
   setBreadcrumbs(
     [
       {
