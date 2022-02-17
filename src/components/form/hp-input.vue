@@ -101,7 +101,6 @@ const validationListeners = computed(() => {
           modelValue = e.target.value;
           emits("update:modelValue", e.target.value);
         }
-        console.log("should not trigger");
         handleChange(e, false);
       },
     };
