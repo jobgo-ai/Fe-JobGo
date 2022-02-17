@@ -110,6 +110,10 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  fullWidth: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const isDropdownOpen = ref(false);
@@ -135,6 +139,7 @@ const containerClasses = computed(() => {
     "hp-button--primary": props.primary,
     "hp-button--dropdown": props.hasDropdown,
     "hp-button--focused": isFocused.value,
+    "hp-button--full-width": props.fullWidth,
   };
 });
 
@@ -147,6 +152,7 @@ const buttonClasses = computed(() => {
     "hp-button__button--destructive": props.destructive,
     "hp-button__button--primary": props.primary,
     "hp-button__button--button-icon": props.icon && !props.label,
+    "hp-button__button--full-width": props.fullWidth,
   };
 });
 
@@ -176,6 +182,10 @@ const emit = defineEmits(["handleClick"]);
   height: 32px;
   position: relative;
   z-index: 10;
+
+  &--full-width {
+    width: 100%;
+  }
 
   &--dropzone {
     width: 100%;
@@ -213,6 +223,12 @@ const emit = defineEmits(["handleClick"]);
       drop-shadow(0px 0px 1px rgba(33, 44, 51, 0.02));
 
     -webkit-appearance: none !important;
+
+    &--full-width {
+      display: flex;
+      width: 100%;
+      justify-content: center;
+    }
 
     &:active,
     &:hover {

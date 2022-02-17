@@ -15,7 +15,7 @@ const Template = (args) => ({
     return { args, buttonIsLoading };
   },
   template: `<div>
-    <div style="display:flex; margin-bottom: 16px; margin-top:200px;">
+    <div style="display:flex; margin-bottom: 16px; margin-top:100px;">
       <hp-button style="margin-right: 12px" v-bind="args"> </hp-button>
       <hp-button style="margin-right: 12px" :to="{ name: 'home' }" label="Link button"> </hp-button>
       <hp-button style="margin-right: 12px" @click="buttonIsLoading = !buttonIsLoading" label="Loading" :isLoading="buttonIsLoading" />
@@ -36,8 +36,11 @@ const Template = (args) => ({
       <hp-button primary style="margin-right: 12px" icon="plus" />
     </div>
     <div style="display:flex; width: 240px; margin-top:24px;">
-    <hp-button dropzone label="Add candidate" icon="plus" />
-  </div>
+      <hp-button dropzone label="Add candidate" icon="plus" />
+    </div>
+    <div style="display:flex; width: 240px; margin-top:24px;">
+     <hp-button fullWidth label="I'm fullwidth" primary icon="plus" />
+    </div>
   </div>`,
 });
 
