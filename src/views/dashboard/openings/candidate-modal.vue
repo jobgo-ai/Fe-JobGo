@@ -41,7 +41,7 @@
           primary
           type="submit"
           :isLoading="isUpdatingCandidate"
-          :isDisabled="isArchivingCandidate"
+          :isDisabled="!meta.valid"
           :label="content.buttonLabel"
         ></hp-button>
       </div>
@@ -113,14 +113,14 @@ const router = useRouter();
 const { setBreadcrumbs } = useBreadcrumbs();
 
 const schema = yup.object({
-  name: yup.string().required("First name is required"),
+  name: yup.string().max(50).required("First name is required"),
   email: yup
     .string()
     .required("Email is required")
     .email("Email must be valid"),
 });
 
-const { handleSubmit } = useForm({
+const { handleSubmit, meta } = useForm({
   validationSchema: schema,
   initialValues: { ...props.candidate },
 });

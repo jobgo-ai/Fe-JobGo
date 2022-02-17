@@ -8,7 +8,6 @@ const candidates = ref([]);
 const templateList = ref([]);
 
 const fetchCandidates = async (openingRef, isForced) => {
-  console.log("im fetching candidates dog", isForced);
   if (candidates.value[0]?.opening.reference === openingRef && !isForced) {
     return;
   }
