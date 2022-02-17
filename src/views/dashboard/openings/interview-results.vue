@@ -56,20 +56,13 @@
         <div class="results__details__skill-container">
           <div class="results__details__skills-title">Evaluated skills</div>
           <ol class="results__details__skills">
-            <li class="results__details__skills__skill">
-              Pizza eating
-              <hp-badge
-                class="results__details__skills__skill__badge"
-                :content="4"
-              ></hp-badge>
-            </li>
-            <li class="results__details__skills__skill">
-              CHANGE ME
-              <hp-badge
-                class="results__details__skills__skill__badge"
-                :content="4"
-              ></hp-badge>
-            </li>
+            <hp-badge-tag
+              v-for="(skill, index) in interview.statistics
+                .candidateSkillScores"
+              :quantity="skill.score.value"
+              :label="skill.name"
+              :type="calculateColor(skill)"
+            ></hp-badge-tag>
           </ol>
         </div>
       </div>
@@ -115,6 +108,7 @@ import { DateTime } from "luxon";
 //Components
 import HpIcon from "@/components/hp-icon.vue";
 import HpBadge from "@/components/hp-badge.vue";
+import HpBadgeTag from "@/components/hp-badge-tag.vue";
 import HpQuestionCardStats from "@/components/cards/hp-question-card-stats.vue";
 
 // Composables
@@ -183,6 +177,21 @@ const interactionList = computed(() => {
     })
     .map((i) => i.value);
 });
+
+const calculateColor = (skill) => {
+  const average = interview.value.statistics.averageInterviewSkillScores.find(
+    (i) => i.slug === skill.slug
+  );
+  if (average) {
+    if (skill.score.value > average.score.value) {
+      return "positive";
+    } else if (skill.score.value < average.score.value) {
+      return "negative";
+    } else {
+      return "neutral";
+    }
+  }
+};
 </script>
 
 <swag lang="scss">
@@ -209,17 +218,7 @@ const interactionList = computed(() => {
     &__skills {
       display: flex;
       flex-wrap: wrap;
-      &__skill {
-        border: 1px solid var(--color-border);
-        background-color: var(--color-panel);
-        padding: 6px;
-        border-radius: $border-radius-sm;
-        margin-right: 8px;
-        margin-bottom: 8px;
-        &__badge {
-          margin-left: 12px;
-        }
-      }
+      gap: 6px;
     }
     flex-shrink: 0;
     width: 552px;

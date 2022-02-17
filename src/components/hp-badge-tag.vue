@@ -1,7 +1,11 @@
 <template>
   <li class="hp-badge-tag__skill">
     {{ label }}
-    <hp-badge class="hp-badge-tag__badge" :content="quantity"></hp-badge>
+    <hp-badge
+      class="hp-badge-tag__badge"
+      :type="type"
+      :content="quantity"
+    ></hp-badge>
   </li>
 </template>
 
@@ -15,7 +19,12 @@ const props = defineProps({
   quantity: {
     type: [String, Number],
   },
+  type: {
+    type: String,
+    default: "",
+  },
 });
+console.log(props.type);
 </script>
 
 <style lang="scss">
