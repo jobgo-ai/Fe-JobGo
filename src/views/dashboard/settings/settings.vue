@@ -15,7 +15,7 @@
       <hp-button
         :onClick="handleNameChange"
         label="Save changes"
-        :isDisabled="!isNameDirty"
+        :isDisabled="values.name.length < 0 || values.name.length > 50"
         primary
       ></hp-button>
     </div>
@@ -87,6 +87,7 @@ const { setToast } = useToast();
 const { isDarkmode, handleDarkModeToggle } = useDarkMode();
 
 const schema = yup.object().shape({
+  name: yup.string().min(3).max(50).required(),
   currentPassword: yup
     .string()
     .label("Current password")

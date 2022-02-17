@@ -116,6 +116,7 @@ const schema = yup.object({
   name: yup.string().max(50).required("First name is required"),
   email: yup
     .string()
+    .max(100)
     .required("Email is required")
     .email("Email must be valid"),
 });
