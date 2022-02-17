@@ -98,7 +98,7 @@ const validationListeners = computed(() => {
       // disable `shouldValidate` to avoid validating on input
       input: (e) => {
         if (props.standalone) {
-          modelValue = e.target.value;
+          modelValue.value = e.target.value;
           emits("update:modelValue", e.target.value);
         }
         handleChange(e, false);
