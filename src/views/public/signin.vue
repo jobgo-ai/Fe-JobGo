@@ -26,6 +26,10 @@
         ></hp-button>
       </form>
     </div>
+    <router-link class="signin__signup" to="/signup"
+      >Don't have an account?
+      <span class="signin__signup__link">Sign up</span></router-link
+    >
     <div class="forgot-password__tos">
       <a
         href="https://www.hireproof.io/terms-of-service"
@@ -118,6 +122,7 @@ const onSubmit = handleSubmit(async (values) => {
     border-radius: $border-radius-md;
     background-color: var(--color-background);
     position: relative;
+    box-shadow: $box-shadow;
   }
   &__image-container {
     display: flex;
@@ -142,6 +147,16 @@ const onSubmit = handleSubmit(async (values) => {
   &__error {
     color: var(--color-error);
     margin-bottom: 16px;
+  }
+  &__signup {
+    color: var(--color-text-secondary);
+    font-weight: 400;
+    margin: auto;
+    margin-top: 24px;
+    &__link {
+      font-weight: 500;
+      color: var(--color-text-primary);
+    }
   }
 }
 </style>

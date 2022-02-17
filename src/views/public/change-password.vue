@@ -125,6 +125,7 @@ const handlePasswordReset = handleSubmit(async (values) => {
     border-radius: $border-radius-md;
     background-color: var(--color-background);
     position: relative;
+    box-shadow: $box-shadow;
   }
   &__image-container {
     display: flex;

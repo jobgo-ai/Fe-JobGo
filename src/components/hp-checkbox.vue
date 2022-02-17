@@ -2,30 +2,53 @@
   <div class="hp-checkbox">
     <transition name="hp-checkbox__icon-transition">
       <hp-icon
-        v-if="props.checked"
+        v-if="modelValue"
         class="hp-checkbox__icon"
         :size="18"
         name="check"
       />
     </transition>
     <input
-      @input="(event) => $emit('update:checked', event.target.checked)"
+      @input="
+        (event) => {
+          modelValue = event.target.checked;
+          $emit('update:modelValue', event.target.checked);
+        }
+      "
       id="option1"
       type="checkbox"
-      :checked="props.checked"
+      :checked="modelValue"
       value="option-1"
-      checked
     />
     <label class="hp-checkbox__label" for="option1"> </label>
   </div>
 </template>
 
 <script setup>
+// Vendor
+import { useField } from "vee-validate";
+
+// Components
 import HpIcon from "@/components/hp-icon.vue";
+
 const props = defineProps({
-  checked: {
-    type: [Boolean, Object],
+  modelValue: {
+    type: Boolean,
   },
+  name: {
+    type: String,
+    default: "",
+  },
+});
+
+console.log(props);
+
+const {
+  errorMessage,
+  value: modelValue,
+  handleChange,
+} = useField(props.name, "", {
+  standalone: props.standalone,
 });
 </script>
 
@@ -41,8 +64,8 @@ const props = defineProps({
     top: 0px;
     left: -1px;
     z-index: 1;
-    color: var(--color-accent-forground);
     pointer-events: none;
+    color: var(--color-accent-forground);
   }
 }
 input[type="checkbox"] {
