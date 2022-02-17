@@ -65,7 +65,7 @@ import { useForm } from "vee-validate";
 
 //Components
 import HpInput from "@/components/form/hp-input.vue";
-import HpCheckbox from "@/components/hp-checkbox.vue";
+import HpCheckbox from "@/components/form/hp-checkbox.vue";
 import HpButton from "@/components/hp-button.vue";
 import useAuth from "@/composables/useAuth";
 import Logo from "@/assets/logo.svg";
