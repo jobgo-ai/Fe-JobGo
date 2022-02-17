@@ -36,9 +36,11 @@
             >
           </div>
         </div>
+        <div v-if="error" class="signup__error">{{ error }}</div>
         <hp-button
-          :isLoading="postLogin.loading.value"
+          :isLoading="isLoading"
           primary
+          :isDisabled="!meta.valid"
           type="submit"
           label="Continue"
           fullWidth
@@ -56,7 +58,8 @@
 
 <script setup>
 // Vendor
-import { useRouter } from "vue-router";
+import { ref } from "vue";
+import { useRouter, useRoute } from "vue-router";
 import * as yup from "yup";
 import { useForm } from "vee-validate";
 
@@ -80,25 +83,36 @@ const schema = yup.object().shape({
   password: yup.string().min(6).required().label("Password"),
   terms: yup
     .boolean()
+    .required()
     .oneOf([true], "You must agree to the terms of service")
     .label("Terms of Service"),
 });
 
-const { handleSubmit, isSubmitting, setFieldError } = useForm({
-  validationSchema: schema,
-  initialValues: { name: "", email: "", password: "", terms: false },
-});
-
 const router = useRouter();
+const route = useRoute();
+
+const isLoading = ref(false);
+const error = ref(null);
+
+const { handleSubmit, isSubmitting, setFieldError, meta } = useForm({
+  validationSchema: schema,
+  initialValues: {
+    name: "",
+    email: route.query.email,
+    password: "",
+    terms: false,
+  },
+});
 
 const postUsers = usePost("users");
 const postLogin = usePost("self/login");
 
 const onSubmit = handleSubmit(async (values) => {
   isLoading.value = true;
-  const { email, password } = values;
+  const { email, password, name } = values;
   const payload = {
     user: {
+      name,
       email,
       password,
     },
@@ -118,7 +132,7 @@ const onSubmit = handleSubmit(async (values) => {
     setUser(postLogin.data.value, true);
     router.push("/");
   } else {
-    error.value = true;
+    error.value = "Something went wrong";
     isLoading.value = false;
   }
 });
@@ -196,6 +210,9 @@ const onSubmit = handleSubmit(async (values) => {
   &__signin {
     margin: auto;
     margin-top: 32px;
+  }
+  &__error {
+    color: var(--color-error);
   }
 }
 </style>
