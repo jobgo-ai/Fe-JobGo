@@ -151,6 +151,7 @@ import { useBreadcrumbs } from "@/composables/useBreadcrumbs";
 import useContextSave from "@/composables/useContextSave";
 import { useGet, usePut } from "@/composables/useHttp";
 import useOpenings from "@/composables/useOpenings";
+import useCandidates from "@/composables/useCandidates";
 
 const route = useRoute();
 const router = useRouter();
@@ -161,6 +162,7 @@ const isLoading = ref(true);
 const isSaving = ref(false);
 
 const { fetchOpenings } = useOpenings();
+const { fetchCandidates } = useCandidates();
 
 const { setBreadcrumbs } = useBreadcrumbs();
 const { setToast } = useToast();
@@ -225,6 +227,7 @@ const onSubmit = handleSubmit(async (values) => {
     message: `${putOpening.data.value.opening.name} updated`,
   });
   fetchOpenings();
+  fetchCandidates(putOpening.data.value.opening.reference, true);
   setBreadcrumbs(
     [
       {
