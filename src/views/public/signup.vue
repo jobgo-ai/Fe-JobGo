@@ -3,8 +3,8 @@
     <div class="signup__logo"><Logo /></div>
     <div class="signup__container">
       <div class="signup__image-container"></div>
-      <p class="signup__subtitle">Welcome back!</p>
-      <h2 class="signup__title">Log into Hireproof</h2>
+      <p class="signup__subtitle">Welcome aboard!</p>
+      <h2 class="signup__title">Sign up with Hireproof</h2>
       <form @submit="onSubmit">
         <hp-input name="name" placeholder="Type your name" label="Name" />
         <hp-input name="email" placeholder="Type your email" label="Email" />
@@ -89,19 +89,36 @@ const { handleSubmit, isSubmitting, setFieldError } = useForm({
 });
 
 const router = useRouter();
+
+const postUsers = usePost("users");
 const postLogin = usePost("self/login");
 
 const onSubmit = handleSubmit(async (values) => {
+  isLoading.value = true;
+  const { email, password } = values;
+  const payload = {
+    user: {
+      email,
+      password,
+    },
+    invitation: route.query.token,
+  };
+  await postUsers.post(payload);
   const data = {
-    credentials: { ...values },
+    credentials: {
+      email,
+      password,
+    },
   };
   await postLogin.post(data);
   if (postLogin.data.value) {
+    error.value = false;
     const { setUser } = useAuth();
     setUser(postLogin.data.value, true);
-    router.push("/openings");
+    router.push("/");
   } else {
-    setFieldError("password", "Invalid email or password");
+    error.value = true;
+    isLoading.value = false;
   }
 });
 </script>
