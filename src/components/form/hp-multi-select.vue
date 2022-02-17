@@ -11,6 +11,7 @@
             :name="name"
             placeholder="Search..."
             @input="handleAsyncSearch"
+            standalone
           />
         </div>
         <ul class="hp-multi-select__flyout__options">
