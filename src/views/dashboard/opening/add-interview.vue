@@ -20,6 +20,7 @@
         name="search"
         variant="search"
         icon="search"
+        standalone
         v-model="filter.search"
         placeholder="Search by name"
       />
