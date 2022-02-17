@@ -10,7 +10,7 @@
         :disabled="isDisabled"
         :class="`hp-input__input hp-input__input--${variant}`"
         :name="name"
-        :type="type ? type : 'text'"
+        :type="type"
         :placeholder="placeholder"
         :value="modelValue"
         v-on="validationListeners"
@@ -20,6 +20,13 @@
         class="hp-input__input-icon"
         :size="14"
         :name="icon"
+      ></hp-icon>
+      <hp-icon
+        class="hp-input__input-icon hp-input__input-icon--password"
+        v-if="isPassword"
+        :name="passwordIcon"
+        @click="isPasswordVisible = !isPasswordVisible"
+        :size="16"
       ></hp-icon>
     </div>
     <transition name="hp-input__error-transition">
@@ -85,6 +92,24 @@ const {
   validateOnValueUpdate: false,
 });
 
+const isPasswordVisible = ref(false);
+
+const isPassword = props.type === "password";
+
+const passwordIcon = computed(() =>
+  isPasswordVisible.value ? "eye-closed" : "eye"
+);
+
+const type = computed(() => {
+  if (props.type === "password") {
+    return isPasswordVisible.value ? "text" : "password";
+  } else if (props.type) {
+    return props.type;
+  } else {
+    return "text";
+  }
+});
+
 const inputRef = ref(null);
 defineExpose({ inputRef });
 
@@ -119,7 +144,7 @@ const containerClasses = computed(() => {
     "hp-input--search": props.variant === "search",
     "hp-input--disabled": props.isDisabled,
     "hp-input--error": errorMessage.value,
-    "hp-input--icon": props.icon,
+    "hp-input--icon": props.icon || props.type === "password",
   };
 });
 </script>
@@ -171,6 +196,9 @@ const containerClasses = computed(() => {
     top: 50%;
     transform: translateY(-50%);
     color: var(--color-text-secondary);
+    &--password {
+      cursor: pointer;
+    }
   }
   &__error {
     color: var(--color-error);

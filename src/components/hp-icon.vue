@@ -28,8 +28,9 @@ const props = defineProps({
 });
 
 const icon = computed(() => {
+  const forceComputed = props.name;
   return defineAsyncComponent(() =>
-    import(/* @vite-ignore */ `../assets/icons/${props.name}.svg`)
+    import(/* @vite-ignore */ `../assets/icons/${forceComputed}.svg`)
   );
 });
 </script>
