@@ -21,6 +21,8 @@
         <hp-button
           :isLoading="postLogin.loading.value"
           primary
+          fullWidth
+          :isDisabled="!meta.valid"
           type="submit"
           label="Continue"
         ></hp-button>
@@ -72,9 +74,8 @@ const schema = yup.object().shape({
   password: yup.string().min(6).required().label("Password"),
 });
 
-const { handleSubmit, isSubmitting, setFieldError } = useForm({
+const { handleSubmit, isSubmitting, setFieldError, meta } = useForm({
   validationSchema: schema,
-  initialValues: { title: "", description: "" },
 });
 
 const router = useRouter();

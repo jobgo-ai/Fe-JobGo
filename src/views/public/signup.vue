@@ -41,6 +41,7 @@
           primary
           type="submit"
           label="Continue"
+          fullWidth
         ></hp-button>
       </form>
     </div>

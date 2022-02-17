@@ -13,6 +13,7 @@
         <hp-button
           @handleClick="handlePasswordReset"
           primary
+          fullWidth
           :isLoading="postForgotPassword.loading.value"
           :isDisabled="!meta.valid"
           label="Reset password"

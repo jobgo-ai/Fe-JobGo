@@ -23,6 +23,7 @@
       <hp-button
         @handleClick="handlePasswordReset"
         primary
+        fullWidth
         :isLoading="postChangePassword.loading.value"
         :isDisabled="!meta.valid"
         label="Reset password"
@@ -149,6 +150,8 @@ const handlePasswordReset = handleSubmit(async (values) => {
   }
   &__text {
     margin-bottom: 16px;
+  }
+  &__signup {
   }
 }
 </chode>
