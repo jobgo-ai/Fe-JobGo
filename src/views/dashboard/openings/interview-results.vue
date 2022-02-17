@@ -11,7 +11,7 @@
             class="results__details__stats__stat__icon"
             name="user"
           ></hp-icon>
-          {{ interview.interviewerName || "Anon" }}
+          {{ interview.interviewerName }}
         </div>
         <div class="results__details__stats__stat">
           <hp-icon
@@ -30,26 +30,51 @@
       </div>
       <div class="results__details__grid">
         <div
-          :class="`results__details__score results__details__score--positive`"
+          :class="`results__details__score results__details__score--${calculateColor(
+            interview.statistics.candidateScore,
+            interview.statistics.averageInterviewScore
+          )}`"
         >
           <div class="results__details__score-container">
             <div class="results__details__score__average">
-              {{ interview.score }}
+              {{ interview.statistics.candidateScore }}
             </div>
             <div class="results__details__score__current">Score</div>
             <div class="results__details__score__average-score">
-              The average score is 2.1
-              <hp-icon name="arrow-top"></hp-icon>
+              The average score is
+              {{ interview.statistics.averageInterviewScore }}
+              <hp-icon
+                :name="
+                  calculateArrowDirection(
+                    interview.statistics.candidateScore,
+                    interview.statistics.averageInterviewScore
+                  )
+                "
+              ></hp-icon>
             </div>
           </div>
         </div>
         <div :class="`results__details__score`">
           <div class="results__details__score-container">
-            <div class="results__details__score__average">100%</div>
+            <div class="results__details__score__average">
+              {{ (interview.statistics.candidateCompletion * 100).toFixed(0) }}
+            </div>
             <div class="results__details__score__current">Completion rate</div>
             <div class="results__details__score__average-score">
-              The average score is 90%
-              <hp-icon name="arrow-top"></hp-icon>
+              The average score is
+              {{
+                (interview.statistics.averageInterviewCompletion * 100).toFixed(
+                  0
+                )
+              }}
+              <hp-icon
+                :name="
+                  calculateArrowDirection(
+                    interview.statistics.candidateCompletion,
+                    interview.statistics.averageInterviewCompletion
+                  )
+                "
+              ></hp-icon>
             </div>
           </div>
         </div>
@@ -61,7 +86,7 @@
                 .candidateSkillScores"
               :quantity="skill.score.value"
               :label="skill.name"
-              :type="calculateColor(skill)"
+              :type="calculateSkillScoreColor(skill)"
             ></hp-badge-tag>
           </ol>
         </div>
@@ -74,25 +99,34 @@
           v-for="(interaction, index) in interactionList"
           class="results__questions__container"
         >
-          <div class="results__questions__container__header">
-            <hp-badge icon="questions" :content="index + 1" />
-            <div
-              v-if="interaction.interaction?.answer"
-              class="
-                results__questions__container__header__little-badge
-                results__questions__container__header__little-badge--positive
-              "
-            >
-              {{ interaction.interaction.answer?.value }} / 5
+          <div class="results__questions__question">
+            <div class="results__questions__container__header">
+              <hp-badge icon="questions" :content="index + 1" />
+              <div
+                v-if="interaction.interaction?.answer"
+                class="
+                  results__questions__container__header__little-badge
+                  results__questions__container__header__little-badge--nuetral
+                "
+              >
+                {{ interaction.interaction.answer?.value }} / 5
+              </div>
             </div>
+            <div class="results__questions__container__content">
+              {{ interaction.question.content }}
+            </div>
+            <hp-question-card-stats
+              hasTooltips
+              :question="interaction.question"
+            />
           </div>
-          <div class="results__questions__container__content">
-            {{ interaction.question.content }}
+          <div v-if="interaction.comment" class="results__questions__notes">
+            <hp-icon
+              name="file"
+              class="results__questions__notes__icon"
+            ></hp-icon>
+            {{ interaction.comment }}
           </div>
-          <hp-question-card-stats
-            hasTooltips
-            :question="interaction.question"
-          />
         </li>
       </ol>
     </div>
@@ -178,18 +212,32 @@ const interactionList = computed(() => {
     .map((i) => i.value);
 });
 
-const calculateColor = (skill) => {
+const calculateArrowDirection = (candidate, avg) => {
+  if (candidate > avg) {
+    return "arrow-top";
+  } else if (candidate < avg) {
+    return "arrow-down";
+  } else {
+    return "arrow-top";
+  }
+};
+
+const calculateColor = (candidate, avg) => {
+  if (candidate > avg) {
+    return "positive";
+  } else if (candidate < avg) {
+    return "negative";
+  } else {
+    return "neutral";
+  }
+};
+
+const calculateSkillScoreColor = (skill) => {
   const average = interview.value.statistics.averageInterviewSkillScores.find(
     (i) => i.slug === skill.slug
   );
   if (average) {
-    if (skill.score.value > average.score.value) {
-      return "positive";
-    } else if (skill.score.value < average.score.value) {
-      return "negative";
-    } else {
-      return "neutral";
-    }
+    return calculateColor(skill.score.value, average.score.value);
   }
 };
 </script>
@@ -341,6 +389,14 @@ const calculateColor = (skill) => {
     border-radius: $border-radius-lg;
     border: $border;
     overflow: auto;
+    &__notes {
+      display: flex;
+      padding: 16px;
+      border-top: 1px dashed var(--color-border);
+      &__icon {
+        margin-right: 6px;
+      }
+    }
     &__title {
       @include text-h5;
       color: var(--color-text-primary);
@@ -349,8 +405,13 @@ const calculateColor = (skill) => {
       margin-bottom: 16px;
     }
 
+    &__question {
+      padding: 26px;
+    }
+
     &__container {
-      @include flyout;
+      border-radius: $border-radius-md;
+      border: $border;
       margin-bottom: 16px;
       &__header {
         display: flex;
@@ -364,6 +425,7 @@ const calculateColor = (skill) => {
           font-size: 12px;
           line-height: 16px;
           letter-spacing: -0.015em;
+          font-weight: 500;
           font-feature-settings: "tnum" on, "lnum" on;
           &--positive {
             background: var(--color-background-positive);

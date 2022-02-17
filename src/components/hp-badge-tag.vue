@@ -24,7 +24,6 @@ const props = defineProps({
     default: "",
   },
 });
-console.log(props.type);
 </script>
 
 <style lang="scss">
