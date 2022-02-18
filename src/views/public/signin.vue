@@ -22,7 +22,7 @@
           :isLoading="postLogin.loading.value"
           primary
           fullWidth
-          :isDisabled="!meta.valid"
+          :isDisabled="!meta.dirty || !meta.valid"
           type="submit"
           label="Continue"
         ></hp-button>
@@ -51,7 +51,7 @@
 
 <script setup>
 // Vendor
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import { useRouter } from "vue-router";
 import * as yup from "yup";
 import { useForm } from "vee-validate";
@@ -76,6 +76,15 @@ const schema = yup.object().shape({
 
 const { handleSubmit, isSubmitting, setFieldError, meta } = useForm({
   validationSchema: schema,
+  initialValues: {
+    email: "",
+    password: "",
+  },
+});
+
+console.log(meta.value);
+watch(meta, () => {
+  console.log(meta);
 });
 
 const router = useRouter();

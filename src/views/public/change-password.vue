@@ -1,7 +1,10 @@
 <template>
   <div class="change-password">
     <div class="change-password__logo"><Logo /></div>
-    <div class="change-password__container">
+    <form
+      @submit.prevent="handlePasswordReset"
+      class="change-password__container"
+    >
       <div class="change-password__image-container"></div>
       <h2 class="change-password__title">Reset password</h2>
       <p class="change-password__text">
@@ -21,14 +24,14 @@
         type="password"
       />
       <hp-button
-        @handleClick="handlePasswordReset"
         primary
         fullWidth
+        type="submit"
         :isLoading="postChangePassword.loading.value"
-        :isDisabled="!meta.valid"
+        :isDisabled="!meta.dirty || !meta.valid"
         label="Reset password"
       ></hp-button>
-    </div>
+    </form>
     <div class="forgot-password__tos">
       <a
         href="https://www.hireproof.io/terms-of-service"
@@ -75,7 +78,7 @@ const schema = yup.object().shape({
     .oneOf([yup.ref("password")], "Passwords do not match"),
 });
 
-const { handleSubmit, isSubmitting, setFieldError, meta } = useForm({
+const { handleSubmit, meta } = useForm({
   validationSchema: schema,
   initialValues: { password: "", password2: "" },
 });

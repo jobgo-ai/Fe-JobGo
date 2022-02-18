@@ -40,7 +40,7 @@
         <hp-button
           :isLoading="isLoading"
           primary
-          :isDisabled="!meta.valid"
+          :isDisabled="!meta.dirty || !meta.valid"
           type="submit"
           label="Continue"
           fullWidth

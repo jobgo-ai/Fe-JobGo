@@ -3,7 +3,7 @@
     <div class="forgot-password__logo"><Logo /></div>
     <div class="forgot-password__container">
       <div class="forgot-password__image-container"></div>
-      <div v-if="!isEmailSent">
+      <form @submit.pervent="handlePasswordReset" v-if="!isEmailSent">
         <h2 class="forgot-password__title">Forgot password</h2>
         <p class="forgot-password__text">
           Don't worry! Just fill in your email and we'll send you a link to
@@ -11,14 +11,14 @@
         </p>
         <hp-input name="email" placeholder="Type your email" label="Email" />
         <hp-button
-          @handleClick="handlePasswordReset"
           primary
           fullWidth
+          type="submit"
           :isLoading="postForgotPassword.loading.value"
-          :isDisabled="!meta.valid"
+          :isDisabled="!meta.dirty || !meta.valid"
           label="Reset password"
         ></hp-button>
-      </div>
+      </form>
       <div v-else>
         <h2 class="forgot-password__title">Verify your email</h2>
         <p>We sent you an email to reset your password.</p>
