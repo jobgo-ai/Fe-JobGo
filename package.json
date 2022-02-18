@@ -2,7 +2,7 @@
   "name": "app",
   "version": "0.0.0",
   "scripts": {
-    "dev": "vite --mode beta",
+    "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
     "storybook": "start-storybook -p 6006",
