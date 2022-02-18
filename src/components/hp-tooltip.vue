@@ -60,6 +60,7 @@ const handleHoverEnter = () => {
   top: -10px;
   transform: translateX(-50%) translateY(-100%);
   z-index: 1000;
+
   background-color: var(--color-tooltip);
   color: var(--color-accent-forground);
   filter: drop-shadow(0px 4px 8px rgba(33, 44, 51, 0.02))
@@ -73,7 +74,7 @@ const handleHoverEnter = () => {
   }
   &__content {
     width: max-content;
-    max-width: 160px;
+    max-width: 240px;
   }
 }
 

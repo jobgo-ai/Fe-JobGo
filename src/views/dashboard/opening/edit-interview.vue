@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="edit-interview__container">
     <hp-drawer :isOpen="isAddQuestionDrawerOpen" @close="handleCloseEditDrawer">
       <questions
         :handleClose="handleCloseEditDrawer"
@@ -94,10 +94,7 @@
         :isDisabled="!meta.dirty || !meta.valid"
       ></hp-button>
     </teleport>
-    <div
-      class="edit-interview edit-interview__container"
-      v-if="!isInterviewLoading && !isLoading"
-    >
+    <div class="edit-interview" v-if="!isInterviewLoading && !isLoading">
       <form @submit.prevent="handleContextFormSave">
         <h2 class="edit-interview__title">Edit interview</h2>
         <p class="edit-interview__subtitle">
@@ -454,14 +451,16 @@ const handleCloseEditDrawer = () => {
 
 <styles lang="scss">
 .edit-interview {
-  @include pageContainer;
   display: flex;
   flex-direction: column;
+  width: 552px;
   &__container {
     display: flex;
     flex-direction: column;
-    width: 552px;
     align-self: center;
+    align-items: center;
+    height: 100vh;
+    overflow: auto;
   }
   &::-webkit-scrollbar {
     display: none;
