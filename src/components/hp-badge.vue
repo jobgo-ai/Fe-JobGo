@@ -1,5 +1,5 @@
 <template>
-  <div :class="`hp-badge hp-badge--${props.type}`">
+  <div :class="`hp-badge hp-badge--${props.type} hp-badge--${props.size}`">
     <hp-icon
       v-if="icon"
       :size="14"
@@ -24,6 +24,10 @@ const props = defineProps({
   type: {
     type: String,
     default: "",
+  },
+  size: {
+    type: String,
+    default: "md",
   },
 });
 </script>
@@ -66,6 +70,11 @@ const props = defineProps({
     &:hover {
       background-color: var(--color-background-negative);
     }
+  }
+
+  &--sm {
+    font-size: 10px;
+    padding: 2px 4px;
   }
 }
 </style>

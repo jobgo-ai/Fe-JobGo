@@ -74,26 +74,14 @@
                 :content="skillList ? skillList.length : 0"
               ></hp-badge>
             </div>
-            <div class="candidate-details__overview__skills">
-              <ol
-                class="candidate-details__overview__skills__skill"
+            <ol class="candidate-details__overview__skills">
+              <hp-badge-tag
                 v-for="skill in skillList"
-              >
-                {{
-                  skill.label
-                }}
-                <hp-badge
-                  class="candidate-details__overview__skills__skill__badge"
-                  :type="
-                    calculateColor(
-                      skill.value,
-                      candidate.opening.statistics.averageOpeningScore
-                    )
-                  "
-                  :content="skill.value"
-                ></hp-badge>
-              </ol>
-            </div>
+                :label="skill.label"
+                :quantity="skill.value"
+                :type="calculateColor(skill.value, skill.value)"
+              ></hp-badge-tag>
+            </ol>
           </div>
         </div>
         <div class="candidate-details__interviews">
@@ -124,10 +112,10 @@
                   <hp-badge
                     v-if="interview.statistics.candidateScore"
                     :type="
-                      interview.statistics.averageTemplateScore >
-                      interview.statistics.candidateScore
-                        ? 'negative'
-                        : 'positive'
+                      calculateColor(
+                        interview.statistics.candidateScore,
+                        interview.statistics.averageTemplateScore
+                      )
                     "
                     :content="interview.statistics.candidateScore.toFixed(2)"
                   ></hp-badge>
@@ -281,6 +269,7 @@ import useToast from "@/composables/useToast";
 // Components
 import HpButton from "@/components/hp-button.vue";
 import HpBadge from "@/components/hp-badge.vue";
+import HpBadgeTag from "@/components/hp-badge-tag.vue";
 import HpIcon from "@/components/hp-icon.vue";
 import CandidateModal from "./candidate-modal.vue";
 import HpSpinner from "@/components/hp-spinner.vue";
@@ -380,13 +369,12 @@ const isNextAction = (template, templates) => {
 };
 
 const calculateColor = (score, avgScore) => {
-  if (!score || score === "0.0") {
-    return "default";
-  }
-  if (score >= avgScore) {
+  if (score > avgScore) {
     return "positive";
-  } else {
+  } else if (avgScore > score) {
     return "negative";
+  } else {
+    return "default";
   }
 };
 
@@ -533,17 +521,7 @@ const calculateInterviewLink = (interview) => {
     &__skills {
       display: flex;
       flex-wrap: wrap;
-      &__skill {
-        border: 1px solid var(--color-border);
-        background-color: var(--color-panel);
-        padding: 6px;
-        border-radius: $border-radius-sm;
-        margin-right: 8px;
-        margin-bottom: 8px;
-        &__badge {
-          margin-left: 12px;
-        }
-      }
+      gap: 6px;
     }
   }
   &__interviews {

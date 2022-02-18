@@ -73,14 +73,13 @@ const isCompleted = (template) => {
   return template.interview.started && template.interview.terminated;
 };
 
-const calculateColor = (score, avgScore) => {
-  if (!score) {
-    return "default";
-  }
-  if (score >= avgScore) {
+const calculateColor = (candidate, avg) => {
+  if (candidate > avg) {
     return "positive";
-  } else {
+  } else if (candidate < avg) {
     return "negative";
+  } else {
+    return "neutral";
   }
 };
 </script>

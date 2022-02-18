@@ -5,6 +5,7 @@
       class="hp-badge-tag__badge"
       :type="type"
       :content="quantity"
+      size="sm"
     ></hp-badge>
   </li>
 </template>
