@@ -38,10 +38,7 @@
           >
             <div class="candidate-details__overview__score-container">
               <div class="candidate-details__overview__score__average">
-                {{
-                  candidate.opening.statistics.candidateScore?.toFixed(2) ??
-                  "0.0"
-                }}
+                {{ candidate.opening.statistics.candidateScore?.toFixed(2) }}
               </div>
               <div class="candidate-details__overview__score__current">
                 Current score
@@ -369,6 +366,9 @@ const isNextAction = (template, templates) => {
 };
 
 const calculateColor = (score, avgScore) => {
+  if (!score) {
+    return "default";
+  }
   if (score > avgScore) {
     return "positive";
   } else if (avgScore > score) {
