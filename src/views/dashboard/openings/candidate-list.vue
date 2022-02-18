@@ -268,9 +268,12 @@ const candidateList = computed(() => {
     selectedTemplateIndex.value === templateList.value.length - 1
       ? withSearch
       : withSearch.filter((candidate) => {
+          console.log(
+            candidate.opening.templates.find((i) => !i.interview.started)
+          );
           return (
             candidate.opening.templates.find((i) => !i.interview.started)
-              .name === templateList.value[selectedTemplateIndex.value].label
+              ?.name === templateList.value[selectedTemplateIndex.value].label
           );
         });
 
