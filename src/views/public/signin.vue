@@ -82,11 +82,6 @@ const { handleSubmit, isSubmitting, setFieldError, meta } = useForm({
   },
 });
 
-console.log(meta.value);
-watch(meta, () => {
-  console.log(meta);
-});
-
 const router = useRouter();
 const postLogin = usePost("self/login");
 
