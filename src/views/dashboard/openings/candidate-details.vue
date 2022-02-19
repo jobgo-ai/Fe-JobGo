@@ -11,7 +11,7 @@
       />
     </hp-modal>
     <transition name="candidate-details-transition">
-      <div v-if="!isCandidateLoading">
+      <div v-if="!isPageLoading">
         <div class="candidate-details__header">
           <div class="candidate-details__info">
             <div class="candidate-details__info__name">
@@ -96,7 +96,10 @@
               :lower="completedTemplates"
             ></hp-circular-badge>
           </div>
-          <ul class="candidate-details__interview-grid">
+          <ul
+            v-if="opening.templates.length > 0"
+            class="candidate-details__interview-grid"
+          >
             <li
               :class="createClasses(interview)"
               v-for="(interview, index) in opening.templates"
@@ -243,6 +246,16 @@
               </div>
             </li>
           </ul>
+          <div class="candidate-details__interviews__empty" v-else>
+            <empty-state class="candidate-details__interviews__empty__image" />
+            There are no interviews for this opening
+            <hp-button
+              primary
+              label="Add interviews"
+              class="candidate-details__interviews__empty__button"
+              :to="`/opening/${route.params.openingRef}/edit/add-interview`"
+            ></hp-button>
+          </div>
         </div>
       </div>
     </transition>
@@ -275,6 +288,9 @@ import HpSpinner from "@/components/hp-spinner.vue";
 import HpModal from "@/components/hp-modal.vue";
 import HpCircularBadge from "@/components/hp-circular-badge.vue";
 
+// Assets
+import EmptyState from "@/assets/abstracts/empty-state.svg";
+
 const props = defineProps({
   openings: {
     type: Array,
@@ -287,6 +303,7 @@ const { fetchCandidate, candidate, isCandidateLoading } = useCandidates();
 const route = useRoute();
 const isEditCandidateModalOpen = ref(false);
 const opening = ref({});
+const isPageLoading = ref(true);
 const URL = import.meta.env.VITE_INTERVIEW_URL;
 
 const { setToast } = useToast();
@@ -309,6 +326,7 @@ const getCandidateDetails = async () => {
       to: `/opening/${opening.value.reference}?candidate=${candidate.value.reference}`,
     },
   ]);
+  isPageLoading.value = false;
 };
 
 onMounted(async () => {
@@ -529,6 +547,20 @@ const calculateInterviewLink = (interview) => {
   &__interviews {
     padding-top: 24px;
     margin-bottom: 200px;
+    &__empty {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      &__image {
+        height: 120px;
+        margin-top: 12p;
+        margin-bottom: 12px;
+      }
+      &__button {
+        margin-top: 12px;
+      }
+    }
     &__header {
       display: flex;
       justify-content: space-between;
