@@ -70,6 +70,7 @@
       </div>
       <teleport to="#teleport-target-header">
         <div
+          ref="overviewArea"
           class="
             edit-openings__teleport-button
             edit-openings__teleport-button--overview
@@ -133,6 +134,7 @@ import { onMounted, ref, computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useForm } from "vee-validate";
 import draggable from "vuedraggable";
+import { onClickOutside } from "@vueuse/core";
 import * as yup from "yup";
 
 // Components
@@ -195,6 +197,15 @@ const dragOptions = computed(() => {
     disabled: false,
     ghostClass: "ghost",
   };
+});
+
+const overviewArea = ref(null);
+
+onClickOutside(overviewArea, (event) => {
+  if (!isOverviewFlyoutOpen.value) {
+    return;
+  }
+  isOverviewFlyoutOpen.value = false;
 });
 
 const handleDragChange = () => {

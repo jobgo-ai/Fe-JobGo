@@ -26,7 +26,7 @@
       />
     </hp-drawer>
     <teleport to="#teleport-target-header">
-      <div class="edit-interview__overview-button">
+      <div ref="overviewTarget" class="edit-interview__overview-button">
         <hp-button
           @handleClick="isOverviewFlyoutOpen = !isOverviewFlyoutOpen"
           icon="file"
@@ -223,6 +223,7 @@ import { useForm } from "vee-validate";
 import { useRoute, useRouter } from "vue-router";
 import * as yup from "yup";
 import draggable from "vuedraggable";
+import { onClickOutside } from "@vueuse/core";
 
 // Views
 import Questions from "@/views/dashboard/opening/questions/questions.vue";
@@ -346,6 +347,15 @@ const onSubmit = handleSubmit(async (values) => {
 });
 const { setBreadcrumbs } = useBreadcrumbs();
 useContextSave(meta);
+
+const overviewTarget = ref(null);
+
+onClickOutside(overviewTarget, (event) => {
+  if (!isOverviewFlyoutOpen.value) {
+    return;
+  }
+  isOverviewFlyoutOpen.value = false;
+});
 
 onMounted(async () => {
   await fetchInterview(route.params.interviewRef);
