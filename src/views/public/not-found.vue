@@ -1,15 +1,22 @@
 <template>
-  <div class="not-found">
-    <div class="not-found__container">
-      <empty-state class="not-found__image"></empty-state>
-      <div class="not-found__text">
-        <span class="not-found__404">404</span>
-        <div class="not-found__text-1">
-          What you are looking for doesn't exist
-        </div>
-        <div>
-          we recommend you head back
-          <router-link class="not-found__link" to="/">home</router-link>
+  <div>
+    <router-link to="/" class="not-found__logo">
+      <Logo />
+    </router-link>
+    <div class="not-found">
+      <div class="not-found__container">
+        <empty-state class="not-found__image"></empty-state>
+        <div class="not-found__text">
+          <span class="not-found__404">404</span>
+          <div class="not-found__text-1">
+            What you are looking for doesn't exist
+          </div>
+          <div>
+            we recommend you head on over to
+            <router-link class="not-found__link" to="/"
+              >your dashboard</router-link
+            >
+          </div>
         </div>
       </div>
     </div>
@@ -18,6 +25,7 @@
 
 <script setup>
 import EmptyState from "@/assets/abstracts/empty-state.svg";
+import Logo from "@/assets/logo.svg";
 </script>
 
 <style lang="scss">
@@ -30,6 +38,11 @@ import EmptyState from "@/assets/abstracts/empty-state.svg";
     display: flex;
     align-items: top;
     width: 552px;
+  }
+  &__logo {
+    position: absolute;
+    top: 16px;
+    left: 50%;
   }
   &__image {
     width: 50%;
