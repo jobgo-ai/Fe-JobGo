@@ -391,10 +391,7 @@ const isNextAction = (template, templates) => {
 };
 
 const calculateColor = (score, avgScore) => {
-  console.log(score);
-  console.log(avgScore);
-  console.log("-------------");
-  if (!score) {
+  if (!score || score === "0.0") {
     return "default";
   }
   if (score > avgScore) {
