@@ -1,14 +1,16 @@
 <template>
   <div class="not-found">
-    <empty-state class="not-found__empty-state"></empty-state>
-    <div class="not-found__text">
-      <span class="not-found__404">404</span>
-      <div class="not-found__text-1">
-        What you are looking for doesn't exist
-      </div>
-      <div>
-        we recommend you head back
-        <router-link class="not-found__link" to="/">home</router-link>
+    <div class="not-found__container">
+      <empty-state class="not-found__image"></empty-state>
+      <div class="not-found__text">
+        <span class="not-found__404">404</span>
+        <div class="not-found__text-1">
+          What you are looking for doesn't exist
+        </div>
+        <div>
+          we recommend you head back
+          <router-link class="not-found__link" to="/">home</router-link>
+        </div>
       </div>
     </div>
   </div>
@@ -23,6 +25,12 @@ import EmptyState from "@/assets/abstracts/empty-state.svg";
   @include pageContainer;
   display: flex;
   align-items: center;
+  justify-content: center;
+  &__container {
+    display: flex;
+    align-items: top;
+    width: 552px;
+  }
   &__image {
     width: 50%;
   }

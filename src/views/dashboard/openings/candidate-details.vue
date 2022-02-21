@@ -78,7 +78,12 @@
                 v-for="skill in skillList"
                 :label="skill.label"
                 :quantity="skill.value"
-                :type="calculateColor(skill.value, skill.value)"
+                :type="
+                  calculateColor(
+                    skill.value,
+                    candidate.opening.statistics.averageOpeningScore
+                  )
+                "
               ></hp-badge-tag>
             </ol>
           </div>
@@ -386,6 +391,9 @@ const isNextAction = (template, templates) => {
 };
 
 const calculateColor = (score, avgScore) => {
+  console.log(score);
+  console.log(avgScore);
+  console.log("-------------");
   if (!score) {
     return "default";
   }
