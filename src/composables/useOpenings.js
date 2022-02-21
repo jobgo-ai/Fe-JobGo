@@ -26,11 +26,16 @@ const fetchOpening = async (openingRef) => {
   opening.value = getOpening.data.value.opening;
 };
 
+const setOpenings = (newOpenings) => {
+  openings.value = newOpenings;
+};
+
 export default () => {
   return {
     fetchOpening,
-    opening,
+    setOpenings,
     fetchOpenings,
+    opening,
     isOpeningsLoading,
     openings,
   };
