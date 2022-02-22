@@ -1,5 +1,6 @@
 import { reactive, toRefs } from "vue";
 import { useGet } from "./useHttp";
+import useOpenings from "./useOpenings";
 
 const AUTH_KEY = "hireproof_token";
 export const AUTH_TOKEN = "token";
@@ -46,6 +47,8 @@ export default () => {
 
   const logout = () => {
     window.localStorage.removeItem(AUTH_KEY);
+    const { setOpenings } = useOpenings();
+    setOpenings([]);
     state.token = null;
     state.user = null;
     return Promise.resolve((state.token = null));
