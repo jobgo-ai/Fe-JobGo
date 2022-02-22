@@ -27,6 +27,7 @@ export const refreshToken = async () => {
     window.localStorage.removeItem(AUTH_KEY);
   } else if (data.value) {
     state.user = data.value.self;
+    window.Intercom("update", { ...data.value.self });
     state.organization = data.value.self.organization;
   }
 };

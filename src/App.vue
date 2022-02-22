@@ -9,6 +9,9 @@
 <script setup>
 import HpToast from "@/components/hp-toast.vue";
 import HpMobileWarning from "@/components/hp-mobile-warning.vue";
+window.Intercom("boot", {
+  app_id: import.meta.env.VITE_INTERCOM_ID,
+});
 </script>
 
 <style lang="scss">
