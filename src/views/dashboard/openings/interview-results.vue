@@ -18,7 +18,7 @@
             class="results__details__stats__stat__icon"
             name="chronometer"
           ></hp-icon>
-          {{ timeTaken }} minutes
+          {{ timeTaken }}
         </div>
         <div class="results__details__stats__stat">
           <hp-icon
@@ -137,7 +137,7 @@
 //Vendor
 import { ref, onMounted, computed } from "vue";
 import { useRouter, useRoute } from "vue-router";
-import { DateTime } from "luxon";
+import { format, formatDistanceStrict } from "date-fns";
 
 //Components
 import HpIcon from "@/components/hp-icon.vue";
@@ -185,16 +185,16 @@ onMounted(async () => {
 });
 
 const createdTime = computed(() => {
-  const startTime = DateTime.fromISO(interview.value.started).toLocaleString(
-    DateTime.DATETIME_MED
-  );
-  return startTime;
+  console.log(new Date(interview.value.started));
+  return format(new Date(interview.value.started), "HH:mm, dd MMMM, yyyy");
 });
 
 const timeTaken = computed(() => {
-  return DateTime.fromISO(interview.value.terminated)
-    .diff(DateTime.fromISO(interview.value.started), "minutes")
-    .toFormat("m");
+  return formatDistanceStrict(
+    new Date(interview.value.terminated),
+    new Date(interview.value.started),
+    { roundingMethod: "ceil" }
+  );
 });
 
 const handleArchiveInterview = async () => {

@@ -190,8 +190,7 @@
                   ></hp-icon>
 
                   Started
-                  {{ formatMinutesAgo(interview.interview.started) }} minutes
-                  ago
+                  {{ formatMinutesAgo(interview.interview.started) }}
                 </div>
                 <hp-button
                   :href="calculateInterviewLink(interview)"
@@ -276,7 +275,7 @@
 // Vendor
 import { onMounted, watch, ref, computed } from "vue";
 import { useRoute } from "vue-router";
-import { DateTime } from "luxon";
+import { formatDistance, format } from "date-fns";
 
 // Composables
 import useCandidates from "@/composables/useCandidates";
@@ -357,16 +356,15 @@ const skillList = computed(() => {
 });
 
 const formatMinutesAgo = (date) => {
-  const date1 = DateTime.fromISO(date);
-  const date2 = DateTime.fromISO(DateTime.now());
+  const distance = formatDistance(new Date(date), Date.now(), {
+    addSuffix: true,
+  });
 
-  const diff = date1.diff(date2, ["hours", "minutes"]);
-
-  return (diff.toObject().minutes * -1).toFixed(0);
+  return distance;
 };
 
 const formatDate = (date) => {
-  return DateTime.fromISO(date).toFormat("dd LLL, yyyy");
+  return format(new Date(date), "dd MMMM, yyyy");
 };
 
 const secondsToMinutes = (seconds) => {
