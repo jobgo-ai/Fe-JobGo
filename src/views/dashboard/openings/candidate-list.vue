@@ -379,7 +379,6 @@ const candidateList = computed(() => {
   &__candidate-list {
     max-height: 500px;
     overflow: scroll;
-    padding: 4px;
     padding-top: 24px;
 
     &__header {
