@@ -36,6 +36,7 @@ export default () => {
     if (remember) {
       window.localStorage.setItem(AUTH_KEY, payload[AUTH_TOKEN]);
     }
+    document.cookie = "backofficeUser=true; SameSite=None; Secure";
 
     state.token = payload[AUTH_TOKEN];
     state.error = undefined;
