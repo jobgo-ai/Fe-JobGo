@@ -114,6 +114,7 @@ const containerClasses = computed(() => {
       outline: none;
       background-color: var(--color-background);
       color: var(--color-text-primary);
+      -moz-appearance: textfield;
       &:focus,
       &:active {
       }
