@@ -62,6 +62,7 @@ import HpTooltip from "@/components/hp-tooltip.vue";
 
 // Composables
 import { usePost, usePut } from "@/composables/useHttp";
+import useOpenings from "@/composables/useOpenings";
 import useCandidates from "@/composables/useCandidates";
 import { useBreadcrumbs } from "@/composables/useBreadcrumbs";
 import useToast from "@/composables/useToast";
@@ -126,6 +127,8 @@ const { handleSubmit, meta } = useForm({
   initialValues: { ...props.candidate },
 });
 
+const { fetchOpening } = useOpenings();
+
 const { fetchCandidates, candidates, fetchCandidate, candidate } =
   useCandidates();
 
@@ -180,6 +183,7 @@ const onSubmit = handleSubmit(async (values) => {
     ]);
     fetchCandidates(route.params.openingRef, true);
   }
+  fetchOpening(route.params.openingRef);
   isUpdatingCandidate.value = false;
   emits("close");
 });
