@@ -11,11 +11,11 @@
     </div>
     <form @submit.prevent="onSubmit" class="edit-question__form">
       <div class="edit-question__question">
-        <hp-input
+        <hp-textarea
           ref="questionInputRef"
           name="content"
           placeholder="Type the question"
-        ></hp-input>
+        ></hp-textarea>
       </div>
       <div class="edit-question__duration">
         <div class="edit-question__duration__container">
@@ -95,6 +95,7 @@ import { useRoute } from "vue-router";
 
 //Components
 import HpInput from "@/components/form/hp-input.vue";
+import HpTextarea from "@/components/form/hp-textarea.vue";
 import HpCounter from "@/components/hp-counter.vue";
 import HpButton from "@/components/hp-button.vue";
 import HpTagger from "@/components/form/hp-tagger.vue";
