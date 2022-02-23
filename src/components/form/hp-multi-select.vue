@@ -189,7 +189,6 @@ const handleChangeEmit = (change) => {
 .hp-multi-select {
   width: 100%;
   display: flex;
-  z-index: 90;
   &__checkbox {
     pointer-events: none;
   }

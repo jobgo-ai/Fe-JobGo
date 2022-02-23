@@ -198,6 +198,7 @@ const onDeleteTemplate = async (template) => {
 <style lang="scss">
 .add-interview {
   @include pageContainer;
+  padding: 26px;
   &__header {
     align-self: flex-start;
     margin-bottom: 24px;
@@ -212,19 +213,40 @@ const onDeleteTemplate = async (template) => {
   }
   &__interview-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
     grid-gap: 24px;
     margin-bottom: 64px;
   }
   &__filter {
     display: grid;
-    grid-template-columns: 2fr 1fr 1fr;
     gap: 16px;
     margin-bottom: 16px;
     &__dropdowns {
       display: flex;
       &__dropdown {
         margin-bottom: 6px;
+      }
+    }
+  }
+}
+
+@media (min-width: $breakpoint-tablet) {
+  .add-interview {
+    &__interview-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      grid-gap: 24px;
+      margin-bottom: 64px;
+    }
+    &__filter {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 16px;
+      &__dropdowns {
+        display: flex;
+        &__dropdown {
+          margin-bottom: 6px;
+        }
       }
     }
   }
