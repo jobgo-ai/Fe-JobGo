@@ -94,7 +94,6 @@ import * as yup from "yup";
 import { useRoute } from "vue-router";
 
 //Components
-import HpInput from "@/components/form/hp-input.vue";
 import HpTextarea from "@/components/form/hp-textarea.vue";
 import HpCounter from "@/components/hp-counter.vue";
 import HpButton from "@/components/hp-button.vue";

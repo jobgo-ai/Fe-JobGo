@@ -6,6 +6,7 @@
     <textarea
       :class="`hp-textarea__input`"
       :name="name"
+      ref="inputRef"
       :placeholder="placeholder"
       :value="modelValue"
       :disabled="isDisabled"
@@ -45,6 +46,9 @@ const props = defineProps({
 import { useField } from "vee-validate";
 
 const { value: modelValue, errorMessage } = useField(props.name);
+
+const inputRef = ref(null);
+defineExpose({ inputRef });
 
 const containerClasses = computed(() => {
   return {
