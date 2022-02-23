@@ -59,11 +59,19 @@ watch(
     position: fixed;
     top: 0;
     right: 0;
-    width: 33%;
+    width: 100%;
     max-width: $drawer-max-width;
     height: 100%;
     background-color: var(--color-background);
     z-index: 100;
+  }
+}
+
+@media (min-width: $breakpoint-tablet) {
+  .hp-drawer {
+    &__drawer {
+      width: 33%;
+    }
   }
 }
 

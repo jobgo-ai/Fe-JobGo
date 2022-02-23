@@ -463,7 +463,7 @@ const handleCloseEditDrawer = () => {
 .edit-interview {
   display: flex;
   flex-direction: column;
-  width: 552px;
+  padding: 26px;
   &__container {
     display: flex;
     flex-direction: column;
@@ -545,6 +545,7 @@ const handleCloseEditDrawer = () => {
 
   &__overview-button {
     margin-right: 6px;
+    display: none;
     position: relative;
     &__skills {
       display: flex;
@@ -592,6 +593,18 @@ const handleCloseEditDrawer = () => {
   }
   &__danger-zone {
     margin-bottom: 164px;
+  }
+}
+
+@media (min-width: $breakpoint-tablet) {
+  .edit-interview {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 552px;
+    &__overview-button {
+      display: block;
+    }
   }
 }
 
