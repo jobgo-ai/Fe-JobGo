@@ -55,6 +55,7 @@ const props = defineProps({
 <style lang="scss">
 .hp-question-card-stats {
   display: flex;
+  flex-direction: column;
   &__stats {
     display: flex;
     justify-content: space-between;
@@ -79,6 +80,11 @@ const props = defineProps({
         margin-left: 6px;
       }
     }
+  }
+}
+@media (min-width: $breakpoint-tablet) {
+  .hp-question-card-stats {
+    flex-direction: row;
   }
 }
 </style>

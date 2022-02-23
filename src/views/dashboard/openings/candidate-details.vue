@@ -631,7 +631,7 @@ const calculateInterviewLink = (interview) => {
 @media (min-width: $breakpoint-tablet) {
   .candidate-details__header {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     justify-content: space-between;
   }
   .candidate-details {

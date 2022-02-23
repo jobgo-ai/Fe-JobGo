@@ -245,7 +245,13 @@ const calculateSkillScoreColor = (skill) => {
 <swag lang="scss">
 .results {
   display: flex;
+  flex-direction: column;
+  padding: 26px;
   &__details {
+    flex-shrink: 0;
+    width: 100%;
+    margin-right: 16px;
+
     &__skill-container {
       border: 1px solid var(--color-border);
       border-radius: $border-radius-lg;
@@ -268,9 +274,6 @@ const calculateSkillScoreColor = (skill) => {
       flex-wrap: wrap;
       gap: 6px;
     }
-    flex-shrink: 0;
-    width: 552px;
-    margin-right: 16px;
     &__candidate {
       @include text-h4;
       color: var(--color-text-secondary);
@@ -445,6 +448,16 @@ const calculateSkillScoreColor = (skill) => {
         margin-bottom: 16px;
         margin-top: 16px;
       }
+    }
+  }
+}
+
+@media (min-width: $breakpoint-tablet) {
+  .results {
+    flex-direction: row;
+    &__details {
+      flex-shrink: 0;
+      width: 552px;
     }
   }
 }
