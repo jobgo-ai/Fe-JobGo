@@ -292,12 +292,13 @@ const archiveOpening = async () => {
 
 <style lang="scss" scoped>
 .edit-openings {
-  display: grid;
-  grid-template-columns: 30% auto;
+  display: flex;
+  flex-direction: column;
   &__teleport-button {
     margin-right: 6px;
     &--overview {
       position: relative;
+      display: none;
     }
   }
   &__spinner {
@@ -310,7 +311,6 @@ const archiveOpening = async () => {
     background-color: var(--color-panel);
     padding: 24px;
     border-radius: $border-radius-lg;
-    height: 80vh;
     display: flex;
     flex-direction: column;
     &__title {
@@ -324,6 +324,7 @@ const archiveOpening = async () => {
       margin-bottom: 24px;
     }
     &__cover-selector {
+      display: none;
       flex-grow: 1;
     }
     &__archive {
@@ -347,7 +348,7 @@ const archiveOpening = async () => {
     }
   }
   &__interview-container {
-    padding-left: 96px;
+    padding: 26px;
     &__grid {
       display: grid;
       grid-gap: 26px;
@@ -363,6 +364,28 @@ const archiveOpening = async () => {
       color: var(--color-text-secondary);
       margin-bottom: 24px;
     }
+  }
+}
+
+@media (min-width: $breakpoint-tablet) {
+  .edit-opening {
+    display: grid;
+    grid-template-columns: 30% auto;
+    &__edit-container {
+      height: 80vh;
+    }
+    &__interview-container {
+      padding: 0px;
+      padding-left: 96px;
+    }
+    &__teleport-button {
+      &--overview {
+        display: block;
+      }
+    }
+  }
+  .edit-openings__edit-container__cover-selector {
+    display: block;
   }
 }
 
