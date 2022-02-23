@@ -133,13 +133,10 @@ const handlePasswordReset = handleSubmit(async (values) => {
     align-items: center;
   }
   &__tos {
-    position: absolute;
-    bottom: 30px;
-    left: 50%;
-    transform: translateX(-50%);
     display: flex;
     justify-content: space-around;
     max-width: 100%;
+    margin-top: 80px;
   }
   &__policy {
     margin-left: 24px;
@@ -163,6 +160,15 @@ const handlePasswordReset = handleSubmit(async (values) => {
       top: 50%;
       height: 446px;
       width: 588px;
+    }
+    &__tos {
+      position: absolute;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      justify-content: space-around;
+      max-width: 100%;
     }
   }
 }
