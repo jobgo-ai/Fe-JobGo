@@ -30,6 +30,7 @@ const { crumbs } = useBreadcrumbs();
 
 @media (min-width: $breakpoint-tablet) {
   .hp-breadcrumbs {
+    display: block;
     &__list {
       display: flex;
     }

@@ -437,6 +437,9 @@ const candidateList = computed(() => {
     z-index: 10;
     padding: 24px;
     padding-bottom: 0px;
+    background-color: var(--color-panel);
+    border: 1px solid var(--color-border);
+    border-radius: $border-radius-lg;
     &--left {
       right: 100%;
       transform: translateX(100%);
