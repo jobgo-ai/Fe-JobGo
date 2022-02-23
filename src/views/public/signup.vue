@@ -142,6 +142,7 @@ const onSubmit = handleSubmit(async (values) => {
 .signup {
   display: flex;
   flex-direction: column;
+  padding: 24px;
   &__subtitle {
     @include text-h3;
     font-weight: 500;
@@ -155,12 +156,11 @@ const onSubmit = handleSubmit(async (values) => {
   &__logo {
     margin: auto;
     margin-bottom: 48px;
-    margin-top: 64px;
   }
   &__container {
     margin: auto;
     padding: 24px;
-    width: 460px;
+    width: 100%;
     border: $border;
     border-radius: $border-radius-md;
     background-color: var(--color-background);
@@ -172,8 +172,8 @@ const onSubmit = handleSubmit(async (values) => {
     background-image: url("../../assets/abstracts/decorations/illustration.svg");
     position: absolute;
     top: 50%;
-    height: 446px;
-    width: 588px;
+    height: 100%;
+    width: 100%;
     left: 50%;
     transform: translateX(-50%) translateY(-50%);
     z-index: -1;
@@ -213,6 +213,26 @@ const onSubmit = handleSubmit(async (values) => {
   }
   &__error {
     color: var(--color-error);
+  }
+}
+
+@media (min-width: $breakpoint-tablet) {
+  .signup {
+    padding: 0;
+    &__container {
+      width: 460px;
+    }
+    &__logo {
+      margin-top: 64px;
+    }
+    &__image-container {
+      display: flex;
+      background-image: url("../../assets/abstracts/decorations/illustration.svg");
+      position: absolute;
+      top: 50%;
+      height: 446px;
+      width: 588px;
+    }
   }
 }
 </style>

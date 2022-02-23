@@ -92,6 +92,7 @@ const handlePasswordReset = handleSubmit(async (values) => {
 .forgot-password {
   display: flex;
   flex-direction: column;
+  padding: 26px;
   &__title {
     @include text-h3;
     font-weight: 500;
@@ -100,12 +101,11 @@ const handlePasswordReset = handleSubmit(async (values) => {
   &__logo {
     margin: auto;
     margin-bottom: 48px;
-    margin-top: 64px;
   }
   &__container {
     margin: auto;
     padding: 24px;
-    width: 460px;
+    width: 100%;
     border: $border;
     border-radius: $border-radius-md;
     background-color: var(--color-background);
@@ -120,8 +120,8 @@ const handlePasswordReset = handleSubmit(async (values) => {
     background-image: url("../../assets/abstracts/decorations/illustration.svg");
     position: absolute;
     top: 50%;
-    height: 446px;
-    width: 588px;
+    height: 100%;
+    width: 100%;
     left: 50%;
     transform: translateX(-50%) translateY(-50%);
     z-index: -1;
@@ -137,10 +137,33 @@ const handlePasswordReset = handleSubmit(async (values) => {
     bottom: 30px;
     left: 50%;
     transform: translateX(-50%);
+    display: flex;
+    justify-content: space-around;
+    max-width: 100%;
   }
   &__policy {
     margin-left: 24px;
     @include text-h5;
+  }
+}
+
+@media (min-width: $breakpoint-tablet) {
+  .forgot-password {
+    padding: 0;
+    &__logo {
+      margin-top: 64px;
+    }
+    &__container {
+      width: 460px;
+    }
+    &__image-container {
+      display: flex;
+      background-image: url("../../assets/abstracts/decorations/illustration.svg");
+      position: absolute;
+      top: 50%;
+      height: 446px;
+      width: 588px;
+    }
   }
 }
 </style>

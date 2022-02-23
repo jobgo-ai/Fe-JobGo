@@ -368,7 +368,7 @@ const archiveOpening = async () => {
 }
 
 @media (min-width: $breakpoint-tablet) {
-  .edit-opening {
+  .edit-openings {
     display: grid;
     grid-template-columns: 30% auto;
     &__edit-container {

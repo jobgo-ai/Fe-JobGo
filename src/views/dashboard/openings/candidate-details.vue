@@ -437,7 +437,7 @@ const calculateInterviewLink = (interview) => {
   }
   &__header {
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
     &__button-group {
       display: flex;
       align-items: center;
@@ -465,7 +465,6 @@ const calculateInterviewLink = (interview) => {
   &__overview {
     margin-top: 40px;
     display: grid;
-    grid-template-columns: 264px auto;
     grid-gap: 24px;
     padding-bottom: 24px;
     border-bottom: 1px dashed var(--color-border);
@@ -629,6 +628,18 @@ const calculateInterviewLink = (interview) => {
   }
 }
 
+@media (min-width: $breakpoint-tablet) {
+  .candidate-details__header {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .candidate-details {
+    &__overview {
+      grid-template-columns: 264px auto;
+    }
+  }
+}
 .candidate-details-transition-enter-active,
 .candidate-details-transition-leave-active {
   transition: opacity 0.15s cubic-bezier(0.17, 0.67, 0.83, 0.67);
