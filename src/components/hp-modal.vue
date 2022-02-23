@@ -39,7 +39,6 @@ watch(
   { immediate: true }
 );
 </script>
-
 <style lang="scss">
 .modal-open {
   overflow: hidden;
@@ -59,9 +58,9 @@ watch(
     z-index: 101;
     border-radius: $border-radius-lg;
     position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    top: 16px;
+    left: 16px;
+    right: 16px;
     background: var(--color-background);
     &__content {
       position: relative;
@@ -73,6 +72,14 @@ watch(
         cursor: pointer;
         color: var(--color-text-secondary);
       }
+    }
+  }
+  @media (min-width: $breakpoint-tablet) {
+    &__modal {
+      width: 320px;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
     }
   }
 }
@@ -95,7 +102,6 @@ watch(
 
 .hp-modal__modal-transition {
   opacity: 1;
-  transform: translate(-50%, -50%);
 }
 .hp-modal__modal-transition-enter-active,
 .hp-modal__modal-transition-leave-active {
@@ -107,6 +113,5 @@ watch(
 .hp-modal__modal-transition-enter-from,
 .hp-modal__modal-transition-leave-to {
   opacity: 0;
-  transform: translate(-50%, -60%);
 }
 </style>

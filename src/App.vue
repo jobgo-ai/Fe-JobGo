@@ -1,14 +1,10 @@
 <template>
   <router-view></router-view>
   <hp-toast />
-  <div class="mobile-warning">
-    <hp-mobile-warning />
-  </div>
 </template>
 
 <script setup>
 import HpToast from "@/components/hp-toast.vue";
-import HpMobileWarning from "@/components/hp-mobile-warning.vue";
 window.Intercom("boot", {
   app_id: import.meta.env.VITE_INTERCOM_ID,
 });
@@ -223,7 +219,12 @@ html {
   background-color: var(--color-background);
   font-size: 14px;
   line-height: 20px;
-  overflow: hidden;
+}
+
+@media (min-width: $breakpoint-tablet) {
+  html {
+    overflow: hidden;
+  }
 }
 
 ol,

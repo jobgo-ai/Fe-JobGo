@@ -25,27 +25,33 @@ const { crumbs } = useBreadcrumbs();
 
 <style lang="scss" scoped>
 .hp-breadcrumbs {
-  &__list {
-    display: flex;
-  }
-  &__crumb {
-    display: flex;
-    align-items: center;
-    font-size: 16px;
-    line-height: 24px;
-    margin-right: 2px;
-    color: var(--color-text-secondary);
-    transition: all 0.15s cubic-bezier(0.17, 0.67, 0.83, 0.67);
-    &:last-child {
-      font-weight: 500;
-      color: var(--color-text-primary);
-      .hp-breadcrumbs__crumb__icon {
-        color: var(--color-text-secondary);
-      }
+  display: none;
+}
+
+@media (min-width: $breakpoint-tablet) {
+  .hp-breadcrumbs {
+    &__list {
+      display: flex;
     }
-    &:first-child {
-      .hp-breadcrumbs__crumb__icon {
-        display: none;
+    &__crumb {
+      display: flex;
+      align-items: center;
+      font-size: 16px;
+      line-height: 24px;
+      margin-right: 2px;
+      color: var(--color-text-secondary);
+      transition: all 0.15s cubic-bezier(0.17, 0.67, 0.83, 0.67);
+      &:last-child {
+        font-weight: 500;
+        color: var(--color-text-primary);
+        .hp-breadcrumbs__crumb__icon {
+          color: var(--color-text-secondary);
+        }
+      }
+      &:first-child {
+        .hp-breadcrumbs__crumb__icon {
+          display: none;
+        }
       }
     }
   }

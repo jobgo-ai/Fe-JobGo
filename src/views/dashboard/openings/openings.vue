@@ -221,6 +221,7 @@ const handleUnarchiveOpening = async (opening) => {
   display: flex;
   width: 100%;
   flex-direction: column;
+  padding: 24px;
   &__title {
     font-size: 24px;
     font-weight: 600;
@@ -238,45 +239,6 @@ const handleUnarchiveOpening = async (opening) => {
   }
 }
 
-.view {
-  display: flex;
-  position: relative;
-  height: calc(100vh - 40px);
-  z-index: 0;
-}
-.candidate-details {
-  position: absolute;
-  left: 440px;
-  height: 100%;
-  width: 848px;
-  padding-right: 4px;
-  padding-left: 4px;
-  overflow: scroll;
-}
-
-.candidate-details::-webkit-scrollbar {
-  display: none;
-}
-
-.openingslist {
-  position: absolute;
-  overflow: hidden;
-  width: calc(100% - 440px);
-  top: 0;
-  left: 0;
-  bottom: 0;
-  transform: translateX(0);
-  transition: all 0.25s linear;
-  &__spinner {
-    display: flex;
-    justify-content: center;
-  }
-}
-
-.openingslist--empty {
-  transform: translateX(25%);
-}
-
 .opening-list {
   &__grid {
     position: relative;
@@ -289,11 +251,57 @@ const handleUnarchiveOpening = async (opening) => {
     padding-bottom: 500px;
   }
 }
+@media (min-width: $breakpoint-tablet) {
+  .openings {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    padding: 0;
+  }
 
-.opening-list__grid::-webkit-scrollbar {
-  display: none;
+  .view {
+    display: flex;
+    position: relative;
+    height: calc(100vh - 40px);
+    z-index: 0;
+  }
+  .candidate-details {
+    position: absolute;
+    left: 440px;
+    height: 100%;
+    width: 848px;
+    padding-right: 4px;
+    padding-left: 4px;
+    overflow: scroll;
+  }
+
+  .candidate-details::-webkit-scrollbar {
+    display: none;
+  }
+
+  .openingslist {
+    position: absolute;
+    overflow: hidden;
+    width: calc(100% - 440px);
+    top: 0;
+    left: 0;
+    bottom: 0;
+    transform: translateX(0);
+    transition: all 0.25s linear;
+    &__spinner {
+      display: flex;
+      justify-content: center;
+    }
+  }
+
+  .openingslist--empty {
+    transform: translateX(25%);
+  }
+
+  .opening-list__grid::-webkit-scrollbar {
+    display: none;
+  }
 }
-
 .candidate-list-transition-enter-active,
 .candidate-list-transition-leave-active {
   transition: all 0.25s linear;

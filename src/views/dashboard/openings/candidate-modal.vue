@@ -226,7 +226,8 @@ const archiveCandidate = async () => {
   &__form {
     padding: 24px;
     border-bottom: 1px dashed var(--color-border);
-    width: 408px;
+    width: 100%;
+    max-width: 408px;
     padding-bottom: 0;
   }
   &__actions {

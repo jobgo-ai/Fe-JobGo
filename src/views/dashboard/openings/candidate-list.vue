@@ -280,24 +280,6 @@ const candidateList = computed(() => {
 
 <style lang="scss" scoped>
 .candidate-list {
-  background-color: var(--color-panel);
-  border-radius: $border-radius-lg;
-  border: 1px solid var(--color-border-subtle);
-  position: absolute;
-  transition: transform 0.25s cubic-bezier(0.17, 0.67, 0.83, 0.67),
-    right 0.25s cubic-bezier(0.17, 0.67, 0.83, 0.67);
-  transform: translateX(0);
-  right: 16px;
-  width: 400px;
-  min-height: 600px;
-  z-index: 10;
-  padding: 24px;
-  padding-bottom: 0px;
-  &--left {
-    right: 100%;
-    transform: translateX(100%);
-  }
-
   &__header {
     display: flex;
     justify-content: space-between;
@@ -441,6 +423,24 @@ const candidateList = computed(() => {
     display: flex;
     justify-content: flex-end;
     margin-bottom: 16px;
+  }
+}
+@media (min-width: $breakpoint-tablet) {
+  .candidate-list {
+    position: absolute;
+    transition: transform 0.25s cubic-bezier(0.17, 0.67, 0.83, 0.67),
+      right 0.25s cubic-bezier(0.17, 0.67, 0.83, 0.67);
+    transform: translateX(0);
+    right: 16px;
+    width: 400px;
+    min-height: 600px;
+    z-index: 10;
+    padding: 24px;
+    padding-bottom: 0px;
+    &--left {
+      right: 100%;
+      transform: translateX(100%);
+    }
   }
 }
 </style>
