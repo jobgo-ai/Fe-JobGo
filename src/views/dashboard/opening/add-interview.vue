@@ -231,6 +231,7 @@ const onDeleteTemplate = async (template) => {
 
 @media (min-width: $breakpoint-tablet) {
   .add-interview {
+    padding: 0;
     &__interview-grid {
       display: grid;
       grid-template-columns: 1fr 1fr 1fr;
