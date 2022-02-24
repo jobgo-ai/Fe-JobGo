@@ -57,16 +57,17 @@
         <div :class="`results__details__score`">
           <div class="results__details__score-container">
             <div class="results__details__score__average">
-              {{ (interview.statistics.candidateCompletion * 100).toFixed(0) }}
+              {{ (interview.statistics.candidateCompletion * 100).toFixed(0) }}%
             </div>
             <div class="results__details__score__current">Completion rate</div>
             <div class="results__details__score__average-score">
-              The average score is
+              Average completion is
               {{
                 (interview.statistics.averageInterviewCompletion * 100).toFixed(
                   0
                 )
               }}
+              %
               <hp-icon
                 :name="
                   calculateArrowDirection(
