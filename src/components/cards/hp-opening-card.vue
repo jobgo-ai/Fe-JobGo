@@ -194,6 +194,7 @@ const containerClasses = computed(() => {
   &__archived {
     display: flex;
     flex-direction: column;
+    height: 100%;
   }
   &__archived-header {
     display: flex;
