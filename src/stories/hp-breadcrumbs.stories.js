@@ -1,12 +1,11 @@
 import HpBreadcrumbs from "../components/hp-breadcrumbs.vue";
-
 export default {
   title: "Components/Breadcrumbs",
   component: HpBreadcrumbs,
   argTypes: {},
 };
 
-import { useBreadcrumbs } from "@/composables/useBreadcrumbs";
+import { useBreadcrumbs } from "../composables/useBreadcrumbs";
 const Template = (args) => ({
   components: { HpBreadcrumbs },
   setup() {
