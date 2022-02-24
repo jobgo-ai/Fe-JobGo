@@ -37,6 +37,7 @@
           </div>
         </div>
         <div v-if="error" class="signup__error">{{ error }}</div>
+        <hp-google-auth />
         <hp-button
           :isLoading="isLoading"
           primary
@@ -64,6 +65,7 @@ import * as yup from "yup";
 import { useForm } from "vee-validate";
 
 //Components
+import HpGoogleAuth from "@/components/hp-google-auth.vue";
 import HpInput from "@/components/form/hp-input.vue";
 import HpCheckbox from "@/components/form/hp-checkbox.vue";
 import HpButton from "@/components/hp-button.vue";
@@ -93,6 +95,33 @@ const route = useRoute();
 
 const isLoading = ref(false);
 const error = ref(null);
+
+const handleGoogleAuth = async (credentials) => {
+  const { credential } = credentials;
+  const payload = {
+    oauth: {
+      provider: "google",
+      token: credential,
+    },
+    invitation: route.query.token,
+  };
+  await postOauth.post(payload);
+  if (postOauth.error.value) {
+    if (postOauth.error.value.error.violation === "providerInvalid") {
+      oauthError.value =
+        "You registered with your email and password, and must use this to login.";
+    }
+    if (postOauth.error.value.error.violation === "invitationInvalid") {
+      oauthError.value = "You do not have a valid invitation to the beta";
+    }
+    if (postOauth.error.value.error.violation === "oauthTokenInvalid") {
+      oauthError.value = "Error signing in";
+    }
+  }
+  const { setUser } = useAuth();
+  setUser(postOauth.data.value, true);
+  router.push("/");
+};
 
 const { handleSubmit, isSubmitting, setFieldError, meta } = useForm({
   validationSchema: schema,
