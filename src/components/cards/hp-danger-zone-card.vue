@@ -26,7 +26,7 @@
     </hp-modal>
     <h4 class="hp-danger-zone__title">Danger zone</h4>
     <p class="hp-danger-zone__subtitle">
-      After you preform this action, there is no going back
+      After you perform this action, there is no going back
     </p>
     <hp-button
       @handleClick="isConfirmationModalOpen = true"

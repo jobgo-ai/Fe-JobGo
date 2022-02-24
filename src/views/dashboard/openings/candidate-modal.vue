@@ -202,9 +202,13 @@ const archiveCandidate = async () => {
     title: "What a change!",
     message: "Candidate updated successfully",
   });
-  router.push(
-    `/openings/${route.params.openingRef}?candidate=${candidates.value[0].reference}`
-  );
+  if (candidates.value.length === 0) {
+    router.push(`/openings/${route.params.openingRef}`);
+  } else {
+    router.push(
+      `/openings/${route.params.openingRef}?candidate=${candidates.value[0].reference}`
+    );
+  }
   emits("close");
 };
 </script>
