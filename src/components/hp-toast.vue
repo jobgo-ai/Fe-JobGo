@@ -49,7 +49,7 @@ const { toastQueue, dismissToast } = useToast();
 <styles lang="scss" scoped>
 .hp-toast {
   position: fixed;
-  bottom: 24px;
+  bottom: 84px;
   right: 24px;
   width: 380px;
   z-index: 10;
@@ -57,7 +57,7 @@ const { toastQueue, dismissToast } = useToast();
     position: relative;
     padding: 15px;
     background-color: var(--color-background);
-    border: 1px solid var(--color-border-subtle);
+    border: 1px solid var(--color-border);
     border-radius: $border-radius-lg;
     box-shadow: 0px 16px 24px rgba(33, 44, 51, 0.06),
       0px 2px 6px rgba(33, 44, 51, 0.04), 0px 0px 1px rgba(33, 44, 51, 0.04);
@@ -105,6 +105,16 @@ const { toastQueue, dismissToast } = useToast();
         color: var(--color-text-secondary);
       }
     }
+  }
+}
+
+@media (min-width: $breakpoint-tablet) {
+  .hp-toast {
+    position: fixed;
+    bottom: 84px;
+    right: 24px;
+    width: 380px;
+    z-index: 10;
   }
 }
 
