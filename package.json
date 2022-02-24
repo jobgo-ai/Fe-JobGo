@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "dev": "vite --mode localDev",
+    "cypress": "cypress open",
     "build": "vite build",
     "preview": "vite preview",
     "storybook": "start-storybook -p 6006",
@@ -10,6 +11,7 @@
   },
   "dependencies": {
     "@vueuse/core": "^7.5.3",
+    "cypress": "^9.5.0",
     "date-fns": "^2.28.0",
     "vee-validate": "^4.5.7",
     "vue": "^3.2.25",
