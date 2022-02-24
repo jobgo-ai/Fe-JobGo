@@ -2,8 +2,6 @@ import HpDropdown from "../components/hp-dropdown.vue";
 import HpFlyoutMenu from "../components/hp-flyout-menu.vue";
 import vueRouter from "storybook-vue3-router";
 
-//console.log
-
 export default {
   title: "Components/Dropdown",
   component: HpDropdown,
