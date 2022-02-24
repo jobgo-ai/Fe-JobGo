@@ -1,6 +1,10 @@
 <template>
   <div class="edit-question">
-    <div v-if="!question" class="edit-question__back" @click="handleClose">
+    <div
+      v-if="!question"
+      class="edit-question__back"
+      @click="$emit('handleTabChange')"
+    >
       <hp-icon name="arrow-left"></hp-icon>Back
     </div>
     <div class="edit-question__header">
