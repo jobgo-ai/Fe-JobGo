@@ -12,7 +12,6 @@
   },
   "dependencies": {
     "@vueuse/core": "^7.5.3",
-    "cypress": "^9.5.0",
     "date-fns": "^2.28.0",
     "vee-validate": "^4.5.7",
     "vue": "^3.2.25",
@@ -29,6 +28,7 @@
     "@vitejs/plugin-vue": "^2.0.0",
     "babel-loader": "^8.2.3",
     "css-loader": "^6.5.1",
+    "cypress": "^9.5.0",
     "sass": "^1.49.0",
     "storybook-builder-vite": "^0.1.13",
     "storybook-vue3-router": "^2.2.1",
