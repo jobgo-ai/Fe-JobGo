@@ -220,6 +220,12 @@ const onDeleteTemplate = async (template) => {
     display: grid;
     gap: 16px;
     margin-bottom: 16px;
+    padding-bottom: 8px;
+    position: sticky;
+    top: 0;
+    border-bottom: 1px dashed var(--color-border);
+    background: var(--color-background);
+    z-index: 100;
     &__dropdowns {
       display: flex;
       &__dropdown {
