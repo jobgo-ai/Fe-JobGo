@@ -114,6 +114,7 @@
                 variant="search"
                 v-model="search"
                 icon="search"
+                standalone
                 placeholder="Search..."
               />
               <div class="candidate-list__add-candidate">
