@@ -433,7 +433,7 @@ const candidateList = computed(() => {
     position: sticky;
     top: 0;
     background: var(--color-panel);
-    z-index: 10000;
+    z-index: 100;
     margin-bottom: 16px;
     border-bottom: 1px dashed var(--color-border);
   }
