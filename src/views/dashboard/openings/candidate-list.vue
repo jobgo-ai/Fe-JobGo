@@ -24,47 +24,47 @@
             ></hp-button>
           </div>
         </div>
-        <h2 class="candidate-list__opening-title">{{ opening.name }}</h2>
-        <p class="candidate-list__opening-description">
-          {{ opening.description }}
-        </p>
-        <div class="candidate-list__stats">
-          <div class="candidate-list__stats__stat">
-            <hp-icon
-              class="candidate-list__stats__stat__icon"
-              name="layers"
-            ></hp-icon>
-            <div class="candidate-list__stats__stat__number">
-              {{ opening.templates?.length }}
+        <div class="candidate-list__scroll-container">
+          <h2 class="candidate-list__opening-title">{{ opening.name }}</h2>
+          <p class="candidate-list__opening-description">
+            {{ opening.description }}
+          </p>
+          <div class="candidate-list__stats">
+            <div class="candidate-list__stats__stat">
+              <hp-icon
+                class="candidate-list__stats__stat__icon"
+                name="layers"
+              ></hp-icon>
+              <div class="candidate-list__stats__stat__number">
+                {{ opening.templates?.length }}
+              </div>
+              Interviews
             </div>
-            Interviews
-          </div>
-          <div class="candidate-list__stats__stat">
-            <hp-icon
-              class="candidate-list__stats__stat__icon"
-              name="skills"
-            ></hp-icon>
-            <div class="candidate-list__stats__stat__number">
-              {{ opening.statistics.skills.length }}
+            <div class="candidate-list__stats__stat">
+              <hp-icon
+                class="candidate-list__stats__stat__icon"
+                name="skills"
+              ></hp-icon>
+              <div class="candidate-list__stats__stat__number">
+                {{ opening.statistics.skills.length }}
+              </div>
+              Skills
             </div>
-            Skills
-          </div>
-          <div class="candidate-list__stats__stat">
-            <hp-icon
-              class="candidate-list__stats__stat__icon"
-              name="candidates"
-            ></hp-icon>
-            <div class="candidate-list__stats__stat__number">
-              {{ opening.statistics.totalCandidates }}
+            <div class="candidate-list__stats__stat">
+              <hp-icon
+                class="candidate-list__stats__stat__icon"
+                name="candidates"
+              ></hp-icon>
+              <div class="candidate-list__stats__stat__number">
+                {{ opening.statistics.totalCandidates }}
+              </div>
+              Candidates
             </div>
-            Candidates
           </div>
-        </div>
-        <div
-          v-if="!isCandidateListLoading"
-          class="candidate-list__candidate-list"
-        >
-          <div>
+          <div
+            v-if="!isCandidateListLoading"
+            class="candidate-list__candidate-list"
+          >
             <div class="candidate-list__candidate-list__header">
               <div>Candidates</div>
               <div
@@ -109,49 +109,50 @@
                 </div>
               </transition>
             </div>
-            <hp-input
-              variant="search"
-              class="candidate-list__search"
-              v-model="search"
-              icon="search"
-              placeholder="Search..."
-            />
-            <div class="candidate-list__add-candidate">
+            <div class="candidate-list__search">
+              <hp-input
+                variant="search"
+                v-model="search"
+                icon="search"
+                placeholder="Search..."
+              />
+              <div class="candidate-list__add-candidate">
+                <hp-button
+                  icon="plus"
+                  dropzone
+                  @click="isAddCandidateModalOpen = true"
+                  label="Add candidate"
+                ></hp-button>
+              </div>
+            </div>
+            <ol v-if="candidateList.length > 0">
+              <hp-candidate-card
+                v-for="candidate in candidateList"
+                :key="candidate.reference"
+                :candidate="candidate"
+              ></hp-candidate-card>
+            </ol>
+            <div class="candidate-list__empty-state" v-else>
+              <empty-state class="candidate-list__empty-state__image" />
+              <div class="candidate-list__empty-state__text--primary">
+                Hello? Is anybody there?
+              </div>
+              <div class="candidate-list__empty-state__text--secondary">
+                Looking a tad empty, try adding a candidate
+              </div>
               <hp-button
-                icon="plus"
-                dropzone
-                @click="isAddCandidateModalOpen = true"
+                @handleClick="isAddCandidateModalOpen = true"
+                primary
                 label="Add candidate"
               ></hp-button>
             </div>
           </div>
-          <ol v-if="candidateList.length > 0">
-            <hp-candidate-card
-              v-for="candidate in candidateList"
-              :key="candidate.reference"
-              :candidate="candidate"
-            ></hp-candidate-card>
-          </ol>
-          <div class="candidate-list__empty-state" v-else>
-            <empty-state class="candidate-list__empty-state__image" />
-            <div class="candidate-list__empty-state__text--primary">
-              Hello? Is anybody there?
-            </div>
-            <div class="candidate-list__empty-state__text--secondary">
-              Looking a tad empty, try adding a candidate
-            </div>
-            <hp-button
-              @handleClick="isAddCandidateModalOpen = true"
-              primary
-              label="Add candidate"
-            ></hp-button>
-          </div>
+          <hp-spinner
+            :size="24"
+            class="candidate-list__spinner"
+            v-else
+          ></hp-spinner>
         </div>
-        <hp-spinner
-          :size="24"
-          class="candidate-list__spinner"
-          v-else
-        ></hp-spinner>
       </div>
       <hp-spinner
         :size="24"
@@ -358,10 +359,13 @@ const candidateList = computed(() => {
     }
   }
 
-  &__candidate-list {
-    max-height: 500px;
+  &__scroll-container {
+    max-height: 80vh;
     overflow: scroll;
-    padding-top: 24px;
+  }
+
+  &__candidate-list {
+    margin-top: 24px;
 
     &__header {
       display: flex;
@@ -423,6 +427,14 @@ const candidateList = computed(() => {
     display: flex;
     justify-content: flex-end;
     margin-bottom: 16px;
+  }
+  &__search {
+    position: sticky;
+    top: 0;
+    background: var(--color-panel);
+    z-index: 10000;
+    margin-bottom: 16px;
+    border-bottom: 1px dashed var(--color-border);
   }
 }
 @media (min-width: $breakpoint-tablet) {
