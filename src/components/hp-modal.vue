@@ -76,7 +76,7 @@ watch(
   }
   @media (min-width: $breakpoint-tablet) {
     &__modal {
-      width: 320px;
+      max-width: 480px;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);

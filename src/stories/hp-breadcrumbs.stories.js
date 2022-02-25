@@ -1,12 +1,12 @@
 import HpBreadcrumbs from "../components/hp-breadcrumbs.vue";
-
 export default {
   title: "Components/Breadcrumbs",
   component: HpBreadcrumbs,
   argTypes: {},
 };
 
-import { useBreadcrumbs } from "@/composables/useBreadcrumbs";
+import vueRouter from "storybook-vue3-router";
+import { useBreadcrumbs } from "../composables/useBreadcrumbs.js";
 const Template = (args) => ({
   components: { HpBreadcrumbs },
   setup() {
@@ -40,3 +40,4 @@ const Template = (args) => ({
 
 export const Primary = Template.bind({});
 Primary.args = {};
+Primary.decorators = [vueRouter()];

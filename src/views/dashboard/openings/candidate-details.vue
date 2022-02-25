@@ -194,7 +194,7 @@
                 </div>
                 <hp-button
                   :href="calculateInterviewLink(interview)"
-                  label="Got to interview"
+                  label="Go to interview"
                   class="candidate-details__interview-grid__item__actions"
                 ></hp-button>
               </div>
