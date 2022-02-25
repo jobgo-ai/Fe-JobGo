@@ -18,7 +18,7 @@ jobs:
         with:
           record: true
           build: npm run build
-          start: npm run dev
+          start: npm run preview
     env:
       # pass the Dashboard record key as an environment variable
       CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
