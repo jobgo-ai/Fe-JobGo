@@ -18,7 +18,7 @@ jobs:
         with:
           record: true
           build: npm run build
-          start: npm run vite
+          start: npm run test
           wait-on: "http://localhost:3000"
     env:
       # pass the Dashboard record key as an environment variable
