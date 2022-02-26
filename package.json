@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "dev": "vite --mode localDev",
+    "vite": "vite",
     "test": "cypress run --headed --browser chrome",
     "cypress": "cypress open",
     "build": "vite build",
