@@ -1,25 +1,25 @@
-// Cypress.Commands.add("login", () => {
-//   cy.intercept({
-//     method: "POST",
-//     url: "**/self/login",
-//   }).as("loginRequest");
+Cypress.Commands.add("login", () => {
+  cy.intercept({
+    method: "POST",
+    url: "**/self/login",
+  }).as("loginRequest");
 
-//   cy.intercept({
-//     method: "GET",
-//     url: "**/self",
-//   }).as("selfRequest");
+  cy.intercept({
+    method: "GET",
+    url: "**/self",
+  }).as("selfRequest");
 
-//   cy.intercept({
-//     method: "GET",
-//     url: "/competencies",
-//   }).as("competenciesRequest");
+  cy.intercept({
+    method: "GET",
+    url: "/competencies",
+  }).as("competenciesRequest");
 
-//   cy.visit("/login");
+  cy.visit("/login");
 
-//   cy.get(`[name='email']`).type("test@hireproof.io");
-//   cy.get(`[name='password']`).type(Cypress.env("password"));
-//   cy.get("button").click();
-//   cy.wait("@loginRequest");
-//   cy.wait("@selfRequest");
-//   cy.wait("@competenciesRequest");
-// });
+  cy.get(`[name='email']`).type("test@hireproof.io");
+  cy.get(`[name='password']`).type(Cypress.env("password"));
+  cy.get("button").click();
+  cy.wait("@loginRequest");
+  cy.wait("@selfRequest");
+  cy.wait("@competenciesRequest");
+});

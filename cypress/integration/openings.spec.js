@@ -1,7 +1,7 @@
 describe("openings", () => {
-  // beforeEach(() => {
-  //   cy.login();
-  // });
+  beforeEach(() => {
+    cy.login();
+  });
 
   it("Can vue openings", () => {
     cy.visit("/openings");
