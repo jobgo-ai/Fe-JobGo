@@ -353,7 +353,7 @@ const candidateList = computed(() => {
   }
 
   &__scroll-container {
-    max-height: 80vh;
+    max-height: 600px;
     overflow: scroll;
   }
 
