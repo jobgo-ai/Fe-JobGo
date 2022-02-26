@@ -34,6 +34,7 @@ onUnmounted(() => {});
   max-width: 1400px;
   position: relative;
   margin: auto;
+  padding-top: $header-height;
 }
 
 .router-view {

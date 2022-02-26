@@ -1,166 +1,158 @@
 <template>
-  <div>
-    <hp-modal
-      :isOpen="isAddCandidateModalOpen"
+  <hp-modal
+    :isOpen="isAddCandidateModalOpen"
+    @close="isAddCandidateModalOpen = false"
+  >
+    <candidate-modal
       @close="isAddCandidateModalOpen = false"
-    >
-      <candidate-modal
-        @close="isAddCandidateModalOpen = false"
-        :opening="opening"
-      />
-    </hp-modal>
-    <div
-      class="candidate-list"
-      :class="{ 'candidate-list--left': isCandidateDetailsOpen }"
-    >
-      <div v-if="opening.statistics">
-        <div class="candidate-list__header">
-          <hp-abstract-avatar :abstractKey="opening.artwork" />
-          <div class="candidate-list__header__button-group">
-            <hp-button
-              :to="`/opening/${opening.reference}/edit`"
-              icon="pencil"
-              label="Edit opening"
-            ></hp-button>
+      :opening="opening"
+    />
+  </hp-modal>
+  <div
+    class="candidate-list"
+    :class="{ 'candidate-list--left': isCandidateDetailsOpen }"
+  >
+    <div v-if="opening.statistics">
+      <div class="candidate-list__header">
+        <hp-abstract-avatar :abstractKey="opening.artwork" />
+        <div class="candidate-list__header__button-group">
+          <hp-button
+            :to="`/opening/${opening.reference}/edit`"
+            icon="pencil"
+            label="Edit opening"
+          ></hp-button>
+        </div>
+      </div>
+      <div class="candidate-list__scroll-container">
+        <h2 class="candidate-list__opening-title">{{ opening.name }}</h2>
+        <p class="candidate-list__opening-description">
+          {{ opening.description }}
+        </p>
+        <div class="candidate-list__stats">
+          <div class="candidate-list__stats__stat">
+            <hp-icon
+              class="candidate-list__stats__stat__icon"
+              name="layers"
+            ></hp-icon>
+            <div class="candidate-list__stats__stat__number">
+              {{ opening.templates?.length }}
+            </div>
+            Interviews
+          </div>
+          <div class="candidate-list__stats__stat">
+            <hp-icon
+              class="candidate-list__stats__stat__icon"
+              name="skills"
+            ></hp-icon>
+            <div class="candidate-list__stats__stat__number">
+              {{ opening.statistics.skills.length }}
+            </div>
+            Skills
+          </div>
+          <div class="candidate-list__stats__stat">
+            <hp-icon
+              class="candidate-list__stats__stat__icon"
+              name="candidates"
+            ></hp-icon>
+            <div class="candidate-list__stats__stat__number">
+              {{ opening.statistics.totalCandidates }}
+            </div>
+            Candidates
           </div>
         </div>
-        <div class="candidate-list__scroll-container">
-          <h2 class="candidate-list__opening-title">{{ opening.name }}</h2>
-          <p class="candidate-list__opening-description">
-            {{ opening.description }}
-          </p>
-          <div class="candidate-list__stats">
-            <div class="candidate-list__stats__stat">
-              <hp-icon
-                class="candidate-list__stats__stat__icon"
-                name="layers"
-              ></hp-icon>
-              <div class="candidate-list__stats__stat__number">
-                {{ opening.templates?.length }}
-              </div>
-              Interviews
-            </div>
-            <div class="candidate-list__stats__stat">
-              <hp-icon
-                class="candidate-list__stats__stat__icon"
-                name="skills"
-              ></hp-icon>
-              <div class="candidate-list__stats__stat__number">
-                {{ opening.statistics.skills.length }}
-              </div>
-              Skills
-            </div>
-            <div class="candidate-list__stats__stat">
-              <hp-icon
-                class="candidate-list__stats__stat__icon"
-                name="candidates"
-              ></hp-icon>
-              <div class="candidate-list__stats__stat__number">
-                {{ opening.statistics.totalCandidates }}
-              </div>
-              Candidates
-            </div>
-          </div>
-          <div
-            v-if="!isCandidateListLoading"
-            class="candidate-list__candidate-list"
-          >
-            <div class="candidate-list__candidate-list__header">
-              <div>Candidates</div>
+        <div
+          v-if="!isCandidateListLoading"
+          class="candidate-list__candidate-list"
+        >
+          <div class="candidate-list__candidate-list__header">
+            <div>Candidates</div>
+            <div
+              class="candidate-list__candidate-list__dropdown-target"
+              @click="isFlyoutOpen = !isFlyoutOpen"
+              ref="dropdownTarget"
+              v-if="templateList && templateList.length > 1"
+            >
               <div
-                class="candidate-list__candidate-list__dropdown-target"
-                @click="isFlyoutOpen = !isFlyoutOpen"
-                ref="dropdownTarget"
-                v-if="templateList && templateList.length > 1"
+                class="candidate-list__candidate-list__dropdown-target__view"
               >
-                <div
-                  class="candidate-list__candidate-list__dropdown-target__view"
-                >
-                  View:
-                </div>
-                <div
-                  class="candidate-list__candidate-list__dropdown-target__tag"
-                >
-                  {{ templateList[selectedTemplateIndex]?.label }}
-                </div>
-                <hp-icon
-                  class="candidate-list__candidate-list__dropdown-target__icon"
-                  name="chevron-down"
-                ></hp-icon>
+                View:
               </div>
-              <transition name="flyout-transition">
-                <div v-if="isFlyoutOpen" class="candidate-list__flyout">
-                  <ol class="candidate-list__flyout__items">
-                    <li
-                      class="candidate-list__flyout__li"
-                      @click="handleItemClick(index)"
-                      v-for="(template, index) in templateList"
-                    >
-                      <div
-                        class="candidate-list__flyout__items__divider"
-                        v-if="index === templateList.length - 1"
-                      ></div>
-                      <div class="candidate-list__flyout__items__item">
-                        {{ template.label }}
-                        <hp-radio name="template" :checked="template.value" />
-                      </div>
-                    </li>
-                  </ol>
-                </div>
-              </transition>
+              <div class="candidate-list__candidate-list__dropdown-target__tag">
+                {{ templateList[selectedTemplateIndex]?.label }}
+              </div>
+              <hp-icon
+                class="candidate-list__candidate-list__dropdown-target__icon"
+                name="chevron-down"
+              ></hp-icon>
             </div>
-            <div class="candidate-list__search">
-              <hp-input
-                variant="search"
-                v-model="search"
-                icon="search"
-                standalone
-                placeholder="Search..."
-              />
-              <div class="candidate-list__add-candidate">
-                <hp-button
-                  icon="plus"
-                  dropzone
-                  @click="isAddCandidateModalOpen = true"
-                  label="Add candidate"
-                ></hp-button>
+            <transition name="flyout-transition">
+              <div v-if="isFlyoutOpen" class="candidate-list__flyout">
+                <ol class="candidate-list__flyout__items">
+                  <li
+                    class="candidate-list__flyout__li"
+                    @click="handleItemClick(index)"
+                    v-for="(template, index) in templateList"
+                  >
+                    <div
+                      class="candidate-list__flyout__items__divider"
+                      v-if="index === templateList.length - 1"
+                    ></div>
+                    <div class="candidate-list__flyout__items__item">
+                      {{ template.label }}
+                      <hp-radio name="template" :checked="template.value" />
+                    </div>
+                  </li>
+                </ol>
               </div>
-            </div>
-            <ol v-if="candidateList.length > 0">
-              <hp-candidate-card
-                v-for="candidate in candidateList"
-                :key="candidate.reference"
-                :candidate="candidate"
-              ></hp-candidate-card>
-            </ol>
-            <div class="candidate-list__empty-state" v-else>
-              <empty-state class="candidate-list__empty-state__image" />
-              <div class="candidate-list__empty-state__text--primary">
-                Hello? Is anybody there?
-              </div>
-              <div class="candidate-list__empty-state__text--secondary">
-                Looking a tad empty, try adding a candidate
-              </div>
+            </transition>
+          </div>
+          <div class="candidate-list__search">
+            <hp-input
+              variant="search"
+              v-model="search"
+              icon="search"
+              standalone
+              placeholder="Search..."
+            />
+            <div class="candidate-list__add-candidate">
               <hp-button
-                @handleClick="isAddCandidateModalOpen = true"
-                primary
+                icon="plus"
+                dropzone
+                @click="isAddCandidateModalOpen = true"
                 label="Add candidate"
               ></hp-button>
             </div>
           </div>
-          <hp-spinner
-            :size="24"
-            class="candidate-list__spinner"
-            v-else
-          ></hp-spinner>
+          <ol v-if="candidateList.length > 0">
+            <hp-candidate-card
+              v-for="candidate in candidateList"
+              :key="candidate.reference"
+              :candidate="candidate"
+            ></hp-candidate-card>
+          </ol>
+          <div class="candidate-list__empty-state" v-else>
+            <empty-state class="candidate-list__empty-state__image" />
+            <div class="candidate-list__empty-state__text--primary">
+              Hello? Is anybody there?
+            </div>
+            <div class="candidate-list__empty-state__text--secondary">
+              Looking a tad empty, try adding a candidate
+            </div>
+            <hp-button
+              @handleClick="isAddCandidateModalOpen = true"
+              primary
+              label="Add candidate"
+            ></hp-button>
+          </div>
         </div>
+        <hp-spinner
+          :size="24"
+          class="candidate-list__spinner"
+          v-else
+        ></hp-spinner>
       </div>
-      <hp-spinner
-        :size="24"
-        class="candidate-list__spinner"
-        v-else
-      ></hp-spinner>
     </div>
+    <hp-spinner :size="24" class="candidate-list__spinner" v-else></hp-spinner>
   </div>
 </template>
 

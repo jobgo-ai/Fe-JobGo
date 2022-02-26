@@ -95,7 +95,10 @@
       ></hp-button>
     </teleport>
     <div class="edit-interview" v-if="!isInterviewLoading && !isLoading">
-      <form @submit.prevent="handleContextFormSave">
+      <form
+        class="edit-interview__form"
+        @submit.prevent="handleContextFormSave"
+      >
         <h2 class="edit-interview__title">Edit interview</h2>
         <p class="edit-interview__subtitle">
           Design the template by editing ceremonies and interview questions.
@@ -600,8 +603,11 @@ const handleCloseEditDrawer = () => {
   .edit-interview {
     display: flex;
     flex-direction: column;
+    align-items: center;
     width: 100%;
-    max-width: 552px;
+    &__form {
+      width: 552px;
+    }
     &__overview-button {
       display: block;
     }

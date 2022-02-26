@@ -186,7 +186,7 @@ const formatSkills = (skills) => {
 
 <style lang="scss">
 .hp-add-opening-card {
-  width: 264px;
+  width: 100%;
   height: 208px;
   list-style: none;
   border-radius: $border-radius-lg;

@@ -1,13 +1,10 @@
 <template>
   <div class="openings">
-    <div class="candidate-list">
-      <transition name="candidate-list-transition" mode="in-out" appear>
-        <candidate-list
-          v-if="isCandidateListOpen"
-          :isCandidateDetailsOpen="isCandidateDetailsOpen"
-        />
-      </transition>
-    </div>
+    <transition name="candidate-list-transition" mode="in-out" appear>
+      <div v-if="isCandidateListOpen" class="candidate-list">
+        <candidate-list :isCandidateDetailsOpen="isCandidateDetailsOpen" />
+      </div>
+    </transition>
     <div :class="`view`">
       <transition
         class="candidate-details"
@@ -242,7 +239,6 @@ const handleUnarchiveOpening = async (opening) => {
 .opening-list {
   &__grid {
     position: relative;
-    overflow: scroll;
     height: 100%;
     display: grid;
     grid-gap: 26px;
@@ -252,6 +248,12 @@ const handleUnarchiveOpening = async (opening) => {
   }
 }
 @media (min-width: $breakpoint-tablet) {
+  .candidate-list {
+    position: sticky;
+    top: 90px;
+    z-index: 100;
+    transition: all 0.25s linear;
+  }
   .openings {
     display: flex;
     width: 100%;
@@ -281,7 +283,6 @@ const handleUnarchiveOpening = async (opening) => {
 
   .openingslist {
     position: absolute;
-    overflow: hidden;
     width: calc(100% - 440px);
     top: 0;
     left: 0;
@@ -304,7 +305,6 @@ const handleUnarchiveOpening = async (opening) => {
 }
 .candidate-list-transition-enter-active,
 .candidate-list-transition-leave-active {
-  transition: all 0.25s linear;
   transform: translateX(0);
 }
 

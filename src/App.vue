@@ -221,12 +221,6 @@ html {
   line-height: 20px;
 }
 
-@media (min-width: $breakpoint-tablet) {
-  html {
-    overflow: hidden;
-  }
-}
-
 ol,
 ul {
   list-style: none;

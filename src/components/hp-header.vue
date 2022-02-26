@@ -162,6 +162,9 @@ const { hasHeaderSaveButton } = useBreadcrumbs();
   justify-content: space-between;
   align-items: center;
   padding: 24px;
+  position: fixed;
+  z-index: 150;
+  background-color: var(--color-background);
   &__save-container {
     padding-right: 16px;
     border-right: $border;

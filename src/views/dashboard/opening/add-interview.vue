@@ -8,49 +8,51 @@
         <button type="submit">Hello</button>
       </form>
     </hp-modal>
-    <div class="add-interview__header">
-      <div class="add-interview__title">Add interviews</div>
-      <div class="add-interview__subtitle">
-        Select a template or create a new one from scratch
+    <div class="add-interview__container">
+      <div class="add-interview__header">
+        <div class="add-interview__title">Add interviews</div>
+        <div class="add-interview__subtitle">
+          Select a template or create a new one from scratch
+        </div>
       </div>
+      <div class="add-interview__filter">
+        <hp-input
+          class="add-interview__filter__search"
+          name="search"
+          variant="search"
+          icon="search"
+          standalone
+          v-model="filter.search"
+          placeholder="Search by name"
+        />
+        <hp-multi-select
+          class="add-interview__filter__dropdowns__dropdown"
+          label="All Skills"
+          :options="skillOptions"
+          name="skills"
+          searchable
+          :onSearch="searchFunction"
+          v-model="filter.skills"
+        ></hp-multi-select>
+        <hp-multi-select
+          :options="jobLevelOptions"
+          class="add-interview__filter__dropdowns__dropdown"
+          label="Experience levels"
+          name="levels"
+          v-model="filter.jobLevels"
+        ></hp-multi-select>
+      </div>
+      <ol v-if="!isInterviewsLoading" class="add-interview__interview-grid">
+        <hp-add-interview-card isAddCard></hp-add-interview-card>
+        <hp-add-interview-card
+          :template="template"
+          :key="template.reference"
+          v-for="template in templates"
+          @handleDelete="onDeleteTemplate"
+        ></hp-add-interview-card>
+      </ol>
+      <hp-spinner v-if="isInterviewsLoading" content size="24" />
     </div>
-    <div class="add-interview__filter">
-      <hp-input
-        class="add-interview__filter__search"
-        name="search"
-        variant="search"
-        icon="search"
-        standalone
-        v-model="filter.search"
-        placeholder="Search by name"
-      />
-      <hp-multi-select
-        class="add-interview__filter__dropdowns__dropdown"
-        label="All Skills"
-        :options="skillOptions"
-        name="skills"
-        searchable
-        :onSearch="searchFunction"
-        v-model="filter.skills"
-      ></hp-multi-select>
-      <hp-multi-select
-        :options="jobLevelOptions"
-        class="add-interview__filter__dropdowns__dropdown"
-        label="Experience levels"
-        name="levels"
-        v-model="filter.jobLevels"
-      ></hp-multi-select>
-    </div>
-    <ol v-if="!isInterviewsLoading" class="add-interview__interview-grid">
-      <hp-add-interview-card isAddCard></hp-add-interview-card>
-      <hp-add-interview-card
-        :template="template"
-        :key="template.reference"
-        v-for="template in templates"
-        @handleDelete="onDeleteTemplate"
-      ></hp-add-interview-card>
-    </ol>
-    <hp-spinner v-if="isInterviewsLoading" content size="24" />
   </div>
 </template>
 
@@ -197,8 +199,12 @@ const onDeleteTemplate = async (template) => {
 
 <style lang="scss">
 .add-interview {
-  @include pageContainer;
   padding: 26px;
+  display: flex;
+  justify-content: center;
+  &__container {
+    width: 882px;
+  }
   &__header {
     align-self: flex-start;
     margin-bottom: 24px;
@@ -222,7 +228,7 @@ const onDeleteTemplate = async (template) => {
     margin-bottom: 16px;
     padding-bottom: 8px;
     position: sticky;
-    top: 0;
+    top: $header-height;
     border-bottom: 1px dashed var(--color-border);
     background: var(--color-background);
     z-index: 100;
