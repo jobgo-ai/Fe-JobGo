@@ -46,7 +46,7 @@ watch(
 .hp-modal {
   &__overlay {
     position: fixed;
-    z-index: 100;
+    z-index: 900;
     top: 0;
     left: 0;
     width: 100%;
@@ -55,7 +55,7 @@ watch(
   }
 
   &__modal {
-    z-index: 101;
+    z-index: 901;
     border-radius: $border-radius-lg;
     position: fixed;
     top: 16px;
