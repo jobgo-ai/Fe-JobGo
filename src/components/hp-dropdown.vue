@@ -32,7 +32,12 @@
       ></hp-icon>
     </button>
     <transition name="flyout-transition">
-      <div class="hp-dropdown__flyout" v-if="isDropdownOpen">
+      <div
+        ref="flyoutRef"
+        tabindex="1"
+        class="hp-dropdown__flyout"
+        v-if="isDropdownOpen"
+      >
         <slot name="dropdown"></slot>
       </div>
     </transition>
@@ -41,7 +46,7 @@
 
 <script setup>
 //Vendor
-import { computed, ref } from "vue";
+import { computed, ref, watchEffect } from "vue";
 import { onClickOutside } from "@vueuse/core";
 
 // Components
@@ -68,7 +73,7 @@ const props = defineProps({
     default: false,
   },
 });
-
+const flyoutRef = ref(null);
 const emits = defineEmits(["onChange"]);
 
 const isDropdownOpen = ref(false);
@@ -79,6 +84,12 @@ const handleButtonClick = () => {
   isDropdownOpen.value = !isDropdownOpen.value;
   emits("onChange", isDropdownOpen.value);
 };
+
+watchEffect(() => {
+  if (flyoutRef.value) {
+    flyoutRef.value.focus();
+  }
+});
 
 onClickOutside(target, (event) => {
   if (!isDropdownOpen.value) {
@@ -154,7 +165,7 @@ const iconClasses = computed(() => {
     padding: 4px 8px;
     right: 0;
     top: calc(100% + 6px);
-    z-index: 1000;
+    z-index: $z-index-1000;
   }
 
   // Default
