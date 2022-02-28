@@ -106,7 +106,6 @@ import HpIcon from "@/components/hp-icon.vue";
 import HpMultiInput from "@/components/form/hp-multi-input.vue";
 
 // Composables
-import { hasEditPermission } from "@/composables/usePermissions.js";
 import useSkillSearch from "@/composables/useSkillSearch";
 import useConstants from "@/composables/useConstants";
 import useInterviews from "@/composables/useInterviews";
