@@ -355,6 +355,7 @@ const candidateList = computed(() => {
   &__scroll-container {
     max-height: 600px;
     overflow: scroll;
+    padding: 4px;
   }
 
   &__candidate-list {
