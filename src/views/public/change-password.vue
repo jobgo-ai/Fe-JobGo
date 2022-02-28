@@ -140,7 +140,7 @@ const handlePasswordReset = handleSubmit(async (values) => {
     width: 588px;
     left: 50%;
     transform: translateX(-50%) translateY(-50%);
-    z-index: -1;
+    z-index: $z-index-negative;
   }
   &__password-container {
     position: relative;

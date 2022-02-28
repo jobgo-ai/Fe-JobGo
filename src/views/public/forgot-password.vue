@@ -124,7 +124,7 @@ const handlePasswordReset = handleSubmit(async (values) => {
     width: 100%;
     left: 50%;
     transform: translateX(-50%) translateY(-50%);
-    z-index: -1;
+    z-index: $z-index-negative;
   }
   &__link {
     margin: auto;

@@ -355,7 +355,7 @@ const handleDeleteQuestiontemplate = async () => {
     display: flex;
     justify-content: start;
     background-color: var(--color-background);
-    z-index: 1000;
+    z-index: $z-index-1000;
     position: fixed;
     bottom: 0;
     padding: 16px;

@@ -231,7 +231,7 @@ const onDeleteTemplate = async (template) => {
     top: $header-height;
     border-bottom: 1px dashed var(--color-border);
     background: var(--color-background);
-    z-index: 100;
+    z-index: $z-index-100;
     &__dropdowns {
       display: flex;
       &__dropdown {

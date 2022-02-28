@@ -59,7 +59,7 @@ const handleHoverEnter = () => {
   left: 50%;
   top: -10px;
   transform: translateX(-50%) translateY(-100%);
-  z-index: 1000;
+  z-index: $z-index-1000;
 
   background-color: var(--color-tooltip);
   color: var(--color-accent-forground);

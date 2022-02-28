@@ -163,7 +163,7 @@ const { hasHeaderSaveButton } = useBreadcrumbs();
   align-items: center;
   padding: 24px;
   position: fixed;
-  z-index: 150;
+  z-index: $z-index-501;
   background-color: var(--color-background);
   &__save-container {
     padding-right: 16px;
@@ -231,7 +231,7 @@ const { hasHeaderSaveButton } = useBreadcrumbs();
     }
   }
   &__dropdown {
-    z-index: 100;
+    z-index: $z-index-100;
     background-color: var(--color-background);
     position: absolute;
     top: calc(100% + 8px);

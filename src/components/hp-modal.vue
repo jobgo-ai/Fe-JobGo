@@ -46,7 +46,7 @@ watch(
 .hp-modal {
   &__overlay {
     position: fixed;
-    z-index: 900;
+    z-index: $z-index-600;
     top: 0;
     left: 0;
     width: 100%;
@@ -55,7 +55,7 @@ watch(
   }
 
   &__modal {
-    z-index: 901;
+    z-index: $z-index-601;
     border-radius: $border-radius-lg;
     position: fixed;
     top: 16px;
@@ -66,7 +66,7 @@ watch(
       position: relative;
       &__close {
         position: absolute;
-        z-index: 10;
+        z-index: $z-index-10;
         top: 10px;
         right: 10px;
         cursor: pointer;

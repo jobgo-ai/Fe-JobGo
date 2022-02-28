@@ -15,18 +15,19 @@
           />
         </div>
         <ul class="hp-multi-select__flyout__options">
-          <li
+          <button
             v-if="optionsList.length > 0 && !isLoading"
             class="hp-multi-select__flyout__options__option"
             v-for="option in optionsList"
             @click="handleChangeEmit(option)"
+            tabindex="1"
           >
             {{ option.label }}
             <hp-checkbox
               class="hp-multi-select__checkbox"
               :checked="modelValue.find((o) => o.value === option.value)"
             />
-          </li>
+          </button>
           <div class="hp-multi-select__spinner" v-else-if="isLoading">
             <hp-spinner />
           </div>
@@ -203,7 +204,7 @@ const handleChangeEmit = (change) => {
     border-radius: $border-radius-md;
     background-color: var(--color-background);
     padding: 0;
-    z-index: 1000;
+    z-index: $z-index-1000;
     &__search {
       padding: 8px 8px 0px 8px;
       border-bottom: 1px dashed var(--color-border);
@@ -223,8 +224,18 @@ const handleChangeEmit = (change) => {
         justify-content: space-between;
         padding: 8px;
         border-radius: $border-radius-sm;
+        outline: 0;
+        background-color: var(--color-background);
+        border: 0;
+        display: flex;
+        text-align: left;
+        width: 100%;
         &:hover {
           background-color: var(--color-forground-floating);
+        }
+        &:focus {
+          background-color: var(--color-forground-floating);
+          outline: none;
         }
       }
     }

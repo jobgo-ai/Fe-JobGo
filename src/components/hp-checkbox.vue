@@ -40,7 +40,7 @@ const props = defineProps({
     position: absolute;
     top: 0px;
     left: -1px;
-    z-index: 1;
+    z-index: $z-index-100;
     color: var(--color-accent-forground);
     pointer-events: none;
   }

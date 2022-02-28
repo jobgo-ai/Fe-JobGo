@@ -244,7 +244,6 @@ watch(top, (newValue) => {
 <style lang="scss">
 .hp-tagger {
   display: flex;
-  z-index: 90;
   &__checkbox {
     pointer-events: none;
   }
@@ -310,7 +309,7 @@ watch(top, (newValue) => {
     border: $border;
     background-color: var(--color-background);
     padding: 0;
-    z-index: 1000;
+    z-index: $z-index-1000;
     position: absolute;
     right: calc(100% + 10px);
     transform: translate3d(0, 0, 0);

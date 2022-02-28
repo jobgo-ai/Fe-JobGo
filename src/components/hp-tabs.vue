@@ -87,7 +87,7 @@ const styles = computed(() => {
   &__background {
     border-radius: 8px;
     top: 4px;
-    z-index: -1;
+    z-index: $z-index-negative;
     height: 32px;
     position: absolute;
     background-color: var(--color-background);

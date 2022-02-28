@@ -237,7 +237,7 @@ const handleUnarchiveOpening = async (opening) => {
   .candidate-list {
     position: sticky;
     top: 90px;
-    z-index: 100;
+    z-index: $z-index-100;
     transition: all 0.25s linear;
   }
   .openings {

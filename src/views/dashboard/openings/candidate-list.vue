@@ -391,7 +391,7 @@ const candidateList = computed(() => {
     position: absolute;
     width: 256px;
     padding: 8px;
-    z-index: 1000;
+    z-index: $z-index-1000;
     right: 0;
     top: 30px;
     transition: all 0.25s cubic-bezier(0.17, 0.67, 0.83, 0.67);
@@ -427,7 +427,7 @@ const candidateList = computed(() => {
     position: sticky;
     top: 0;
     background: var(--color-panel);
-    z-index: 100;
+    z-index: $z-index-100;
     margin-bottom: 16px;
     border-bottom: 1px dashed var(--color-border);
   }
@@ -441,7 +441,7 @@ const candidateList = computed(() => {
     right: 16px;
     width: 400px;
     min-height: 600px;
-    z-index: 10;
+    z-index: $z-index-10;
     padding: 20px;
     padding-bottom: 0px;
     background-color: var(--color-panel);

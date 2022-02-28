@@ -34,7 +34,7 @@
   border: $border;
   border-radius: $border-radius-lg;
   padding: 16px;
-  z-index: 100;
+  z-index: $z-index-100;
   background-color: var(--color-background);
 }
 

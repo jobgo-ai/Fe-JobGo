@@ -52,7 +52,7 @@ watch(
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.5);
-    z-index: 1000;
+    z-index: $z-index-600;
   }
 
   &__drawer {
@@ -63,7 +63,7 @@ watch(
     max-width: $drawer-max-width;
     height: 100%;
     background-color: var(--color-background);
-    z-index: 1000;
+    z-index: $z-index-601;
   }
 }
 
