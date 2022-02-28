@@ -43,7 +43,6 @@
             <hp-opening-card
               v-for="opening in openings"
               :isSelected="opening.reference === route.params.openingRef"
-              @click="handleOpeningCardClick(opening)"
               :key="opening.reference"
               :opening="opening"
               @unarchiveOpening="handleUnarchiveOpening"
@@ -92,19 +91,6 @@ const { setToast } = useToast();
 
 const { fetchOpenings, openings, isOpeningsLoading } = useOpenings();
 const { setBreadcrumbs } = useBreadcrumbs();
-
-const handleOpeningCardClick = (opening) => {
-  if (opening.state === "archived") {
-    return;
-  }
-  if (opening.reference === route.params.openingRef) {
-    router.push(`/openings/`);
-  } else {
-    router.push(`/openings/${opening.reference}`);
-  }
-};
-
-onUnmounted(async () => {});
 
 onMounted(async () => {
   // Checks for openingRef in route params

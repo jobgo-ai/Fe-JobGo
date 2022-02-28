@@ -1,5 +1,9 @@
 <template>
-  <li :class="containerClasses">
+  <hp-router-link
+    :isDisabled="isAddCard || isArchived"
+    :to="linkValue"
+    :class="containerClasses"
+  >
     <div class="hp-opening-card__add-new" v-if="isAddCard">
       <div>
         <div class="hp-opening-card__add-new__icon-container">
@@ -87,15 +91,21 @@
         </div>
       </div>
     </div>
-  </li>
+  </hp-router-link>
 </template>
 
 <script setup>
+// Vendor
 import { computed, defineAsyncComponent } from "vue";
+import { useRoute } from "vue-router";
+
+// Components
 import HpButton from "@/components/hp-button.vue";
 import HpBadge from "@/components/hp-badge.vue";
 import HpAbstractAvatar from "@/components/hp-abstract-avatar.vue";
 import HpIcon from "@/components/hp-icon.vue";
+import HpRouterLink from "@/components/hp-router-link.vue";
+
 const props = defineProps({
   opening: {
     type: Object,
@@ -115,6 +125,8 @@ const props = defineProps({
   },
 });
 
+const route = useRoute();
+
 const emits = defineEmits(["unarchiveOpening, handleAddNew"]);
 
 const splash = defineAsyncComponent(() =>
@@ -130,6 +142,13 @@ const containerClasses = computed(() => {
     "hp-opening-card--selected": props.isSelected,
     "hp-opening-card--archived": props.isArchived,
   };
+});
+
+const linkValue = computed(() => {
+  if (props.opening.reference === route.params.openingRef) {
+    return `/openings`;
+  }
+  return `/openings/${props.opening.reference}`;
 });
 </script>
 
@@ -157,6 +176,9 @@ const containerClasses = computed(() => {
   &:hover {
     box-shadow: inset 0px 0px 4px rgba(33, 44, 51, 0.01),
       inset 0px 0px 48px rgba(33, 44, 51, 0.03);
+  }
+  &:focus {
+    outline: 4px solid var(--color-focus);
   }
   &__splash {
     flex-shrink: 0;
