@@ -5,42 +5,40 @@
       <p class="question-list__subtitle">
         Select a template or create your own questions.
       </p>
-      <form>
-        <hp-input
-          class="question-list__search"
-          name="search"
-          variant="search"
-          icon="search"
-          v-model="search"
+      <hp-input
+        class="question-list__search"
+        name="search"
+        variant="search"
+        icon="search"
+        v-model="search"
+        standalone
+      />
+      <div class="question-list__filters">
+        <hp-multi-select
+          class="question-list__filters__dropdown"
+          label="Skills"
+          :options="skillOptions"
+          name="skills"
+          searchable
           standalone
-        />
-        <div class="question-list__filters">
-          <hp-multi-select
-            class="question-list__filters__dropdown"
-            label="Skills"
-            :options="skillOptions"
-            name="skills"
-            searchable
-            standalone
-            :onSearch="searchFunction"
-            v-model="filter.skills"
-          ></hp-multi-select>
-          <hp-multi-select
-            :options="jobLevelOptions"
-            class="question-list__filters__dropdown"
-            label="Experience levels"
-            standalone
-            name="levels"
-            v-model="filter.jobLevels"
-          ></hp-multi-select>
-        </div>
-        <hp-button
-          dropzone
-          icon="plus"
-          label="Start from scratch"
-          @handleClick="$emit('handleTabChange')"
-        />
-      </form>
+          :onSearch="searchFunction"
+          v-model="filter.skills"
+        ></hp-multi-select>
+        <hp-multi-select
+          :options="jobLevelOptions"
+          class="question-list__filters__dropdown"
+          label="Experience levels"
+          standalone
+          name="levels"
+          v-model="filter.jobLevels"
+        ></hp-multi-select>
+      </div>
+      <hp-button
+        dropzone
+        icon="plus"
+        label="Start from scratch"
+        @handleClick="$emit('handleTabChange')"
+      />
     </div>
     <ol
       ref="listContainer"

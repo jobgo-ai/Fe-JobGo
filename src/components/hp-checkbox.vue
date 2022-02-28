@@ -15,6 +15,7 @@
       :checked="props.checked"
       value="option-1"
       checked
+      :tabindex="tabindex"
     />
     <label class="hp-checkbox__label" for="option1"> </label>
   </div>
@@ -25,6 +26,10 @@ import HpIcon from "@/components/hp-icon.vue";
 const props = defineProps({
   checked: {
     type: [Boolean, Object],
+  },
+  tabindex: {
+    type: Number,
+    default: "1",
   },
 });
 </script>

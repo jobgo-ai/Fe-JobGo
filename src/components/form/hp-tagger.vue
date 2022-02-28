@@ -33,7 +33,7 @@
             />
           </div>
           <ul class="hp-tagger__flyout__options">
-            <li
+            <button
               v-if="optionsList.length > 0 && !isLoading"
               class="hp-tagger__flyout__options__option"
               v-for="option in optionsList"
@@ -43,8 +43,9 @@
               <hp-checkbox
                 class="hp-tagger__checkbox"
                 :checked="modelValue.find((v) => v.value === option.value)"
+                tabindex="-1"
               />
-            </li>
+            </button>
             <div class="hp-tagger__spinner" v-else-if="isLoading">
               <hp-spinner />
             </div>
@@ -332,8 +333,18 @@ watch(top, (newValue) => {
         justify-content: space-between;
         padding: 8px;
         border-radius: $border-radius-sm;
+        outline: 0;
+        background-color: var(--color-background);
+        border: 0;
+        display: flex;
+        text-align: left;
+        width: 100%;
         &:hover {
           background-color: var(--color-forground-floating);
+        }
+        &:focus {
+          background-color: var(--color-forground-floating);
+          outline: none;
         }
       }
     }

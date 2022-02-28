@@ -26,6 +26,7 @@
             <hp-checkbox
               class="hp-multi-select__checkbox"
               :checked="modelValue.find((o) => o.value === option.value)"
+              tabindex="-1"
             />
           </button>
           <div class="hp-multi-select__spinner" v-else-if="isLoading">
