@@ -213,6 +213,7 @@ onMounted(async () => {
   &__scroll-container {
     overflow: scroll;
     flex-grow: 1;
+    padding: 4px;
     &::-webkit-scrollbar {
       width: 0px;
     }

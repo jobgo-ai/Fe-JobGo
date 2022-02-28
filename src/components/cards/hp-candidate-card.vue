@@ -1,13 +1,12 @@
 <template>
   <router-link
+    :class="`hp-candidate-card ${
+      candidate.reference === route.query.candidate &&
+      'hp-candidate-card--selected'
+    }`"
     :to="`/openings/${route.params.openingRef}?candidate=${candidate.reference}`"
   >
-    <li
-      :class="`hp-candidate-card ${
-        candidate.reference === route.query.candidate &&
-        'hp-candidate-card--selected'
-      }`"
-    >
+    <div class="hp-candidate-card__container">
       <div class="hp-candidate-card__info">
         <div class="hp-candidate-card__info__details">
           <div class="hp-candidate-card__info__details__detail">
@@ -44,7 +43,7 @@
           :key="template"
         ></div>
       </div>
-    </li>
+    </div>
   </router-link>
 </template>
 
@@ -88,13 +87,11 @@ const calculateColor = (candidate, avg) => {
 .hp-candidate-card {
   border: 1px solid var(--color-border);
   background-color: var(--color-panel);
-  border-radius: $border-radius-lg;
+  border-radius: $border-radius-md;
   padding: 12px;
   margin-bottom: 12px;
   cursor: pointer;
-  &:focus {
-    background: red;
-  }
+  display: flex;
   &:hover {
     box-shadow: inset 0px 0px 4px rgba(33, 44, 51, 0.01),
       inset 0px 0px 48px rgba(33, 44, 51, 0.03);
@@ -105,8 +102,14 @@ const calculateColor = (candidate, avg) => {
       box-shadow: none;
     }
   }
+  &__container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
   &__info {
     display: flex;
+    width: 100%;
     justify-content: space-between;
     &__details__detail {
       font-weight: 500;
@@ -142,6 +145,9 @@ const calculateColor = (candidate, avg) => {
     &:last-child {
       margin-right: 0;
     }
+  }
+  &:focus {
+    outline: 4px solid var(--color-focus);
   }
 }
 </style>

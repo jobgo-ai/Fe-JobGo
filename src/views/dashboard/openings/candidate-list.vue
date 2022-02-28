@@ -440,7 +440,7 @@ const candidateList = computed(() => {
     width: 400px;
     min-height: 600px;
     z-index: 10;
-    padding: 24px;
+    padding: 20px;
     padding-bottom: 0px;
     background-color: var(--color-panel);
     border: 1px solid var(--color-border);
