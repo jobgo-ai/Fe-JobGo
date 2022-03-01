@@ -23,22 +23,24 @@ describe("openings", () => {
     cy.contains("Archive opening").click();
   });
 
-  // it("Can add an interview", () => {
-  //   cy.contains("PERMANENT_TEST_OPENING").click();
-  //   cy.contains("Edit opening").click();
-  //   cy.contains("Add interview").click();
-  //   cy.contains("TEST_INTERVIEW")
-  //     .parents(".hp-add-opening-card")
-  //     .find("button")
-  //     .contains("Add to opening")
-  //     .click();
-  // });
+  it("Can add an interview", () => {
+    cy.contains("PERMANENT_TEST_OPENING").click();
+    cy.contains("Edit opening").click();
+    cy.contains("Add interview")
+      .parents(".hp-interview-card")
+      .find("a")
+      .contains("Add interview")
+      .click();
+    cy.contains("Add interview");
+    cy.get(".hp-add-opening-card").next().contains("Add to opening").click();
+  });
 
-  // it("Can remove interview from opening", () => {
-  //   cy.contains("PERMANENT_TEST_OPENING").click();
-  //   cy.contains("Edit opening").click();
-  //   cy.contains("TEST_INTERVIEW")
-  //     .find(".hp-button__button__icon--danger")
-  //     .click();
-  // });
+  it("Can remove interview from opening", () => {
+    cy.contains("PERMANENT_TEST_OPENING").click();
+    cy.contains("Edit opening").click();
+    cy.get(".hp-interview-card")
+      .eq(1)
+      .find(".hp-button__button__icon--danger")
+      .click();
+  });
 });
