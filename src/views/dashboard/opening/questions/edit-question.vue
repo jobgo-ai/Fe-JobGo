@@ -37,7 +37,8 @@
         <div class="edit-question__duration__labels">
           <div class="edit-question__label">Skills</div>
           <div class="edit-question__sublabel">
-            What does this question measure? Max of 3 skills.
+            What does this question measure?
+            <span class="edit-question__sublabel--bold">Max of 3 skills</span>.
           </div>
         </div>
         <hp-tagger
@@ -315,6 +316,9 @@ const handleDeleteQuestiontemplate = async () => {
     @include text-h5;
     font-weight: 300;
     color: var(--color-text-secondary);
+    &--bold {
+      font-weight: 500;
+    }
   }
   &__guidelines {
     padding-top: 16px;

@@ -35,7 +35,10 @@
           <ul class="hp-tagger__flyout__options">
             <button
               v-if="optionsList.length > 0 && !isLoading"
-              class="hp-tagger__flyout__options__option"
+              :class="`hp-tagger__flyout__options__option ${
+                isDisabled(option) &&
+                'hp-tagger__flyout__options__option--disabled'
+              }`"
               v-for="option in optionsList"
               @click="handleChangeEmit(option)"
               type="button"
@@ -44,7 +47,7 @@
               <hp-checkbox
                 class="hp-tagger__checkbox"
                 :checked="modelValue.find((v) => v.value === option.value)"
-                tabindex="-1"
+                :tabindex="-1"
               />
             </button>
             <div class="hp-tagger__spinner" v-else-if="isLoading">
@@ -119,9 +122,6 @@ const props = defineProps({
   closeOnSelect: {
     type: Boolean,
     default: true,
-  },
-  maxItemsSelected: {
-    type: Number,
   },
   searchable: {
     type: Boolean,
@@ -241,6 +241,12 @@ const { top } = useElementBounding(target);
 watch(top, (newValue) => {
   flyoutTop.value = newValue - magicNumber;
 });
+
+const isDisabled = (option) => {
+  const isIncluded = props.modelValue.find((v) => v.value === option.value);
+  const isMax = props.max && props.modelValue.length >= props.max;
+  return !isIncluded && isMax;
+};
 </script>
 
 <style lang="scss">
@@ -347,6 +353,10 @@ watch(top, (newValue) => {
         &:focus {
           background-color: var(--color-forground-floating);
           outline: none;
+        }
+        &--disabled {
+          opacity: 0.4;
+          cursor: not-allowed;
         }
       }
     }
