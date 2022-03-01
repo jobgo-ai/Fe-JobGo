@@ -22,7 +22,10 @@
         </div>
       </div>
     </div>
-    <div class="view-interview__header">
+    <div
+      v-if="interview.statistics.skills.length > 0"
+      class="view-interview__header"
+    >
       Top skills evaluated
       <ol class="view-interview__skills">
         <hp-badge-tag
