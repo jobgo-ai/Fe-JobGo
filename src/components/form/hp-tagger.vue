@@ -38,6 +38,7 @@
               class="hp-tagger__flyout__options__option"
               v-for="option in optionsList"
               @click="handleChangeEmit(option)"
+              type="button"
             >
               {{ option.label }}
               <hp-checkbox
@@ -338,6 +339,7 @@ watch(top, (newValue) => {
         border: 0;
         display: flex;
         text-align: left;
+        color: var(--color-text-primary);
         width: 100%;
         &:hover {
           background-color: var(--color-forground-floating);
