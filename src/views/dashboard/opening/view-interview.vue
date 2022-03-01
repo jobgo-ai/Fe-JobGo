@@ -140,6 +140,7 @@ onMounted(async () => {
 <styles lang="scss">
 .view-interview {
   padding: 26px;
+  padding-bottom: 0px;
   height: 100vh;
   display: flex;
   flex-direction: column;
