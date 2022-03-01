@@ -38,7 +38,9 @@
           <div class="edit-question__label">Skills</div>
           <div class="edit-question__sublabel">
             What does this question measure?
-            <span class="edit-question__sublabel--bold">Max of 3 skills</span>.
+            <span class="edit-question__sublabel--bold"
+              >Maximum of 3 skills</span
+            >.
           </div>
         </div>
         <hp-tagger
