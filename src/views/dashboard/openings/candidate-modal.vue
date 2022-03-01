@@ -127,7 +127,7 @@ const { handleSubmit, meta } = useForm({
   initialValues: { ...props.candidate },
 });
 
-const { fetchOpening } = useOpenings();
+const { fetchOpening, updateOpenings } = useOpenings();
 
 const { fetchCandidates, candidates, fetchCandidate, candidate } =
   useCandidates();
@@ -184,6 +184,7 @@ const onSubmit = handleSubmit(async (values) => {
     fetchCandidates(route.params.openingRef, true);
   }
   fetchOpening(route.params.openingRef);
+  updateOpenings();
   isUpdatingCandidate.value = false;
   emits("close");
 });
@@ -209,6 +210,7 @@ const archiveCandidate = async () => {
       `/openings/${route.params.openingRef}?candidate=${candidates.value[0].reference}`
     );
   }
+  updateOpenings();
   emits("close");
 };
 </script>

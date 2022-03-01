@@ -137,7 +137,7 @@ const router = useRouter();
 const route = useRoute();
 
 const { setToast } = useToast();
-const { fetchOpening } = useOpenings();
+const { fetchOpening, updateOpenings } = useOpenings();
 
 const secondsToMinutes = (seconds) => {
   return Math.floor(seconds / 60);
@@ -170,6 +170,7 @@ const handleAddToInterview = async () => {
 
   await postOpening.post(payload);
   await fetchOpening(route.params.openingRef);
+  updateOpenings();
   isLoading.value = false;
   router.push(`/opening/${route.params.openingRef}/edit`);
   setToast({
