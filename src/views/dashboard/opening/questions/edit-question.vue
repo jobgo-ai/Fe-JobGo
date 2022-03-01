@@ -13,7 +13,7 @@
         This is the question prompt, it is important that this is readable
       </p>
     </div>
-    <form @submit.prevent class="edit-question__form">
+    <form @submit.prevent="onSubmit" class="edit-question__form">
       <div class="edit-question__question">
         <hp-textarea
           ref="questionInputRef"
@@ -75,6 +75,7 @@
         <hp-button
           :isDisabled="!meta.dirty || !meta.valid"
           primary
+          type="submit"
           :isLoading="isSaving"
           :label="content.action"
         />

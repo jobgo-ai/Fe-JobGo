@@ -398,7 +398,9 @@ const calculateSkillScoreColor = (skill) => {
       padding: 16px;
       border-top: 1px dashed var(--color-border);
       &__icon {
+        color: var(--color-text-secondary);
         margin-right: 6px;
+        font-weight: 300;
       }
     }
     &__title {
