@@ -7,7 +7,12 @@
       <h2 class="signup__title">Sign up with Hireproof</h2>
       <form @submit="onSubmit">
         <hp-input name="name" placeholder="Type your name" label="Name" />
-        <hp-input name="email" placeholder="Type your email" label="Email" />
+        <hp-input
+          :isDisabled="true"
+          name="email"
+          placeholder="Type your email"
+          label="Email"
+        />
         <div class="signup__password-container">
           <hp-input
             name="password"
