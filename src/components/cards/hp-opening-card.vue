@@ -177,6 +177,11 @@ const linkValue = computed(() => {
     box-shadow: inset 0px 0px 4px rgba(33, 44, 51, 0.01),
       inset 0px 0px 48px rgba(33, 44, 51, 0.03);
   }
+  &--add-new {
+    &:hover {
+      box-shadow: none;
+    }
+  }
   &:focus {
     outline: 4px solid var(--color-focus);
   }

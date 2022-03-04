@@ -50,9 +50,6 @@ const props = defineProps({
   &__icon {
     margin-right: 6px;
   }
-  &:hover {
-    background-color: var(--color-border-subtle);
-  }
 
   &--positive {
     background-color: var(--color-background-positive);
