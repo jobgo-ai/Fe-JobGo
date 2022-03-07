@@ -21,7 +21,11 @@
             type="password"
           />
         </div>
-        <div class="signup__checkbox-container">
+        <button
+          class="signup__checkbox-container"
+          type="button"
+          @click="toggleTerms"
+        >
           <hp-checkbox
             :isLoading="postLogin.loading.value"
             name="terms"
@@ -40,7 +44,7 @@
               >Privacy Policy</a
             >
           </div>
-        </div>
+        </button>
         <div v-if="error" class="signup__error">{{ error }}</div>
         <hp-button
           :isLoading="isLoading"
@@ -99,7 +103,14 @@ const route = useRoute();
 const isLoading = ref(false);
 const error = ref(null);
 
-const { handleSubmit, isSubmitting, setFieldError, meta } = useForm({
+const {
+  handleSubmit,
+  isSubmitting,
+  setFieldError,
+  setFieldValue,
+  meta,
+  values,
+} = useForm({
   validationSchema: schema,
   initialValues: {
     name: "",
@@ -109,6 +120,9 @@ const { handleSubmit, isSubmitting, setFieldError, meta } = useForm({
   },
 });
 
+const toggleTerms = () => {
+  setFieldValue("terms", !values.terms);
+};
 const postUsers = usePost("users");
 const postLogin = usePost("self/login");
 
@@ -199,7 +213,10 @@ const onSubmit = handleSubmit(async (values) => {
 
   &__checkbox-container {
     display: flex;
+    background-color: var(--color-background);
+    border: none;
     align-items: center;
+    width: 100%;
     @include text-h5;
     margin-bottom: 24px;
     &__text {
@@ -210,6 +227,10 @@ const onSubmit = handleSubmit(async (values) => {
     &__link {
       font-weight: 500;
       color: var(--color-text-primary);
+    }
+    &:focus {
+      outline: 4px solid var(--color-focus);
+      border-radius: 4px;
     }
   }
   &__signin {
