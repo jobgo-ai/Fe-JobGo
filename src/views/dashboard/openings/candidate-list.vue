@@ -87,20 +87,27 @@
             </div>
             <transition name="flyout-transition">
               <div v-if="isFlyoutOpen" class="candidate-list__flyout">
-                <ol class="candidate-list__flyout__items">
+                <ol class="candidate-list__flyout__options">
                   <li
-                    class="candidate-list__flyout__li"
-                    @click="handleItemClick(index)"
                     v-for="(template, index) in templateList"
+                    class="candidate-list__flyout__options__option"
                   >
+                    <button
+                      class="candidate-list__flyout__options__button"
+                      @click="handleItemClick(index)"
+                      type="button"
+                    >
+                      {{ template.label }}
+                      <hp-radio
+                        name="template"
+                        tabindex="-1"
+                        :checked="template.value"
+                      />
+                    </button>
                     <div
                       class="candidate-list__flyout__items__divider"
-                      v-if="index === templateList.length - 1"
+                      v-if="index === templateList.length - 2"
                     ></div>
-                    <div class="candidate-list__flyout__items__item">
-                      {{ template.label }}
-                      <hp-radio name="template" :checked="template.value" />
-                    </div>
                   </li>
                 </ol>
               </div>
@@ -406,14 +413,42 @@ const candidateList = computed(() => {
       }
       &__item {
         padding: 8px 12px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        border-radius: $border-radius-sm;
+      }
+    }
+    &__options {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      &__button {
         cursor: pointer;
+        padding: 8px;
+        border-radius: $border-radius-sm;
+        outline: 0;
+        background-color: var(--color-background);
+        border: 0;
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
         &:hover {
           background-color: var(--color-forground-floating);
         }
+        &:focus {
+          background-color: var(--color-forground-floating);
+          outline: none;
+        }
+        &--disabled {
+          opacity: 0.4;
+          cursor: not-allowed;
+        }
+      }
+      &__option {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        text-align: left;
+        color: var(--color-text-primary);
+        width: 100%;
+        flex-direction: column;
       }
     }
   }

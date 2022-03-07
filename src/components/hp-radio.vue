@@ -5,6 +5,7 @@
       type="radio"
       :name="name"
       :checked="checked"
+      v-bind="$attrs"
     />
     <label class="hp-radio__label" htmlFor="name">{{ label }}</label>
   </div>
