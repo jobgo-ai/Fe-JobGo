@@ -59,6 +59,18 @@
               </router-link>
             </div>
             <div class="hp-header__dropdown__options">
+              <a
+                href="https://help.hireproof.io"
+                class="hp-header__dropdown__options__option"
+              >
+                <hp-icon
+                  name="help"
+                  class="hp-header__dropdown__options__option__icon"
+                />
+                Help center
+              </a>
+            </div>
+            <div class="hp-header__dropdown__options">
               <div
                 @click.prevent="handleDarkModeToggle"
                 class="
