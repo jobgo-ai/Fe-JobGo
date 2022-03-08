@@ -24,7 +24,7 @@
         <button
           class="signup__checkbox-container"
           type="button"
-          @click="toggleTerms"
+          @click.prevent="toggleTerms"
         >
           <hp-checkbox
             :isLoading="postLogin.loading.value"
