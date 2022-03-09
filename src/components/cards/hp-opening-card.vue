@@ -6,7 +6,10 @@
   >
     <div class="hp-opening-card__add-new" v-if="isAddCard">
       <div>
-        <div class="hp-opening-card__add-new__icon-container">
+        <div
+          @click="$emit('handleAddNew')"
+          class="hp-opening-card__add-new__icon-container"
+        >
           <hp-icon :size="24" name="plus"></hp-icon>
         </div>
         <p class="hp-opening-card__content__name">New opening</p>
@@ -240,11 +243,15 @@ const linkValue = computed(() => {
       display: flex;
       justify-content: center;
       align-items: center;
+      cursor: pointer;
       height: 40px;
       width: 40px;
       border: 1px dashed var(--color-border);
       border-radius: $border-radius-lg;
       margin-bottom: 16px;
+      &:hover {
+        background: var(--color-panel);
+      }
     }
   }
 }
