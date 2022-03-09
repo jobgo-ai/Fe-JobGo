@@ -62,6 +62,7 @@
               <a
                 href="https://help.hireproof.io"
                 class="hp-header__dropdown__options__option"
+                target="_blank"
               >
                 <hp-icon
                   name="help"
