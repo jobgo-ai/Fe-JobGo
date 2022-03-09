@@ -8,7 +8,10 @@
     </hp-drawer>
     <div class="hp-add-opening-card__add-new" v-if="isAddCard">
       <div>
-        <div class="hp-add-opening-card__add-new__icon-container">
+        <div
+          @click="handleCreateInterview"
+          class="hp-add-opening-card__add-new__icon-container"
+        >
           <hp-icon :size="24" name="plus"></hp-icon>
         </div>
         <p class="hp-add-opening-card__content__name">Start from scratch</p>
@@ -237,10 +240,6 @@ const formatSkills = (skills) => {
   &--selected {
     background-color: var(--color-panel);
   }
-  &:hover {
-    box-shadow: inset 0px 0px 4px rgba(33, 44, 51, 0.01),
-      inset 0px 0px 48px rgba(33, 44, 51, 0.03);
-  }
   &__add-new {
     padding: 16px;
     flex: 1;
@@ -254,9 +253,13 @@ const formatSkills = (skills) => {
       align-items: center;
       height: 40px;
       width: 40px;
+      cursor: pointer;
       border: 1px dashed var(--color-border);
       border-radius: $border-radius-lg;
       margin-bottom: 16px;
+      &:hover {
+        background: var(--color-panel);
+      }
     }
   }
 }

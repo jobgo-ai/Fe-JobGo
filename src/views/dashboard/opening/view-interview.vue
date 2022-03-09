@@ -1,6 +1,10 @@
 <template>
   <div v-if="!isInterviewLoading" class="view-interview">
     <h2 class="view-interview__title">{{ interview.name }}</h2>
+    <div v-if="interview.description">
+      <div class="view-interview__header">Description</div>
+      <p class="view-interview__description">{{ interview.description }}</p>
+    </div>
     <div class="view-interview__header">Overview</div>
     <div class="view-interview__stats">
       <div class="view-interview__stats__stat">
@@ -155,6 +159,10 @@ onMounted(async () => {
     color: var(--color-text-secondary);
     font-weight: 500;
     @include text-h5;
+  }
+  &__description {
+    margin-bottom: 12px;
+    margin-top: 6px;
   }
   &__stats {
     display: grid;
