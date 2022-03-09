@@ -49,6 +49,9 @@
               :isArchived="state === 'archived'"
             >
             </hp-opening-card>
+            <div v-if="state === 'archived' && openings.length === 0">
+              No archived interviews
+            </div>
           </ol>
           <hp-spinner
             class="openingslist__spinner"
