@@ -1,5 +1,6 @@
 <template>
-  <hp-router-link
+  <component
+    :is="tag"
     :isDisabled="isAddCard || isArchived"
     :to="linkValue"
     :class="containerClasses"
@@ -94,7 +95,7 @@
         </div>
       </div>
     </div>
-  </hp-router-link>
+  </component>
 </template>
 
 <script setup>
@@ -107,7 +108,6 @@ import HpButton from "@/components/hp-button.vue";
 import HpBadge from "@/components/hp-badge.vue";
 import HpAbstractAvatar from "@/components/hp-abstract-avatar.vue";
 import HpIcon from "@/components/hp-icon.vue";
-import HpRouterLink from "@/components/hp-router-link.vue";
 
 const props = defineProps({
   opening: {
@@ -127,6 +127,8 @@ const props = defineProps({
     default: false,
   },
 });
+
+const tag = props.isAddCard || props.isArchived ? "div" : "router-link";
 
 const route = useRoute();
 
