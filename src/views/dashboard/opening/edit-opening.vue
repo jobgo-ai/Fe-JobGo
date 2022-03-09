@@ -36,7 +36,6 @@
         </p>
         <hp-button
           :to="`/opening/${route.params.openingRef}/edit/add-interview`"
-          primary
           label="Add interview"
         ></hp-button>
       </div>
