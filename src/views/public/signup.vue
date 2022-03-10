@@ -123,8 +123,9 @@ const {
 });
 
 const toggleTerms = (e) => {
-  console.log("fuck");
-  console.log("shoutout", e);
+  if (e.target.tagName === "LABEL") {
+    e.preventDefault();
+  }
   setFieldValue("terms", !values.terms);
 };
 const postUsers = usePost("users");

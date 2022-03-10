@@ -186,7 +186,6 @@ onMounted(async () => {
 });
 
 const createdTime = computed(() => {
-  console.log(new Date(interview.value.started));
   return format(new Date(interview.value.started), "HH:mm, dd MMMM, yyyy");
 });
 

@@ -33,7 +33,7 @@
       ></hp-spinner>
     </component>
     <button
-      @focus="isFocused = true"
+      @focus="handleFocus"
       @blur="isFocused = false"
       :class="addonClasses"
       :disabled="isDisabled"
@@ -131,6 +131,10 @@ const computedTag = computed(() => {
 
   return "button";
 });
+
+const handleFocus = () => {
+  isFocused.value = true;
+};
 
 const containerClasses = computed(() => {
   return {
