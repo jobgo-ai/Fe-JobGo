@@ -35,7 +35,7 @@ const props = defineProps({
   },
 });
 
-const isHovered = ref(true);
+const isHovered = ref(false);
 
 let timeout = null;
 const handleHoverOut = () => {
