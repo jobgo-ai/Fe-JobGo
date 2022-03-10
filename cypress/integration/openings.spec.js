@@ -14,7 +14,6 @@ describe("openings", () => {
     cy.get(`[name='description']`)
       .clear()
       .type("This is a test opening, please archive me");
-    cy.contains("Save changes").click();
   });
 
   it("Can archive an opening", () => {
@@ -57,7 +56,5 @@ describe("openings", () => {
         return false;
       }
     });
-
-    cy.contains("Save changes").click();
   });
 });
