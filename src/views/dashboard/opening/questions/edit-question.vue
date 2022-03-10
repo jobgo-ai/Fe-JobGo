@@ -128,7 +128,7 @@ const isEdit = props.question;
 const content = isEdit
   ? {
       title: "Edit question",
-      action: "Edit question",
+      action: "Save changes",
     }
   : { title: "Create question", action: "Create question" };
 

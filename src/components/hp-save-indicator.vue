@@ -11,6 +11,7 @@
 import { watch, ref } from "vue";
 import HpSpinner from "@/components/hp-spinner.vue";
 import HpIcon from "@/components/hp-icon.vue";
+import HpTooltip from "@/components/hp-tooltip.vue";
 
 const startTime = ref(null);
 

@@ -1,11 +1,14 @@
 <template>
-  <div class="hp-tooltip__container">
+  <div :class="`hp-tooltip__container hp-tooltip__container--${position}`">
     <div @mouseleave="handleHoverOut" @mouseenter="handleHoverEnter">
       <slot />
     </div>
     <transition name="hp-tooltip-transition">
-      <div v-if="isHovered && !isDisabled" class="hp-tooltip">
-        <div class="hp__tooltip-arrow"></div>
+      <div
+        v-if="isHovered && !isDisabled"
+        :class="`hp-tooltip hp-tooltip--${position}`"
+      >
+        <div :class="`hp__tooltip-arrow hp__tooltip-arrow--${position}`"></div>
         <div v-if="isHovered" class="hp-tooltip__content">
           <slot name="content" />
         </div>
@@ -26,9 +29,13 @@ const props = defineProps({
     type: Number,
     default: 150,
   },
+  position: {
+    type: String,
+    default: "top",
+  },
 });
 
-const isHovered = ref(false);
+const isHovered = ref(true);
 
 let timeout = null;
 const handleHoverOut = () => {
@@ -57,10 +64,7 @@ const handleHoverEnter = () => {
   padding: 12px 12px;
   border-radius: $border-radius-lg;
   left: 50%;
-  top: -10px;
-  transform: translateX(-50%) translateY(-100%);
   z-index: $z-index-1000;
-
   background-color: var(--color-tooltip);
   color: var(--color-accent-forground);
   filter: drop-shadow(0px 4px 8px rgba(33, 44, 51, 0.02))
@@ -76,6 +80,15 @@ const handleHoverEnter = () => {
     width: max-content;
     max-width: 240px;
   }
+  &--top {
+    top: -10px;
+    transform: translateX(-50%) translateY(-100%);
+  }
+
+  &--bottom {
+    top: 100%;
+    transform: translateX(-50%) translateY(10px);
+  }
 }
 
 .hp__tooltip-arrow {
@@ -85,11 +98,17 @@ const handleHoverEnter = () => {
   background-color: inherit;
   border: inherit;
   position: absolute;
-  bottom: -6px;
   left: calc(50% - 6px);
   clip-path: polygon(0% 0%, 100% 100%, 0% 100%);
-  transform: rotate(315deg);
   border-radius: 0 0 0 4px;
+  &--bottom {
+    transform: rotate(135deg);
+    top: -6px;
+  }
+  &--top {
+    transform: rotate(315deg);
+    bottom: -6px;
+  }
 }
 
 .hp-tooltip-transition {
