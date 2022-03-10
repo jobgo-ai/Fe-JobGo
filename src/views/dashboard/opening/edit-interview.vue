@@ -85,14 +85,7 @@
           </div>
         </transition>
       </div>
-      <hp-button
-        label="Save changes"
-        type="submit"
-        primary
-        :isLoading="isSaving"
-        @handleClick="onSubmit"
-        :isDisabled="!meta.dirty || !meta.valid"
-      ></hp-button>
+      <hp-save-indicator :isLoading="isSaving"></hp-save-indicator>
     </teleport>
     <div class="edit-interview" v-if="!isInterviewLoading && !isLoading">
       <form
@@ -103,8 +96,12 @@
         <p class="edit-interview__subtitle">
           Design the template by editing ceremonies and interview questions.
         </p>
-        <hp-input label="Name" name="name"></hp-input>
-        <hp-input label="Description" name="description"></hp-input>
+        <hp-input @input="debouncedSubmit" label="Name" name="name"></hp-input>
+        <hp-input
+          @input="debouncedSubmit"
+          label="Description"
+          name="description"
+        ></hp-input>
         <h3 class="edit-interview__ceremony__header__title">Questions</h3>
         <ol class="edit-interview__question-cards">
           <draggable
@@ -224,6 +221,7 @@
 import { onMounted, ref, computed } from "vue";
 import { useForm } from "vee-validate";
 import { useRoute, useRouter } from "vue-router";
+import { useDebounceFn } from "@vueuse/core";
 import * as yup from "yup";
 import draggable from "vuedraggable";
 import { onClickOutside } from "@vueuse/core";
@@ -246,6 +244,7 @@ import HpTextarea from "@/components/form/hp-textarea.vue";
 import HpSpinner from "@/components/hp-spinner.vue";
 import HpQuestionCardStats from "@/components/cards/hp-question-card-stats.vue";
 import HpDangerZone from "@/components/cards/hp-danger-zone-card.vue";
+import HpSaveIndicator from "@/components/hp-save-indicator.vue";
 
 // Composables
 import { hasEditPermission } from "@/composables/usePermissions";
@@ -320,11 +319,6 @@ const onSubmit = handleSubmit(async (values) => {
   });
   isSaving.value = false;
   const formattedInterview = setInterview(putInterview.data.value.template);
-  setToast({
-    type: "positive",
-    title: "Well done!",
-    message: "Interview updated",
-  });
   resetForm({
     touched: false,
     dirty: false,
@@ -348,6 +342,11 @@ const onSubmit = handleSubmit(async (values) => {
     true
   );
 });
+
+const debouncedSubmit = useDebounceFn(() => {
+  onSubmit();
+}, 500);
+
 const { setBreadcrumbs } = useBreadcrumbs();
 useContextSave(meta);
 
@@ -395,6 +394,7 @@ const dragOptions = computed(() => {
 
 const handleDragChange = () => {
   setFieldValue("questions", interview.value.questions);
+  onSubmit();
 };
 
 const handleRemoveQuestion = async (template) => {
@@ -419,11 +419,6 @@ const handleRemoveQuestion = async (template) => {
     },
   });
   setInterview(putInterview.data.value.template);
-  setToast({
-    type: "positive",
-    title: "Well done!",
-    message: "Interview updated",
-  });
 };
 
 const handleDeleteInterviewTemplate = async () => {

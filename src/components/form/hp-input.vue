@@ -5,7 +5,6 @@
     </label>
     <div class="hp-input__input-container">
       <input
-        v-bind="$attrs"
         ref="inputRef"
         :disabled="isDisabled"
         :class="`hp-input__input hp-input__input--${variant}`"
@@ -14,6 +13,7 @@
         :placeholder="placeholder"
         :value="modelValue"
         v-on="validationListeners"
+        v-bind="$attrs"
       />
       <hp-icon
         v-if="icon"

@@ -20,12 +20,21 @@
           <p class="edit-openings__edit-container__subtitle">
             Main information for your openings
           </p>
-          <hp-input label="Name" name="name"></hp-input>
-          <hp-textarea label="Description" name="description"></hp-textarea>
+          <hp-input
+            @input="debouncedSubmit"
+            label="Name"
+            name="name"
+          ></hp-input>
+          <hp-textarea
+            @input="debouncedSubmit"
+            label="Description"
+            name="description"
+          ></hp-textarea>
           <hp-image-selector
             class="edit-openings__edit-container__cover-selector"
             label="Cover"
             name="artwork"
+            @input="debouncedSubmit"
           ></hp-image-selector>
           <div class="edit-openings__edit-container__archive">
             <hp-button
@@ -126,14 +135,7 @@
             </div>
           </transition>
         </div>
-        <hp-button
-          label="Save changes"
-          type="submit"
-          primary
-          :isLoading="isSaving"
-          @handleClick="onSubmit"
-          :isDisabled="!meta.dirty || !meta.valid"
-        ></hp-button>
+        <hp-save-indicator :isLoading="isSaving"></hp-save-indicator>
       </teleport>
     </form>
     <div class="edit-openings__spinner" v-else>
@@ -148,6 +150,7 @@ import { onMounted, ref, computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useForm } from "vee-validate";
 import draggable from "vuedraggable";
+import { useDebounceFn } from "@vueuse/core";
 import { onClickOutside } from "@vueuse/core";
 import * as yup from "yup";
 
@@ -161,6 +164,7 @@ import HpModal from "@/components/hp-modal.vue";
 import HpButton from "@/components/hp-button.vue";
 import HpTextarea from "@/components/form/hp-textarea.vue";
 import HpSpinner from "@/components/hp-spinner.vue";
+import HpSaveIndicator from "@/components/hp-save-indicator.vue";
 import HpImageSelector from "@/components/form/hp-image-selector.vue";
 import MicCheck from "@/assets/abstracts/mic-check.svg";
 import HpBadgeTag from "@/components/hp-badge-tag.vue";
@@ -186,7 +190,6 @@ const { fetchOpenings } = useOpenings();
 const { fetchCandidates } = useCandidates();
 
 const { setBreadcrumbs } = useBreadcrumbs();
-const { setToast } = useToast();
 
 const schema = yup.object({
   name: yup
@@ -229,6 +232,7 @@ onClickOutside(overviewArea, (event) => {
 
 const handleDragChange = () => {
   setFieldValue("templates", templates.value);
+  onSubmit();
 };
 
 const handleRemoveInterview = (templateReference) => {
@@ -251,11 +255,6 @@ const onSubmit = handleSubmit(async (values) => {
   isSaving.value = false;
   opening.value = putOpening.data.value.opening;
   resetForm({ touched: false, values: opening.value });
-  setToast({
-    type: "positive",
-    title: "Well done!",
-    message: `${putOpening.data.value.opening.name} updated`,
-  });
   fetchOpenings();
   fetchCandidates(putOpening.data.value.opening.reference, true);
   setBreadcrumbs(
@@ -272,6 +271,10 @@ const onSubmit = handleSubmit(async (values) => {
     true
   );
 });
+
+const debouncedSubmit = useDebounceFn(() => {
+  onSubmit();
+}, 500);
 
 onMounted(async () => {
   if (route.params.openingRef) {

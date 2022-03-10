@@ -80,7 +80,7 @@ const props = defineProps({
 
 const { errorMessage, value: modelValue } = useField(props.name);
 
-const emits = defineEmits(["update:modelValue"]);
+const emits = defineEmits(["update:modelValue", "input"]);
 
 const target = ref(null);
 const isFlyoutOpen = ref(false);
@@ -100,6 +100,7 @@ onClickOutside(target, (event) => {
 const handleImageSelect = (index) => {
   modelValue.value = index;
   isFlyoutOpen.value = false;
+  emits("input");
 };
 </script>
 
