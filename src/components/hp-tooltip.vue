@@ -3,7 +3,7 @@
     <div @mouseleave="handleHoverOut" @mouseenter="handleHoverEnter">
       <slot />
     </div>
-    <transition name="hp-tooltip-transition">
+    <transition :name="`hp-tooltip-${position}-transition`">
       <div
         v-if="isHovered && !isDisabled"
         :class="`hp-tooltip hp-tooltip--${position}`"
@@ -111,16 +111,29 @@ const handleHoverEnter = () => {
   }
 }
 
-.hp-tooltip-transition {
+.hp-tooltip-top-transition {
   transform: translateX(-50%);
 }
-.hp-tooltip-transition-enter-active,
-.hp-tooltip-transition-leave-active {
+.hp-tooltip-top-transition-enter-active,
+.hp-tooltip-top-transition-leave-active {
   transition: all 0.15s cubic-bezier(0.17, 0.67, 0.83, 0.67);
 }
-.hp-tooltip-transition-enter-from,
-.hp-tooltip-transition-leave-to {
+.hp-tooltip-top-transition-enter-from,
+.hp-tooltip-top-transition-leave-to {
   opacity: 0;
   transform: translateX(-50%) translateY(-110%) scale(0.9);
+}
+
+.hp-tooltip-bottom-transition {
+  transform: translateX(-50%);
+}
+.hp-tooltip-bottom-transition-enter-active,
+.hp-tooltip-bottom-transition-leave-active {
+  transition: all 0.15s cubic-bezier(0.17, 0.67, 0.83, 0.67);
+}
+.hp-tooltip-bottom-transition-enter-from,
+.hp-tooltip-bottom-transition-leave-to {
+  opacity: 0;
+  transform: translateX(-50%) translateY(15px) scale(0.9);
 }
 </style>

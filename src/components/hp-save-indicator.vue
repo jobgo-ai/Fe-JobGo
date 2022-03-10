@@ -1,10 +1,15 @@
 <template>
-  <div class="hp-save-indicator">
-    <transition name="hp-save-indicator-transition" mode="out-in">
-      <hp-spinner v-if="showLoading"></hp-spinner>
-      <div v-else><hp-icon size="16" name="check-circle"></hp-icon></div>
-    </transition>
-  </div>
+  <hp-tooltip :delay="500" position="bottom">
+    <div class="hp-save-indicator">
+      <transition name="hp-save-indicator-transition" mode="out-in">
+        <hp-spinner v-if="showLoading"></hp-spinner>
+        <div v-else><hp-icon size="16" name="check-circle"></hp-icon></div>
+      </transition>
+    </div>
+    <template #content>{{
+      showLoading ? "Saving" : "All changes saved"
+    }}</template>
+  </hp-tooltip>
 </template>
 
 <script setup>
