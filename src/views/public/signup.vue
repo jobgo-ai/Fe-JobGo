@@ -24,7 +24,7 @@
         <button
           class="signup__checkbox-container"
           type="button"
-          @click.prevent="toggleTerms"
+          @click="toggleTerms"
         >
           <hp-checkbox
             :isLoading="postLogin.loading.value"
@@ -34,12 +34,14 @@
             Agree to the
             <a
               class="signup__checkbox-container__link"
+              target="_blank"
               href="https://www.hireproof.io/terms-of-service"
               >Terms of Service</a
             >
             and
             <a
               class="signup__checkbox-container__link"
+              target="_blank"
               href="https://www.hireproof.io/terms-of-service"
               >Privacy Policy</a
             >
@@ -120,7 +122,9 @@ const {
   },
 });
 
-const toggleTerms = () => {
+const toggleTerms = (e) => {
+  console.log("fuck");
+  console.log("shoutout", e);
   setFieldValue("terms", !values.terms);
 };
 const postUsers = usePost("users");
