@@ -235,14 +235,6 @@ const handleDragChange = () => {
   onSubmit();
 };
 
-const handleRemoveInterview = (templateReference) => {
-  const newTemplate = templates.value.filter(
-    (t) => t.reference !== templateReference
-  );
-  templates.value = newTemplate;
-  setFieldValue("templates", newTemplate);
-};
-
 const onSubmit = handleSubmit(async (values) => {
   isSaving.value = true;
   const putOpening = usePut(`openings/${route.params.openingRef}`);
@@ -271,6 +263,15 @@ const onSubmit = handleSubmit(async (values) => {
     true
   );
 });
+
+const handleRemoveInterview = (templateReference) => {
+  const newTemplate = templates.value.filter(
+    (t) => t.reference !== templateReference
+  );
+  templates.value = newTemplate;
+  setFieldValue("templates", newTemplate);
+  onSubmit();
+};
 
 const debouncedSubmit = useDebounceFn(() => {
   onSubmit();
