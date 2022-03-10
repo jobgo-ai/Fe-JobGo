@@ -14,7 +14,10 @@
             label="Password"
             type="password"
           />
-          <router-link to="/forgot-password" class="signin__forgot-password"
+          <router-link
+            tabIndex="-1"
+            to="/forgot-password"
+            class="signin__forgot-password"
             >Forgot password</router-link
           >
         </div>
