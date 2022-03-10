@@ -32,11 +32,13 @@ describe("openings", () => {
     cy.contains("PERMANENT_OPENING").click();
     cy.contains("Edit opening").click();
     cy.contains("Add interview").click();
-    // cy.contains("Add interview")
-    //   .parents(".hp-interview-card")
-    //   .find("a")
-    //   .contains("Add interview")
-    //   .click();
+    cy.contains("Add interview")
+      .parents(".hp-interview-card")
+      .find("a")
+      .contains("Add interview")
+      .click();
+
+    //Gets add to opening card - badly named
     cy.get(".hp-add-opening-card").next().contains("Add to opening").click();
   });
 
@@ -46,7 +48,7 @@ describe("openings", () => {
 
     cy.get(".hp-interview-card").each(($el, index, $list) => {
       // Hacky way to exlude the add new card
-      if (index !== $list.length - 1) {
+      if (index < $list.length - 2) {
         cy.get(".hp-interview-card")
           .eq(1)
           .find(".hp-button__button__icon--danger")
