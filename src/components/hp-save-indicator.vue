@@ -1,5 +1,5 @@
 <template>
-  <hp-tooltip :delay="500" position="bottom">
+  <hp-tooltip class="hp-save-indicator__tooltip" :delay="500" position="bottom">
     <div class="hp-save-indicator">
       <transition name="hp-save-indicator-transition" mode="out-in">
         <hp-spinner v-if="showLoading"></hp-spinner>
@@ -56,5 +56,8 @@ watch(
   border: $border;
   border-radius: $border-radius-sm;
   align-items: center;
+  &__tooltip {
+    cursor: default;
+  }
 }
 </style>
