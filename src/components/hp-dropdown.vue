@@ -46,7 +46,7 @@
 
 <script setup>
 //Vendor
-import { computed, ref, watchEffect } from "vue";
+import { computed, onMounted, ref, watch, watchEffect } from "vue";
 import { onClickOutside } from "@vueuse/core";
 
 // Components
@@ -85,11 +85,14 @@ const handleButtonClick = () => {
   emits("onChange", isDropdownOpen.value);
 };
 
-watchEffect(() => {
-  if (flyoutRef.value) {
-    flyoutRef.value.focus();
+watch(
+  () => flyoutRef.value,
+  () => {
+    if (flyoutRef.value) {
+      flyoutRef.value.focus();
+    }
   }
-});
+);
 
 onClickOutside(target, (event) => {
   if (!isDropdownOpen.value) {

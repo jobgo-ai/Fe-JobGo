@@ -20,13 +20,13 @@
             class="hp-multi-select__flyout__options__option"
             v-for="option in optionsList"
             @click="handleChangeEmit(option)"
-            tabindex="1"
+            :tabindex="1"
           >
             {{ option.label }}
             <hp-checkbox
               class="hp-multi-select__checkbox"
               :checked="modelValue.find((o) => o.value === option.value)"
-              tabindex="-1"
+              :tabindex="-1"
             />
           </button>
           <div class="hp-multi-select__spinner" v-else-if="isLoading">
@@ -226,6 +226,7 @@ const handleChangeEmit = (change) => {
         padding: 8px;
         border-radius: $border-radius-sm;
         outline: 0;
+        color: var(--color-text);
         background-color: var(--color-background);
         border: 0;
         display: flex;
