@@ -160,6 +160,7 @@ const linkValue = computed(() => {
 <style lang="scss">
 .hp-opening-card {
   width: 264px;
+  height: 236px;
   list-style: none;
   cursor: pointer;
   border-radius: $border-radius-lg;
