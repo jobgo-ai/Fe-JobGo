@@ -159,7 +159,6 @@ const linkValue = computed(() => {
 
 <style lang="scss">
 .hp-opening-card {
-  height: 236px;
   width: 264px;
   list-style: none;
   cursor: pointer;
@@ -215,6 +214,7 @@ const linkValue = computed(() => {
     &__description {
       flex: 1;
       color: var(--color-text-secondary);
+      padding-bottom: 12px;
     }
     &__badges {
       display: flex;
