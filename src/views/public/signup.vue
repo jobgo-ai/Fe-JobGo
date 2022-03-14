@@ -21,6 +21,14 @@
             type="password"
           />
         </div>
+        <div class="signup__password-container">
+          <hp-input
+            name="passwordConfirmation"
+            placeholder="Repeat your password"
+            label="Repeat password"
+            type="password"
+          />
+        </div>
         <button
           class="signup__checkbox-container"
           type="button"
@@ -85,13 +93,18 @@ import Logo from "@/assets/logo.svg";
 import { usePost } from "@/composables/useHttp";
 
 const schema = yup.object().shape({
-  name: yup.string().required(),
+  name: yup.string().required().label("Name"),
   email: yup
     .string()
     .email("Must be a valid email address")
     .required()
     .label("Email"),
   password: yup.string().min(6).required().label("Password"),
+  passwordConfirmation: yup
+    .string()
+    .label("Confirm password")
+    .required()
+    .oneOf([yup.ref("password")], "Passwords do not match"),
   terms: yup
     .boolean()
     .required()
