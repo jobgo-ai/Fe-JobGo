@@ -2,8 +2,18 @@
   <hp-tooltip class="hp-save-indicator__tooltip" :delay="500" position="bottom">
     <div class="hp-save-indicator">
       <transition name="hp-save-indicator-transition" mode="out-in">
-        <hp-spinner v-if="showLoading"></hp-spinner>
-        <div v-else><hp-icon size="16" name="check-circle"></hp-icon></div>
+        <hp-spinner
+          v-if="showLoading || (meta.dirty && meta.valid)"
+        ></hp-spinner>
+        <div v-else>
+          <hp-icon
+            class="hp-save-indicator__error"
+            v-if="!meta.valid"
+            size="16"
+            name="clean"
+          ></hp-icon>
+          <hp-icon size="16" v-else name="check-circle"></hp-icon>
+        </div>
       </transition>
     </div>
     <template #content>{{
@@ -24,6 +34,9 @@ const props = defineProps({
   isLoading: {
     type: Boolean,
     default: false,
+  },
+  meta: {
+    type: Object,
   },
 });
 
@@ -58,6 +71,9 @@ watch(
   align-items: center;
   &__tooltip {
     cursor: default;
+  }
+  &__error {
+    color: var(--color-error);
   }
 }
 </style>

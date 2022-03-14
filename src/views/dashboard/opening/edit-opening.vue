@@ -135,7 +135,10 @@
             </div>
           </transition>
         </div>
-        <hp-save-indicator :isLoading="isSaving"></hp-save-indicator>
+        <hp-save-indicator
+          :meta="meta"
+          :isLoading="isSaving"
+        ></hp-save-indicator>
       </teleport>
     </form>
     <div class="edit-openings__spinner" v-else>

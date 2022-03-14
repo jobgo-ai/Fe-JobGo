@@ -15,7 +15,8 @@
             type="number"
             v-model="modelValue"
             maxlength="2"
-            class="hp-counter__container__input"
+            :class="inputClasses"
+            @input="handleInput"
             @focus="isInputFocused = true"
             @blur="isInputFocused = false"
           />
@@ -34,7 +35,7 @@ import HpBadge from "@/components/hp-badge.vue";
 import { ref, computed } from "vue";
 import { useField } from "vee-validate";
 
-const emits = defineEmits(["update:modelValue"]);
+const emits = defineEmits(["update:modelValue", "input"]);
 const props = defineProps({
   modelValue: {
     type: Number,
@@ -51,7 +52,7 @@ const props = defineProps({
   },
   min: {
     type: Number,
-    default: 0,
+    default: 1,
   },
   max: {
     type: Number,
@@ -66,10 +67,27 @@ const { errorMessage, value: modelValue } = useField(props.name);
 const containerClasses = computed(() => {
   return {
     "hp-counter__input-container": true,
+    "hp-counter__input-container--error": props.max < modelValue.value,
+    "hp-counter__input-container--error": props.min > modelValue.value,
+    "hp-counter__input-container--error": errorMessage.value,
+    "hp-counter__input-container--error": !modelValue.value,
     "hp-counter__input-container--disabled": props.isDisabled,
     "hp-counter__input-container--focused": isInputFocused.value,
   };
 });
+
+const inputClasses = computed(() => {
+  return {
+    "hp-counter__container__input": true,
+    "hp-counter__container__input--error": props.max < modelValue.value,
+    "hp-counter__container__input--error": props.min > modelValue.value,
+  };
+});
+
+const handleInput = (e) => {
+  emits("update:modelValue", e.target.value);
+  emits("input", modelValue);
+};
 </script>
 
 <styles lang="scss">
@@ -91,6 +109,13 @@ const containerClasses = computed(() => {
         border: 1px solid var(--color-accent-background);
       }
     }
+    &--error {
+      border: 1px solid var(--color-error);
+      outline: 4px solid var(--color-focus);
+      .hp-counter__container {
+        border: none;
+      }
+    }
   }
   &__label {
     font-weight: 500;
@@ -104,9 +129,6 @@ const containerClasses = computed(() => {
     border: 1px solid var(--color-border);
     border-radius: $border-radius-sm;
     padding: 8px;
-    &:hover {
-      border: 1px solid var(--color-accent-background);
-    }
     &__input {
       width: 100%;
       max-width: 22px;

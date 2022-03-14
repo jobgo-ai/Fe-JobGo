@@ -10,7 +10,7 @@
       :placeholder="placeholder"
       :value="modelValue"
       :disabled="isDisabled"
-      v-on:input="modelValue = $event.target.value"
+      v-on:input="handleInput"
       :rows="rows"
     ></textarea>
     <transition name="hp-textarea__error-transition">
@@ -43,12 +43,19 @@ const props = defineProps({
   },
 });
 
+const emits = defineEmits(["input"]);
+
 import { useField } from "vee-validate";
 
 const { value: modelValue, errorMessage } = useField(props.name);
 
 const inputRef = ref(null);
 defineExpose({ inputRef });
+
+const handleInput = (e) => {
+  modelValue.value = e.target.value;
+  emits("input", modelValue);
+};
 
 const containerClasses = computed(() => {
   return {

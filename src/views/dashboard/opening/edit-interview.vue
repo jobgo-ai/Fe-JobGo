@@ -85,7 +85,7 @@
           </div>
         </transition>
       </div>
-      <hp-save-indicator :isLoading="isSaving"></hp-save-indicator>
+      <hp-save-indicator :isLoading="isSaving" :meta="meta"></hp-save-indicator>
     </teleport>
     <div class="edit-interview" v-if="!isInterviewLoading && !isLoading">
       <form
@@ -179,10 +179,17 @@
                   Set warmup instructions and expected duration
                 </p>
               </div>
-              <hp-counter name="ceremony.warmup.duration" />
+              <hp-counter
+                @input="debouncedSubmit"
+                name="ceremony.warmup.duration"
+              />
             </div>
             <div>
-              <hp-textarea :rows="6" name="ceremony.warmup.content" />
+              <hp-textarea
+                @input="debouncedSubmit"
+                :rows="6"
+                name="ceremony.warmup.content"
+              />
             </div>
           </div>
           <div
@@ -197,10 +204,17 @@
                   Set Cooldown instructions and expected duration
                 </p>
               </div>
-              <hp-counter name="ceremony.cooldown.duration" />
+              <hp-counter
+                @input="debouncedSubmit"
+                name="ceremony.cooldown.duration"
+              />
             </div>
             <div>
-              <hp-textarea :rows="6" name="ceremony.cooldown.content" />
+              <hp-textarea
+                @input="debouncedSubmit"
+                :rows="6"
+                name="ceremony.cooldown.content"
+              />
             </div>
           </div>
         </div>
@@ -281,12 +295,12 @@ const schema = yup.object({
   description: yup.string().nullable(),
   ceremony: yup.object({
     cooldown: yup.object({
-      content: yup.string(),
-      duration: yup.number().min(0).max(60),
+      content: yup.string().max(1000),
+      duration: yup.number().min(1).max(60),
     }),
     warmup: yup.object({
-      content: yup.string(),
-      duration: yup.number().min(0).max(60),
+      content: yup.string().max(1000),
+      duration: yup.number().min(1).max(60),
     }),
   }),
   questions: yup.array(),
