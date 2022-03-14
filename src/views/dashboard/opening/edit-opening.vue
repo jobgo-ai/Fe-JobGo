@@ -1,14 +1,5 @@
 <template>
   <div>
-    <hp-modal
-      :isOpen="isAddCandidateModalOpen"
-      @close="isAddCandidateModalOpen = false"
-    >
-      <candidate-modal
-        @close="isAddCandidateModalOpen = false"
-        :opening="opening"
-      />
-    </hp-modal>
     <form
       class="edit-openings"
       v-if="!isLoading"
@@ -88,9 +79,9 @@
       <teleport to="#teleport-target-header">
         <hp-button
           class="edit-openings__teleport-button"
-          icon="user"
-          @click="isAddCandidateModalOpen = true"
-          label="Add candidate"
+          icon="candidates"
+          :to="`/openings/${opening.reference}`"
+          label="Candidate list"
         ></hp-button>
         <div
           ref="overviewArea"
@@ -157,13 +148,9 @@ import { useDebounceFn } from "@vueuse/core";
 import { onClickOutside } from "@vueuse/core";
 import * as yup from "yup";
 
-// Views
-import CandidateModal from "../openings/candidate-modal.vue";
-
 // Components
 import HpInterviewCard from "@/components/cards/hp-interview-card.vue";
 import HpInput from "@/components/form/hp-input.vue";
-import HpModal from "@/components/hp-modal.vue";
 import HpButton from "@/components/hp-button.vue";
 import HpTextarea from "@/components/form/hp-textarea.vue";
 import HpSpinner from "@/components/hp-spinner.vue";
@@ -187,7 +174,6 @@ const opening = ref({});
 const isOverviewFlyoutOpen = ref(false);
 const isLoading = ref(true);
 const isSaving = ref(false);
-const isAddCandidateModalOpen = ref(false);
 
 const { fetchOpenings } = useOpenings();
 const { fetchCandidates } = useCandidates();
