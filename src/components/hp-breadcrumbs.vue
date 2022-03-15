@@ -10,7 +10,9 @@
           class="hp-breadcrumbs__crumb__icon"
           name="chevron-right"
         ></hp-icon>
-        <router-link :to="crumb.to">{{ crumb.label }}</router-link>
+        <router-link class="hp-breadcrumbs__link" :to="crumb.to">{{
+          crumb.label
+        }}</router-link>
       </li>
     </transition-group>
   </div>
@@ -40,11 +42,15 @@ const { crumbs } = useBreadcrumbs();
       font-size: 16px;
       line-height: 24px;
       margin-right: 2px;
-      color: var(--color-text-secondary);
       transition: all 0.15s cubic-bezier(0.17, 0.67, 0.83, 0.67);
+      .hp-breadcrumbs__link {
+        color: var(--color-text-secondary);
+      }
       &:last-child {
         font-weight: 500;
-        color: var(--color-text-primary);
+        .hp-breadcrumbs__link {
+          color: var(--color-text-primary);
+        }
         .hp-breadcrumbs__crumb__icon {
           color: var(--color-text-secondary);
         }
