@@ -235,7 +235,7 @@ const onSubmit = handleSubmit(async (values) => {
   });
   isSaving.value = false;
   opening.value = putOpening.data.value.opening;
-  resetForm({ touched: false, values: opening.value });
+  resetForm({ touched: false, values: values });
   fetchOpenings();
   fetchCandidates(putOpening.data.value.opening.reference, true);
   setBreadcrumbs(
