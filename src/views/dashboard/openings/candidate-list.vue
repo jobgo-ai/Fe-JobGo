@@ -425,6 +425,7 @@ const candidateList = computed(() => {
         border-radius: $border-radius-sm;
         outline: 0;
         background-color: var(--color-background);
+        color: var(--color-text);
         border: 0;
         display: flex;
         justify-content: space-between;

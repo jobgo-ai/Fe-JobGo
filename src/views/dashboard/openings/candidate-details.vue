@@ -29,65 +29,6 @@
             ></hp-button>
           </div>
         </div>
-        <div class="candidate-details__overview">
-          <div
-            :class="`candidate-details__overview__score candidate-details__overview__score--${calculateColor(
-              candidate.opening.statistics.candidateScore,
-              candidate.opening.statistics.averageOpeningScore
-            )}`"
-          >
-            <div class="candidate-details__overview__score-container">
-              <div class="candidate-details__overview__score__average">
-                {{
-                  candidate.opening.statistics.candidateScore?.toFixed(2) || "~"
-                }}
-              </div>
-              <div class="candidate-details__overview__score__current">
-                Current score
-              </div>
-              <div
-                v-if="candidate.opening.statistics.averageOpeningScore"
-                class="candidate-details__overview__score__average-score"
-              >
-                The average score is
-                {{
-                  candidate.opening.statistics.averageOpeningScore?.toFixed(2)
-                }}
-                <hp-icon
-                  v-if="
-                    candidate.opening.statistics.candidateScore >
-                    candidate.opening.statistics.averageOpeningScore
-                  "
-                  name="arrow-top"
-                ></hp-icon>
-                <hp-icon v-else name="arrow-down"></hp-icon>
-              </div>
-            </div>
-          </div>
-          <div class="candidate-details__overview__skill-container">
-            <div class="candidate-details__overview__skills-title">
-              Evaluated skills
-              <hp-badge
-                class="candidate-details__overview__skills-title__badge"
-                icon="skills"
-                :content="skillList ? skillList.length : 0"
-              ></hp-badge>
-            </div>
-            <ol class="candidate-details__overview__skills">
-              <hp-badge-tag
-                v-for="skill in skillList"
-                :label="skill.label"
-                :quantity="skill.value"
-                :type="
-                  calculateColor(
-                    skill.value,
-                    candidate.opening.statistics.averageOpeningScore
-                  )
-                "
-              ></hp-badge-tag>
-            </ol>
-          </div>
-        </div>
         <div class="candidate-details__interviews">
           <div class="candidate-details__interviews__header">
             <div>
@@ -259,6 +200,65 @@
               class="candidate-details__interviews__empty__button"
               :to="`/opening/${route.params.openingRef}/edit/add-interview`"
             ></hp-button>
+          </div>
+        </div>
+        <div class="candidate-details__overview">
+          <div
+            :class="`candidate-details__overview__score candidate-details__overview__score--${calculateColor(
+              candidate.opening.statistics.candidateScore,
+              candidate.opening.statistics.averageOpeningScore
+            )}`"
+          >
+            <div class="candidate-details__overview__score-container">
+              <div class="candidate-details__overview__score__average">
+                {{
+                  candidate.opening.statistics.candidateScore?.toFixed(2) || "~"
+                }}
+              </div>
+              <div class="candidate-details__overview__score__current">
+                Current score
+              </div>
+              <div
+                v-if="candidate.opening.statistics.averageOpeningScore"
+                class="candidate-details__overview__score__average-score"
+              >
+                The average score is
+                {{
+                  candidate.opening.statistics.averageOpeningScore?.toFixed(2)
+                }}
+                <hp-icon
+                  v-if="
+                    candidate.opening.statistics.candidateScore >
+                    candidate.opening.statistics.averageOpeningScore
+                  "
+                  name="arrow-top"
+                ></hp-icon>
+                <hp-icon v-else name="arrow-down"></hp-icon>
+              </div>
+            </div>
+          </div>
+          <div class="candidate-details__overview__skill-container">
+            <div class="candidate-details__overview__skills-title">
+              Evaluated skills
+              <hp-badge
+                class="candidate-details__overview__skills-title__badge"
+                icon="skills"
+                :content="skillList ? skillList.length : 0"
+              ></hp-badge>
+            </div>
+            <ol class="candidate-details__overview__skills">
+              <hp-badge-tag
+                v-for="skill in skillList"
+                :label="skill.label"
+                :quantity="skill.value"
+                :type="
+                  calculateColor(
+                    skill.value,
+                    candidate.opening.statistics.averageOpeningScore
+                  )
+                "
+              ></hp-badge-tag>
+            </ol>
           </div>
         </div>
       </div>
@@ -467,7 +467,6 @@ const calculateInterviewLink = (interview) => {
     display: grid;
     grid-gap: 24px;
     padding-bottom: 24px;
-    border-bottom: 1px dashed var(--color-border);
     &--incomplete {
       display: flex;
       flex-direction: column;
@@ -548,7 +547,6 @@ const calculateInterviewLink = (interview) => {
   }
   &__interviews {
     padding-top: 24px;
-    margin-bottom: 200px;
     &__empty {
       display: flex;
       justify-content: center;
@@ -585,6 +583,8 @@ const calculateInterviewLink = (interview) => {
     display: grid;
     grid-template-columns: repeat(auto-fit, 264px);
     grid-gap: 24px;
+    padding-bottom: 24px;
+    border-bottom: 1px dashed var(--color-border);
   }
   &__interview-grid__item {
     border-radius: $border-radius-lg;
