@@ -86,7 +86,7 @@
                   />
                   Dark mode
                 </div>
-                <hp-switch v-model:checked="isDarkmode" />
+                <hp-switch v-model="isDarkmode" />
               </div>
             </div>
             <div @click="handleLogout" class="hp-header__dropdown__options">

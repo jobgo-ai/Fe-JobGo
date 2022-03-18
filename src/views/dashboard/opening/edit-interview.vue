@@ -110,19 +110,22 @@
                 Set warmup instructions and expected duration
               </p>
             </div>
-            <hp-switch name=""></hp-switch>
+            <hp-switch v-model="isWarmupDisabled"></hp-switch>
           </div>
-          <div>
-            <hp-counter
-              @input="debouncedSubmit"
-              name="ceremony.warmup.duration"
-            />
-            <hp-textarea
-              @input="debouncedSubmit"
-              :rows="6"
-              name="ceremony.warmup.content"
-            />
-          </div>
+          <transition name="ceremony-transition">
+            <div v-if="isWarmupDisabled">
+              <hp-counter
+                class="edit-interview__ceremony__duration"
+                @input="debouncedSubmit"
+                name="ceremony.warmup.duration"
+              />
+              <hp-textarea
+                @input="debouncedSubmit"
+                :rows="6"
+                name="ceremony.warmup.content"
+              />
+            </div>
+          </transition>
         </div>
         <h3 class="edit-interview__ceremony__header__title">Questions</h3>
         <ol class="edit-interview__question-cards">
@@ -192,32 +195,32 @@
             dropzone
           ></hp-button>
         </div>
-        <div>
-          <div
-            class="edit-interview__ceremony edit-interview__ceremony--cooldown"
-          >
-            <div class="edit-interview__ceremony__header">
-              <div>
-                <h3 class="edit-interview__ceremony__header__title">
-                  Cooldown
-                </h3>
-                <p class="edit-interview__ceremony__header__subtitle">
-                  Set Cooldown instructions and expected duration
-                </p>
-              </div>
+        <div
+          class="edit-interview__ceremony edit-interview__ceremony--cooldown"
+        >
+          <div class="edit-interview__ceremony__header">
+            <div>
+              <h3 class="edit-interview__ceremony__header__title">Cooldown</h3>
+              <p class="edit-interview__ceremony__header__subtitle">
+                Set Cooldown instructions and expected duration
+              </p>
+            </div>
+            <hp-switch v-model="isCooldownDisabled"></hp-switch>
+          </div>
+          <transition name="ceremony-transition">
+            <div v-if="isCooldownDisabled">
               <hp-counter
                 @input="debouncedSubmit"
                 name="ceremony.cooldown.duration"
+                class="edit-interview__ceremony__duration"
               />
-            </div>
-            <div>
               <hp-textarea
                 @input="debouncedSubmit"
                 :rows="6"
                 name="ceremony.cooldown.content"
               />
             </div>
-          </div>
+          </transition>
         </div>
         <hp-danger-zone
           v-if="hasEditPermission(interview)"
@@ -286,6 +289,8 @@ const isOverviewFlyoutOpen = ref(false);
 const isAddQuestionDrawerOpen = ref(false);
 const isViewQuestionDrawerOpen = ref(false);
 const isEditQuestionDrawerOpen = ref(false);
+const isWarmupDisabled = ref(true);
+const isCooldownDisabled = ref(true);
 const { interview, fetchInterview, isInterviewLoading, setInterview } =
   useInterviews();
 const putInterview = usePut(`templates/${route.params.interviewRef}`);
@@ -483,7 +488,6 @@ const handleCloseEditDrawer = () => {
     flex-direction: column;
     align-self: center;
     align-items: center;
-    height: 100vh;
     overflow: auto;
   }
   &::-webkit-scrollbar {
@@ -501,10 +505,15 @@ const handleCloseEditDrawer = () => {
   &__questions-button {
     margin-top: 16px;
     padding-bottom: 24px;
-    border-bottom: 1px dashed var(--color-border);
-    margin-bottom: 16px;
   }
   &__ceremony {
+    border: 1px dashed var(--color-border);
+    padding: 12px;
+    border-radius: $border-radius-sm;
+    margin-bottom: 16px;
+    &__duration {
+      margin-bottom: 12px;
+    }
     &--cooldown {
       border-bottom: 1px dashed var(--color-border);
       margin-bottom: 16px;
@@ -642,5 +651,18 @@ const handleCloseEditDrawer = () => {
 }
 .list-group-item i {
   cursor: pointer;
+}
+
+.ceremony-transition {
+  transform: translateY(0);
+}
+.ceremony-transition-enter-active,
+.ceremony-transition-leave-active {
+  transition: all 0.15s cubic-bezier(0.17, 0.67, 0.83, 0.67);
+}
+.ceremony-transition-enter-from,
+.ceremony-transition-leave-to {
+  opacity: 0;
+  transform: translateY(-10px);
 }
 </styles>

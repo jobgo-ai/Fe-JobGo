@@ -4,8 +4,8 @@
       v-bind="$attrs"
       class="hp-switch__input"
       type="checkbox"
-      :checked="checked"
-      @change="$emit('update:checked', $event.target.checked)"
+      v-model="modelValue"
+      @change="$emit('update:modelValue', $event.target.checked)"
     />
     <span class="hp-switch__switch"></span>
     <span class="label">{{ label }}</span>
@@ -17,11 +17,13 @@ const props = defineProps({
   label: {
     type: String,
   },
-  checked: {
+  modelValue: {
     type: Boolean,
     required: true,
   },
 });
+
+const emits = defineEmits(["update:modelValue"]);
 </script>
 
 <style lang="scss">
