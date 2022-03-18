@@ -102,6 +102,28 @@
           label="Description"
           name="description"
         ></hp-input>
+        <div class="edit-interview__ceremony">
+          <div class="edit-interview__ceremony__header">
+            <div>
+              <h3 class="edit-interview__ceremony__header__title">Warmup</h3>
+              <p class="edit-interview__ceremony__header__subtitle">
+                Set warmup instructions and expected duration
+              </p>
+            </div>
+            <hp-switch name=""></hp-switch>
+          </div>
+          <div>
+            <hp-counter
+              @input="debouncedSubmit"
+              name="ceremony.warmup.duration"
+            />
+            <hp-textarea
+              @input="debouncedSubmit"
+              :rows="6"
+              name="ceremony.warmup.content"
+            />
+          </div>
+        </div>
         <h3 class="edit-interview__ceremony__header__title">Questions</h3>
         <ol class="edit-interview__question-cards">
           <draggable
@@ -171,27 +193,6 @@
           ></hp-button>
         </div>
         <div>
-          <div class="edit-interview__ceremony">
-            <div class="edit-interview__ceremony__header">
-              <div>
-                <h3 class="edit-interview__ceremony__header__title">Warmup</h3>
-                <p class="edit-interview__ceremony__header__subtitle">
-                  Set warmup instructions and expected duration
-                </p>
-              </div>
-              <hp-counter
-                @input="debouncedSubmit"
-                name="ceremony.warmup.duration"
-              />
-            </div>
-            <div>
-              <hp-textarea
-                @input="debouncedSubmit"
-                :rows="6"
-                name="ceremony.warmup.content"
-              />
-            </div>
-          </div>
           <div
             class="edit-interview__ceremony edit-interview__ceremony--cooldown"
           >
@@ -250,6 +251,7 @@ import HpInput from "@/components/form/hp-input.vue";
 import HpTooltip from "@/components/hp-tooltip.vue";
 import HpButton from "@/components/hp-button.vue";
 import HpCounter from "@/components/hp-counter.vue";
+import HpSwitch from "@/components/hp-switch.vue";
 import HpIcon from "@/components/hp-icon.vue";
 import HpBadgeTag from "@/components/hp-badge-tag.vue";
 import HpBadge from "@/components/hp-badge.vue";
