@@ -7,6 +7,12 @@
     >
       <div>
         <div class="edit-openings__edit-container">
+          <router-link
+            class="edit-question__back"
+            :to="`/openings/${opening.reference}`"
+          >
+            <hp-icon name="arrow-left"></hp-icon>Back
+          </router-link>
           <h3 class="edit-openings__edit-container__title">Edit opening</h3>
           <p class="edit-openings__edit-container__subtitle">
             Main information for your openings
@@ -77,13 +83,7 @@
         </div>
       </div>
       <teleport to="#teleport-target-header">
-        <hp-button
-          class="edit-openings__teleport-button"
-          icon="candidates"
-          :to="`/openings/${opening.reference}`"
-          label="Candidate list"
-        ></hp-button>
-        <div
+        <!-- <div
           ref="overviewArea"
           class="
             edit-openings__teleport-button
@@ -125,7 +125,7 @@
               </div>
             </div>
           </transition>
-        </div>
+        </div> -->
         <hp-save-indicator
           :meta="meta"
           :isLoading="isSaving"
@@ -152,6 +152,7 @@ import * as yup from "yup";
 import HpInterviewCard from "@/components/cards/hp-interview-card.vue";
 import HpInput from "@/components/form/hp-input.vue";
 import HpButton from "@/components/hp-button.vue";
+import HpIcon from "@/components/hp-icon.vue";
 import HpTextarea from "@/components/form/hp-textarea.vue";
 import HpSpinner from "@/components/hp-spinner.vue";
 import HpSaveIndicator from "@/components/hp-save-indicator.vue";
