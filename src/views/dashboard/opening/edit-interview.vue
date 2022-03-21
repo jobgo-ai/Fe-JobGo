@@ -110,10 +110,10 @@
                 Set warmup instructions and expected duration
               </p>
             </div>
-            <hp-switch v-model="isWarmupDisabled"></hp-switch>
+            <hp-switch v-model="isWarmupEnabled"></hp-switch>
           </div>
           <transition name="ceremony-transition">
-            <div v-if="isWarmupDisabled">
+            <div v-if="isWarmupEnabled">
               <hp-counter
                 class="edit-interview__ceremony__duration"
                 @input="debouncedSubmit"
@@ -205,10 +205,13 @@
                 Set Cooldown instructions and expected duration
               </p>
             </div>
-            <hp-switch v-model="isCooldownDisabled"></hp-switch>
+            <hp-switch
+              @input="calculateCooldown"
+              v-model="isCooldownEnabled"
+            ></hp-switch>
           </div>
           <transition name="ceremony-transition">
-            <div v-if="isCooldownDisabled">
+            <div v-if="isCooldownEnabled">
               <hp-counter
                 @input="debouncedSubmit"
                 name="ceremony.cooldown.duration"
@@ -289,8 +292,8 @@ const isOverviewFlyoutOpen = ref(false);
 const isAddQuestionDrawerOpen = ref(false);
 const isViewQuestionDrawerOpen = ref(false);
 const isEditQuestionDrawerOpen = ref(false);
-const isWarmupDisabled = ref(true);
-const isCooldownDisabled = ref(true);
+const isWarmupEnabled = ref(true);
+const isCooldownEnabled = ref(true);
 const { interview, fetchInterview, isInterviewLoading, setInterview } =
   useInterviews();
 const putInterview = usePut(`templates/${route.params.interviewRef}`);
@@ -301,40 +304,52 @@ const schema = yup.object({
   name: yup.string().required("Interview name is required"),
   description: yup.string().nullable(),
   ceremony: yup.object({
-    cooldown: yup.object({
-      content: yup.string().max(1000),
-      duration: yup.number().min(1).max(60),
-    }),
-    warmup: yup.object({
-      content: yup.string().max(1000),
-      duration: yup.number().min(1).max(60),
-    }),
+    cooldown: yup
+      .object({
+        content: yup.string().max(1000).nullable(),
+        duration: yup.number().min(1).max(60).nullable(),
+      })
+      .nullable(),
+    warmup: yup
+      .object({
+        content: yup.string().max(1000),
+        duration: yup.number().min(1).max(60),
+      })
+      .nullable(),
   }),
   questions: yup.array(),
 });
 
-const { handleSubmit, resetForm, meta, setFieldValue } = useForm({
+const { handleSubmit, resetForm, meta, setFieldValue, values } = useForm({
   validationSchema: schema,
   validateOnMount: false,
 });
+
+const calculateCooldown = () => {
+  const cooldown = !isCooldownEnabled.value
+    ? null
+    : {
+        content: values.ceremony.cooldown.content,
+        duration: values.ceremony.cooldown.duration * 60,
+      };
+
+  setFieldValue("ceremony.cooldown", cooldown);
+  debouncedSubmit();
+  return cooldown;
+};
 
 const onSubmit = handleSubmit(async (values) => {
   isSaving.value = true;
   const formattedQuestions =
     interview.value?.questions.map((q) => q.reference) || [];
+
   await putInterview.put({
     template: {
       ...values,
       questions: formattedQuestions,
       ceremony: {
-        warmup: {
-          ...values.ceremony.warmup,
-          duration: values.ceremony.warmup.duration * 60,
-        },
-        cooldown: {
-          ...values.ceremony.cooldown,
-          duration: values.ceremony.cooldown.duration * 60,
-        },
+        warmup: values.warmup,
+        cooldown: values.cooldown,
       },
     },
   });
@@ -383,6 +398,8 @@ onClickOutside(overviewTarget, (event) => {
 onMounted(async () => {
   await fetchInterview(route.params.interviewRef);
   resetForm({ touched: false, values: interview.value });
+  isWarmupEnabled.value = interview.value.ceremony.warmup !== null;
+  isCooldownEnabled.value = interview.value.ceremony.cooldown !== null;
 
   setBreadcrumbs(
     [
