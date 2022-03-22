@@ -118,12 +118,21 @@
           {{ values.ceremony.enabled }}
           <transition name="ceremony-transition">
             <div v-if="values.ceremony.warmup.enabled">
-              <hp-counter
-                class="edit-interview__ceremony__duration"
-                @input="debouncedSubmit"
-                name="ceremony.warmup.duration"
-              />
+              <div class="edit-question__duration__container">
+                <div class="edit-question__duration__labels">
+                  <div class="edit-question__label">Duration time</div>
+                  <div class="edit-question__sublabel">
+                    Expected duration, in minutes
+                  </div>
+                </div>
+                <hp-counter
+                  class="edit-interview__ceremony__duration"
+                  @input="debouncedSubmit"
+                  name="ceremony.warmup.duration"
+                />
+              </div>
               <hp-textarea
+                label="Instructions for warmup"
                 @input="debouncedSubmit"
                 :rows="6"
                 name="ceremony.warmup.content"
@@ -216,12 +225,21 @@
           </div>
           <transition name="ceremony-transition">
             <div v-if="values.ceremony.cooldown.enabled">
-              <hp-counter
-                @input="debouncedSubmit"
-                name="ceremony.cooldown.duration"
-                class="edit-interview__ceremony__duration"
-              />
+              <div class="edit-question__duration__container">
+                <div class="edit-question__duration__labels">
+                  <div class="edit-question__label">Duration time</div>
+                  <div class="edit-question__sublabel">
+                    Expected duration, in minutes
+                  </div>
+                </div>
+                <hp-counter
+                  class="edit-interview__ceremony__duration"
+                  @input="debouncedSubmit"
+                  name="ceremony.cooldown.duration"
+                />
+              </div>
               <hp-textarea
+                label="Instructions for cooldown"
                 @input="debouncedSubmit"
                 :rows="6"
                 name="ceremony.cooldown.content"
@@ -308,8 +326,8 @@ const schema = yup.object({
   ceremony: yup.object({
     cooldown: yup.object({
       enabled: yup.boolean(),
-      content: yup.string().max(1000).nullable(),
-      duration: yup.number().min(1).max(60).nullable(),
+      content: yup.string().max(1000),
+      duration: yup.number().min(1).max(60),
     }),
     warmup: yup.object({
       enabled: yup.boolean(),
@@ -329,19 +347,29 @@ const onSubmit = handleSubmit(async (values) => {
   isSaving.value = true;
   const formattedQuestions =
     interview.value?.questions.map((q) => q.reference) || [];
+
+  const formatCeremony = (ceremonyType) => {
+    if (values.ceremony[ceremonyType].enabled) {
+      return {
+        ...values.ceremony[ceremonyType],
+        duration: values.ceremony[ceremonyType].duration * 60,
+      };
+    } else {
+      return {
+        ...interview.value.ceremony[ceremonyType],
+        duration: interview.value.ceremony[ceremonyType].duration * 60,
+        enabled: false,
+      };
+    }
+  };
+
   const payload = {
     template: {
       ...values,
       questions: formattedQuestions,
       ceremony: {
-        warmup: {
-          ...values.ceremony.warmup,
-          duration: values.ceremony.warmup.duration * 60,
-        },
-        cooldown: {
-          ...values.ceremony.cooldown,
-          duration: values.ceremony.cooldown.duration * 60,
-        },
+        warmup: formatCeremony("warmup"),
+        cooldown: formatCeremony("cooldown"),
       },
     },
   };
