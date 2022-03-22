@@ -118,6 +118,12 @@
           {{ values.ceremony.enabled }}
           <transition name="ceremony-transition">
             <div v-if="values.ceremony.warmup.enabled">
+              <hp-textarea
+                label="Instructions for warmup"
+                @input="debouncedSubmit"
+                :rows="6"
+                name="ceremony.warmup.content"
+              />
               <div class="edit-question__duration__container">
                 <div class="edit-question__duration__labels">
                   <div class="edit-question__label">Duration time</div>
@@ -131,12 +137,6 @@
                   name="ceremony.warmup.duration"
                 />
               </div>
-              <hp-textarea
-                label="Instructions for warmup"
-                @input="debouncedSubmit"
-                :rows="6"
-                name="ceremony.warmup.content"
-              />
             </div>
           </transition>
         </div>
@@ -225,6 +225,12 @@
           </div>
           <transition name="ceremony-transition">
             <div v-if="values.ceremony.cooldown.enabled">
+              <hp-textarea
+                label="Instructions for cooldown"
+                @input="debouncedSubmit"
+                :rows="6"
+                name="ceremony.cooldown.content"
+              />
               <div class="edit-question__duration__container">
                 <div class="edit-question__duration__labels">
                   <div class="edit-question__label">Duration time</div>
@@ -238,12 +244,6 @@
                   name="ceremony.cooldown.duration"
                 />
               </div>
-              <hp-textarea
-                label="Instructions for cooldown"
-                @input="debouncedSubmit"
-                :rows="6"
-                name="ceremony.cooldown.content"
-              />
             </div>
           </transition>
         </div>
@@ -543,8 +543,9 @@ const handleCloseEditDrawer = () => {
     padding-bottom: 24px;
   }
   &__ceremony {
-    border: 1px dashed var(--color-border);
+    border: 1px solid var(--color-border);
     padding: 12px;
+    padding-bottom: 0;
     border-radius: $border-radius-sm;
     margin-bottom: 16px;
     &__duration {
