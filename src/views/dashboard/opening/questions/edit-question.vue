@@ -223,7 +223,9 @@ const onSubmit = handleSubmit(async (values) => {
     duration: values.duration * 60,
     jobLevels: values.jobLevels.map((l) => l.value),
     skills: values.skills.map((s) => s.value),
-    guidelines: values.guidelines.filter((g) => g !== ""),
+    guidelines: values.guidelines
+      ? values.guidelines.filter((g) => g !== "")
+      : [],
   };
 
   if (props.question?.reference) {
