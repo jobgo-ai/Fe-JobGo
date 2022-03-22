@@ -28,7 +28,11 @@
           Reduce glare and give your eyes a break
         </p>
       </div>
-      <hp-switch @click.prevent="handleDarkModeToggle" v-model="isDarkmode" />
+      <hp-switch
+        @click.prevent="handleDarkModeToggle"
+        v-model="isDarkmode"
+        standalone
+      />
     </div>
     <div class="settings__card">
       <form @submit.pervent="onSubmit" autocomplete="off">

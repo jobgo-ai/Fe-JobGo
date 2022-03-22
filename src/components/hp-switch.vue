@@ -13,6 +13,7 @@
 </template>
 
 <script setup>
+import { watch } from "vue";
 import { useField } from "vee-validate";
 
 const props = defineProps({
@@ -33,6 +34,7 @@ const emits = defineEmits(["input"]);
 
 const { value: modelValue, errorMessage } = useField(props.name, "", {
   standalone: props.standalone,
+  initialValue: props.modelValue,
   validateOnValueUpdate: false,
 });
 
@@ -40,6 +42,16 @@ const handleInput = (e) => {
   modelValue.value = e.target.checked;
   emits("input", modelValue);
 };
+
+watch(
+  () => props.modelValue,
+  (value) => {
+    if (!props.standalone) {
+      return;
+    }
+    modelValue.value = props.modelValue;
+  }
+);
 </script>
 
 <style lang="scss">
