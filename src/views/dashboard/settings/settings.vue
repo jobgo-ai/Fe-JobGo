@@ -30,7 +30,8 @@
       </div>
       <hp-switch
         @click.prevent="handleDarkModeToggle"
-        v-model:checked="isDarkmode"
+        v-model="isDarkmode"
+        standalone
       />
     </div>
     <div class="settings__card">

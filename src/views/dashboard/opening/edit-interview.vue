@@ -102,6 +102,35 @@
           label="Description"
           name="description"
         ></hp-input>
+        <div class="edit-interview__ceremony">
+          <div class="edit-interview__ceremony__header">
+            <div>
+              <h3 class="edit-interview__ceremony__header__title">Warmup</h3>
+              <p class="edit-interview__ceremony__header__subtitle">
+                Set warmup instructions and expected duration
+              </p>
+            </div>
+            <hp-switch
+              name="ceremony.warmup.enabled"
+              @input="debouncedSubmit"
+            ></hp-switch>
+          </div>
+          {{ values.ceremony.enabled }}
+          <transition name="ceremony-transition">
+            <div v-if="values.ceremony.warmup.enabled">
+              <hp-counter
+                class="edit-interview__ceremony__duration"
+                @input="debouncedSubmit"
+                name="ceremony.warmup.duration"
+              />
+              <hp-textarea
+                @input="debouncedSubmit"
+                :rows="6"
+                name="ceremony.warmup.content"
+              />
+            </div>
+          </transition>
+        </div>
         <h3 class="edit-interview__ceremony__header__title">Questions</h3>
         <ol class="edit-interview__question-cards">
           <draggable
@@ -170,53 +199,35 @@
             dropzone
           ></hp-button>
         </div>
-        <div>
-          <div class="edit-interview__ceremony">
-            <div class="edit-interview__ceremony__header">
-              <div>
-                <h3 class="edit-interview__ceremony__header__title">Warmup</h3>
-                <p class="edit-interview__ceremony__header__subtitle">
-                  Set warmup instructions and expected duration
-                </p>
-              </div>
-              <hp-counter
-                @input="debouncedSubmit"
-                name="ceremony.warmup.duration"
-              />
-            </div>
+        <div
+          class="edit-interview__ceremony edit-interview__ceremony--cooldown"
+        >
+          <div class="edit-interview__ceremony__header">
             <div>
-              <hp-textarea
-                @input="debouncedSubmit"
-                :rows="6"
-                name="ceremony.warmup.content"
-              />
+              <h3 class="edit-interview__ceremony__header__title">Cooldown</h3>
+              <p class="edit-interview__ceremony__header__subtitle">
+                Set Cooldown instructions and expected duration
+              </p>
             </div>
+            <hp-switch
+              name="ceremony.cooldown.enabled"
+              @input="debouncedSubmit"
+            ></hp-switch>
           </div>
-          <div
-            class="edit-interview__ceremony edit-interview__ceremony--cooldown"
-          >
-            <div class="edit-interview__ceremony__header">
-              <div>
-                <h3 class="edit-interview__ceremony__header__title">
-                  Cooldown
-                </h3>
-                <p class="edit-interview__ceremony__header__subtitle">
-                  Set Cooldown instructions and expected duration
-                </p>
-              </div>
+          <transition name="ceremony-transition">
+            <div v-if="values.ceremony.cooldown.enabled">
               <hp-counter
                 @input="debouncedSubmit"
                 name="ceremony.cooldown.duration"
+                class="edit-interview__ceremony__duration"
               />
-            </div>
-            <div>
               <hp-textarea
                 @input="debouncedSubmit"
                 :rows="6"
                 name="ceremony.cooldown.content"
               />
             </div>
-          </div>
+          </transition>
         </div>
         <hp-danger-zone
           v-if="hasEditPermission(interview)"
@@ -250,6 +261,7 @@ import HpInput from "@/components/form/hp-input.vue";
 import HpTooltip from "@/components/hp-tooltip.vue";
 import HpButton from "@/components/hp-button.vue";
 import HpCounter from "@/components/hp-counter.vue";
+import HpSwitch from "@/components/hp-switch.vue";
 import HpIcon from "@/components/hp-icon.vue";
 import HpBadgeTag from "@/components/hp-badge-tag.vue";
 import HpBadge from "@/components/hp-badge.vue";
@@ -295,10 +307,12 @@ const schema = yup.object({
   description: yup.string().nullable(),
   ceremony: yup.object({
     cooldown: yup.object({
-      content: yup.string().max(1000),
-      duration: yup.number().min(1).max(60),
+      enabled: yup.boolean(),
+      content: yup.string().max(1000).nullable(),
+      duration: yup.number().min(1).max(60).nullable(),
     }),
     warmup: yup.object({
+      enabled: yup.boolean(),
       content: yup.string().max(1000),
       duration: yup.number().min(1).max(60),
     }),
@@ -306,7 +320,7 @@ const schema = yup.object({
   questions: yup.array(),
 });
 
-const { handleSubmit, resetForm, meta, setFieldValue } = useForm({
+const { handleSubmit, resetForm, meta, setFieldValue, values } = useForm({
   validationSchema: schema,
   validateOnMount: false,
 });
@@ -315,7 +329,7 @@ const onSubmit = handleSubmit(async (values) => {
   isSaving.value = true;
   const formattedQuestions =
     interview.value?.questions.map((q) => q.reference) || [];
-  await putInterview.put({
+  const payload = {
     template: {
       ...values,
       questions: formattedQuestions,
@@ -330,7 +344,8 @@ const onSubmit = handleSubmit(async (values) => {
         },
       },
     },
-  });
+  };
+  await putInterview.put(payload);
   isSaving.value = false;
   const formattedInterview = setInterview(putInterview.data.value.template);
   resetForm({
@@ -481,7 +496,6 @@ const handleCloseEditDrawer = () => {
     flex-direction: column;
     align-self: center;
     align-items: center;
-    height: 100vh;
     overflow: auto;
   }
   &::-webkit-scrollbar {
@@ -499,10 +513,15 @@ const handleCloseEditDrawer = () => {
   &__questions-button {
     margin-top: 16px;
     padding-bottom: 24px;
-    border-bottom: 1px dashed var(--color-border);
-    margin-bottom: 16px;
   }
   &__ceremony {
+    border: 1px dashed var(--color-border);
+    padding: 12px;
+    border-radius: $border-radius-sm;
+    margin-bottom: 16px;
+    &__duration {
+      margin-bottom: 12px;
+    }
     &--cooldown {
       border-bottom: 1px dashed var(--color-border);
       margin-bottom: 16px;
@@ -640,5 +659,18 @@ const handleCloseEditDrawer = () => {
 }
 .list-group-item i {
   cursor: pointer;
+}
+
+.ceremony-transition {
+  transform: translateY(0);
+}
+.ceremony-transition-enter-active,
+.ceremony-transition-leave-active {
+  transition: all 0.15s cubic-bezier(0.17, 0.67, 0.83, 0.67);
+}
+.ceremony-transition-enter-from,
+.ceremony-transition-leave-to {
+  opacity: 0;
+  transform: translateY(-10px);
 }
 </styles>
