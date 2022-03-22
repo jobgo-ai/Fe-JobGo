@@ -260,7 +260,7 @@ const handleUnarchiveOpening = async (opening) => {
     position: absolute;
     left: 440px;
     height: 100%;
-    width: 848px;
+    max-width: 848px;
     padding-right: 4px;
     padding-left: 4px;
     overflow: scroll;
