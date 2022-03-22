@@ -110,10 +110,14 @@
                 Set warmup instructions and expected duration
               </p>
             </div>
-            <hp-switch v-model="isWarmupEnabled"></hp-switch>
+            <hp-switch
+              name="ceremony.warmup.enabled"
+              @input="debouncedSubmit"
+            ></hp-switch>
           </div>
+          {{ values.ceremony.enabled }}
           <transition name="ceremony-transition">
-            <div v-if="isWarmupEnabled">
+            <div v-if="values.ceremony.warmup.enabled">
               <hp-counter
                 class="edit-interview__ceremony__duration"
                 @input="debouncedSubmit"
@@ -206,12 +210,12 @@
               </p>
             </div>
             <hp-switch
-              @input="calculateCooldown"
-              v-model="isCooldownEnabled"
+              name="ceremony.warmup.enabled"
+              @input="debouncedSubmit"
             ></hp-switch>
           </div>
           <transition name="ceremony-transition">
-            <div v-if="isCooldownEnabled">
+            <div v-if="values.ceremony.cooldown.enabled">
               <hp-counter
                 @input="debouncedSubmit"
                 name="ceremony.cooldown.duration"
@@ -292,8 +296,6 @@ const isOverviewFlyoutOpen = ref(false);
 const isAddQuestionDrawerOpen = ref(false);
 const isViewQuestionDrawerOpen = ref(false);
 const isEditQuestionDrawerOpen = ref(false);
-const isWarmupEnabled = ref(true);
-const isCooldownEnabled = ref(true);
 const { interview, fetchInterview, isInterviewLoading, setInterview } =
   useInterviews();
 const putInterview = usePut(`templates/${route.params.interviewRef}`);
@@ -304,18 +306,16 @@ const schema = yup.object({
   name: yup.string().required("Interview name is required"),
   description: yup.string().nullable(),
   ceremony: yup.object({
-    cooldown: yup
-      .object({
-        content: yup.string().max(1000).nullable(),
-        duration: yup.number().min(1).max(60).nullable(),
-      })
-      .nullable(),
-    warmup: yup
-      .object({
-        content: yup.string().max(1000),
-        duration: yup.number().min(1).max(60),
-      })
-      .nullable(),
+    cooldown: yup.object({
+      enabled: yup.boolean(),
+      content: yup.string().max(1000).nullable(),
+      duration: yup.number().min(1).max(60).nullable(),
+    }),
+    warmup: yup.object({
+      enabled: yup.boolean(),
+      content: yup.string().max(1000),
+      duration: yup.number().min(1).max(60),
+    }),
   }),
   questions: yup.array(),
 });
@@ -325,34 +325,28 @@ const { handleSubmit, resetForm, meta, setFieldValue, values } = useForm({
   validateOnMount: false,
 });
 
-const calculateCooldown = () => {
-  const cooldown = !isCooldownEnabled.value
-    ? null
-    : {
-        content: values.ceremony.cooldown.content,
-        duration: values.ceremony.cooldown.duration * 60,
-      };
-
-  setFieldValue("ceremony.cooldown", cooldown);
-  debouncedSubmit();
-  return cooldown;
-};
-
 const onSubmit = handleSubmit(async (values) => {
+  console.log(values.ceremony.warmup);
   isSaving.value = true;
   const formattedQuestions =
     interview.value?.questions.map((q) => q.reference) || [];
-
-  await putInterview.put({
+  const payload = {
     template: {
       ...values,
       questions: formattedQuestions,
       ceremony: {
-        warmup: values.warmup,
-        cooldown: values.cooldown,
+        warmup: {
+          ...values.ceremony.warmup,
+          duration: values.ceremony.warmup.duration * 60,
+        },
+        cooldown: {
+          ...values.ceremony.cooldown,
+          duration: values.ceremony.cooldown.duration * 60,
+        },
       },
     },
-  });
+  };
+  await putInterview.put(payload);
   isSaving.value = false;
   const formattedInterview = setInterview(putInterview.data.value.template);
   resetForm({
@@ -398,8 +392,6 @@ onClickOutside(overviewTarget, (event) => {
 onMounted(async () => {
   await fetchInterview(route.params.interviewRef);
   resetForm({ touched: false, values: interview.value });
-  isWarmupEnabled.value = interview.value.ceremony.warmup !== null;
-  isCooldownEnabled.value = interview.value.ceremony.cooldown !== null;
 
   setBreadcrumbs(
     [

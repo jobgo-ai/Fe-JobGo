@@ -1,11 +1,11 @@
 <template>
   <label class="hp-switch">
     <input
-      v-bind="$attrs"
       class="hp-switch__input"
       type="checkbox"
-      v-model="modelValue"
-      @change="handleChange"
+      :value="modelValue"
+      @input="handleInput"
+      @blur="handleBlur"
     />
     <span class="hp-switch__switch"></span>
     <span class="label">{{ label }}</span>
@@ -13,21 +13,29 @@
 </template>
 
 <script setup>
+import { useField } from "vee-validate";
+
 const props = defineProps({
   label: {
     type: String,
   },
-  modelValue: {
+  standalone: {
     type: Boolean,
-    required: true,
+    default: false,
   },
+  name: {
+    type: String,
+  },
+  modelValue: Boolean,
 });
 
-const emits = defineEmits(["update:modelValue", "input"]);
+const emits = defineEmits(["input"]);
 
-const handleChange = (e) => {
-  emits("update:modelValue", e.target.checked);
-  emits("input");
+const { value: modelValue, errorMessage } = useField(props.name);
+
+const handleInput = (e) => {
+  modelValue.value = e.target.value;
+  emits("input", modelValue);
 };
 </script>
 
