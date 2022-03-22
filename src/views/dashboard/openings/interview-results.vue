@@ -105,10 +105,10 @@
               <hp-badge icon="questions" :content="index + 1" />
               <div
                 v-if="interaction.interaction?.answer"
-                class="
+                :class="`
                   results__questions__container__header__little-badge
-                  results__questions__container__header__little-badge--nuetral
-                "
+                  results__questions__container__header__little-badge--${interaction.interaction.answer?.value}
+                `"
               >
                 {{ interaction.interaction.answer?.value }} / 5
               </div>
@@ -431,16 +431,31 @@ const calculateSkillScoreColor = (skill) => {
           line-height: 16px;
           letter-spacing: -0.015em;
           font-weight: 500;
-          font-feature-settings: "tnum" on, "lnum" on;
-          &--positive {
-            background: var(--color-background-positive);
-            border: 1px solid var(--color-border-positive);
-            color: var(--color-forground-positive);
-          }
-          &--negative {
+          font-variant-numeric: tabular-nums;
+          &--1 {
             background: var(--color-background-negative);
-            border: 1px solid var(--color-border-negative);
+            border-color: var(--color-border-negative);
             color: var(--color-forground-negative);
+          }
+          &--2 {
+            background: var(--orange-background);
+            border-color: var(--orange-border);
+            color: var(--orange-forground);
+          }
+          &--3 {
+            background: var(--yellow-background);
+            border-color: var(--yellow-border);
+            color: var(--yellow-forground);
+          }
+          &--4 {
+            background: var(--blue-background);
+            border-color: var(--blue-border);
+            color: var(--blue-forground);
+          }
+          &--5 {
+            background: var(--color-background-positive);
+            border-color: var(--color-border-positive);
+            color: var(--color-forground-positive);
           }
         }
       }

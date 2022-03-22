@@ -26,7 +26,7 @@
       />
     </hp-drawer>
     <teleport to="#teleport-target-header">
-      <div ref="overviewTarget" class="edit-interview__overview-button">
+      <!-- <div ref="overviewTarget" class="edit-interview__overview-button">
         <hp-button
           @handleClick="isOverviewFlyoutOpen = !isOverviewFlyoutOpen"
           icon="file"
@@ -84,7 +84,7 @@
             </div>
           </div>
         </transition>
-      </div>
+      </div> -->
       <hp-save-indicator :isLoading="isSaving" :meta="meta"></hp-save-indicator>
     </teleport>
     <div class="edit-interview" v-if="!isInterviewLoading && !isLoading">

@@ -46,6 +46,16 @@ window.Intercom("boot", {
   --color-spinner-track: rgba(51, 70, 82, 0.4);
   --color-spinner-bullet: rgba(51, 70, 82, 1);
 
+  --blue-background: #dfe8ed;
+  --blue-border: #a4bdca;
+  --blue-forground: #3b5f71;
+  --orange-background: #f0e5dc;
+  --orange-border: #d4b399;
+  --orange-forground: #80512c;
+  --yellow-background: #fcf4e3;
+  --yellow-border: #f7dfaf;
+  --yellow-forground: #b28f4b;
+
   --grey--100: #ffffff;
   --grey--200: #f9f9f9;
   --grey--300: #f0f0f0;
@@ -192,6 +202,16 @@ window.Intercom("boot", {
   --color-forground-tooltip: #393f42;
   --color-spinner-track: rgba(255, 255, 255, 0.4);
   --color-spinner-bullet: rgba(255, 255, 255, 1);
+
+  --blue-background: rgba(80, 129, 153, 0.08);
+  --blue-border: rgba(80, 129, 153, 0.32);
+  --blue-forground: rgb(80, 129, 153);
+  --orange-background: rgba(173, 109, 59, 0.08);
+  --orange-border: rgba(173, 109, 59, 0.32);
+  --orange-forground: #ad6d3b;
+  --yellow-background: rgba(240, 193, 101, 0.08);
+  --yellow-border: rgba(240, 193, 101, 0.32);
+  --yellow-forground: rgb(240, 194, 102);
 }
 
 .flyout-transition {
