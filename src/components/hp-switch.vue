@@ -3,7 +3,7 @@
     <input
       class="hp-switch__input"
       type="checkbox"
-      :value="modelValue"
+      :checked="modelValue"
       @input="handleInput"
       @blur="handleBlur"
     />
@@ -31,10 +31,13 @@ const props = defineProps({
 
 const emits = defineEmits(["input"]);
 
-const { value: modelValue, errorMessage } = useField(props.name);
+const { value: modelValue, errorMessage } = useField(props.name, "", {
+  standalone: props.standalone,
+  validateOnValueUpdate: false,
+});
 
 const handleInput = (e) => {
-  modelValue.value = e.target.value;
+  modelValue.value = e.target.checked;
   emits("input", modelValue);
 };
 </script>

@@ -210,7 +210,7 @@
               </p>
             </div>
             <hp-switch
-              name="ceremony.warmup.enabled"
+              name="ceremony.cooldown.enabled"
               @input="debouncedSubmit"
             ></hp-switch>
           </div>
@@ -326,7 +326,6 @@ const { handleSubmit, resetForm, meta, setFieldValue, values } = useForm({
 });
 
 const onSubmit = handleSubmit(async (values) => {
-  console.log(values.ceremony.warmup);
   isSaving.value = true;
   const formattedQuestions =
     interview.value?.questions.map((q) => q.reference) || [];
