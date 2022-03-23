@@ -106,20 +106,26 @@
           <div class="edit-interview__ceremony__header">
             <div>
               <h3 class="edit-interview__ceremony__header__title">Warmup</h3>
-              <p class="edit-interview__ceremony__header__subtitle">
+              <p class="edit-question__sublabel">
                 Set warmup instructions and expected duration
               </p>
             </div>
             <hp-switch
               name="ceremony.warmup.enabled"
+              :isDisabled="isSaving"
               @input="debouncedSubmit"
             ></hp-switch>
           </div>
           {{ values.ceremony.enabled }}
           <transition name="ceremony-transition">
             <div v-if="values.ceremony.warmup.enabled">
+              <div class="edit-question__duration__labels">
+                <div class="edit-question__label">Warmup instructions</div>
+                <div class="edit-question__sublabel">
+                  (optional, but recommended)
+                </div>
+              </div>
               <hp-textarea
-                label="Instructions for warmup"
                 @input="debouncedSubmit"
                 :rows="6"
                 name="ceremony.warmup.content"
@@ -220,13 +226,19 @@
             </div>
             <hp-switch
               name="ceremony.cooldown.enabled"
+              :isDisabled="isSaving"
               @input="debouncedSubmit"
             ></hp-switch>
           </div>
           <transition name="ceremony-transition">
             <div v-if="values.ceremony.cooldown.enabled">
+              <div class="edit-question__duration__labels">
+                <div class="edit-question__label">Warmup instructions</div>
+                <div class="edit-question__sublabel">
+                  (optional, but recommended)
+                </div>
+              </div>
               <hp-textarea
-                label="Instructions for cooldown"
                 @input="debouncedSubmit"
                 :rows="6"
                 name="ceremony.cooldown.content"
@@ -344,7 +356,6 @@ const { handleSubmit, resetForm, meta, setFieldValue, values } = useForm({
 });
 
 const onSubmit = handleSubmit(async (values) => {
-  isSaving.value = true;
   const formattedQuestions =
     interview.value?.questions.map((q) => q.reference) || [];
 
@@ -400,9 +411,14 @@ const onSubmit = handleSubmit(async (values) => {
   );
 });
 
-const debouncedSubmit = useDebounceFn(() => {
+const onSubmitWithDebounce = useDebounceFn(() => {
   onSubmit();
 }, 500);
+
+const debouncedSubmit = () => {
+  isSaving.value = true;
+  onSubmitWithDebounce();
+};
 
 const { setBreadcrumbs } = useBreadcrumbs();
 useContextSave(meta);

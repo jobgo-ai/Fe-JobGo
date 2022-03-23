@@ -1,19 +1,20 @@
 <template>
-  <label class="hp-switch">
+  <label :class="containerClasses">
     <input
-      class="hp-switch__input"
+      :class="switchClasses"
       type="checkbox"
+      :disabled="isDisabled"
       :checked="modelValue"
       @input="handleInput"
       @blur="handleBlur"
     />
-    <span class="hp-switch__switch"></span>
+    <span :class="switchLabel"></span>
     <span class="label">{{ label }}</span>
   </label>
 </template>
 
 <script setup>
-import { watch } from "vue";
+import { watch, computed } from "vue";
 import { useField } from "vee-validate";
 
 const props = defineProps({
@@ -23,6 +24,10 @@ const props = defineProps({
   standalone: {
     type: Boolean,
     default: false,
+  },
+  isDisabled: {
+    type: Boolean,
+    value: false,
   },
   name: {
     type: String,
@@ -52,6 +57,27 @@ watch(
     modelValue.value = props.modelValue;
   }
 );
+
+const switchClasses = computed(() => {
+  return {
+    "hp-switch__input": true,
+    "hp-switch__input--disabled": props.isDisabled,
+  };
+});
+
+const switchLabel = computed(() => {
+  return {
+    "hp-switch__switch": true,
+    "hp-switch__switch--disabled": props.isDisabled,
+  };
+});
+
+const containerClasses = computed(() => {
+  return {
+    "hp-switch": true,
+    "hp-switch--disabled": props.isDisabled,
+  };
+});
 </script>
 
 <style lang="scss">
@@ -65,12 +91,19 @@ watch(
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;
   border-width: 0;
+  &--disabled {
+    pointer-events: none;
+  }
 }
 
 .hp-switch {
   cursor: pointer;
   display: inline-flex;
   align-items: center;
+  &--disabled {
+    cursor: not-allowed;
+    opacity: 0.4;
+  }
 }
 
 .hp-switch__switch {
@@ -86,6 +119,11 @@ watch(
   border-radius: var(--switch-size);
   background-color: var(--color-text-tertiary);
   transition: all 0.15s cubic-bezier(0.17, 0.67, 0.83, 0.67);
+
+  &--disabled {
+    pointer-events: none;
+    cursor: not-allowed;
+  }
 }
 
 .hp-switch__input:focus + .hp-switch__switch {
@@ -94,6 +132,12 @@ watch(
 
 .hp-switch__input:active + .hp-switch__switch {
   outline: var(--color-focus) solid 4px;
+}
+
+.hp-switch__input--disabled,
+.hp-switch--disabled,
+.hp-switch__switch--disabled {
+  outline: none !important;
 }
 
 .hp-switch__switch::before {

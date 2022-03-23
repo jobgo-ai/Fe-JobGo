@@ -14,7 +14,14 @@ const Template = (args) => ({
     return { args, isChecked };
   },
   template: `<div>
+  <div>
+  Default
     <hp-switch v-model:checked="isChecked" name="toggle" />
+  </div>
+  <div>
+    Disabled
+    <hp-switch v-model:checked="isChecked" :isDisabled="true" name="toggle" />
+    </div>
   </div>`,
 });
 
