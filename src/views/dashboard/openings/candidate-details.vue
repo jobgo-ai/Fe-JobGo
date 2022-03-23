@@ -119,7 +119,7 @@
                     name="loader"
                     :size="15"
                   ></hp-icon>
-                  In progress
+                  In progress with {{ interview.interview.interviewerName }}
                 </div>
                 <div class="candidate-details__interview-grid__item__icon-text">
                   <hp-icon
@@ -135,7 +135,7 @@
                 </div>
                 <hp-button
                   :href="calculateInterviewLink(interview)"
-                  label="Go to interview"
+                  :label="`Go to ${interview.interview.interviewerName}'s interview`"
                   class="candidate-details__interview-grid__item__actions"
                 ></hp-button>
               </div>
@@ -572,7 +572,6 @@ const calculateInterviewLink = (interview) => {
       line-height: 24px;
     }
     &__subtitle {
-      font-weight: 500;
       font-size: 14px;
       line-height: 20px;
       color: var(--color-text-secondary);
