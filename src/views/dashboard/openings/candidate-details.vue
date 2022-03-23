@@ -135,7 +135,7 @@
                 </div>
                 <hp-button
                   :href="calculateInterviewLink(interview)"
-                  :label="`Go to ${interview.interview.interviewerName}'s interview`"
+                  label="Join interview in progress"
                   class="candidate-details__interview-grid__item__actions"
                 ></hp-button>
               </div>
