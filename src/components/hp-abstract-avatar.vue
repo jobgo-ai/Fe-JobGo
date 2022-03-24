@@ -10,7 +10,7 @@
 </template>
 
 <script setup>
-import { ref, watch, defineAsyncComponent } from "vue";
+import { shallowRef, watch, defineAsyncComponent } from "vue";
 const props = defineProps({
   abstractKey: {
     type: [String, Number],
@@ -18,7 +18,7 @@ const props = defineProps({
   },
 });
 
-const avatar = ref(null);
+const avatar = shallowRef(null);
 
 watch(
   () => props.abstractKey,
