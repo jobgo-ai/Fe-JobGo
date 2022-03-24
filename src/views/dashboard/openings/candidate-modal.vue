@@ -32,6 +32,7 @@
             @handleClick="archiveCandidate(candidate)"
             v-if="!isAddNew"
             :isLoading="isArchivingCandidate"
+            :isDisabled="isArchivingCandidate || isUpdatingCandidate"
             icon="archive"
             danger
           ></hp-button>
@@ -41,7 +42,9 @@
           primary
           type="submit"
           :isLoading="isUpdatingCandidate"
-          :isDisabled="!meta.valid"
+          :isDisabled="
+            !meta.valid || isArchivingCandidate || isUpdatingCandidate
+          "
           :label="content.buttonLabel"
         ></hp-button>
       </div>
