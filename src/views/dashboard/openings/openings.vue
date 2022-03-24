@@ -228,7 +228,6 @@ const handleUnarchiveOpening = async (opening) => {
 .opening-list {
   &__grid {
     position: relative;
-    height: 100%;
     display: grid;
     grid-gap: 26px;
     grid-template-columns: repeat(auto-fill, 264px);
