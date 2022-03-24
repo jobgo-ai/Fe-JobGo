@@ -42,7 +42,7 @@ watch(
   &__image {
     height: 100%;
     width: 100%;
-    clip-path: circle(50% at 50% 50%);
+    clip-path: circle(70% at 50% 50%);
   }
 }
 </style>
