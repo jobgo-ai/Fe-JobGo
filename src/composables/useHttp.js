@@ -1,19 +1,6 @@
 import { ref } from "vue";
 import { state } from "./useAuth";
 
-import useToast from "@/composables/useToast";
-
-const { setToast } = useToast();
-
-const setErrorToast = () => {
-  setToast({
-    type: "negative",
-    duration: 10000,
-    title: "Oh no, something went wrong.",
-    message: "Your data was not saved.  We suggest a refresh.",
-  });
-};
-
 const API_URL = import.meta.env.VITE_API_URL;
 
 export function useGet(endpoint) {
@@ -49,7 +36,6 @@ export function useGet(endpoint) {
         data.value = jsonRes;
       }
     } catch (err) {
-      setErrorToast();
       error.value = err;
     } finally {
       loading.value = false;
@@ -89,7 +75,6 @@ export function usePatch(endpoint) {
         data.value = await res.json();
       }
     } catch (err) {
-      setErrorToast();
       error.value = err;
     } finally {
       loading.value = false;
@@ -128,7 +113,6 @@ export function usePut(endpoint) {
         data.value = await res.json();
       }
     } catch (err) {
-      setErrorToast();
       error.value = err;
     } finally {
       loading.value = false;
@@ -167,7 +151,6 @@ export function usePost(endpoint) {
         data.value = await res.json();
       }
     } catch (err) {
-      setErrorToast();
       error.value = err;
     } finally {
       loading.value = false;
@@ -206,7 +189,6 @@ export function useDelete(endpoint) {
         data.value = await res.json();
       }
     } catch (err) {
-      setErrorToast();
       error.value = err;
     } finally {
       loading.value = false;
