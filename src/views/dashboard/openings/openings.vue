@@ -111,7 +111,7 @@ onMounted(async () => {
 watch(
   () => route.query.candidate,
   async () => {
-    if (!route.query.candidate) {
+    if (!route.query.candidate && route.name === "openings") {
       setBreadcrumbs([
         {
           label: "Openings",

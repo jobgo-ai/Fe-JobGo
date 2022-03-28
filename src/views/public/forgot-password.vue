@@ -20,7 +20,7 @@
         ></hp-button>
       </form>
       <div v-else>
-        <h2 class="forgot-password__title">Verify your email</h2>
+        <h2 class="forgot-password__title">Check your email</h2>
         <p>We sent you an email to reset your password.</p>
       </div>
     </div>

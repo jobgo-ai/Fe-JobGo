@@ -176,10 +176,14 @@ onMounted(async () => {
     },
     {
       label: props.opening.name,
-      to: `/openings/${props.opening.reference}?candidate=${interview.value.candidate.reference}`,
+      to: `/openings/${props.opening.reference}`,
     },
     {
       label: interview.value.candidate.name,
+      to: `/openings/${props.opening.reference}?candidate=${interview.value.candidate.reference}`,
+    },
+    {
+      label: interview.value.template.name,
       to: ``,
     },
   ]);

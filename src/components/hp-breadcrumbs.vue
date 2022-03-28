@@ -51,9 +51,6 @@ const { crumbs } = useBreadcrumbs();
         .hp-breadcrumbs__link {
           color: var(--color-text-primary);
         }
-        .hp-breadcrumbs__crumb__icon {
-          color: var(--color-text-secondary);
-        }
       }
       &:first-child {
         .hp-breadcrumbs__crumb__icon {
