@@ -51,6 +51,17 @@
           @handleDelete="onDeleteTemplate"
         ></hp-add-interview-card>
       </ol>
+      <div class="add-interview__load-more">
+        <hp-button
+          v-if="!isInterviewsLoading && hasLoadMore"
+          label="Load more"
+          @click="fetchMoreTemplates"
+          primary
+          :isLoading="isLoadingMoreLoading"
+        >
+          Load more
+        </hp-button>
+      </div>
       <hp-spinner v-if="isInterviewsLoading" content size="24" />
     </div>
   </div>
@@ -65,10 +76,12 @@ import * as yup from "yup";
 
 // Components
 import HpModal from "@/components/hp-modal.vue";
+import HpButton from "@/components/hp-button.vue";
 import HpInput from "@/components/form/hp-input.vue";
 import HpSpinner from "@/components/hp-spinner.vue";
 import HpMultiSelect from "@/components/form/hp-multi-select.vue";
 import HpAddInterviewCard from "@/components/cards/hp-add-interview-card.vue";
+
 // Composables
 import useSkillSearch from "@/composables/useSkillSearch";
 import useConstants from "@/composables/useConstants";
@@ -83,6 +96,10 @@ const props = defineProps({
 });
 
 const isInterviewsLoading = ref(true);
+const isLoadingMoreLoading = ref(false);
+const hasLoadMore = ref(true);
+const offset = ref(0);
+const limit = 20;
 
 const filter = ref({ search: "", skills: [], jobLevels: [] });
 
@@ -111,12 +128,11 @@ watch(
   { deep: true }
 );
 
-const getUrl = (loadingMore) => {
+const getUrl = () => {
   let url = `templates`;
-  var params = new URLSearchParams([["limit", 20]]);
-  if (loadingMore) {
-    params.append("offset", next);
-  }
+  var params = new URLSearchParams([["limit", limit]]);
+
+  params.append("offset", offset.value);
   if (filter.value.jobLevels.length > 0) {
     const onlySlugs = filter.value.jobLevels.map((j) => j.value);
     params.append("job-levels", onlySlugs.join(","));
@@ -136,11 +152,26 @@ const getUrl = (loadingMore) => {
 };
 
 const fetchTemplates = async () => {
+  offset.value = 0;
   isInterviewsLoading.value = true;
   const getTemplates = useGet(getUrl());
   await getTemplates.get();
   templates.value = getTemplates.data.value.templates;
+  hasLoadMore.value = getTemplates.data.value.templates.length / limit === 1;
   isInterviewsLoading.value = false;
+};
+
+const fetchMoreTemplates = async () => {
+  isLoadingMoreLoading.value = true;
+  offset.value = offset.value + limit;
+  const getTemplates = useGet(getUrl());
+  await getTemplates.get();
+  templates.value = templates.value.concat(
+    [],
+    getTemplates.data.value.templates
+  );
+  hasLoadMore.value = getTemplates.data.value.templates / limit === 1;
+  isLoadingMoreLoading.value = false;
 };
 
 onMounted(async () => {
@@ -238,6 +269,11 @@ const onDeleteTemplate = async (template) => {
         margin-bottom: 6px;
       }
     }
+  }
+  &__load-more {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 200px;
   }
 }
 
