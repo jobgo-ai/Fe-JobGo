@@ -56,7 +56,6 @@
           v-if="!isInterviewsLoading && hasLoadMore"
           label="Load more"
           @click="fetchMoreTemplates"
-          primary
           :isLoading="isLoadingMoreLoading"
         >
           Load more
@@ -190,7 +189,7 @@ onMounted(async () => {
     },
     {
       label: "Add interview",
-      to: `/opening/${props.opening.reference}/view/add-interview`,
+      to: `/opening/${props.opening.reference}/edit/add-interview`,
     },
   ]);
 

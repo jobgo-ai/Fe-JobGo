@@ -33,7 +33,11 @@
             ]"
             v-model="state"
           />
-          <ol v-if="!isOpeningsLoading" class="opening-list__grid">
+          <ol
+            v-if="!isOpeningsLoading"
+            ref="scrollContainer"
+            class="opening-list__grid"
+          >
             <hp-opening-card
               v-if="state === 'active'"
               @handleAddNew="handleNewOpening"
@@ -67,7 +71,8 @@
 <script setup>
 import { ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { onMounted, onUnmounted } from "vue";
+import { onMounted } from "vue";
+import { useWindowScroll, useElementSize } from "@vueuse/core";
 
 // Composables
 import { usePost, usePut } from "@/composables/useHttp";
@@ -92,8 +97,26 @@ const isCandidateListOpen = ref(route.params.openingRef);
 const state = ref("active");
 const { setToast } = useToast();
 
-const { fetchOpenings, openings, isOpeningsLoading } = useOpenings();
+const { fetchOpenings, openings, isOpeningsLoading, offset } = useOpenings();
 const { setBreadcrumbs } = useBreadcrumbs();
+
+const scrollContainer = ref(null);
+const { y } = useWindowScroll();
+
+watch(
+  () => y.value,
+  () => {
+    let documentHeight = document.body.scrollHeight;
+    let currentScroll = window.scrollY + window.innerHeight;
+
+    if (documentHeight <= currentScroll + 60) {
+      if (isOpeningsLoading.value) {
+        return;
+      }
+      fetchOpenings(true, state.value);
+    }
+  }
+);
 
 onMounted(async () => {
   // Checks for openingRef in route params
@@ -185,7 +208,7 @@ watch(state, async () => {
   if (state.value === "archived") {
     router.push(`/openings/`);
   }
-  await fetchOpenings(state.value);
+  await fetchOpenings(false, state.value);
 });
 
 const handleUnarchiveOpening = async (opening) => {
@@ -232,7 +255,7 @@ const handleUnarchiveOpening = async (opening) => {
     grid-gap: 26px;
     grid-template-columns: repeat(auto-fill, 264px);
     align-content: baseline;
-    padding-bottom: 500px;
+    padding-bottom: 64px;
   }
 }
 @media (min-width: $breakpoint-tablet) {
