@@ -51,7 +51,7 @@ const fetchOpenings = async (isLoadMore = false, state = "active") => {
   isLoadingMoreLoading.value = false;
 };
 
-const updateOpenings = async () => {
+const updateOpenings = async (state = "active") => {
   if (getOpenings.loading.value) {
     getOpenings.controller.abort();
   }
@@ -78,6 +78,7 @@ export default () => {
     fetchOpening,
     setOpenings,
     fetchOpenings,
+    updateOpenings,
     hasMoreData,
     offset,
     opening,
