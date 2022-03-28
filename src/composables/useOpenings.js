@@ -37,11 +37,11 @@ const fetchOpenings = async (isLoadMore = false, state = "active") => {
     offset.value
   }`;
   await getOpenings.get(url);
+  if (getOpenings.data.value.openings.length < limit) {
+    hasMoreData.value = false;
+  }
   if (getOpenings.data.value) {
     if (isLoadMore) {
-      if (getOpenings.data.value.openings.length < limit) {
-        hasMoreData.value = false;
-      }
       openings.value = [...openings.value, ...getOpenings.data.value.openings];
     } else {
       openings.value = getOpenings.data.value.openings;
