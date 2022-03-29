@@ -130,9 +130,9 @@
               ></hp-button>
             </div>
           </div>
-          <ol v-if="candidateList.length > 0">
+          <ol v-if="candidates.length > 0">
             <hp-candidate-card
-              v-for="candidate in candidateList"
+              v-for="candidate in candidates"
               :key="candidate.reference"
               :candidate="candidate"
             ></hp-candidate-card>
@@ -194,6 +194,13 @@ const props = defineProps({
   },
 });
 
+const filters = ref({
+  search: "",
+  stage: "all",
+});
+
+const offset = ref(0);
+
 const { opening, fetchOpening } = useOpenings();
 
 const { fetchCandidates, isCandidateListLoading, candidates, templateList } =
@@ -235,48 +242,38 @@ watch(
     if (!route.params.openingRef) {
       return;
     }
-    fetchCandidates(route.params.openingRef);
+    fetchCandidates();
     fetchOpening(route.params.openingRef);
   },
   { immediate: true }
+);
+
+watch(
+  () => filters,
+  () => {
+    console.log("filter change");
+    const url = getUrl();
+    fetchCandidates(url);
+  }
 );
 
 const selectedTemplateIndex = ref(
   templateList.value?.findIndex((template) => template.value)
 );
 
-// TODO: refactor
-const candidateList = computed(() => {
-  if (!templateList.value) {
-    return [];
+const getUrl = () => {
+  const limit = 20;
+  let url = `templates`;
+  var params = new URLSearchParams([["limit", limit]]);
+
+  params.append("offset", offset.value);
+  params.append("search", filters.value.stage);
+  if (filters.value.search !== "") {
+    params.append("search", filters.value.search);
   }
-  // with debounced search
-  const withSearch = debouncedSearch.value
-    ? candidates.value.filter((candidate) => {
-        return candidate.name
-          .toLowerCase()
-          .includes(debouncedSearch.value.toLowerCase());
-      })
-    : candidates.value;
 
-  // Finding the selected template's index
-  selectedTemplateIndex.value = templateList.value.findIndex(
-    (template) => template.value
-  );
-
-  // filtered by currently selected template
-  const filteredByTemplate =
-    selectedTemplateIndex.value === templateList.value.length - 1
-      ? withSearch
-      : withSearch.filter((candidate) => {
-          return (
-            candidate.opening.templates.find((i) => !i.interview.started)
-              ?.name === templateList.value[selectedTemplateIndex.value].label
-          );
-        });
-
-  return filteredByTemplate;
-});
+  return `${url}?${params.toString()}`;
+};
 </script>
 
 <style lang="scss" scoped>

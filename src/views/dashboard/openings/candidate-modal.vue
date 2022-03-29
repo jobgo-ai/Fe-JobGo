@@ -151,7 +151,7 @@ const onSubmit = handleSubmit(async (values) => {
       title: "Well done!",
       message: "Candidate created successfully",
     });
-    fetchCandidates(route.params.openingRef, true);
+    fetchCandidates();
     router.push(
       `/openings/${route.params.openingRef}?candidate=${postCandidate.data.value.candidate.reference}`
     );
@@ -184,7 +184,7 @@ const onSubmit = handleSubmit(async (values) => {
         to: `/opening/${route.params.openingRef}?candidate=${candidate.value.reference}`,
       },
     ]);
-    fetchCandidates(route.params.openingRef, true);
+    fetchCandidates();
   }
   fetchOpening(route.params.openingRef);
   updateOpenings();
@@ -200,7 +200,7 @@ const archiveCandidate = async () => {
   await archiveCandidate.put({
     state: "archived",
   });
-  await fetchCandidates(route.params.openingRef, true);
+  await fetchCandidates();
   setToast({
     type: "success",
     title: "What a change!",
