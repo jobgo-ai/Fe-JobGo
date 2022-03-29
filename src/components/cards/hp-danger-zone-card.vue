@@ -5,23 +5,26 @@
       :isOpen="isConfirmationModalOpen"
     >
       <div class="hp-danger-zone__modal">
-        <h4 class="hp-danger-zone__title">Confirm delete</h4>
-        <p class="hp-danger-zone__subtitle">
-          This is a permanent deletion, all related data will be lost.
-        </p>
-        <p class="hp-danger-zone__warning">This action is not reversable</p>
-        <hp-input
-          icon="locked"
-          label="To confirm, please type DELETE"
-          v-model="confirmation"
-          standalone
-        ></hp-input>
-        <hp-button
-          label="Confirm"
-          :isDisabled="confirmation !== 'DELETE'"
-          @handleClick="onConfirm"
-          destructive
-        ></hp-button>
+        <form @submit.prevent="">
+          <h4 class="hp-danger-zone__title">Confirm delete</h4>
+          <p class="hp-danger-zone__subtitle">
+            This is a permanent deletion, all related data will be lost.
+          </p>
+          <p class="hp-danger-zone__warning">This action is not reversable</p>
+          <hp-input
+            icon="locked"
+            label="To confirm, please type DELETE"
+            v-model="confirmation"
+            standalone
+          ></hp-input>
+          <hp-button
+            label="Confirm"
+            type="submit"
+            :isDisabled="confirmation !== 'DELETE'"
+            @handleClick="onConfirm"
+            destructive
+          ></hp-button>
+        </form>
       </div>
     </hp-modal>
     <h4 class="hp-danger-zone__title">Danger zone</h4>

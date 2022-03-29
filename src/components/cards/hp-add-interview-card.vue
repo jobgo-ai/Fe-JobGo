@@ -76,14 +76,24 @@
           ></hp-button>
           <template #content>View interview</template>
         </hp-tooltip>
-        <hp-tooltip :delay="500" class="hp-add-opening-card__actions__button">
+        <hp-tooltip
+          v-if="hasEditPermission(template)"
+          :delay="500"
+          class="hp-add-opening-card__actions__button"
+        >
           <hp-button
             :to="`/opening/${route.params.openingRef}/edit/edit-interview/${template.reference}`"
             icon="pencil"
-            tooltipLabel="Edit interview"
-            v-if="hasEditPermission(template)"
           ></hp-button>
           <template #content>Edit interview</template>
+        </hp-tooltip>
+        <hp-tooltip :delay="500" class="hp-add-opening-card__actions__button">
+          <hp-button
+            icon="copy"
+            @click="handleCloneInterview(template.reference)"
+            v-if="!hasEditPermission(template)"
+          ></hp-button>
+          <template #content>Clone interview</template>
         </hp-tooltip>
       </div>
     </div>
@@ -185,6 +195,14 @@ const handleAddToInterview = async () => {
 
 const formatSkills = (skills) => {
   return skills.map((skill) => skill.value.name).join(", ");
+};
+
+const handleCloneInterview = async (ref) => {
+  const postInterview = usePost(`clone/templates/${ref}`);
+  await postInterview.post();
+  router.push(
+    `/opening/${route.params.openingRef}/edit/edit-interview/${postInterview.data.value.template.reference}`
+  );
 };
 </script>
 

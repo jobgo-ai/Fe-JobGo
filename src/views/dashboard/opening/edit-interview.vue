@@ -118,7 +118,7 @@
           </div>
           {{ values.ceremony.enabled }}
           <transition name="ceremony-transition">
-            <div v-if="values.ceremony.warmup.enabled">
+            <div v-show="values.ceremony.warmup.enabled">
               <div class="edit-question__duration__labels">
                 <div class="edit-question__label">Warmup instructions</div>
                 <div class="edit-question__sublabel">
@@ -293,7 +293,6 @@ import HpButton from "@/components/hp-button.vue";
 import HpCounter from "@/components/hp-counter.vue";
 import HpSwitch from "@/components/hp-switch.vue";
 import HpIcon from "@/components/hp-icon.vue";
-import HpBadgeTag from "@/components/hp-badge-tag.vue";
 import HpBadge from "@/components/hp-badge.vue";
 import HpDrawer from "@/components/hp-drawer.vue";
 import HpTextarea from "@/components/form/hp-textarea.vue";
@@ -355,7 +354,7 @@ const { handleSubmit, resetForm, meta, setFieldValue, values } = useForm({
   validateOnMount: false,
 });
 
-const onSubmit = handleSubmit(async (values) => {
+const onSubmit = handleSubmit(async () => {
   const formattedQuestions =
     interview.value?.questions.map((q) => q.reference) || [];
 
@@ -386,11 +385,12 @@ const onSubmit = handleSubmit(async (values) => {
   };
   await putInterview.put(payload);
   isSaving.value = false;
-  const formattedInterview = setInterview(putInterview.data.value.template);
+  setInterview(putInterview.data.value.template);
+
   resetForm({
     touched: false,
     dirty: false,
-    values: formattedInterview,
+    values: values,
   });
   setBreadcrumbs(
     [
@@ -413,7 +413,7 @@ const onSubmit = handleSubmit(async (values) => {
 
 const onSubmitWithDebounce = useDebounceFn(() => {
   onSubmit();
-}, 500);
+}, 300);
 
 const debouncedSubmit = () => {
   isSaving.value = true;
