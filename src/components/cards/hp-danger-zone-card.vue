@@ -12,6 +12,7 @@
           </p>
           <p class="hp-danger-zone__warning">This action is not reversable</p>
           <hp-input
+            ref="inputRef"
             icon="locked"
             label="To confirm, please type DELETE"
             v-model="confirmation"
@@ -20,8 +21,9 @@
           <hp-button
             label="Confirm"
             type="submit"
+            :isLoading="isConfirmationLoading"
             :isDisabled="confirmation !== 'DELETE'"
-            @handleClick="onConfirm"
+            @handleClick="handleConfirmationClick"
             destructive
           ></hp-button>
         </form>
@@ -32,7 +34,7 @@
       After you perform this action, there is no going back
     </p>
     <hp-button
-      @handleClick="isConfirmationModalOpen = true"
+      @handleClick="openConfirmationModal"
       destructive
       :label="label"
     ></hp-button>
@@ -40,7 +42,7 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { onMounted, ref, nextTick } from "vue";
 import HpButton from "@/components/hp-button.vue";
 import HpInput from "@/components/form/hp-input.vue";
 import HpModal from "@/components/hp-modal.vue";
@@ -60,8 +62,22 @@ const props = defineProps({
   },
 });
 
+const inputRef = ref(null);
+const isConfirmationLoading = ref(false);
+
 const isConfirmationModalOpen = ref(false);
-const confirmation = ref("eee");
+const confirmation = ref("");
+
+const openConfirmationModal = async () => {
+  isConfirmationModalOpen.value = true;
+  await nextTick();
+  inputRef.value.inputRef.focus();
+};
+
+const handleConfirmationClick = async () => {
+  isConfirmationLoading.value = true;
+  await props.onConfirm();
+};
 </script>
 
 <style lang="scss" scoped>
