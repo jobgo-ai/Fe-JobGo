@@ -116,7 +116,7 @@
           <div class="candidate-list__search">
             <hp-input
               variant="search"
-              v-model="search"
+              v-model="filters.search"
               icon="search"
               standalone
               placeholder="Search..."
@@ -233,9 +233,6 @@ onClickOutside(dropdownTarget, (event) => {
   isFlyoutOpen.value = false;
 });
 
-const search = ref("");
-const debouncedSearch = useDebounce(search, 269);
-
 watch(
   () => route.params.openingRef,
   async () => {
@@ -254,7 +251,8 @@ watch(
     console.log("filter change");
     const url = getUrl();
     fetchCandidates(url);
-  }
+  },
+  { deep: true }
 );
 
 const selectedTemplateIndex = ref(
