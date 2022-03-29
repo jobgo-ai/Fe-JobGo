@@ -156,7 +156,6 @@ onMounted(async () => {
     margin-bottom: 6px;
   }
   &__header {
-    color: var(--color-text-secondary);
     font-weight: 500;
     @include text-h5;
   }

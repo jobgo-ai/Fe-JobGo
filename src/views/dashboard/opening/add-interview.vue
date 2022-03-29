@@ -155,9 +155,7 @@ const fetchTemplates = async () => {
   isInterviewsLoading.value = true;
   const getTemplates = useGet(getUrl());
   await getTemplates.get();
-  console.log("sup");
   templates.value = getTemplates.data.value.templates;
-  console.log(getTemplates.data.value.templates.length === limit);
   hasLoadMore.value = getTemplates.data.value.templates.length === limit;
   isInterviewsLoading.value = false;
 };
