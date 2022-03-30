@@ -75,7 +75,7 @@
                 View:
               </div>
               <div class="candidate-list__candidate-list__dropdown-target__tag">
-                {{ templateList[selectedTemplateIndex]?.label }}
+                {{ templateLabel }}
               </div>
               <hp-icon
                 class="candidate-list__candidate-list__dropdown-target__icon"
@@ -91,14 +91,14 @@
                   >
                     <button
                       class="candidate-list__flyout__options__button"
-                      @click="handleItemClick(index)"
+                      @click="handleFilterChange(template)"
                       type="button"
                     >
                       {{ template.label }}
                       <hp-radio
                         name="template"
                         tabindex="-1"
-                        :checked="template.value"
+                        :checked="template.value === filters.template"
                       />
                     </button>
                     <div
@@ -165,7 +165,7 @@
 
 <script setup>
 //Vendor
-import { ref, watch, toRefs } from "vue";
+import { ref, watch, toRefs, computed } from "vue";
 import { useRoute } from "vue-router";
 import { onClickOutside, useScroll, useDebounce } from "@vueuse/core";
 
@@ -197,7 +197,7 @@ const props = defineProps({
 const search = ref("");
 const filters = ref({
   search: useDebounce(search, 300),
-  stage: "all",
+  template: "all",
 });
 
 const { opening, fetchOpening } = useOpenings();
@@ -217,16 +217,15 @@ const isAddCandidateModalOpen = ref(false);
 const isFlyoutOpen = ref(false);
 const dropdownTarget = ref(null);
 
-const handleItemClick = (index) => {
-  templateList.value = templateList.value.map((template, i) => {
-    if (i === index) {
-      template.value = true;
-    } else {
-      template.value = false;
-    }
-    return template;
-  });
+const templateLabel = computed(() => {
+  return templateList.value.find(
+    (template) => template.value === filters.value.template
+  )?.label;
+});
+
+const handleFilterChange = (template) => {
   isFlyoutOpen.value = false;
+  filters.value.template = template.value;
 };
 
 onClickOutside(dropdownTarget, (event) => {
@@ -280,10 +279,6 @@ watch(
   { deep: true }
 );
 
-const selectedTemplateIndex = ref(
-  templateList.value?.findIndex((template) => template.value)
-);
-
 const getUrl = () => {
   const limit = 20;
   let url = `openings/${route.params.openingRef}/candidates`;
@@ -292,6 +287,9 @@ const getUrl = () => {
   params.append("offset", offset.value);
   if (filters.value.search !== "") {
     params.append("search", filters.value.search);
+  }
+  if (filters.value.template !== "all") {
+    params.append("template", filters.value.template);
   }
 
   return `${url}?${params.toString()}`;
