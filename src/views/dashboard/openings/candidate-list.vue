@@ -208,7 +208,7 @@ const getUrl = () => {
   const limit = 20;
   let url = `openings/${route.params.openingRef}/candidates`;
   var params = new URLSearchParams([["limit", limit]]);
-
+  params.append("state", "active");
   params.append("offset", offset.value);
   if (filters.value.search !== "") {
     params.append("search", filters.value.search);

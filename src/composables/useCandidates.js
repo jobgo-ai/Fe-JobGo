@@ -26,7 +26,7 @@ export default () => {
   const fetchCandidates = async (url) => {
     const endpoint = url
       ? url
-      : `openings/${route.params.openingRef}/candidates`;
+      : `openings/${route.params.openingRef}/candidates?state=active`;
     isCandidateListLoading.value = true;
     const getCandidates = useGet(endpoint);
     await getCandidates.get();
