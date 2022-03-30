@@ -199,9 +199,26 @@ const filters = ref({
   search: useDebounce(search, 300),
   template: "all",
 });
+const offset = ref(0);
 
 const { opening, fetchOpening } = useOpenings();
 const limit = 15;
+
+const getUrl = () => {
+  const limit = 20;
+  let url = `openings/${route.params.openingRef}/candidates`;
+  var params = new URLSearchParams([["limit", limit]]);
+
+  params.append("offset", offset.value);
+  if (filters.value.search !== "") {
+    params.append("search", filters.value.search);
+  }
+  if (filters.value.template !== "all") {
+    params.append("template", filters.value.template);
+  }
+
+  return `${url}?${params.toString()}`;
+};
 
 const {
   fetchCandidates,
@@ -244,7 +261,10 @@ watch(
     if (!route.params.openingRef) {
       return;
     }
-    fetchCandidates();
+    offset.value = 0;
+    const url = getUrl();
+    filters.value.template = "all";
+    fetchCandidates(url);
     fetchOpening(route.params.openingRef);
   },
   { immediate: true }
@@ -253,7 +273,6 @@ watch(
 const scrollContainer = ref(null);
 const { y, arrivedState } = useScroll(scrollContainer);
 const { bottom } = toRefs(arrivedState);
-const offset = ref(0);
 watch(
   () => bottom.value,
   () => {
@@ -278,22 +297,6 @@ watch(
   },
   { deep: true }
 );
-
-const getUrl = () => {
-  const limit = 20;
-  let url = `openings/${route.params.openingRef}/candidates`;
-  var params = new URLSearchParams([["limit", limit]]);
-
-  params.append("offset", offset.value);
-  if (filters.value.search !== "") {
-    params.append("search", filters.value.search);
-  }
-  if (filters.value.template !== "all") {
-    params.append("template", filters.value.template);
-  }
-
-  return `${url}?${params.toString()}`;
-};
 </script>
 
 <style lang="scss" scoped>

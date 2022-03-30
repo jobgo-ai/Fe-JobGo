@@ -24,9 +24,6 @@ export default () => {
   };
 
   const fetchCandidates = async (url) => {
-    // if (candidates.value[0]?.opening.reference === openingRef && !isForced) {
-    //   return;
-    // }
     const endpoint = url
       ? url
       : `openings/${route.params.openingRef}/candidates`;
