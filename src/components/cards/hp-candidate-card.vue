@@ -1,9 +1,6 @@
 <template>
   <router-link
-    :class="`hp-candidate-card ${
-      candidate.reference === route.query.candidate &&
-      'hp-candidate-card--selected'
-    }`"
+    :class="candidateCardClasses"
     :to="`/openings/${route.params.openingRef}?candidate=${candidate.reference}`"
   >
     <div class="hp-candidate-card__container">
@@ -17,7 +14,7 @@
           </div>
         </div>
         <hp-badge
-          v-if="candidate.opening.statistics.candidateScore"
+          v-if="candidate.opening?.statistics?.candidateScore"
           :type="
             calculateColor(
               candidate.opening.statistics.candidateScore,
@@ -48,6 +45,7 @@
 </template>
 
 <script setup>
+import { computed } from "vue";
 import { useRoute } from "vue-router";
 import HpBadge from "@/components/hp-badge.vue";
 
@@ -56,6 +54,10 @@ const props = defineProps({
     type: Object,
     default: () => ({}),
     required: true,
+  },
+  isDisabled: {
+    type: Boolean,
+    default: false,
   },
 });
 
@@ -81,6 +83,15 @@ const calculateColor = (candidate, avg) => {
     return "neutral";
   }
 };
+
+const candidateCardClasses = computed(() => {
+  return {
+    "hp-candidate-card": true,
+    "hp-candidate-card--selected":
+      route.query.candidate === props.candidate.reference,
+    "hp-candidate-card--disabled": props.isDisabled,
+  };
+});
 </script>
 
 <style lang="scss">
@@ -95,6 +106,9 @@ const calculateColor = (candidate, avg) => {
   &:hover {
     box-shadow: inset 0px 0px 4px rgba(33, 44, 51, 0.01),
       inset 0px 0px 48px rgba(33, 44, 51, 0.03);
+  }
+  &--disabled {
+    opacity: 0.4;
   }
   &--selected {
     background-color: var(--color-background);

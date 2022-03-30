@@ -23,7 +23,7 @@
           ></hp-button>
         </div>
       </div>
-      <div class="candidate-list__scroll-container">
+      <div ref="scrollContainer" class="candidate-list__scroll-container">
         <h2 class="candidate-list__opening-title">{{ opening.name }}</h2>
         <p class="candidate-list__opening-description">
           {{ opening.description }}
@@ -113,7 +113,7 @@
           <div class="candidate-list__search">
             <hp-input
               variant="search"
-              v-model="filters.search"
+              v-model="search"
               icon="search"
               standalone
               placeholder="Search..."
@@ -133,6 +133,7 @@
                 v-for="candidate in candidates"
                 :key="candidate.reference"
                 :candidate="candidate"
+                :isDisabled="isInfiniteLoading"
               ></hp-candidate-card>
             </ol>
             <div class="candidate-list__empty-state" v-else>
@@ -164,9 +165,9 @@
 
 <script setup>
 //Vendor
-import { ref, computed, watch } from "vue";
+import { ref, watch, toRefs } from "vue";
 import { useRoute } from "vue-router";
-import { useDebounce, onClickOutside } from "@vueuse/core";
+import { onClickOutside, useScroll, useDebounce } from "@vueuse/core";
 
 // Views
 import CandidateModal from "./candidate-modal.vue";
@@ -193,17 +194,22 @@ const props = defineProps({
   },
 });
 
+const search = ref("");
 const filters = ref({
-  search: "",
+  search: useDebounce(search, 300),
   stage: "all",
 });
 
-const offset = ref(0);
-
 const { opening, fetchOpening } = useOpenings();
 
-const { fetchCandidates, isCandidateListLoading, candidates, templateList } =
-  useCandidates();
+const {
+  fetchCandidates,
+  isCandidateListLoading,
+  candidates,
+  templateList,
+  fetchMoreCandidates,
+  isInfiniteLoading,
+} = useCandidates();
 
 const route = useRoute();
 const isAddCandidateModalOpen = ref(false);
@@ -244,9 +250,30 @@ watch(
   { immediate: true }
 );
 
+const scrollContainer = ref(null);
+const { y, arrivedState } = useScroll(scrollContainer);
+const { bottom } = toRefs(arrivedState);
+const offset = ref(0);
+const limit = 15;
+watch(
+  () => bottom.value,
+  () => {
+    if (!bottom.value) {
+      return;
+    }
+    if (isInfiniteLoading.value) {
+      return;
+    }
+    offset.value = offset.value + limit;
+    const url = getUrl();
+    fetchMoreCandidates(url);
+  }
+);
+
 watch(
   () => filters,
   () => {
+    offset.value = 0;
     const url = getUrl();
     fetchCandidates(url);
   },

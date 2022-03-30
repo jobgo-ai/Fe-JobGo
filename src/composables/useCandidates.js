@@ -5,10 +5,23 @@ import { useRoute } from "vue-router";
 export default () => {
   const route = useRoute();
   const isCandidateListLoading = ref(false);
+  const isInfiniteLoading = ref(false);
   const isCandidateLoading = ref(true);
   const candidate = ref({});
   const candidates = ref([]);
   const templateList = ref([]);
+
+  const fetchMoreCandidates = async (url) => {
+    const endpoint = url;
+    isInfiniteLoading.value = true;
+    const getCandidates = useGet(endpoint);
+    await getCandidates.get();
+    candidates.value = [
+      ...candidates.value,
+      ...getCandidates.data.value.candidates,
+    ];
+    isInfiniteLoading.value = false;
+  };
 
   const fetchCandidates = async (url) => {
     // if (candidates.value[0]?.opening.reference === openingRef && !isForced) {
@@ -35,8 +48,10 @@ export default () => {
     isCandidateListLoading,
     isCandidateLoading,
     candidates,
+    fetchMoreCandidates,
     candidate,
     templateList,
+    isInfiniteLoading,
     fetchCandidates,
     fetchCandidate,
   };
