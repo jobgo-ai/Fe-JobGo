@@ -97,7 +97,8 @@ const isCandidateListOpen = ref(route.params.openingRef);
 const state = ref("active");
 const { setToast } = useToast();
 
-const { fetchOpenings, openings, isOpeningsLoading, offset } = useOpenings();
+const { fetchOpenings, openings, isOpeningsLoading, hasMoreData } =
+  useOpenings();
 const { setBreadcrumbs } = useBreadcrumbs();
 
 const scrollContainer = ref(null);
@@ -113,6 +114,7 @@ watch(
       if (isOpeningsLoading.value) {
         return;
       }
+
       fetchOpenings(true, state.value);
     }
   }
@@ -208,6 +210,7 @@ watch(state, async () => {
   if (state.value === "archived") {
     router.push(`/openings/`);
   }
+  hasMoreData.value = true;
   await fetchOpenings(false, state.value);
 });
 

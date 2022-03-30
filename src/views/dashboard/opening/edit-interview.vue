@@ -105,9 +105,11 @@
         <div class="edit-interview__ceremony">
           <div class="edit-interview__ceremony__header">
             <div>
-              <h3 class="edit-interview__ceremony__header__title">Warmup</h3>
+              <h3 class="edit-interview__ceremony__header__title">
+                Before the interview
+              </h3>
               <p class="edit-question__sublabel">
-                Set warmup instructions and expected duration
+                Instructions to start dialog and kick off the interview
               </p>
             </div>
             <hp-switch
@@ -116,7 +118,6 @@
               @input="debouncedSubmit"
             ></hp-switch>
           </div>
-          {{ values.ceremony.enabled }}
           <transition name="ceremony-transition">
             <div v-show="values.ceremony.warmup.enabled">
               <div class="edit-question__duration__labels">
@@ -219,9 +220,11 @@
         >
           <div class="edit-interview__ceremony__header">
             <div>
-              <h3 class="edit-interview__ceremony__header__title">Cooldown</h3>
+              <h3 class="edit-interview__ceremony__header__title">
+                After the interview
+              </h3>
               <p class="edit-interview__ceremony__header__subtitle">
-                Set Cooldown instructions and expected duration
+                Instructions for finishing the interview
               </p>
             </div>
             <hp-switch
@@ -232,12 +235,6 @@
           </div>
           <transition name="ceremony-transition">
             <div v-if="values.ceremony.cooldown.enabled">
-              <div class="edit-question__duration__labels">
-                <div class="edit-question__label">Warmup instructions</div>
-                <div class="edit-question__sublabel">
-                  (optional, but recommended)
-                </div>
-              </div>
               <hp-textarea
                 @input="debouncedSubmit"
                 :rows="6"
@@ -245,10 +242,8 @@
               />
               <div class="edit-question__duration__container">
                 <div class="edit-question__duration__labels">
-                  <div class="edit-question__label">Duration time</div>
-                  <div class="edit-question__sublabel">
-                    Expected duration, in minutes
-                  </div>
+                  <div class="edit-question__label">Estimated duration</div>
+                  <div class="edit-question__sublabel">In minutes</div>
                 </div>
                 <hp-counter
                   class="edit-interview__ceremony__duration"

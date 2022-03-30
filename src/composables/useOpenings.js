@@ -1,7 +1,7 @@
 import { ref } from "vue";
 import { useGet } from "./useHttp";
 
-const limit = 15;
+const limit = 5;
 
 const offset = ref(0);
 const hasMoreData = ref(true);
@@ -17,7 +17,8 @@ const fetchOpenings = async (isLoadMore = false, state = "active") => {
     getOpenings.controller.abort();
   }
 
-  if (isLoadMore && !hasMoreData) {
+  console.log(hasMoreData.value);
+  if (!hasMoreData.value) {
     return;
   }
 
@@ -36,10 +37,13 @@ const fetchOpenings = async (isLoadMore = false, state = "active") => {
   const url = `openings?state=${state.toLowerCase()}&limit=${limit}&offset=${
     offset.value
   }`;
+  console.log(url);
   await getOpenings.get(url);
-  if (getOpenings.data.value.openings.length < limit) {
+  if (getOpenings.data.value.openings.length !== limit) {
+    console.log("no more data");
     hasMoreData.value = false;
   }
+
   if (getOpenings.data.value) {
     if (isLoadMore) {
       openings.value = [...openings.value, ...getOpenings.data.value.openings];
