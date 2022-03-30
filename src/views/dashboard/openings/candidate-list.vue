@@ -60,10 +60,7 @@
             Candidates
           </div>
         </div>
-        <div
-          v-if="!isCandidateListLoading"
-          class="candidate-list__candidate-list"
-        >
+        <div class="candidate-list__candidate-list">
           <div class="candidate-list__candidate-list__header">
             <div>Candidates</div>
             <div
@@ -130,33 +127,35 @@
               ></hp-button>
             </div>
           </div>
-          <ol v-if="candidates.length > 0">
-            <hp-candidate-card
-              v-for="candidate in candidates"
-              :key="candidate.reference"
-              :candidate="candidate"
-            ></hp-candidate-card>
-          </ol>
-          <div class="candidate-list__empty-state" v-else>
-            <empty-state class="candidate-list__empty-state__image" />
-            <div class="candidate-list__empty-state__text--primary">
-              Hello? Is anybody there?
+          <div v-if="!isCandidateListLoading">
+            <ol v-if="candidates.length > 0">
+              <hp-candidate-card
+                v-for="candidate in candidates"
+                :key="candidate.reference"
+                :candidate="candidate"
+              ></hp-candidate-card>
+            </ol>
+            <div class="candidate-list__empty-state" v-else>
+              <empty-state class="candidate-list__empty-state__image" />
+              <div class="candidate-list__empty-state__text--primary">
+                Hello? Is anybody there?
+              </div>
+              <div class="candidate-list__empty-state__text--secondary">
+                Looking a tad empty, try adding a candidate
+              </div>
+              <hp-button
+                @handleClick="isAddCandidateModalOpen = true"
+                primary
+                label="Add candidate"
+              ></hp-button>
             </div>
-            <div class="candidate-list__empty-state__text--secondary">
-              Looking a tad empty, try adding a candidate
-            </div>
-            <hp-button
-              @handleClick="isAddCandidateModalOpen = true"
-              primary
-              label="Add candidate"
-            ></hp-button>
           </div>
+          <hp-spinner
+            :size="24"
+            class="candidate-list__spinner"
+            v-else
+          ></hp-spinner>
         </div>
-        <hp-spinner
-          :size="24"
-          class="candidate-list__spinner"
-          v-else
-        ></hp-spinner>
       </div>
     </div>
     <hp-spinner :size="24" class="candidate-list__spinner" v-else></hp-spinner>
@@ -248,7 +247,6 @@ watch(
 watch(
   () => filters,
   () => {
-    console.log("filter change");
     const url = getUrl();
     fetchCandidates(url);
   },
@@ -261,11 +259,10 @@ const selectedTemplateIndex = ref(
 
 const getUrl = () => {
   const limit = 20;
-  let url = `templates`;
+  let url = `openings/${route.params.openingRef}/candidates`;
   var params = new URLSearchParams([["limit", limit]]);
 
   params.append("offset", offset.value);
-  params.append("search", filters.value.stage);
   if (filters.value.search !== "") {
     params.append("search", filters.value.search);
   }

@@ -17,7 +17,6 @@ const fetchOpenings = async (isLoadMore = false, state = "active") => {
     getOpenings.controller.abort();
   }
 
-  console.log(hasMoreData.value);
   if (!hasMoreData.value) {
     return;
   }
@@ -37,10 +36,8 @@ const fetchOpenings = async (isLoadMore = false, state = "active") => {
   const url = `openings?state=${state.toLowerCase()}&limit=${limit}&offset=${
     offset.value
   }`;
-  console.log(url);
   await getOpenings.get(url);
   if (getOpenings.data.value.openings.length !== limit) {
-    console.log("no more data");
     hasMoreData.value = false;
   }
 
