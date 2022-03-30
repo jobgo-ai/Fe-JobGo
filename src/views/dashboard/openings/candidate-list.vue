@@ -201,6 +201,7 @@ const filters = ref({
 });
 
 const { opening, fetchOpening } = useOpenings();
+const limit = 15;
 
 const {
   fetchCandidates,
@@ -254,7 +255,6 @@ const scrollContainer = ref(null);
 const { y, arrivedState } = useScroll(scrollContainer);
 const { bottom } = toRefs(arrivedState);
 const offset = ref(0);
-const limit = 15;
 watch(
   () => bottom.value,
   () => {
