@@ -120,12 +120,6 @@
           </div>
           <transition name="ceremony-transition">
             <div v-show="values.ceremony.warmup.enabled">
-              <div class="edit-question__duration__labels">
-                <div class="edit-question__label">Warmup instructions</div>
-                <div class="edit-question__sublabel">
-                  (optional, but recommended)
-                </div>
-              </div>
               <hp-textarea
                 @input="debouncedSubmit"
                 :rows="6"
@@ -133,10 +127,7 @@
               />
               <div class="edit-question__duration__container">
                 <div class="edit-question__duration__labels">
-                  <div class="edit-question__label">Duration time</div>
-                  <div class="edit-question__sublabel">
-                    Expected duration, in minutes
-                  </div>
+                  <div class="edit-question__label">Estimated duration</div>
                 </div>
                 <hp-counter
                   class="edit-interview__ceremony__duration"
@@ -234,7 +225,7 @@
             ></hp-switch>
           </div>
           <transition name="ceremony-transition">
-            <div v-if="values.ceremony.cooldown.enabled">
+            <div v-show="values.ceremony.cooldown.enabled">
               <hp-textarea
                 @input="debouncedSubmit"
                 :rows="6"
@@ -243,7 +234,6 @@
               <div class="edit-question__duration__container">
                 <div class="edit-question__duration__labels">
                   <div class="edit-question__label">Estimated duration</div>
-                  <div class="edit-question__sublabel">In minutes</div>
                 </div>
                 <hp-counter
                   class="edit-interview__ceremony__duration"
