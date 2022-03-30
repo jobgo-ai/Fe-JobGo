@@ -553,7 +553,6 @@ const handleCloseEditDrawer = () => {
       margin-bottom: 12px;
     }
     &--cooldown {
-      border-bottom: 1px dashed var(--color-border);
       margin-bottom: 16px;
     }
     &__header {
