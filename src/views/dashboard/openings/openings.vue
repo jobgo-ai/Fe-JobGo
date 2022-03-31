@@ -115,6 +115,10 @@ watch(
         return;
       }
 
+      if (route.query.candidate) {
+        return;
+      }
+
       fetchOpenings(true, state.value);
     }
   }
@@ -286,6 +290,7 @@ const handleUnarchiveOpening = async (opening) => {
     left: 440px;
     height: 100%;
     max-width: 848px;
+    width: 100%;
     padding-right: 4px;
     padding-left: 4px;
     overflow: scroll;
