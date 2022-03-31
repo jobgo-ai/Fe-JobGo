@@ -1,7 +1,7 @@
 import { ref } from "vue";
 import { useGet } from "./useHttp";
 
-const limit = 5;
+const limit = 20;
 
 const offset = ref(0);
 const hasMoreData = ref(true);
