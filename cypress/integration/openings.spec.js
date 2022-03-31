@@ -49,7 +49,7 @@ describe("openings", () => {
       // Sticky hacky, but increment if we add more data
       if (index + 3 < $list.length) {
         cy.get(".hp-interview-card")
-          .eq(1)
+          .eq($list.length - (index + 1))
           .find(".hp-button__button__icon--danger")
           .click();
       } else {
