@@ -84,6 +84,7 @@ import HpInput from "@/components/form/hp-input.vue";
 import HpSpinner from "@/components/hp-spinner.vue";
 import HpIcon from "@/components/hp-icon.vue";
 import EmptyState from "@/assets/abstracts/empty-state.svg";
+import { useElementBounding } from "@vueuse/core";
 import { onClickOutside } from "@vueuse/core";
 
 const emits = defineEmits(["update:modelValue"]);
@@ -233,10 +234,9 @@ const handleChangeEmit = (change) => {
 const magicNumber = 60;
 const handleOpenFlyout = () => {
   isFlyoutOpen.value = true;
-  flyoutTop.value = target.value.getBoundingClientRect().top - magicNumber;
+  flyoutTop.value = target.value?.getBoundingClientRect().top - magicNumber;
 };
 const flyoutTop = ref(0);
-import { useElementBounding } from "@vueuse/core";
 const { top } = useElementBounding(target);
 watch(top, (newValue) => {
   flyoutTop.value = newValue - magicNumber;
