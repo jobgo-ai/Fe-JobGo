@@ -47,7 +47,7 @@ describe("openings", () => {
 
     cy.get(".hp-interview-card").each(($el, index, $list) => {
       // Hacky way to exlude the add new card
-      if (index < $list.length - 2) {
+      if (index < $list.length - 3) {
         cy.get(".hp-interview-card")
           .eq(1)
           .find(".hp-button__button__icon--danger")
