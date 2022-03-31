@@ -16,7 +16,7 @@
           name="name"
         ></hp-input>
         <hp-input
-          placeholder="Enter candidate email..."
+          placeholder="Enter candidate email"
           label="Email"
           :isDisabled="isArchivingCandidate || isUpdatingCandidate"
           name="email"
