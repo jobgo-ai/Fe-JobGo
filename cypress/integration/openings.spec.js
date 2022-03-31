@@ -46,7 +46,7 @@ describe("openings", () => {
     cy.contains("Edit opening").click();
 
     cy.get(".hp-interview-card").each(($el, index, $list) => {
-      // Hacky way to exlude the add new card
+      // Sticky hacky, but increment if we add more data
       if (index < $list.length - 3) {
         cy.get(".hp-interview-card")
           .eq(1)
