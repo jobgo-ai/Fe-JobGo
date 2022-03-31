@@ -90,6 +90,7 @@ const {
 } = useField(props.name, "", {
   standalone: props.standalone,
   validateOnValueUpdate: false,
+  initialValue: props.modelValue,
 });
 
 const isPasswordVisible = ref(false);
