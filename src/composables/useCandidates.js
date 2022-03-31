@@ -6,16 +6,24 @@ export default () => {
   const route = useRoute();
   const isCandidateListLoading = ref(false);
   const isInfiniteLoading = ref(false);
+  const hasMoreToLoad = ref(true);
   const isCandidateLoading = ref(true);
   const candidate = ref({});
   const candidates = ref([]);
   const templateList = ref([]);
 
   const fetchMoreCandidates = async (url) => {
+    if (!hasMoreToLoad.value) {
+      return;
+    }
     const endpoint = url;
     isInfiniteLoading.value = true;
     const getCandidates = useGet(endpoint);
     await getCandidates.get();
+    // magic number adheres to limit
+    if (getCandidates.data.value.candidates.length < 15) {
+      hasMoreToLoad.value = false;
+    }
     candidates.value = [
       ...candidates.value,
       ...getCandidates.data.value.candidates,
@@ -61,10 +69,11 @@ export default () => {
     isCandidateListLoading,
     isCandidateLoading,
     candidates,
-    fetchMoreCandidates,
     candidate,
     templateList,
     isInfiniteLoading,
+    hasMoreToLoad,
+    fetchMoreCandidates,
     fetchCandidates,
     fetchCandidate,
   };

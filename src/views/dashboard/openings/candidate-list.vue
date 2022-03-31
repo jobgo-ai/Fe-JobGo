@@ -205,7 +205,7 @@ const { opening, fetchOpening } = useOpenings();
 const limit = 15;
 
 const getUrl = () => {
-  const limit = 20;
+  const limit = 15;
   let url = `openings/${route.params.openingRef}/candidates`;
   var params = new URLSearchParams([["limit", limit]]);
   params.append("state", "active");
@@ -223,6 +223,7 @@ const getUrl = () => {
 const {
   fetchCandidates,
   isCandidateListLoading,
+  hasMoreToLoad,
   candidates,
   templateList,
   fetchMoreCandidates,
@@ -262,6 +263,7 @@ watch(
       return;
     }
     offset.value = 0;
+    hasMoreToLoad.value = true;
     const url = getUrl();
     filters.value.template = "all";
     fetchCandidates(url);
@@ -292,6 +294,7 @@ watch(
   () => filters,
   () => {
     offset.value = 0;
+    hasMoreToLoad.value = true;
     const url = getUrl();
     fetchCandidates(url);
   },
