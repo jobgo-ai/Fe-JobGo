@@ -192,7 +192,7 @@ const schema = yup.object({
   templates: yup.array(),
 });
 
-const { handleSubmit, resetForm, meta, setFieldValue } = useForm({
+const { handleSubmit, resetForm, meta, setFieldValue, values } = useForm({
   validationSchema: schema,
   initialValues: {
     name: "",
@@ -225,7 +225,7 @@ const handleDragChange = () => {
   onSubmit();
 };
 
-const onSubmit = handleSubmit(async (values) => {
+const onSubmit = handleSubmit(async (submitValues) => {
   isSaving.value = true;
   const putOpening = usePut(`openings/${route.params.openingRef}`);
   await putOpening.put({
@@ -235,7 +235,7 @@ const onSubmit = handleSubmit(async (values) => {
     },
   });
   isSaving.value = false;
-  resetForm({ touched: false, values: values });
+  resetForm({ touched: false, values: { ...submitValues, values } });
   opening.value.name = values.name;
   fetchOpenings();
   fetchCandidates();

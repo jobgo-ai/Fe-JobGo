@@ -135,6 +135,9 @@
                 :candidate="candidate"
                 :isDisabled="isInfiniteLoading"
               ></hp-candidate-card>
+              <div class="stupidclass">
+                <hp-spinner size="32" v-if="isInfiniteLoading"></hp-spinner>
+              </div>
             </ol>
             <div class="candidate-list__empty-state" v-else>
               <empty-state class="candidate-list__empty-state__image" />
@@ -273,7 +276,9 @@ watch(
 );
 
 const scrollContainer = ref(null);
-const { y, arrivedState } = useScroll(scrollContainer);
+const { y, arrivedState } = useScroll(scrollContainer, {
+  offset: { bottom: 400 },
+});
 const { bottom } = toRefs(arrivedState);
 watch(
   () => bottom.value,
@@ -303,6 +308,11 @@ watch(
 </script>
 
 <style lang="scss" scoped>
+.stupidclass {
+  padding: 24px;
+  display: flex;
+  justify-content: center;
+}
 .candidate-list {
   &__header {
     display: flex;
