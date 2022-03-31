@@ -15,6 +15,7 @@
             ref="inputRef"
             icon="locked"
             label="To confirm, please type DELETE"
+            name="confirmation"
             v-model="confirmation"
             standalone
           ></hp-input>
