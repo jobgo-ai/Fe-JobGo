@@ -235,7 +235,6 @@ const onSubmit = handleSubmit(async (submitValues) => {
     },
   });
   isSaving.value = false;
-  resetForm({ touched: false, values: { ...submitValues, values } });
   opening.value.name = values.name;
   fetchOpenings();
   fetchCandidates();

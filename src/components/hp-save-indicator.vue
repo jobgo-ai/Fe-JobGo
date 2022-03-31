@@ -2,9 +2,7 @@
   <hp-tooltip class="hp-save-indicator__tooltip" :delay="500" position="bottom">
     <div class="hp-save-indicator">
       <transition name="hp-save-indicator-transition" mode="out-in">
-        <hp-spinner
-          v-if="showLoading || (meta.dirty && meta.valid)"
-        ></hp-spinner>
+        <hp-spinner v-if="showLoading"></hp-spinner>
         <div v-else>
           <hp-icon
             class="hp-save-indicator__error"
