@@ -6,7 +6,7 @@ describe("questions", () => {
   it("Can view questions", () => {
     cy.contains("PERMANENT_OPENING").click();
     cy.contains("Edit opening").click();
-    cy.contains("TESTING_QUESTIONS_INTERVIEW")
+    cy.contains("DONT_DELETE")
       .parents(".hp-interview-card")
       .find("a")
       .contains("Edit interview")
@@ -21,7 +21,7 @@ describe("questions", () => {
   it("Can add a new question", () => {
     cy.contains("PERMANENT_OPENING").click();
     cy.contains("Edit opening").click();
-    cy.contains("TESTING_QUESTIONS_INTERVIEW")
+    cy.contains("DONT_DELETE")
       .parents(".hp-interview-card")
       .find("a")
       .contains("Edit interview")
@@ -44,7 +44,7 @@ describe("questions", () => {
   it("Can delete a question", () => {
     cy.contains("PERMANENT_OPENING").click();
     cy.contains("Edit opening").click();
-    cy.contains("TESTING_QUESTIONS_INTERVIEW")
+    cy.contains("DONT_DELETE")
       .parents(".hp-interview-card")
       .find("a")
       .contains("Edit interview")
