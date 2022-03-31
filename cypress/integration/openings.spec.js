@@ -47,7 +47,7 @@ describe("openings", () => {
 
     cy.get(".hp-interview-card").each(($el, index, $list) => {
       // Sticky hacky, but increment if we add more data
-      if (index < $list.length - 2) {
+      if (index + 3 < $list.length) {
         cy.get(".hp-interview-card")
           .eq(1)
           .find(".hp-button__button__icon--danger")
