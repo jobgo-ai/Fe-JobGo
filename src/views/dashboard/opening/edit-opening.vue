@@ -236,6 +236,11 @@ const onSubmit = handleSubmit(async (submitValues) => {
   });
   isSaving.value = false;
   opening.value.name = values.name;
+  resetForm({
+    touched: false,
+    dirty: false,
+    values: { ...values, templates: values.templates },
+  });
   fetchOpenings();
   fetchCandidates();
   setBreadcrumbs(
