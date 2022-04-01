@@ -17,7 +17,7 @@ const fetchOpenings = async (isLoadMore = false, state = "active") => {
     getOpenings.controller.abort();
   }
 
-  if (!hasMoreData.value) {
+  if (!hasMoreData.value && isLoadMore) {
     return;
   }
 
@@ -45,6 +45,7 @@ const fetchOpenings = async (isLoadMore = false, state = "active") => {
     if (isLoadMore) {
       openings.value = [...openings.value, ...getOpenings.data.value.openings];
     } else {
+      console.log(getOpenings.data.value);
       openings.value = getOpenings.data.value.openings;
     }
   }
