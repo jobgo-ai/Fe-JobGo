@@ -337,6 +337,7 @@ const schema = yup.object({
 const { handleSubmit, resetForm, meta, setFieldValue, values } = useForm({
   validationSchema: schema,
   validateOnMount: false,
+  initialValues: {},
 });
 
 const onSubmit = handleSubmit(async () => {
@@ -375,7 +376,7 @@ const onSubmit = handleSubmit(async () => {
   resetForm({
     touched: false,
     dirty: false,
-    values: values,
+    values: { ...values, questions: formattedQuestions },
   });
   setBreadcrumbs(
     [
