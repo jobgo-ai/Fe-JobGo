@@ -44,12 +44,6 @@
               <div class="settings__card__member__role">
                 {{ member.role }}
               </div>
-              <hp-button
-                isDisabled
-                danger
-                icon="trash"
-                variant="danger"
-              ></hp-button>
             </div>
           </li>
         </ol>
