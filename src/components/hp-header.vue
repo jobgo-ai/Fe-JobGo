@@ -319,6 +319,7 @@ const { hasHeaderSaveButton } = useBreadcrumbs();
         padding: 12px 0;
         display: flex;
         flex-direction: column;
+        word-break: break-all;
       }
       &__email {
         color: var(--color-text-secondary);
