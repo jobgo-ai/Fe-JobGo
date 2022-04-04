@@ -10,6 +10,7 @@ import Signup from "@/views/public/signup.vue";
 import Layout from "@/views/dashboard/layout.vue";
 import ChangePassword from "@/views/public/change-password.vue";
 import Settings from "@/views/dashboard/settings/settings.vue";
+import Organization from "@/views/dashboard/settings/organization.vue";
 
 //Openings
 import Openings from "@/views/dashboard/openings/openings.vue";
@@ -69,6 +70,11 @@ const routes = [
         path: "settings",
         name: "settings",
         component: Settings,
+      },
+      {
+        path: "organization",
+        name: "organization",
+        component: Organization,
       },
     ],
   },

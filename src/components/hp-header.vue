@@ -44,6 +44,20 @@
                 </div>
               </div>
             </div>
+            <div v-if="organization" class="hp-header__dropdown__options">
+              <router-link
+                to="/organization"
+                tag="div"
+                class="hp-header__dropdown__options__option"
+                @click="isAccountMenuOpen = false"
+              >
+                <hp-icon
+                  name="candidates"
+                  class="hp-header__dropdown__options__option__icon"
+                />
+                Organization
+              </router-link>
+            </div>
             <div class="hp-header__dropdown__options">
               <router-link
                 to="/settings"
@@ -117,7 +131,7 @@ import { useBreadcrumbs } from "@/composables/useBreadcrumbs";
 // Svg
 import Logo from "@/assets/logo.svg";
 
-const { logout } = useAuth();
+const { logout, organization } = useAuth();
 const router = useRouter();
 
 const { isDarkmode, handleDarkModeToggle } = useDarkMode();
@@ -305,6 +319,7 @@ const { hasHeaderSaveButton } = useBreadcrumbs();
         padding: 12px 0;
         display: flex;
         flex-direction: column;
+        word-break: break-all;
       }
       &__email {
         color: var(--color-text-secondary);
