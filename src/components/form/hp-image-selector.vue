@@ -16,7 +16,7 @@
       <div v-if="isFlyoutOpen" class="hp-image-selector__flyout">
         <div class="hp-image-selector__flyout__flyout-label">Select image</div>
         <div class="hp-image-selector__flyout__flyout-container">
-          <div
+          <button
             v-for="(image, index) in Object.keys(CoverDict)"
             @click.prevent="handleImageSelect(index)"
             :class="`hp-image-selector__flyout__image-wrapper ${
@@ -30,7 +30,7 @@
               role="img"
               :alt="`abstract cover #${modelValue}`"
             />
-          </div>
+          </button>
         </div>
       </div>
     </transition>
@@ -38,8 +38,10 @@
 </template>
 
 <script setup>
+import { ref } from "vue";
 import { useField } from "vee-validate";
 import HpIcon from "@/components/hp-icon.vue";
+import { onClickOutside } from "@vueuse/core";
 
 // Assets
 import Cover0 from "@/assets/abstracts/covers/cover_0.svg";
@@ -66,8 +68,6 @@ const CoverDict = {
   9: Cover9,
 };
 
-import { defineAsyncComponent, ref, computed } from "vue";
-
 const props = defineProps({
   name: {
     type: String,
@@ -87,8 +87,6 @@ const isFlyoutOpen = ref(false);
 
 const initialValue = ref(props.modelValue);
 
-import { onClickOutside } from "@vueuse/core";
-
 onClickOutside(target, (event) => {
   if (!isFlyoutOpen.value) {
     return;
@@ -107,6 +105,7 @@ const handleImageSelect = (index) => {
 <style lang="scss">
 .hp-image-selector {
   position: relative;
+
   &__label {
     font-weight: 500;
     margin-bottom: 8px;
@@ -126,8 +125,12 @@ const handleImageSelect = (index) => {
       padding: 4px;
       width: 154px;
       cursor: pointer;
+      background: transparent;
       &:hover {
         border-color: var(--color-accent-background);
+      }
+      &:focus {
+        outline: 4px solid var(--color-focus);
       }
       &--selected {
         border-color: var(--color-accent-background);
