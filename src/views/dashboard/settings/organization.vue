@@ -1,63 +1,75 @@
 <template>
-  <div class="settings">
-    <hp-modal :isOpen="isAddMemberModalOpen">
-      <div class="settings__modal">
-        <h4 class="settings__card__title">Invite member</h4>
-        <p class="settings__card__subtitle">
-          This member will have access to your organizations interviews,
-          results, and templates
-        </p>
-        <form @submit="onSubmit">
-          <div class="">
-            <hp-input
-              placeholder="Enter candidate email..."
-              label="Email"
-              name="email"
-            ></hp-input>
-          </div>
-          <hp-button
-            primary
-            type="submit"
-            :isLoading="isSendingInvite"
-            :isDisabled="!meta.valid || isSendingInvite"
-            label="Send invite"
-          ></hp-button>
-        </form></div
-    ></hp-modal>
-    <h2 class="settings__title">
-      {{ organization.name }}
-    </h2>
-    <p class="settings__subtitle">Manage your organization</p>
-    <div class="settings__card">
-      <h4 class="settings__card__title">Member information</h4>
-      <p class="settings__card__subtitle">Manage your members</p>
-      <ol class="settings__card__memberlist">
-        <li class="settings__card__member" v-for="member in members">
-          <div class="settings__card__member__name">{{ member.name }}</div>
-          <div class="settings__card__member__actions">
-            <div class="settings__card__member__role">
-              {{ member.role }}
+  <div>
+    <div class="settings" v-if="!isLoading">
+      <hp-modal :isOpen="isAddMemberModalOpen">
+        <div class="settings__modal">
+          <h4 class="settings__card__title">Invite member</h4>
+          <p class="settings__card__subtitle">
+            This member will have access to your organizations interviews,
+            results, and templates
+          </p>
+          <form @submit="onSubmit">
+            <div class="">
+              <hp-input
+                placeholder="Enter candidate email..."
+                label="Email"
+                name="email"
+              ></hp-input>
             </div>
             <hp-button
-              isDisabled
-              danger
-              icon="trash"
-              variant="danger"
+              primary
+              type="submit"
+              :isLoading="isSendingInvite"
+              :isDisabled="!meta.valid || isSendingInvite"
+              label="Send invite"
             ></hp-button>
-          </div>
-        </li>
-      </ol>
-      <h4 class="settings__card__title">Invite new member</h4>
-      <p class="settings__card__subtitle">
-        They will receive an email at the entered address, they will be added to
-        the organization
-      </p>
-      <hp-button
-        @handleClick="isAddMemberModalOpen = true"
-        label="Add member"
-        name="email"
-        primary
-      ></hp-button>
+          </form></div
+      ></hp-modal>
+      <h2 class="settings__title">
+        {{ organization.name }}
+      </h2>
+      <p class="settings__subtitle">Manage your organization</p>
+      <div class="settings__card">
+        <h4 class="settings__card__title">Member information</h4>
+        <p class="settings__card__subtitle">Manage your members</p>
+        <ol class="settings__card__memberlist">
+          <li class="settings__card__member" v-for="member in members">
+            <div class="settings__card__member__name">
+              {{ member.name }}
+              <span class="settings__card__member__email">{{
+                member.email
+              }}</span>
+            </div>
+            <div class="settings__card__member__actions">
+              <div class="settings__card__member__role">
+                {{ member.role }}
+              </div>
+              <hp-button
+                isDisabled
+                danger
+                icon="trash"
+                variant="danger"
+              ></hp-button>
+            </div>
+          </li>
+        </ol>
+        <div v-if="user.organization.role === `owner`">
+          <h4 class="settings__card__title">Invite new member</h4>
+          <p class="settings__card__subtitle">
+            They will receive an email at the entered address, they will be
+            added to the organization
+          </p>
+          <hp-button
+            @handleClick="isAddMemberModalOpen = true"
+            label="Add member"
+            name="email"
+            primary
+          ></hp-button>
+        </div>
+      </div>
+    </div>
+    <div v-if="isLoading" class="settings__spinner">
+      <hp-spinner :content="true" size="32" />
     </div>
   </div>
 </template>
@@ -72,16 +84,17 @@ import { useForm } from "vee-validate";
 import HpInput from "@/components/form/hp-input.vue";
 import HpButton from "@/components/hp-button.vue";
 import HpModal from "@/components/hp-modal.vue";
-import HpIcon from "@/components/hp-icon.vue";
+import HpSpinner from "@/components/hp-spinner.vue";
 
 // Composables
 import { usePost, useGet } from "@/composables/useHttp";
 import useAuth from "@/composables/useAuth";
 import useToast from "@/composables/useToast";
 
-const { organization } = useAuth();
+const { organization, user } = useAuth();
 const isAddMemberModalOpen = ref(false);
 const isSendingInvite = ref(false);
+const isLoading = ref(true);
 const members = ref([]);
 
 const { setToast } = useToast();
@@ -96,6 +109,7 @@ onMounted(async () => {
   );
   await getOrganization.get();
   members.value = getOrganization.data.value.users;
+  isLoading.value = false;
 });
 
 const { handleSubmit, meta } = useForm({
@@ -129,6 +143,9 @@ const onSubmit = handleSubmit(async (values) => {
   &__modal {
     padding: 24px;
   }
+  &__spinner {
+    margin: auto;
+  }
   &__card {
     &__add-member {
       display: flex;
@@ -152,7 +169,13 @@ const onSubmit = handleSubmit(async (values) => {
         align-items: center;
       }
       &__name {
+        display: flex;
+        flex-direction: column;
         @include text-h5;
+      }
+      &__email {
+        color: var(--color-text-secondary);
+        @include text-h6;
       }
       &__role {
         margin-right: 12px;
