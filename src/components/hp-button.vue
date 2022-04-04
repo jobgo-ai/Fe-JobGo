@@ -174,6 +174,7 @@ const iconClasses = computed(() => {
     "hp-button__button__icon--solo": !props.label,
     "hp-button__button__icon--right": props.iconRight,
     "hp-button__button__icon--danger": props.danger,
+    "hp-button__button__icon--disabled": props.isDisabled,
   };
 });
 
@@ -265,6 +266,9 @@ const emit = defineEmits(["handleClick"]);
       }
       &--danger {
         color: var(--color-error);
+      }
+      &--disabled {
+        opacity: 0.4;
       }
     }
 
