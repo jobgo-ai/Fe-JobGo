@@ -1,7 +1,34 @@
 <template>
   <div>
     <div class="settings" v-if="!isLoading">
-      <hp-modal :isOpen="isAddMemberModalOpen">
+      <hp-modal
+        :isOpen="isConfirmMemberRemovalOpen"
+        @close="isConfirmMemberRemovalOpen = false"
+      >
+        <div class="settings__modal">
+          <h4 class="settings__card__title">Remove member</h4>
+          <p class="settings__card__subtitle">
+            This member will lose access to your organizations interviews,
+            results, and templates
+          </p>
+          <div class="settings__modal__actions">
+            <hp-button
+              @handleClick="isConfirmMemberRemovalOpen = false"
+              label="Cancel"
+            ></hp-button>
+            <hp-button
+              class="settings__modal__button"
+              destructive
+              :isLoading="isRemovingMember"
+              label="Remove member"
+              @handleClick="handleRemoveMember"
+            ></hp-button>
+          </div></div
+      ></hp-modal>
+      <hp-modal
+        :isOpen="isAddMemberModalOpen"
+        @close="isAddMemberModalOpen = false"
+      >
         <div class="settings__modal">
           <h4 class="settings__card__title">Invite member</h4>
           <p class="settings__card__subtitle">
@@ -44,10 +71,16 @@
               <div class="settings__card__member__role">
                 {{ member.role }}
               </div>
+              <hp-button
+                icon="trash"
+                v-if="canDeleteMember(member)"
+                danger
+                @handleClick="handleRemovalRequest(member)"
+              ></hp-button>
             </div>
           </li>
         </ol>
-        <div v-if="user.organization.role === `owner`">
+        <div v-if="isOwner">
           <h4 class="settings__card__title">Invite new member</h4>
           <p class="settings__card__subtitle">
             They will receive an email at the entered address, they will be
@@ -70,7 +103,7 @@
 
 <script setup>
 // Vendor
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue";
 import * as yup from "yup";
 import { useForm } from "vee-validate";
 
@@ -81,12 +114,15 @@ import HpModal from "@/components/hp-modal.vue";
 import HpSpinner from "@/components/hp-spinner.vue";
 
 // Composables
-import { usePost, useGet } from "@/composables/useHttp";
+import { usePost, useGet, useDelete } from "@/composables/useHttp";
 import useAuth from "@/composables/useAuth";
 import useToast from "@/composables/useToast";
 
 const { organization, user } = useAuth();
 const isAddMemberModalOpen = ref(false);
+const memberToRemove = ref(null);
+const isRemovingMember = ref(false);
+const isConfirmMemberRemovalOpen = ref(false);
 const isSendingInvite = ref(false);
 const isLoading = ref(true);
 const members = ref([]);
@@ -97,13 +133,21 @@ const schema = yup.object().shape({
   email: yup.string().email(),
 });
 
-onMounted(async () => {
+const isOwner = computed(() => {
+  return user.value.organization?.role === "owner";
+});
+
+const fetchOrgs = async () => {
   const getOrganization = useGet(
     `organizations/${organization.value.slug}/users`
   );
   await getOrganization.get();
   members.value = getOrganization.data.value.users;
   isLoading.value = false;
+};
+
+onMounted(() => {
+  fetchOrgs();
 });
 
 const { handleSubmit, meta } = useForm({
@@ -112,6 +156,26 @@ const { handleSubmit, meta } = useForm({
     email: "",
   },
 });
+
+const handleRemoveMember = async () => {
+  isRemovingMember.value = true;
+  const deleteMember = useDelete(`users/${memberToRemove.value.reference}`);
+  await deleteMember.remove();
+  await fetchOrgs();
+  isRemovingMember.value = false;
+  isConfirmMemberRemovalOpen.value = false;
+  setToast({
+    type: "positive",
+    title: "Member removed",
+    message: `The member will no longer have access to your organization`,
+  });
+  memberToRemove.value = null;
+};
+
+const handleRemovalRequest = (member) => {
+  memberToRemove.value = member;
+  isConfirmMemberRemovalOpen.value = true;
+};
 
 const onSubmit = handleSubmit(async (values) => {
   isSendingInvite.value = true;
@@ -130,12 +194,30 @@ const onSubmit = handleSubmit(async (values) => {
   isSendingInvite.value = false;
   isAddMemberModalOpen.value = false;
 });
+
+const canDeleteMember = (member) => {
+  const isAdmin = user.value.organization?.role === "admin";
+  if (isAdmin) {
+    return true;
+  }
+
+  const isOwner = user.value.organization?.role === "owner";
+  const notCurrentMember = user.value.reference !== member.reference;
+  return isOwner && notCurrentMember;
+};
 </script>
 
 <styles lang="scss">
 .settings {
   &__modal {
     padding: 24px;
+    &__button {
+      margin-left: 12px;
+    }
+    &__actions {
+      display: flex;
+      justify-content: flex-end;
+    }
   }
   &__spinner {
     margin: auto;
