@@ -10,6 +10,7 @@
         :class="`hp-input__input hp-input__input--${variant}`"
         :name="name"
         :type="type"
+        :autocomplete="autocomplete"
         :placeholder="placeholder"
         :value="modelValue"
         v-on="validationListeners"
@@ -78,6 +79,10 @@ const props = defineProps({
   standalone: {
     type: Boolean,
     default: false,
+  },
+  autocomplete: {
+    type: String,
+    default: "off",
   },
 });
 
