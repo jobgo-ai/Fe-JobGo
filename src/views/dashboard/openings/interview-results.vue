@@ -400,6 +400,7 @@ const calculateSkillScoreColor = (skill) => {
       display: flex;
       padding: 16px;
       border-top: 1px dashed var(--color-border);
+      white-space: pre-wrap;
       &__icon {
         color: var(--color-text-secondary);
         margin-right: 6px;
