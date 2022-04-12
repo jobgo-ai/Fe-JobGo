@@ -93,43 +93,49 @@
         </div>
       </div>
     </div>
-    <div class="results__questions">
-      <div class="results__questions__title">Questions</div>
-      <ol class="results__questions__list">
-        <li
-          v-for="(interaction, index) in interactionList"
-          class="results__questions__container"
-        >
-          <div class="results__questions__question">
-            <div class="results__questions__container__header">
-              <hp-badge icon="questions" :content="index + 1" />
-              <div
-                v-if="interaction.interaction?.answer"
-                :class="`
+    <div class="results__container">
+      <div v-if="interview.comment" class="results__comments">
+        <div class="results__questions__title">Notes</div>
+        {{ interview.comment }}
+      </div>
+      <div class="results__questions">
+        <div class="results__questions__title">Questions</div>
+        <ol class="results__questions__list">
+          <li
+            v-for="(interaction, index) in interactionList"
+            class="results__questions__container"
+          >
+            <div class="results__questions__question">
+              <div class="results__questions__container__header">
+                <hp-badge icon="questions" :content="index + 1" />
+                <div
+                  v-if="interaction.interaction?.answer"
+                  :class="`
                   results__questions__container__header__little-badge
                   results__questions__container__header__little-badge--${interaction.interaction.answer?.value}
                 `"
-              >
-                {{ interaction.interaction.answer?.value }} / 5
+                >
+                  {{ interaction.interaction.answer?.value }} / 5
+                </div>
               </div>
+              <div class="results__questions__container__content">
+                {{ interaction.question.content }}
+              </div>
+              <hp-question-card-stats
+                hasTooltips
+                :question="interaction.question"
+              />
             </div>
-            <div class="results__questions__container__content">
-              {{ interaction.question.content }}
+            <div v-if="interaction.comment" class="results__questions__notes">
+              <hp-icon
+                name="file"
+                class="results__questions__notes__icon"
+              ></hp-icon>
+              {{ interaction.comment }}
             </div>
-            <hp-question-card-stats
-              hasTooltips
-              :question="interaction.question"
-            />
-          </div>
-          <div v-if="interaction.comment" class="results__questions__notes">
-            <hp-icon
-              name="file"
-              class="results__questions__notes__icon"
-            ></hp-icon>
-            {{ interaction.comment }}
-          </div>
-        </li>
-      </ol>
+          </li>
+        </ol>
+      </div>
     </div>
   </div>
 </template>
@@ -251,6 +257,20 @@ const calculateSkillScoreColor = (skill) => {
   display: flex;
   flex-direction: column;
   padding: 26px;
+
+  &__container {
+    display: flex;
+    flex-direction: column;
+  }
+  &__comments {
+    padding: 24px;
+    padding-top: 0px;
+    border-radius: 16px;
+    border: 1px solid var(--color-border);
+    overflow: auto;
+    white-space: pre-wrap;
+    margin-bottom: 26px;
+  }
   &__details {
     flex-shrink: 0;
     width: 100%;

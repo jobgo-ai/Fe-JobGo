@@ -118,11 +118,7 @@ const { setBreadcrumbs } = useBreadcrumbs();
 
 const schema = yup.object({
   name: yup.string().max(50).required("First name is required"),
-  email: yup
-    .string()
-    .max(100)
-    .required("Email is required")
-    .email("Email must be valid"),
+  email: yup.string().max(100).email("Email must be valid").nullable(),
 });
 
 const { handleSubmit, meta } = useForm({
@@ -142,6 +138,7 @@ const onSubmit = handleSubmit(async (values) => {
     const payload = {
       candidate: {
         ...values,
+        email: values.email === "" ? null : values.email,
         opening: route.params.openingRef,
       },
     };
