@@ -120,6 +120,8 @@ const handlePasswordReset = handleSubmit(async (values) => {
     margin: auto;
     margin-bottom: 48px;
     margin-top: 64px;
+    height: 48px;
+    width: 48px;
   }
   &__container {
     margin: auto;
