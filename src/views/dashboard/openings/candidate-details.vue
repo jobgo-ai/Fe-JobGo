@@ -347,14 +347,17 @@ watch(
 );
 
 const skillList = computed(() => {
-  return candidate.value?.opening?.statistics?.candidateSkillScores
-    ?.sort((a, b) => {
-      return b.score.value - a.score.value;
-    })
-    .map((skill) => ({
+  const formattedSkills =
+    candidate.value?.opening?.statistics?.candidateSkillScores.map((skill) => ({
       label: skill.name,
       value: skill.score.value?.toFixed(1) ?? "0.0",
     }));
+
+  const sortedSkills = formattedSkills.sort((a, b) => {
+    return b.value - a.value;
+  });
+
+  return sortedSkills;
 });
 
 const formatMinutesAgo = (date) => {
