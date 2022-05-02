@@ -21,7 +21,6 @@ const Template = (args) => ({
       statistics: {
         candidates: 3,
         templates: 3,
-        competencies: [],
         skills: [
           { quantity: 1, value: { slug: "1010data", name: "1010data" } },
           { quantity: 1, value: { slug: "10base2", name: "10BASE2" } },

@@ -9,11 +9,6 @@ Cypress.Commands.add("login", () => {
     url: "**/self",
   }).as("selfRequest");
 
-  cy.intercept({
-    method: "GET",
-    url: "/competencies",
-  }).as("competenciesRequest");
-
   cy.visit("/login");
 
   cy.get(`[name='email']`).type("test@hireproof.io");
@@ -21,5 +16,4 @@ Cypress.Commands.add("login", () => {
   cy.get("button").click();
   cy.wait("@loginRequest");
   cy.wait("@selfRequest");
-  cy.wait("@competenciesRequest");
 });

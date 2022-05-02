@@ -19,10 +19,9 @@ import useConstants from "@/composables/useConstants";
 // Components
 import HpHeader from "@/components/hp-header.vue";
 
-const { loadCompetencies, loadQuestionLevels } = useConstants();
+const { loadQuestionLevels } = useConstants();
 
 onMounted(() => {
-  loadCompetencies();
   loadQuestionLevels();
 });
 onUnmounted(() => {});
