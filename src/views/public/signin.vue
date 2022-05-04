@@ -38,12 +38,14 @@
     <div class="forgot-password__tos">
       <a
         href="https://www.hireproof.io/terms-of-service"
+        target="_blank"
         class="forgot-password__policy"
       >
         Terms of service
       </a>
       <a
-        href="https://www.hireproof.io/terms-of-service"
+        href="https://www.hireproof.io/privacy-policy"
+        target="_blank"
         class="forgot-password__policy"
       >
         Privacy policy

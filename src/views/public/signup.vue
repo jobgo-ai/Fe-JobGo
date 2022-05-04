@@ -50,7 +50,7 @@
             <a
               class="signup__checkbox-container__link"
               target="_blank"
-              href="https://www.hireproof.io/terms-of-service"
+              href="https://www.hireproof.io/privacy-policy"
               >Privacy Policy</a
             >
           </div>
