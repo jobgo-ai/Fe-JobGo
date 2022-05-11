@@ -18,7 +18,7 @@ const Template = (args) => ({
   },
   template: `<div style="display:flex; flex-wrap: wrap;">
       <div v-for="icon in iconNames">
-        <div style="display:flex; flex-flow: column; color: red; margin-right:8px; font-size: 8px;">
+        <div style="display:flex; flex-flow: column; margin-right:8px; font-size: 8px;">
         <hp-icon :name="icon" v-bind="args"> </hp-icon>
         {{icon}} 
         </div>
