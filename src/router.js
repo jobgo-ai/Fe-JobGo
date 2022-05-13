@@ -60,7 +60,7 @@ const routes = [
             component: CompareCandidates,
           },
           {
-            path: "results/:resultsRef",
+            path: "results/:templateRef/:evaluationRef",
             name: "interview-results",
             component: InterviewResults,
           },

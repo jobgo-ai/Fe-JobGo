@@ -95,9 +95,9 @@
 
 <script setup>
 //Vendor
+import * as yup from "yup";
 import { ref, computed, onMounted, watchEffect } from "vue";
 import { useForm } from "vee-validate";
-import * as yup from "yup";
 import { useRoute } from "vue-router";
 
 //Components

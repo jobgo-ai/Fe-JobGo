@@ -35,7 +35,7 @@
       <div
         ref="flyoutRef"
         tabindex="1"
-        class="hp-dropdown__flyout"
+        :class="flyoutClasses"
         v-if="isDropdownOpen"
       >
         <slot name="dropdown"></slot>
@@ -63,6 +63,10 @@ const props = defineProps({
   type: {
     type: String,
     default: "button",
+  },
+  left: {
+    type: Boolean,
+    default: false,
   },
   isLoading: {
     type: Boolean,
@@ -129,6 +133,13 @@ const iconClasses = computed(() => {
     "hp-dropdown__button__icon--solo": !props.label,
   };
 });
+
+const flyoutClasses = computed(() => {
+  return {
+    "hp-dropdown__flyout": true,
+    "hp-dropdown__flyout--left": props.left,
+  };
+});
 </script>
 
 <div lang="scss" scoped>
@@ -169,6 +180,14 @@ const iconClasses = computed(() => {
     right: 0;
     top: calc(100% + 6px);
     z-index: $z-index-1000;
+    &--left {
+      left: 0;
+      right: unset;
+    }
+  }
+
+  &__label {
+    padding-right: 6px;
   }
 
   // Default

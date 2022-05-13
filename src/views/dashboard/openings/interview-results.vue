@@ -11,7 +11,7 @@
             class="results__details__stats__stat__icon"
             name="user"
           ></hp-icon>
-          {{ interview.interviewerName }}
+          {{ evaluation.interviewerName }}
         </div>
         <div class="results__details__stats__stat">
           <hp-icon
@@ -166,14 +166,21 @@ const props = defineProps({
 const { setBreadcrumbs } = useBreadcrumbs();
 const router = useRouter();
 const route = useRoute();
-const interview = ref({});
 const candidate = ref({});
+const interview = ref({});
+const evaluation = ref({});
 
 onMounted(async () => {
-  const getInterview = useGet(`interviews/${route.params.resultsRef}`);
-  await getInterview.get();
-  interview.value = getInterview.data.value.interview;
-  candidate.value = getInterview.data.value.interview.candidate;
+  const getEvaluation = useGet(
+    `interviews/${route.params.templateRef}/evaluations/${route.params.evaluationRef}`
+  );
+  const getTemplate = useGet(`interviews/${route.params.templateRef}/`);
+
+  await Promise.all([getEvaluation.get(), getTemplate.get()]);
+  candidate.value =
+    getEvaluation.data.value.interviewEvaluation.interview.candidate;
+  interview.value = getTemplate.data.value.interview;
+  evaluation.value = getEvaluation.data.value.interviewEvaluation;
 
   setBreadcrumbs([
     {
@@ -185,8 +192,8 @@ onMounted(async () => {
       to: `/openings/${props.opening.reference}`,
     },
     {
-      label: interview.value.candidate.name,
-      to: `/openings/${props.opening.reference}?candidate=${interview.value.candidate.reference}`,
+      label: candidate.value.name,
+      to: `/openings/${props.opening.reference}?candidate=${candidate.value.reference}`,
     },
     {
       label: interview.value.template.name,
@@ -196,13 +203,13 @@ onMounted(async () => {
 });
 
 const createdTime = computed(() => {
-  return format(new Date(interview.value.started), "HH:mm, dd MMMM, yyyy");
+  return format(new Date(evaluation.value.started), "HH:mm, dd MMMM, yyyy");
 });
 
 const timeTaken = computed(() => {
   return formatDistanceStrict(
-    new Date(interview.value.terminated),
-    new Date(interview.value.started),
+    new Date(evaluation.value.terminated),
+    new Date(evaluation.value.started),
     { roundingMethod: "ceil" }
   );
 });
@@ -215,7 +222,7 @@ const handleArchiveInterview = async () => {
 };
 
 const interactionList = computed(() => {
-  return interview.value.interactions
+  return evaluation.value.interactions
     .filter((interaction) => {
       return interaction.type === "question";
     })

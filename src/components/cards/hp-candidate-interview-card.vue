@@ -19,34 +19,9 @@
       {{ interview.name }}
     </div>
   </div>
-  <div v-if="interview.interview.terminated">
-    <div class="candidate-details__interview-grid__item__icon-text">
-      <hp-icon
-        class="candidate-details__interview-grid__item__icon-text__icon"
-        name="user"
-        :size="15"
-      ></hp-icon>
-      {{ interview.interview.interviewerName }}
-    </div>
-    <div class="candidate-details__interview-grid__item__icon-text">
-      <hp-icon
-        class="candidate-details__interview-grid__item__icon-text__icon"
-        name="calendar"
-        :size="15"
-      ></hp-icon>
-
-      {{ formatDate(interview.interview.terminated) }}
-    </div>
-    <div class="candidate-details__interview-grid__item__actions">
-      <hp-button
-        label="View full results"
-        :to="`/opening/${route.params.openingRef}/results/${interview.interview.token}`"
-      ></hp-button>
-    </div>
-  </div>
   <div
+    v-if="inProgressInterview"
     class="candidate-details__interview-grid__item__progress-wrapper"
-    v-else-if="interview.interview.started && !interview.interview.terminated"
   >
     <div class="candidate-details__interview-grid__item__icon-text">
       <hp-icon
@@ -54,7 +29,7 @@
         name="loader"
         :size="15"
       ></hp-icon>
-      In progress with {{ interview.interview.interviewerName }}
+      In progress with {{ inProgressInterview.interviewerName }}
     </div>
     <div class="candidate-details__interview-grid__item__icon-text">
       <hp-icon
@@ -64,13 +39,89 @@
       ></hp-icon>
 
       Started
-      {{ formatMinutesAgo(interview.interview.started) }}
     </div>
-    <hp-button
-      :href="calculateInterviewLink(interview)"
-      label="Join interview in progress"
-      class="candidate-details__interview-grid__item__actions"
-    ></hp-button>
+    <div class="candidate-details__interview-grid__item__actions">
+      <hp-button
+        :href="generateInProgressInterviewLink()"
+        label="In progress interview"
+        class="candidate-details__interview-grid__item_"
+      ></hp-button>
+      <hp-button
+        class="candidate-details__interview-grid__item__actions--icon"
+        icon="copy"
+        @click="copyInterview(interview)"
+      ></hp-button>
+    </div>
+  </div>
+  <div v-else-if="hasMultipleInterviews">
+    <div class="candidate-details__interview-grid__item__icon-text">
+      <hp-icon
+        class="candidate-details__interview-grid__item__icon-text__icon"
+        name="user"
+        :size="15"
+      ></hp-icon>
+      {{ interview.interview.evaluations.length }} interviewers
+    </div>
+    <div class="candidate-details__interview-grid__item__icon-text">
+      <hp-icon
+        class="candidate-details__interview-grid__item__icon-text__icon"
+        name="calendar"
+        :size="15"
+      ></hp-icon>
+
+      {{ formatDate(interview.interview.evaluations[0].terminated) }}
+    </div>
+    <div class="candidate-details__interview-grid__item__actions">
+      <hp-dropdown
+        class="candidate-interview-card__dropdown"
+        :label="'View results'"
+        left
+      >
+        <template v-slot:dropdown>
+          <ul class="hp-multi-select__flyout__options">
+            <router-link
+              v-for="evaluation in completedEvaluations"
+              :to="`/opening/${route.params.openingRef}/results/${interview.interview.token}/${evaluation.token}`"
+            >
+              <li class="hp-multi-select__flyout__options__option">
+                {{ evaluation.interviewerName }}
+              </li>
+            </router-link>
+          </ul>
+        </template>
+      </hp-dropdown>
+      <hp-button @click="copyInterview(interview)" icon="copy"></hp-button>
+    </div>
+  </div>
+  <div v-else-if="hasTerminatedInterview">
+    <div class="candidate-details__interview-grid__item__icon-text">
+      <hp-icon
+        class="candidate-details__interview-grid__item__icon-text__icon"
+        name="user"
+        :size="15"
+      ></hp-icon>
+      {{ interview.interview.evaluations[0].interviewerName }}
+    </div>
+    <div class="candidate-details__interview-grid__item__icon-text">
+      <hp-icon
+        class="candidate-details__interview-grid__item__icon-text__icon"
+        name="calendar"
+        :size="15"
+      ></hp-icon>
+
+      {{ formatDate(interview.interview.evaluations[0].terminated) }}
+    </div>
+    <div class="candidate-details__interview-grid__item__actions">
+      <hp-button
+        label="View full results"
+        :to="`/opening/${route.params.openingRef}/results/${interview.interview.token}/${interview.interview.evaluations[0].token}`"
+      ></hp-button>
+      <hp-button
+        class="candidate-details__interview-grid__item__actions--icon"
+        icon="copy"
+        @click="copyInterview(interview)"
+      ></hp-button>
+    </div>
   </div>
   <div v-else>
     <div class="candidate-details__interview-grid__item__icon-text">
@@ -117,16 +168,20 @@
 
 <script setup>
 //Vendor
+import { computed } from "vue";
+import { useRoute } from "vue-router";
 import { formatDistance, format } from "date-fns";
 
 //Components
 import HpBadge from "@/components/hp-badge.vue";
 import HpIcon from "@/components/hp-icon.vue";
 import HpButton from "@/components/hp-button.vue";
+import HpDropdown from "@/components/hp-dropdown.vue";
 
 //Composables
 import useToast from "@/composables/useToast";
 
+const route = useRoute();
 const { setToast } = useToast();
 
 const props = defineProps({
@@ -142,6 +197,28 @@ const props = defineProps({
     type: Object,
     required: true,
   },
+});
+
+const inProgressInterview = computed(() => {
+  return props.interview.interview.evaluations.find(
+    (i) => i.started && !i.terminated
+  );
+});
+
+console.log(inProgressInterview);
+
+const completedEvaluations = computed(() => {
+  return props.opening.templates
+    .find((t) => props.interview.reference === t.reference)
+    .interview.evaluations.filter((e) => e.terminated);
+});
+
+const hasMultipleInterviews = computed(() => {
+  return props.interview.interview.evaluations.length > 1;
+});
+
+const hasTerminatedInterview = computed(() => {
+  return props.interview.interview.evaluations.some((i) => i.terminated);
 });
 
 const URL = import.meta.env.VITE_INTERVIEW_URL;
@@ -202,6 +279,18 @@ const calculateInterviewLink = (interview) => {
   }`;
   return URL;
 };
+
+const generateInProgressInterviewLink = () => {
+  return `${import.meta.env.VITE_INTERVIEW_URL}/token/${
+    props.interview.interview.token
+  }/${inProgressInterview.value.token}`;
+};
 </script>
 
-<style lang="scss"></style>
+<style lang="scss">
+.candidate-interview-card {
+  &__dropdown {
+    margin-right: 8px;
+  }
+}
+</style>
