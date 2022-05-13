@@ -1,5 +1,5 @@
 <template>
-  <div v-if="interview.token" class="results">
+  <div v-if="!isLoading" class="results">
     <div class="results__details">
       <p class="results__details__candidate">{{ candidate.name }}</p>
       <h2 class="results__details__interview-name">
@@ -138,6 +138,8 @@
       </div>
     </div>
   </div>
+
+  <hp-spinner :size="24" class="candidate-details__spinner" v-else />
 </template>
 
 <script setup>
@@ -149,6 +151,7 @@ import { format, formatDistanceStrict } from "date-fns";
 //Components
 import HpIcon from "@/components/hp-icon.vue";
 import HpBadge from "@/components/hp-badge.vue";
+import HpSpinner from "@/components/hp-spinner.vue";
 import HpBadgeTag from "@/components/hp-badge-tag.vue";
 import HpQuestionCardStats from "@/components/cards/hp-question-card-stats.vue";
 
@@ -169,6 +172,7 @@ const route = useRoute();
 const candidate = ref({});
 const interview = ref({});
 const evaluation = ref({});
+const isLoading = ref(true);
 
 onMounted(async () => {
   const getEvaluation = useGet(
@@ -200,6 +204,8 @@ onMounted(async () => {
       to: ``,
     },
   ]);
+
+  isLoading.value = false;
 });
 
 const createdTime = computed(() => {
