@@ -65,13 +65,13 @@ const route = useRoute();
 
 const isNextAction = (template, templates) => {
   const nextRef = templates.find((t) => {
-    return !t.interview?.started;
-  })?.interview?.token;
-  return template.interview.token === nextRef;
+    return !t.interview?.evaluations.some((e) => e.terminated);
+  });
+  return template.interview.token === nextRef?.interview?.token;
 };
 
 const isCompleted = (template) => {
-  return template.interview.started && template.interview.terminated;
+  return template.interview.evaluations.some((e) => e.terminated);
 };
 
 const calculateColor = (candidate, avg) => {
