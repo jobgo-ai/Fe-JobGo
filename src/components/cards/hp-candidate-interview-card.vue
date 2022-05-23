@@ -213,13 +213,10 @@ const secondsToMinutes = (seconds) => {
 };
 
 const isNextAction = (template, templates) => {
-  console.log(templates);
   const nextRef = templates.find((t) => {
     return !t.interview?.evaluations.some((e) => e.started);
   }).interview?.token;
 
-  console.log(template);
-  console.log(nextRef);
   return template.interview.token === nextRef;
 };
 

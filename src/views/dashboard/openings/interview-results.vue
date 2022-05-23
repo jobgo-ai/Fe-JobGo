@@ -94,9 +94,9 @@
       </div>
     </div>
     <div class="results__container">
-      <div v-if="interview.comment" class="results__comments">
+      <div v-if="evaluation.comment" class="results__comments">
         <div class="results__questions__title">Notes</div>
-        {{ interview.comment }}
+        {{ evaluation.comment }}
       </div>
       <div class="results__questions">
         <div class="results__questions__title">Questions</div>
@@ -185,6 +185,7 @@ onMounted(async () => {
     getEvaluation.data.value.interviewEvaluation.interview.candidate;
   interview.value = getTemplate.data.value.interview;
   evaluation.value = getEvaluation.data.value.interviewEvaluation;
+  console.log(getEvaluation.data.value);
 
   setBreadcrumbs([
     {
