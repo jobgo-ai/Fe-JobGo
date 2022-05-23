@@ -67,7 +67,7 @@
       ></hp-button>
     </div>
   </div>
-  <div v-else-if="hasTerminatedInterview">
+  <div v-else-if="hasTerminatedInterview && completedEvaluations.length === 1">
     <div class="candidate-details__interview-grid__item__icon-text">
       <hp-icon
         class="candidate-details__interview-grid__item__icon-text__icon"
@@ -90,6 +90,46 @@
         label="View full results"
         :to="`/opening/${route.params.openingRef}/results/${interview.interview.token}/${interview.interview.evaluations[0].token}`"
       ></hp-button>
+      <hp-button
+        class="candidate-details__interview-grid__item__actions--icon"
+        icon="copy"
+        @click="copyInterview(interview)"
+      ></hp-button>
+    </div>
+  </div>
+  <div v-else-if="hasTerminatedInterview && completedEvaluations.length > 1">
+    <div class="candidate-details__interview-grid__item__icon-text">
+      <hp-icon
+        class="candidate-details__interview-grid__item__icon-text__icon"
+        name="user"
+        :size="15"
+      ></hp-icon>
+      {{ interview.interview.evaluations.length }} Interviewers
+    </div>
+    <div class="candidate-details__interview-grid__item__icon-text">
+      <hp-icon
+        class="candidate-details__interview-grid__item__icon-text__icon"
+        name="calendar"
+        :size="15"
+      ></hp-icon>
+
+      {{ formatDate(interview.interview.evaluations[0].terminated) }}
+    </div>
+    <div class="candidate-details__interview-grid__item__actions">
+      <hp-dropdown :label="'View full results'" left>
+        <template v-slot:dropdown>
+          <ul class="hp-multi-select__flyout__options">
+            <router-link
+              v-for="evaluation in completedEvaluations"
+              :to="`/opening/${route.params.openingRef}/results/${interview.interview.token}/${evaluation.token}`"
+            >
+              <li class="hp-multi-select__flyout__options__option">
+                {{ evaluation.interviewerName }}
+              </li>
+            </router-link>
+          </ul>
+        </template>
+      </hp-dropdown>
       <hp-button
         class="candidate-details__interview-grid__item__actions--icon"
         icon="copy"
@@ -144,7 +184,7 @@
 //Vendor
 import { computed } from "vue";
 import { useRoute } from "vue-router";
-import { formatDistance, format } from "date-fns";
+import { format } from "date-fns";
 
 //Components
 import HpBadge from "@/components/hp-badge.vue";
@@ -190,6 +230,12 @@ const hasTerminatedInterview = computed(() => {
 });
 
 const URL = import.meta.env.VITE_INTERVIEW_URL;
+
+const completedEvaluations = computed(() => {
+  return props.opening.templates
+    .find((t) => props.interview.reference === t.reference)
+    .interview.evaluations.filter((e) => e.terminated);
+});
 
 const calculateColor = (score, avgScore) => {
   if (!score || score === "0.0") {

@@ -138,7 +138,6 @@
       </div>
     </div>
   </div>
-
   <hp-spinner :size="24" class="candidate-details__spinner" v-else />
 </template>
 
@@ -185,7 +184,6 @@ onMounted(async () => {
     getEvaluation.data.value.interviewEvaluation.interview.candidate;
   interview.value = getTemplate.data.value.interview;
   evaluation.value = getEvaluation.data.value.interviewEvaluation;
-  console.log(getEvaluation.data.value);
 
   setBreadcrumbs([
     {
