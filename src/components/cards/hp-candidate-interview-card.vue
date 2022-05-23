@@ -185,16 +185,6 @@ const inProgressInterviews = computed(() => {
   );
 });
 
-const completedEvaluations = computed(() => {
-  return props.opening.templates
-    .find((t) => props.interview.reference === t.reference)
-    .interview.evaluations.filter((e) => e.terminated);
-});
-
-const hasMultipleInterviews = computed(() => {
-  return props.interview.interview.evaluations.length > 1;
-});
-
 const hasTerminatedInterview = computed(() => {
   return props.interview.interview.evaluations.some((i) => i.terminated);
 });
@@ -214,14 +204,6 @@ const calculateColor = (score, avgScore) => {
   }
 };
 
-const formatMinutesAgo = (date) => {
-  const distance = formatDistance(new Date(date), Date.now(), {
-    addSuffix: true,
-  });
-
-  return distance;
-};
-
 const formatDate = (date) => {
   return format(new Date(date), "dd MMMM, yyyy");
 };
@@ -231,9 +213,13 @@ const secondsToMinutes = (seconds) => {
 };
 
 const isNextAction = (template, templates) => {
+  console.log(templates);
   const nextRef = templates.find((t) => {
-    return !t.interview?.started;
+    return !t.interview?.evaluations.some((e) => e.started);
   }).interview?.token;
+
+  console.log(template);
+  console.log(nextRef);
   return template.interview.token === nextRef;
 };
 
