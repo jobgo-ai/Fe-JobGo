@@ -2,15 +2,16 @@ import { ref } from "vue";
 import { useGet } from "./useHttp";
 import { useRoute } from "vue-router";
 
+const isCandidateListLoading = ref(false);
+const isInfiniteLoading = ref(false);
+const hasMoreToLoad = ref(true);
+const isCandidateLoading = ref(true);
+const candidate = ref({});
+const candidates = ref([]);
+const templateList = ref([]);
+
 export default () => {
   const route = useRoute();
-  const isCandidateListLoading = ref(false);
-  const isInfiniteLoading = ref(false);
-  const hasMoreToLoad = ref(true);
-  const isCandidateLoading = ref(true);
-  const candidate = ref({});
-  const candidates = ref([]);
-  const templateList = ref([]);
 
   const fetchMoreCandidates = async (url) => {
     if (!hasMoreToLoad.value) {

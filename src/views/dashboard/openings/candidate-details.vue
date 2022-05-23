@@ -246,7 +246,6 @@ const calculateColor = (score, avgScore) => {
 };
 
 const completedTemplates = computed(() => {
-  console.log(candidate.value.opening);
   return candidate.value.opening.templates.filter((t) =>
     t.interview.evaluations.some((e) => e.terminated)
   ).length;

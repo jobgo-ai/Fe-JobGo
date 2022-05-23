@@ -157,6 +157,7 @@ const onSubmit = handleSubmit(async (values) => {
     const payload = {
       candidate: {
         ...values,
+        email: values.email === "" ? null : values.email,
         opening: route.params.openingRef,
       },
     };
