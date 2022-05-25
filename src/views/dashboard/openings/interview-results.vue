@@ -180,7 +180,7 @@ onMounted(async () => {
     `interviews/${route.params.templateRef}/evaluations/${route.params.evaluationRef}`
   );
 
-  await Promise.all([getEvaluation.get(), getTemplate.get()]);
+  await getEvaluation.get();
   candidate.value =
     getEvaluation.data.value.interviewEvaluation.interview.candidate;
   evaluation.value = getEvaluation.data.value.interviewEvaluation;
