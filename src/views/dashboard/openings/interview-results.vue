@@ -3,7 +3,7 @@
     <div class="results__details">
       <p class="results__details__candidate">{{ candidate.name }}</p>
       <h2 class="results__details__interview-name">
-        {{ interview.template.name }}
+        {{ evaluation.interview.template.name }}
       </h2>
       <div class="results__details__stats">
         <div class="results__details__stats__stat">
@@ -31,23 +31,23 @@
       <div class="results__details__grid">
         <div
           :class="`results__details__score results__details__score--${calculateColor(
-            interview.statistics.candidateScore,
-            interview.statistics.averageInterviewScore
+            evaluation.statistics.candidateScore,
+            evaluation.statistics.averageInterviewScore
           )}`"
         >
           <div class="results__details__score-container">
             <div class="results__details__score__average">
-              {{ interview.statistics.candidateScore }}
+              {{ evaluation.statistics.candidateScore }}
             </div>
             <div class="results__details__score__current">Score</div>
             <div class="results__details__score__average-score">
               The average score is
-              {{ interview.statistics.averageInterviewScore }}
+              {{ evaluation.statistics.averageInterviewScore }}
               <hp-icon
                 :name="
                   calculateArrowDirection(
-                    interview.statistics.candidateScore,
-                    interview.statistics.averageInterviewScore
+                    evaluation.statistics.candidateScore,
+                    evaluation.statistics.averageInterviewScore
                   )
                 "
               ></hp-icon>
@@ -57,22 +57,24 @@
         <div :class="`results__details__score`">
           <div class="results__details__score-container">
             <div class="results__details__score__average">
-              {{ (interview.statistics.candidateCompletion * 100).toFixed(0) }}%
+              {{
+                (evaluation.statistics.candidateCompletion * 100).toFixed(0)
+              }}%
             </div>
             <div class="results__details__score__current">Completion rate</div>
             <div class="results__details__score__average-score">
               Average completion is
               {{
-                (interview.statistics.averageInterviewCompletion * 100).toFixed(
-                  0
-                )
+                (
+                  evaluation.statistics.averageInterviewCompletion * 100
+                ).toFixed(0)
               }}
               %
               <hp-icon
                 :name="
                   calculateArrowDirection(
-                    interview.statistics.candidateCompletion,
-                    interview.statistics.averageInterviewCompletion
+                    evaluation.statistics.candidateCompletion,
+                    evaluation.statistics.averageInterviewCompletion
                   )
                 "
               ></hp-icon>
@@ -83,7 +85,7 @@
           <div class="results__details__skills-title">Evaluated skills</div>
           <ol class="results__details__skills">
             <hp-badge-tag
-              v-for="(skill, index) in interview.statistics
+              v-for="(skill, index) in evaluation.statistics
                 .candidateSkillScores"
               :quantity="skill.score.value"
               :label="skill.name"
@@ -177,12 +179,10 @@ onMounted(async () => {
   const getEvaluation = useGet(
     `interviews/${route.params.templateRef}/evaluations/${route.params.evaluationRef}`
   );
-  const getTemplate = useGet(`interviews/${route.params.templateRef}/`);
 
   await Promise.all([getEvaluation.get(), getTemplate.get()]);
   candidate.value =
     getEvaluation.data.value.interviewEvaluation.interview.candidate;
-  interview.value = getTemplate.data.value.interview;
   evaluation.value = getEvaluation.data.value.interviewEvaluation;
 
   setBreadcrumbs([
@@ -199,7 +199,7 @@ onMounted(async () => {
       to: `/openings/${props.opening.reference}?candidate=${candidate.value.reference}`,
     },
     {
-      label: interview.value.template.name,
+      label: evaluation.value.interview.template.name,
       to: ``,
     },
   ]);
@@ -220,7 +220,7 @@ const timeTaken = computed(() => {
 });
 
 const handleArchiveInterview = async () => {
-  const deleteInterview = useDelete(`interviews/${interview.value.token}`);
+  const deleteInterview = useDelete(`interviews/${evaluation.value.token}`);
   await deleteInterview.remove();
   isInterviewArchiveConfirmOpen.value = false;
   router.push(`/candidates/${route.params.candidateRef}`);
@@ -255,7 +255,7 @@ const calculateColor = (candidate, avg) => {
 };
 
 const calculateSkillScoreColor = (skill) => {
-  const average = interview.value.statistics.averageInterviewSkillScores.find(
+  const average = evaluation.value.statistics.averageInterviewSkillScores.find(
     (i) => i.slug === skill.slug
   );
   if (average) {
