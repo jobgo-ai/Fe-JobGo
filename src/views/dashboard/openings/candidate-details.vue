@@ -151,6 +151,7 @@ import HpSpinner from "@/components/hp-spinner.vue";
 import HpModal from "@/components/hp-modal.vue";
 import HpCircularBadge from "@/components/hp-circular-badge.vue";
 import HpCandidateInterviewCard from "@/components/cards/hp-candidate-interview-card.vue";
+import useOpenings from "@/composables/useOpenings";
 
 // Assets
 import EmptyState from "@/assets/abstracts/empty-state.svg";
@@ -166,8 +167,9 @@ const { fetchCandidate, candidate, isCandidateLoading } = useCandidates();
 
 const route = useRoute();
 const isEditCandidateModalOpen = ref(false);
-const opening = ref({});
 const isPageLoading = ref(true);
+const opening = ref({});
+const { opening: openingTemplate } = useOpenings();
 
 const getCandidateDetails = async () => {
   await fetchCandidate(route.query.candidate);
@@ -204,15 +206,28 @@ watch(
 );
 
 const skillList = computed(() => {
-  const formattedSkills =
-    candidate.value?.opening?.statistics?.candidateSkillScores.map((skill) => ({
+  const skills = openingTemplate.value.statistics.skills.map((skill) => {
+    return {
+      name: skill.value.name,
+      slug: skill.value.slug,
+    };
+  });
+
+  const formattedSkills = skills.map((skill) => {
+    const skillValue =
+      candidate.value?.opening?.statistics?.candidateSkillScores.find(
+        (s) => s.slug === skill.slug
+      )?.score?.value;
+
+    return {
       label: skill.name,
-      value: skill.score.value?.toFixed(1) ?? "0.0",
+      value: skillValue?.toFixed(1) ?? "0.0",
       average:
         candidate.value?.opening?.statistics?.averageOpeningSkillScores.find(
           (s) => s.slug === skill.slug
-        ).score.value,
-    }));
+        )?.score?.value,
+    };
+  });
 
   const sortedSkills = formattedSkills.sort((a, b) => {
     return b.value - a.value;
