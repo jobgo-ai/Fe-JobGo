@@ -117,12 +117,7 @@
                 v-for="skill in skillList"
                 :label="skill.label"
                 :quantity="skill.value"
-                :type="
-                  calculateColor(
-                    skill.value,
-                    candidate.opening.statistics.averageOpeningScore
-                  )
-                "
+                :type="calculateColor(skill.value, skill.average)"
               ></hp-badge-tag>
             </ol>
           </div>
@@ -213,6 +208,10 @@ const skillList = computed(() => {
     candidate.value?.opening?.statistics?.candidateSkillScores.map((skill) => ({
       label: skill.name,
       value: skill.score.value?.toFixed(1) ?? "0.0",
+      average:
+        candidate.value?.opening?.statistics?.averageOpeningSkillScores.find(
+          (s) => s.slug === skill.slug
+        ).score.value,
     }));
 
   const sortedSkills = formattedSkills.sort((a, b) => {
