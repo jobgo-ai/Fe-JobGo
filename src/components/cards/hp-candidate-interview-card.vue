@@ -15,9 +15,12 @@
         :content="interview.statistics.candidateScore.toFixed(2)"
       ></hp-badge>
     </div>
-    <div class="candidate-details__interview-grid__item__header__title">
+    <h3
+      class="candidate-details__interview-grid__item__header__title"
+      :title="interview.name"
+    >
       {{ interview.name }}
-    </div>
+    </h3>
   </div>
   <div
     v-if="inProgressInterview"
@@ -293,11 +296,3 @@ const generateInProgressInterviewLink = (token) => {
   }/${token}`;
 };
 </script>
-
-<style lang="scss">
-.candidate-interview-card {
-  &__dropdown {
-    margin-right: 8px;
-  }
-}
-</style>
