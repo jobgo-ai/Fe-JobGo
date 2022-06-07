@@ -442,6 +442,9 @@ const completedTemplates = computed(() => {
         font-size: 14px;
         line-height: 20px;
         margin-bottom: 16px;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
       }
     }
     &__icon-text {
