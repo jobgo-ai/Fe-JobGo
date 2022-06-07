@@ -14,29 +14,26 @@
           </div>
         </div>
         <hp-badge
-          v-if="candidate.opening?.statistics?.candidateScore"
+          v-if="candidate?.statistics?.candidateScore"
           :type="
             calculateColor(
-              candidate.opening.statistics.candidateScore,
-              candidate.opening.statistics.averageOpeningScore
+              candidate.statistics.candidateScore,
+              candidate.statistics.averageOpeningScore
             )
           "
-          :content="candidate.opening.statistics.candidateScore.toFixed(2)"
+          :content="candidate.statistics.candidateScore.toFixed(2)"
         ></hp-badge>
       </div>
-      <div
-        v-if="candidate.opening.templates.length > 0"
-        class="hp-candidate-card__interview-ticks"
-      >
+      <div v-if="false" class="hp-candidate-card__interview-ticks">
         <div
           :class="[
             `hp-candidate-card__interview-tick`,
-            isNextAction(template, candidate.opening.templates) &&
+            isNextAction(template, opening.templates) &&
               'hp-candidate-card__interview-tick--next',
             isCompleted(template) &&
               'hp-candidate-card__interview-tick--completed',
           ]"
-          v-for="template in candidate.opening.templates"
+          v-for="template in opening.templates"
           :key="template"
         ></div>
       </div>
@@ -48,6 +45,7 @@
 import { computed } from "vue";
 import { useRoute } from "vue-router";
 import HpBadge from "@/components/hp-badge.vue";
+import useOpenings from "@/composables/useOpenings";
 
 const props = defineProps({
   candidate: {
@@ -60,6 +58,8 @@ const props = defineProps({
     default: false,
   },
 });
+
+const { opening } = useOpenings();
 
 const route = useRoute();
 

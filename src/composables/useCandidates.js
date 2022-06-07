@@ -8,7 +8,6 @@ const hasMoreToLoad = ref(true);
 const isCandidateLoading = ref(true);
 const candidate = ref({});
 const candidates = ref([]);
-const templateList = ref([]);
 
 export default () => {
   const route = useRoute();
@@ -41,22 +40,6 @@ export default () => {
     await getCandidates.get();
     candidates.value = getCandidates.data.value.candidates;
     isCandidateListLoading.value = false;
-
-    templateList.value =
-      getCandidates.data.value?.candidates[0]?.opening.templates
-        .map((template) => ({
-          label: template.name,
-          value: template.reference,
-        }))
-        .concat(
-          [],
-          [
-            {
-              label: "All interviews",
-              value: "all",
-            },
-          ]
-        );
   };
 
   const fetchCandidate = async (candidateRef) => {
@@ -71,7 +54,6 @@ export default () => {
     isCandidateLoading,
     candidates,
     candidate,
-    templateList,
     isInfiniteLoading,
     hasMoreToLoad,
     fetchMoreCandidates,

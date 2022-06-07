@@ -228,7 +228,6 @@ const {
   isCandidateListLoading,
   hasMoreToLoad,
   candidates,
-  templateList,
   fetchMoreCandidates,
   isInfiniteLoading,
 } = useCandidates();
@@ -237,6 +236,23 @@ const route = useRoute();
 const isAddCandidateModalOpen = ref(false);
 const isFlyoutOpen = ref(false);
 const dropdownTarget = ref(null);
+
+const templateList = computed(() => {
+  return opening.value.templates
+    .map((template) => ({
+      label: template.name,
+      value: template.reference,
+    }))
+    .concat(
+      [],
+      [
+        {
+          label: "All interviews",
+          value: "all",
+        },
+      ]
+    );
+});
 
 const templateLabel = computed(() => {
   return templateList.value.find(
