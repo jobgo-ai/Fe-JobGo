@@ -14,29 +14,25 @@
           </div>
         </div>
         <hp-badge
-          v-if="candidate.opening?.statistics?.candidateScore"
+          v-if="candidate?.statistics?.candidateScore"
           :type="
             calculateColor(
-              candidate.opening.statistics.candidateScore,
-              candidate.opening.statistics.averageOpeningScore
+              candidate.statistics.candidateScore,
+              candidate.statistics.averageOpeningScore
             )
           "
-          :content="candidate.opening.statistics.candidateScore.toFixed(2)"
+          :content="candidate.statistics.candidateScore.toFixed(2)"
         ></hp-badge>
       </div>
-      <div
-        v-if="candidate.opening.templates.length > 0"
-        class="hp-candidate-card__interview-ticks"
-      >
+      <div v-if="opening.templates" class="hp-candidate-card__interview-ticks">
         <div
           :class="[
             `hp-candidate-card__interview-tick`,
-            isNextAction(template, candidate.opening.templates) &&
-              'hp-candidate-card__interview-tick--next',
-            isCompleted(template) &&
+            isNextAction(index) && 'hp-candidate-card__interview-tick--next',
+            candidate.statistics.interviewProgress[index] === 'terminated' &&
               'hp-candidate-card__interview-tick--completed',
           ]"
-          v-for="template in candidate.opening.templates"
+          v-for="(template, index) in opening.templates"
           :key="template"
         ></div>
       </div>
@@ -48,6 +44,7 @@
 import { computed } from "vue";
 import { useRoute } from "vue-router";
 import HpBadge from "@/components/hp-badge.vue";
+import useOpenings from "@/composables/useOpenings";
 
 const props = defineProps({
   candidate: {
@@ -61,17 +58,16 @@ const props = defineProps({
   },
 });
 
+const { opening } = useOpenings();
+
 const route = useRoute();
 
-const isNextAction = (template, templates) => {
-  const nextRef = templates.find((t) => {
-    return !t.interview?.evaluations.some((e) => e.terminated);
-  });
-  return template.interview.token === nextRef?.interview?.token;
-};
-
-const isCompleted = (template) => {
-  return template.interview.evaluations.some((e) => e.terminated);
+const isNextAction = (index) => {
+  const firstNonTerminated =
+    props.candidate.statistics.interviewProgress.findIndex((progress) => {
+      return progress !== "terminated";
+    });
+  return firstNonTerminated === index;
 };
 
 const calculateColor = (candidate, avg) => {

@@ -31,7 +31,6 @@
     "css-loader": "^6.5.1",
     "sass": "^1.49.0",
     "storybook-builder-vite": "^0.1.13",
-    "storybook-vue3-router": "^2.2.1",
     "style-loader": "^3.3.1",
     "vite": "^2.8.4",
     "vite-svg-loader": "^3.1.2",
