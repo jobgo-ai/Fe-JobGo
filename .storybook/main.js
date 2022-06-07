@@ -7,7 +7,7 @@ module.exports = {
   addons: ["@storybook/addon-links", "@storybook/addon-essentials"],
   framework: "@storybook/vue3",
   core: {
-    builder: "storybook-builder-vite",
+    builder: "@storybook/builder-vite",
   },
   async viteFinal(config) {
     const { config: userConfig } = await loadConfigFromFile(
