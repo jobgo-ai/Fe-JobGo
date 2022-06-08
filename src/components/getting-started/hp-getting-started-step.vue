@@ -1,24 +1,26 @@
 <template>
   <div class="hp-getting-started-step">
-    <div
-      :class="`hp-getting-started-step__container ${
-        completed && 'hp-getting-started-step__container'
-      }`"
-      @click="handleAccordianClick"
-    >
-      <div class="hp-getting-started-step__big-o-container">
-        <div :class="bigOClasses">
-          <hp-icon v-if="completed" name="check"></hp-icon>
-        </div>
+    <div class="hp-getting-started-step__big-o-container">
+      <div :class="bigOClasses">
+        <hp-icon v-if="completed" name="check"></hp-icon>
       </div>
-      <div class="hp-getting-started-step__container__title">{{ title }}</div>
-      <hp-icon v-if="!completed" name="chevron-down"></hp-icon>
     </div>
-    <transition name="flyout-transition">
-      <div v-if="isAccordianOpen" class="hp-getting-started-step__content">
-        <slot></slot>
+    <div>
+      <div
+        @click="handleAccordianClick"
+        :class="`hp-getting-started-step__container ${
+          completed && 'hp-getting-started-step__container'
+        }`"
+      >
+        <div class="hp-getting-started-step__container__title">{{ title }}</div>
+        <hp-icon v-if="!completed" name="chevron-down"></hp-icon>
       </div>
-    </transition>
+      <transition name="flyout-transition">
+        <div v-if="isAccordianOpen" class="hp-getting-started-step__content">
+          <slot></slot>
+        </div>
+      </transition>
+    </div>
   </div>
 </template>
 
@@ -44,7 +46,7 @@ const props = defineProps({
   },
 });
 
-const isAccordianOpen = ref(false);
+const isAccordianOpen = ref(props.isNextStep);
 
 const handleAccordianClick = () => {
   if (props.completed) {
@@ -65,7 +67,7 @@ const bigOClasses = computed(() => {
 <style lang="scss" scoped>
 .hp-getting-started-step {
   border-bottom: 1px solid var(--color-border);
-  padding: 16px;
+  display: flex;
   cursor: pointer;
   &__big-o {
     height: 24px;
@@ -85,27 +87,24 @@ const bigOClasses = computed(() => {
     cursor: pointer;
   }
   &__content {
-    padding-top: 4px;
-    margin-left: 32px;
     font-size: 12px;
-  }
-  &:first-child {
-    padding-top: 12px;
-  }
-  &:last-child {
-    margin-bottom: 0;
-    border-bottom: none;
+    padding: 0px 16px;
+    padding-bottom: 16px;
   }
   &__container {
     display: flex;
     align-items: center;
+    padding: 16px;
     &__title {
-      margin-right: 12px;
+      margin-right: 8px;
       white-space: nowrap;
     }
   }
   &__big-o-container {
-    width: 32px;
+    display: flex;
+    align-items: flex-start;
+    padding-top: 12px;
+    padding-left: 18px;
   }
 }
 

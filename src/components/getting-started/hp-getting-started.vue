@@ -40,6 +40,76 @@
               ></hp-button>
             </div>
           </hp-getting-started-step>
+          <hp-getting-started-step
+            title="Create interview template"
+            :isNextStep="nextStep === 'interview'"
+          >
+            <div class="hp-getting-started__flyout__step__description">
+              Create an opening for your new job router-link
+              <hp-button
+                class="hp-getting-started__flyout__step__cta"
+                label="Create opening"
+                primary
+                @click="console.log('fuck')"
+              ></hp-button>
+            </div>
+          </hp-getting-started-step>
+          <hp-getting-started-step
+            title="Create question template"
+            :isNextStep="nextStep === 'question'"
+          >
+            <div class="hp-getting-started__flyout__step__description">
+              Create an opening for your new job router-link
+              <hp-button
+                class="hp-getting-started__flyout__step__cta"
+                label="Create opening"
+                primary
+                @click="console.log('fuck')"
+              ></hp-button>
+            </div>
+          </hp-getting-started-step>
+          <hp-getting-started-step
+            title="Add a candidate"
+            :isNextStep="nextStep === 'candidate'"
+          >
+            <div class="hp-getting-started__flyout__step__description">
+              Create an opening for your new job router-link
+              <hp-button
+                class="hp-getting-started__flyout__step__cta"
+                label="Create opening"
+                primary
+                @click="console.log('fuck')"
+              ></hp-button>
+            </div>
+          </hp-getting-started-step>
+          <hp-getting-started-step
+            title="Run an interview"
+            :isNextStep="nextStep === 'interviewed'"
+          >
+            <div class="hp-getting-started__flyout__step__description">
+              Create an opening for your new job router-link
+              <hp-button
+                class="hp-getting-started__flyout__step__cta"
+                label="Create opening"
+                primary
+                @click="console.log('fuck')"
+              ></hp-button>
+            </div>
+          </hp-getting-started-step>
+          <hp-getting-started-step
+            title="Invite a team member"
+            :isNextStep="nextStep === 'invited'"
+          >
+            <div class="hp-getting-started__flyout__step__description">
+              Create an opening for your new job router-link
+              <hp-button
+                class="hp-getting-started__flyout__step__cta"
+                label="Create opening"
+                primary
+                @click="console.log('fuck')"
+              ></hp-button>
+            </div>
+          </hp-getting-started-step>
         </ol>
       </div>
     </transition>
@@ -110,13 +180,13 @@ const nextStep = computed(() => {
   &__dropdown {
     cursor: pointer;
     font-size: 10px;
-    border-radius: $border-radius-md;
+    border-radius: $border-radius-lg;
     padding: 8px;
     display: flex;
     align-items: center;
     border: 1px solid var(--color-background);
     &__content {
-      margin-right: 16px;
+      margin-right: 8px;
     }
     &:hover {
       background-color: var(--color-panel);
@@ -133,9 +203,6 @@ const nextStep = computed(() => {
     top: 50px;
     transition: all 0.25s cubic-bezier(0.17, 0.67, 0.83, 0.67);
     &__step {
-      &__description {
-        margin-top: 4px;
-      }
       &__cta {
         margin-top: 12px;
       }
