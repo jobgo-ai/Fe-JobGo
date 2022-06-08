@@ -7,11 +7,7 @@
       @click="handleAccordianClick"
     >
       <div class="hp-getting-started-step__big-o-container">
-        <div
-          :class="`hp-getting-started-step__big-o ${
-            completed && 'hp-getting-started-step__big-o--completed'
-          }`"
-        >
+        <div :class="bigOClasses">
           <hp-icon v-if="completed" name="check"></hp-icon>
         </div>
       </div>
@@ -28,7 +24,7 @@
 
 <script setup>
 // Vendor
-import { ref } from "vue";
+import { ref, computed } from "vue";
 
 // Components
 import HpIcon from "@/components/hp-icon.vue";
@@ -42,6 +38,10 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  isNextStep: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const isAccordianOpen = ref(false);
@@ -52,11 +52,18 @@ const handleAccordianClick = () => {
   }
   isAccordianOpen.value = !isAccordianOpen.value;
 };
+
+const bigOClasses = computed(() => {
+  return {
+    "hp-getting-started-step__big-o": true,
+    "hp-getting-started-step__big-o--completed": props.completed,
+    "hp-getting-started-step__big-o--next-action": props.isNextStep,
+  };
+});
 </script>
 
 <style lang="scss" scoped>
 .hp-getting-started-step {
-  margin-bottom: 12px;
   border-bottom: 1px solid var(--color-border);
   padding: 16px;
   cursor: pointer;
@@ -68,6 +75,11 @@ const handleAccordianClick = () => {
     &--completed {
       color: var(--color-border);
     }
+    &--next-action {
+      border: 2px solid var(--blue--200);
+      background-color: var(--blue--100);
+      animation: pulse 1.2s infinite;
+    }
   }
   &--completed {
     cursor: pointer;
@@ -78,7 +90,7 @@ const handleAccordianClick = () => {
     font-size: 12px;
   }
   &:first-child {
-    margin-top: 12px;
+    padding-top: 12px;
   }
   &:last-child {
     margin-bottom: 0;
@@ -94,6 +106,21 @@ const handleAccordianClick = () => {
   }
   &__big-o-container {
     width: 32px;
+  }
+}
+
+@keyframes pulse {
+  0% {
+    -moz-box-shadow: 0 0 0 0 rgba(80, 129, 153, 0.4);
+    box-shadow: 0 0 0 0 rgba(80, 129, 153, 0.4);
+  }
+  70% {
+    -moz-box-shadow: 0 0 0 6px rgba(80, 129, 153, 0);
+    box-shadow: 0 0 0 6px rgba(80, 129, 153, 0);
+  }
+  100% {
+    -moz-box-shadow: 0 0 0 0 rgba(80, 129, 153, 0);
+    box-shadow: 0 0 0 0 rgba(80, 129, 153, 0);
   }
 }
 </style>

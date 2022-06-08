@@ -26,7 +26,10 @@
             :completed="checklist['account']"
           >
           </hp-getting-started-step>
-          <hp-getting-started-step title="Create opening">
+          <hp-getting-started-step
+            title="Create opening"
+            :isNextStep="nextStep === 'opening'"
+          >
             <div class="hp-getting-started__flyout__step__description">
               Create an opening for your new job router-link
               <hp-button
@@ -76,6 +79,10 @@ const completedSteps = computed(() => {
   return Object.keys(checklist.value).filter((key) => checklist.value[key])
     .length;
 });
+
+const nextStep = computed(() => {
+  return stepOrder.find((step) => !checklist.value[step]);
+});
 </script>
 
 <style lang="scss" scoped>
@@ -96,19 +103,25 @@ const completedSteps = computed(() => {
       height: 8px;
       border-radius: 2px;
       &--complete {
-        background-color: var(--color-text-primary);
+        background-color: var(--blue--500);
       }
     }
   }
   &__dropdown {
+    cursor: pointer;
     font-size: 10px;
-    font-weight: 500;
-    background-color: var(--color-panel);
-    border: 1px solid var(--color-border);
     border-radius: $border-radius-md;
     padding: 8px;
     display: flex;
     align-items: center;
+    border: 1px solid var(--color-background);
+    &__content {
+      margin-right: 16px;
+    }
+    &:hover {
+      background-color: var(--color-panel);
+      border: 1px solid var(--color-border);
+    }
   }
   &__flyout {
     background-color: var(--color-background);

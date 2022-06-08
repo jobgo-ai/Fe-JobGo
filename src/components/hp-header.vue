@@ -5,10 +5,10 @@
       <hp-breadcrumbs />
     </div>
     <div class="hp-header__right">
+      <div id="teleport-target-header" class="hp-header__save-container"></div>
       <div v-if="true">
         <hp-getting-started />
       </div>
-      <div id="teleport-target-header" class="hp-header__save-container"></div>
       <div
         class="hp-header__dropdown-container"
         ref="dropdownTarget"
