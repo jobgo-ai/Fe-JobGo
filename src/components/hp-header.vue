@@ -6,7 +6,7 @@
     </div>
     <div class="hp-header__right">
       <div id="teleport-target-header" class="hp-header__save-container"></div>
-      <div v-if="true">
+      <div class="hp-header__getting-started">
         <hp-getting-started />
       </div>
       <div
@@ -235,6 +235,9 @@ const { hasHeaderSaveButton } = useBreadcrumbs();
   }
   &__dropdown-container {
     position: relative;
+  }
+  &__getting-started {
+    margin-right: 8px;
   }
   &__dropdown-target {
     display: flex;
