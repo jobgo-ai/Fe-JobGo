@@ -1,8 +1,8 @@
 <template>
-  <div class="hp-getting-started">
+  <div ref="target" class="hp-getting-started">
     <div
       @click="isDropdownOpen = !isDropdownOpen"
-      ref="gettingStartedDropdownTarget"
+      ref="target"
       class="hp-getting-started__dropdown"
     >
       <div class="hp-getting-started__dropdown__content">
@@ -119,6 +119,7 @@
 <script setup>
 // Vendor
 import { ref, onMounted, computed } from "vue";
+import { onClickOutside } from "@vueuse/core";
 // Components
 import HpIcon from "@/components/hp-icon.vue";
 import HpButton from "@/components/hp-button.vue";
@@ -127,6 +128,7 @@ import HpGettingStartedStep from "@/components/getting-started/hp-getting-starte
 import { useGettingStarted } from "@/composables/useGettingStarted";
 
 const isDropdownOpen = ref(false);
+const target = ref(null);
 
 const stepOrder = [
   "account",
@@ -143,6 +145,13 @@ const { checklist, fetchChecklist } = useGettingStarted();
 onMounted(async () => {
   await fetchChecklist();
   console.log(checklist);
+});
+
+onClickOutside(target, (event) => {
+  if (!isDropdownOpen.value) {
+    return;
+  }
+  isDropdownOpen.value = false;
 });
 
 const completedSteps = computed(() => {
@@ -181,7 +190,7 @@ const nextStep = computed(() => {
     cursor: pointer;
     font-size: 10px;
     border-radius: $border-radius-lg;
-    padding: 8px;
+    padding: 8px 12px;
     display: flex;
     align-items: center;
     border: 1px solid var(--color-background);
