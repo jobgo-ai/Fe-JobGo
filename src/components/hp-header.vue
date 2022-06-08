@@ -5,6 +5,9 @@
       <hp-breadcrumbs />
     </div>
     <div class="hp-header__right">
+      <div v-if="true">
+        <hp-getting-started />
+      </div>
       <div id="teleport-target-header" class="hp-header__save-container"></div>
       <div
         class="hp-header__dropdown-container"
@@ -119,6 +122,7 @@ import { useRouter } from "vue-router";
 import { ref, computed, onMounted, onUnmounted } from "vue";
 import { onClickOutside } from "@vueuse/core";
 // Components
+import HpGettingStarted from "@/components/getting-started/hp-getting-started.vue";
 import HpAvatar from "@/components/hp-avatar.vue";
 import HpIcon from "@/components/hp-icon.vue";
 import HpSwitch from "@/components/hp-switch.vue";
