@@ -1,5 +1,9 @@
 <template>
-  <div class="hp-getting-started-step">
+  <div
+    :class="`hp-getting-started-step           ${
+      completed && 'hp-getting-started-step--completed'
+    }`"
+  >
     <div class="hp-getting-started-step__big-o-container">
       <div :class="bigOClasses">
         <hp-icon v-if="completed" name="check"></hp-icon>
@@ -84,7 +88,7 @@ const bigOClasses = computed(() => {
     }
   }
   &--completed {
-    cursor: pointer;
+    cursor: default;
   }
   &__content {
     font-size: 12px;
