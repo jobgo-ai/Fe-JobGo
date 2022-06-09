@@ -141,7 +141,6 @@ const onSubmit = handleSubmit(async (values) => {
       },
     };
     await postCandidate.post(payload);
-    fetchChecklist();
     setToast({
       type: "positive",
       title: "Well done!",

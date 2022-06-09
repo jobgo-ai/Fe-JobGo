@@ -72,12 +72,13 @@
 import { ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { onMounted } from "vue";
-import { useWindowScroll, useElementSize } from "@vueuse/core";
+import { useWindowScroll } from "@vueuse/core";
 
 // Composables
-import { usePost, usePut } from "@/composables/useHttp";
+import { usePut } from "@/composables/useHttp";
 import useToast from "@/composables/useToast";
 import useOpenings from "@/composables/useOpenings";
+import { useGettingStarted } from "@/composables/useGettingStarted";
 import { useBreadcrumbs } from "@/composables/useBreadcrumbs";
 
 // Views
@@ -105,6 +106,8 @@ const {
   createOpening,
 } = useOpenings();
 const { setBreadcrumbs } = useBreadcrumbs();
+
+const { fetchChecklist } = useGettingStarted();
 
 const scrollContainer = ref(null);
 const { y } = useWindowScroll();
@@ -202,6 +205,7 @@ watch(
 const handleNewOpening = async () => {
   const newOpeningRef = await createOpening();
   router.push(`/opening/${newOpeningRef}/edit`);
+  fetchChecklist();
   fetchOpenings();
 };
 

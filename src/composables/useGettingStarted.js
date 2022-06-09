@@ -31,7 +31,7 @@ export const useGettingStarted = () => {
   };
 
   const dismissGettingStarted = () => {
-    localStorage.getItem("isGettingStartedDismissed", true);
+    localStorage.setItem("isGettingStartedDismissed", true);
     isDismissed.value = true;
   };
 

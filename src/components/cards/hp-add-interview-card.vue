@@ -115,6 +115,7 @@ import HpDrawer from "@/components/hp-drawer.vue";
 // Composables
 import { hasEditPermission } from "@/composables/usePermissions";
 import { usePost } from "@/composables/useHttp";
+import { useGettingStarted } from "@/composables/useGettingStarted";
 import useToast from "@/composables/useToast";
 import useOpenings from "@/composables/useOpenings";
 
@@ -141,6 +142,8 @@ const props = defineProps({
 });
 
 const emits = defineEmits(["handleDelete"]);
+
+const { fetchChecklist } = useGettingStarted();
 
 const isLoading = ref(false);
 const isCreatingInterview = ref(false);
@@ -170,6 +173,7 @@ const handleCreateInterview = async () => {
   await postOpening.post(payload);
   const url = `/opening/${route.params.openingRef}/edit/edit-interview/${postInterview.data.value.template.reference}`;
   await fetchOpening(route.params.openingRef);
+  fetchChecklist();
   router.push(url);
   isCreatingInterview.value = false;
 };
