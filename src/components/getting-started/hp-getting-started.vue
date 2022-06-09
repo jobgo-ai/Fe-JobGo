@@ -6,7 +6,10 @@
       class="hp-getting-started__dropdown"
     >
       <div class="hp-getting-started__dropdown__content">
-        <div>Getting started {{ ((completedSteps / 7) * 100).toFixed() }}%</div>
+        <div>
+          Getting started
+          {{ ((completedSteps / stepOrder.length) * 100).toFixed() }}%
+        </div>
         <ol class="hp-getting-started__squares">
           <li
             :class="`hp-getting-started__squares__square ${
@@ -77,12 +80,6 @@
           >
             <div class="hp-getting-started__flyout__step__description">
               Select an opening and add a candidate.
-              <hp-button
-                class="hp-getting-started__flyout__step__cta"
-                label="Add candidate"
-                primary
-                :isDisabled="!opening.reference"
-              ></hp-button>
             </div>
           </hp-getting-started-step>
           <hp-getting-started-step
@@ -104,15 +101,17 @@
             title="Invite a team member"
             :isNextStep="nextStep === 'invited'"
             :completed="checklist['invited']"
+            v-if="organization"
           >
             <div class="hp-getting-started__flyout__step__description">
               Invite a new team member
-              <hp-button
-                class="hp-getting-started__flyout__step__cta"
-                label="Invite members"
-                primary
-                @click="console.log('fuck')"
-              ></hp-button>
+              <router-link to="/organization">
+                <hp-button
+                  class="hp-getting-started__flyout__step__cta"
+                  label="Invite members"
+                  primary
+                ></hp-button
+              ></router-link>
             </div>
           </hp-getting-started-step>
         </ol>
@@ -141,9 +140,12 @@ import HpGettingStartedStep from "@/components/getting-started/hp-getting-starte
 // Composables
 import { useGettingStarted } from "@/composables/useGettingStarted";
 import useOpenings from "@/composables/useOpenings";
+import useAuth from "@/composables/useAuth";
 
 const isDropdownOpen = ref(false);
 const target = ref(null);
+
+const { organization } = useAuth();
 
 const stepOrder = [
   "account",
@@ -152,7 +154,6 @@ const stepOrder = [
   "question",
   "candidate",
   "interviewed",
-  "invited",
 ];
 
 const { checklist, fetchChecklist, dismissGettingStarted } =
@@ -171,16 +172,15 @@ onMounted(async () => {
   await fetchChecklist();
 });
 
-// onClickOutside(target, (event) => {
-//   if (!isDropdownOpen.value) {
-//     return;
-//   }
-//   isDropdownOpen.value = false;
-// });
+onClickOutside(target, (event) => {
+  if (!isDropdownOpen.value) {
+    return;
+  }
+  isDropdownOpen.value = false;
+});
 
 const completedSteps = computed(() => {
-  return Object.keys(checklist.value).filter((key) => checklist.value[key])
-    .length;
+  return stepOrder.filter((key) => checklist.value[key]).length;
 });
 
 const nextStep = computed(() => {
