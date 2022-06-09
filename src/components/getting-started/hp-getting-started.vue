@@ -156,6 +156,10 @@ const stepOrder = [
   "interviewed",
 ];
 
+if (organization.role === "owner") {
+  stepOrder.push("invited");
+}
+
 const { checklist, fetchChecklist, dismissGettingStarted } =
   useGettingStarted();
 const { createOpening, opening } = useOpenings();
