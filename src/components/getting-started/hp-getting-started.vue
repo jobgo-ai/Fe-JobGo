@@ -101,7 +101,7 @@
             title="Invite a team member"
             :isNextStep="nextStep === 'invited'"
             :completed="checklist['invited']"
-            v-if="organization"
+            v-if="organization?.role === 'owner'"
           >
             <div class="hp-getting-started__flyout__step__description">
               Invite a new team member
