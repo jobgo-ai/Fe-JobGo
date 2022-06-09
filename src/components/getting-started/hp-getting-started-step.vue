@@ -6,18 +6,34 @@
   >
     <div class="hp-getting-started-step__big-o-container">
       <div :class="bigOClasses">
-        <hp-icon v-if="completed" name="check"></hp-icon>
+        <div
+          v-if="!completed"
+          class="hp-getting-started-step__big-o-container__question"
+        >
+          ?
+        </div>
+        <hp-icon
+          class="hp-getting-started-step__big-o-container__checkmark"
+          v-if="completed"
+          name="check"
+        ></hp-icon>
       </div>
     </div>
-    <div>
+    <div class="hp-getting-started-step__accordian">
       <div
         @click="handleAccordianClick"
         :class="`hp-getting-started-step__container ${
-          completed && 'hp-getting-started-step__container'
+          completed && 'hp-getting-started-step__container--completed'
         }`"
       >
         <div class="hp-getting-started-step__container__title">{{ title }}</div>
-        <hp-icon v-if="!completed" name="chevron-down"></hp-icon>
+        <hp-icon
+          :class="`hp-getting-started-step__container__icon ${
+            isAccordianOpen && 'hp-getting-started-step__container__icon--open'
+          }`"
+          v-if="!completed"
+          name="chevron-down"
+        ></hp-icon>
       </div>
       <transition name="flyout-transition">
         <div v-if="isAccordianOpen" class="hp-getting-started-step__content">
@@ -72,14 +88,16 @@ const bigOClasses = computed(() => {
 .hp-getting-started-step {
   border-bottom: 1px solid var(--color-border);
   display: flex;
-  cursor: pointer;
+  &:last-child {
+    border-bottom: none;
+  }
   &__big-o {
     height: 24px;
     width: 24px;
     border-radius: 50%;
     border: 2px solid var(--color-border);
     &--completed {
-      color: var(--color-border);
+      border: 2px solid var(--blue--300);
     }
     &--next-action {
       border: 2px solid var(--blue--200);
@@ -95,20 +113,48 @@ const bigOClasses = computed(() => {
     padding: 0px 16px;
     padding-bottom: 16px;
   }
+  &__accordian {
+    width: 100%;
+  }
   &__container {
     display: flex;
     align-items: center;
     padding: 16px;
+    cursor: pointer;
+    width: 100%;
     &__title {
       margin-right: 8px;
       white-space: nowrap;
+    }
+    &__icon {
+      transition: all 0.15s ease-in-out;
+      &--open {
+        transform: rotate(180deg);
+      }
+    }
+    &--completed {
+      cursor: default;
     }
   }
   &__big-o-container {
     display: flex;
     align-items: flex-start;
+    justify-content: center;
     padding-top: 12px;
     padding-left: 18px;
+    &__checkmark {
+      color: var(--blue--300);
+    }
+    &__question {
+      height: 20px;
+      width: 20px;
+      display: flex;
+      font-size: 14px;
+      font-weight: 300;
+      color: var(--blue--200);
+      justify-content: center;
+      align-items: center;
+    }
   }
 }
 

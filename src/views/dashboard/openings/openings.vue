@@ -97,8 +97,13 @@ const isCandidateListOpen = ref(route.params.openingRef);
 const state = ref("active");
 const { setToast } = useToast();
 
-const { fetchOpenings, openings, isOpeningsLoading, hasMoreData } =
-  useOpenings();
+const {
+  fetchOpenings,
+  openings,
+  isOpeningsLoading,
+  hasMoreData,
+  createOpening,
+} = useOpenings();
 const { setBreadcrumbs } = useBreadcrumbs();
 
 const scrollContainer = ref(null);
@@ -194,19 +199,9 @@ watch(
   { immediate: true }
 );
 
-// Handle add opening
-const postOpening = usePost("openings");
 const handleNewOpening = async () => {
-  await postOpening.post({
-    opening: {
-      name: `Opening #${openings.value.length + 1}`,
-      description: "",
-      templates: [],
-    },
-  });
-  if (postOpening.data.value) {
-    router.push(`/opening/${postOpening.data.value.opening.reference}/edit`);
-  }
+  const newOpeningRef = await createOpening();
+  router.push(`/opening/${newOpeningRef}/edit`);
   fetchOpenings();
 };
 

@@ -31,12 +31,12 @@
             :isNextStep="nextStep === 'opening'"
           >
             <div class="hp-getting-started__flyout__step__description">
-              Create an opening for your new job router-link
+              Create a new opening for your new position
               <hp-button
                 class="hp-getting-started__flyout__step__cta"
                 label="Create opening"
-                primary
-                @click="console.log('fuck')"
+                :primary="nextStep === 'opening'"
+                @click="handleCreateOpening"
               ></hp-button>
             </div>
           </hp-getting-started-step>
@@ -49,7 +49,7 @@
               <hp-button
                 class="hp-getting-started__flyout__step__cta"
                 label="Create opening"
-                primary
+                :primary="nextStep === 'interview'"
                 @click="console.log('fuck')"
               ></hp-button>
             </div>
@@ -120,12 +120,14 @@
 // Vendor
 import { ref, onMounted, computed } from "vue";
 import { onClickOutside } from "@vueuse/core";
+import { useRouter } from "vue-router";
 // Components
 import HpIcon from "@/components/hp-icon.vue";
 import HpButton from "@/components/hp-button.vue";
 import HpGettingStartedStep from "@/components/getting-started/hp-getting-started-step.vue";
 // Composables
 import { useGettingStarted } from "@/composables/useGettingStarted";
+import useOpenings from "@/composables/useOpenings";
 
 const isDropdownOpen = ref(false);
 const target = ref(null);
@@ -141,6 +143,14 @@ const stepOrder = [
 ];
 
 const { checklist, fetchChecklist } = useGettingStarted();
+
+const router = useRouter();
+
+const handleCreateOpening = async () => {
+  const { createOpening } = useOpenings();
+  const newOpeningRef = await createOpening();
+  router.push(`/opening/${newOpeningRef}/edit`);
+};
 
 onMounted(async () => {
   await fetchChecklist();
@@ -212,6 +222,10 @@ const nextStep = computed(() => {
     top: 50px;
     transition: all 0.25s cubic-bezier(0.17, 0.67, 0.83, 0.67);
     &__step {
+      &__description {
+        display: flex;
+        flex-direction: column;
+      }
       &__cta {
         margin-top: 12px;
       }
