@@ -29,6 +29,7 @@
           <hp-getting-started-step
             title="Create opening"
             :isNextStep="nextStep === 'opening'"
+            :completed="checklist['opening']"
           >
             <div class="hp-getting-started__flyout__step__description">
               Create a new opening for your new position
@@ -42,14 +43,15 @@
           </hp-getting-started-step>
           <hp-getting-started-step
             title="Create interview template"
-            :isNextStep="nextStep === 'interview'"
+            :isNextStep="nextStep === 'template'"
+            :completed="checklist['template']"
           >
             <div class="hp-getting-started__flyout__step__description">
               Create an opening for your new job router-link
               <hp-button
                 class="hp-getting-started__flyout__step__cta"
                 label="Create opening"
-                :primary="nextStep === 'interview'"
+                :primary="nextStep === 'template'"
                 @click="console.log('fuck')"
               ></hp-button>
             </div>
@@ -57,6 +59,7 @@
           <hp-getting-started-step
             title="Create question template"
             :isNextStep="nextStep === 'question'"
+            :completed="checklist['question']"
           >
             <div class="hp-getting-started__flyout__step__description">
               Create an opening for your new job router-link
@@ -71,6 +74,7 @@
           <hp-getting-started-step
             title="Add a candidate"
             :isNextStep="nextStep === 'candidate'"
+            :completed="checklist['candidate']"
           >
             <div class="hp-getting-started__flyout__step__description">
               Create an opening for your new job router-link
@@ -85,6 +89,7 @@
           <hp-getting-started-step
             title="Run an interview"
             :isNextStep="nextStep === 'interviewed'"
+            :completed="checklist['interviewed']"
           >
             <div class="hp-getting-started__flyout__step__description">
               Create an opening for your new job router-link
@@ -99,6 +104,7 @@
           <hp-getting-started-step
             title="Invite a team member"
             :isNextStep="nextStep === 'invited'"
+            :completed="checklist['invited']"
           >
             <div class="hp-getting-started__flyout__step__description">
               Create an opening for your new job router-link
@@ -111,6 +117,14 @@
             </div>
           </hp-getting-started-step>
         </ol>
+        <div class="hp-getting-started__header">
+          <div
+            @click="dismissGettingStarted"
+            class="hp-getting-started__header__dismissal"
+          >
+            Don't show this again
+          </div>
+        </div>
       </div>
     </transition>
   </div>
@@ -142,7 +156,8 @@ const stepOrder = [
   "invited",
 ];
 
-const { checklist, fetchChecklist } = useGettingStarted();
+const { checklist, fetchChecklist, dismissGettingStarted } =
+  useGettingStarted();
 
 const router = useRouter();
 
@@ -194,6 +209,25 @@ const nextStep = computed(() => {
       &--complete {
         background-color: var(--blue--500);
       }
+    }
+  }
+  &__header {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 8px 12px;
+    &__title {
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--color-text-primary);
+      margin: 4px 0;
+    }
+    &__dismissal {
+      font-size: 12px;
+      text-decoration: underline;
+      text-align: center;
+      color: var(--color-text-secondary);
+      cursor: pointer;
     }
   }
   &__dropdown {

@@ -6,7 +6,7 @@
     </div>
     <div class="hp-header__right">
       <div id="teleport-target-header" class="hp-header__save-container"></div>
-      <div class="hp-header__getting-started">
+      <div v-if="!isDismissed" class="hp-header__getting-started">
         <hp-getting-started />
       </div>
       <div
@@ -132,6 +132,8 @@ import useContextSave from "@/composables/useContextSave";
 import useAuth from "@/composables/useAuth";
 import useDarkMode from "@/composables/useDarkMode";
 import { useBreadcrumbs } from "@/composables/useBreadcrumbs";
+import { useGettingStarted } from "@/composables/useGettingStarted";
+
 // Svg
 import Logo from "@/assets/logo.svg";
 
@@ -142,6 +144,8 @@ const { isDarkmode, handleDarkModeToggle } = useDarkMode();
 
 const dropdownTarget = ref(null);
 const isAccountMenuOpen = ref(false);
+
+const { isDismissed } = useGettingStarted();
 
 onClickOutside(dropdownTarget, (event) => {
   if (!isAccountMenuOpen.value) {

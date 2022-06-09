@@ -88,9 +88,6 @@ const bigOClasses = computed(() => {
 .hp-getting-started-step {
   border-bottom: 1px solid var(--color-border);
   display: flex;
-  &:last-child {
-    border-bottom: none;
-  }
   &__big-o {
     height: 24px;
     width: 24px;
