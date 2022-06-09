@@ -19,6 +19,9 @@ const isDismissed = ref(
 
 export const useGettingStarted = () => {
   const fetchChecklist = async () => {
+    if (isDismissed.value) {
+      return;
+    }
     const getGettingStarted = useGet("self/getting-started");
     await getGettingStarted.get();
     checklist.value = {

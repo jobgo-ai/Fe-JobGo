@@ -36,7 +36,10 @@
         ></hp-icon>
       </div>
       <transition name="flyout-transition">
-        <div v-if="isAccordianOpen" class="hp-getting-started-step__content">
+        <div
+          v-if="isAccordianOpen && !completed"
+          class="hp-getting-started-step__content"
+        >
           <slot></slot>
         </div>
       </transition>
@@ -116,9 +119,11 @@ const bigOClasses = computed(() => {
   &__container {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     padding: 16px;
     cursor: pointer;
     width: 100%;
+    height: 52px;
     &__title {
       margin-right: 8px;
       white-space: nowrap;
@@ -137,7 +142,7 @@ const bigOClasses = computed(() => {
     display: flex;
     align-items: flex-start;
     justify-content: center;
-    padding-top: 12px;
+    padding-top: 13px;
     padding-left: 18px;
     &__checkmark {
       color: var(--blue--300);

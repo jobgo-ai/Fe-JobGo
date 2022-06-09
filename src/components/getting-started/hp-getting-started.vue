@@ -47,28 +47,27 @@
             :completed="checklist['template']"
           >
             <div class="hp-getting-started__flyout__step__description">
-              Create an opening for your new job router-link
-              <hp-button
-                class="hp-getting-started__flyout__step__cta"
-                label="Create opening"
-                :primary="nextStep === 'template'"
-                @click="console.log('fuck')"
-              ></hp-button>
+              Select an opening, and create a new interview template.
+              <router-link
+                :to="`/opening/${opening.reference}/edit/add-interview`"
+              >
+                <hp-button
+                  class="hp-getting-started__flyout__step__cta"
+                  label="Create template"
+                  :isDisabled="!opening.reference"
+                  :primary="nextStep === 'template'"
+                ></hp-button>
+              </router-link>
             </div>
           </hp-getting-started-step>
           <hp-getting-started-step
-            title="Create question template"
+            title="Create question"
             :isNextStep="nextStep === 'question'"
             :completed="checklist['question']"
           >
             <div class="hp-getting-started__flyout__step__description">
-              Create an opening for your new job router-link
-              <hp-button
-                class="hp-getting-started__flyout__step__cta"
-                label="Create opening"
-                primary
-                @click="console.log('fuck')"
-              ></hp-button>
+              Select an opening, select an interview, and create a new question
+              template.
             </div>
           </hp-getting-started-step>
           <hp-getting-started-step
@@ -77,12 +76,12 @@
             :completed="checklist['candidate']"
           >
             <div class="hp-getting-started__flyout__step__description">
-              Create an opening for your new job router-link
+              Select an opening and add a candidate.
               <hp-button
                 class="hp-getting-started__flyout__step__cta"
-                label="Create opening"
+                label="Add candidate"
                 primary
-                @click="console.log('fuck')"
+                :isDisabled="!opening.reference"
               ></hp-button>
             </div>
           </hp-getting-started-step>
@@ -92,7 +91,7 @@
             :completed="checklist['interviewed']"
           >
             <div class="hp-getting-started__flyout__step__description">
-              Create an opening for your new job router-link
+              Complete an interview
               <hp-button
                 class="hp-getting-started__flyout__step__cta"
                 label="Create opening"
@@ -107,10 +106,10 @@
             :completed="checklist['invited']"
           >
             <div class="hp-getting-started__flyout__step__description">
-              Create an opening for your new job router-link
+              Invite a new team member
               <hp-button
                 class="hp-getting-started__flyout__step__cta"
-                label="Create opening"
+                label="Invite members"
                 primary
                 @click="console.log('fuck')"
               ></hp-button>
@@ -158,26 +157,26 @@ const stepOrder = [
 
 const { checklist, fetchChecklist, dismissGettingStarted } =
   useGettingStarted();
+const { createOpening, opening } = useOpenings();
 
 const router = useRouter();
 
 const handleCreateOpening = async () => {
-  const { createOpening } = useOpenings();
   const newOpeningRef = await createOpening();
+  fetchChecklist();
   router.push(`/opening/${newOpeningRef}/edit`);
 };
 
 onMounted(async () => {
   await fetchChecklist();
-  console.log(checklist);
 });
 
-onClickOutside(target, (event) => {
-  if (!isDropdownOpen.value) {
-    return;
-  }
-  isDropdownOpen.value = false;
-});
+// onClickOutside(target, (event) => {
+//   if (!isDropdownOpen.value) {
+//     return;
+//   }
+//   isDropdownOpen.value = false;
+// });
 
 const completedSteps = computed(() => {
   return Object.keys(checklist.value).filter((key) => checklist.value[key])
@@ -247,6 +246,7 @@ const nextStep = computed(() => {
     }
   }
   &__flyout {
+    @include flyout;
     background-color: var(--color-background);
     border: 1px solid var(--color-border);
     border-radius: $border-radius-lg;
