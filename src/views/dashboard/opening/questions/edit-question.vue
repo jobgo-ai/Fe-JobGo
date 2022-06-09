@@ -113,6 +113,7 @@ import HpMultiInput from "@/components/form/hp-multi-input.vue";
 import useSkillSearch from "@/composables/useSkillSearch";
 import useConstants from "@/composables/useConstants";
 import useInterviews from "@/composables/useInterviews";
+import { useGettingStarted } from "@/composables/useGettingStarted";
 import useToast from "@/composables/useToast";
 import { usePost, usePut, useDelete } from "@/composables/useHttp";
 import useQuestionContext from "@/composables/useQuestionContext";
@@ -141,6 +142,7 @@ const levels = ref([]);
 
 const { handleSkillSearch } = useSkillSearch();
 const { jobLevels } = useConstants();
+const { fetchChecklist } = useGettingStarted();
 
 const isSaving = ref(false);
 
@@ -251,6 +253,7 @@ const onSubmit = handleSubmit(async (values) => {
       question: postQuestion.data.value.question.reference,
     });
     setInterview(postTemplateQuestion.data.value.template);
+    fetchChecklist();
     setToast({
       type: "positive",
       title: "Well done!",

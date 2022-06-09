@@ -1,15 +1,13 @@
 import { ref, computed } from "vue";
-import { useGet } from "./useHttp";
+import { useGet, usePost } from "./useHttp";
 
 const limit = 20;
-
 const offset = ref(0);
 const hasMoreData = ref(true);
 const isOpeningsLoading = ref(true);
 const isLoadingMoreLoading = ref(false);
 const openings = ref([]);
 const opening = ref([]);
-
 const getOpenings = useGet();
 
 const fetchOpenings = async (isLoadMore = false, state = "active") => {
@@ -64,6 +62,19 @@ const updateOpenings = async (state = "active") => {
   isOpeningsLoading.value = false;
 };
 
+const createOpening = async (opening) => {
+  const postOpening = usePost("openings");
+  await postOpening.post({
+    opening: {
+      name: `Opening #${openings.value.length + 1}`,
+      description: "",
+      templates: [],
+    },
+  });
+  fetchOpenings();
+  return postOpening.data.value.opening.reference;
+};
+
 const fetchOpening = async (openingRef) => {
   const getOpening = useGet(`openings/${openingRef}`);
   await getOpening.get();
@@ -85,5 +96,6 @@ export default () => {
     opening,
     isOpeningsLoading,
     openings,
+    createOpening,
   };
 };

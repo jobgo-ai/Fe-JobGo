@@ -64,23 +64,21 @@ import HpButton from "@/components/hp-button.vue";
 import HpTooltip from "@/components/hp-tooltip.vue";
 
 // Composables
+import { useGettingStarted } from "@/composables/useGettingStarted";
 import { usePost, usePut } from "@/composables/useHttp";
 import useOpenings from "@/composables/useOpenings";
 import useCandidates from "@/composables/useCandidates";
-import { useGettingStarted } from "@/composables/useGettingStarted";
 import { useBreadcrumbs } from "@/composables/useBreadcrumbs";
 import useToast from "@/composables/useToast";
 
 const props = defineProps({
-  opening: {
-    type: Object,
-    required: true,
-  },
   candidate: {
     type: Object,
     default: { name: "", email: "" },
   },
 });
+
+const { fetchOpening, updateOpenings, opening } = useOpenings();
 
 const emits = defineEmits(["close"]);
 
@@ -102,12 +100,12 @@ const content = computed(() => {
   return isAddNew
     ? {
         title: "Add candidate",
-        subtitle: `New candidate for ${props.opening.name}`,
+        subtitle: `New candidate for ${opening.value.name}`,
         buttonLabel: "Create candidate",
       }
     : {
         title: "Edit candidate",
-        subtitle: `Edit candidate for ${props.opening.name}`,
+        subtitle: `Edit candidate for ${opening.value.name}`,
         buttonLabel: "Update candidate",
       };
 });
@@ -128,8 +126,6 @@ const { handleSubmit, meta } = useForm({
 });
 
 const { fetchChecklist } = useGettingStarted();
-const { fetchOpening, updateOpenings } = useOpenings();
-
 const { fetchCandidates, candidates, fetchCandidate, candidate } =
   useCandidates();
 
@@ -176,7 +172,7 @@ const onSubmit = handleSubmit(async (values) => {
         to: "/openings",
       },
       {
-        label: props.opening.name,
+        label: opening.value.name,
         to: `/openings/${route.params.openingRef}`,
       },
       {
@@ -188,7 +184,6 @@ const onSubmit = handleSubmit(async (values) => {
   }
   fetchOpening(route.params.openingRef);
   updateOpenings();
-  fetchChecklist();
   isUpdatingCandidate.value = false;
   emits("close");
 });

@@ -575,6 +575,8 @@ const handleCloseEditDrawer = () => {
   }
   &__question-card {
     @include flyout;
+    padding: 16px;
+    box-shadow: none;
     margin-bottom: 16px;
     &__container {
       display: flex;

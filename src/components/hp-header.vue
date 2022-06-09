@@ -6,6 +6,9 @@
     </div>
     <div class="hp-header__right">
       <div id="teleport-target-header" class="hp-header__save-container"></div>
+      <div v-if="!isDismissed" class="hp-header__getting-started">
+        <hp-getting-started />
+      </div>
       <div
         class="hp-header__dropdown-container"
         ref="dropdownTarget"
@@ -119,6 +122,7 @@ import { useRouter } from "vue-router";
 import { ref, computed, onMounted, onUnmounted } from "vue";
 import { onClickOutside } from "@vueuse/core";
 // Components
+import HpGettingStarted from "@/components/getting-started/hp-getting-started.vue";
 import HpAvatar from "@/components/hp-avatar.vue";
 import HpIcon from "@/components/hp-icon.vue";
 import HpSwitch from "@/components/hp-switch.vue";
@@ -128,6 +132,8 @@ import useContextSave from "@/composables/useContextSave";
 import useAuth from "@/composables/useAuth";
 import useDarkMode from "@/composables/useDarkMode";
 import { useBreadcrumbs } from "@/composables/useBreadcrumbs";
+import { useGettingStarted } from "@/composables/useGettingStarted";
+
 // Svg
 import Logo from "@/assets/logo.svg";
 
@@ -138,6 +144,8 @@ const { isDarkmode, handleDarkModeToggle } = useDarkMode();
 
 const dropdownTarget = ref(null);
 const isAccountMenuOpen = ref(false);
+
+const { isDismissed } = useGettingStarted();
 
 onClickOutside(dropdownTarget, (event) => {
   if (!isAccountMenuOpen.value) {
@@ -231,6 +239,9 @@ const { hasHeaderSaveButton } = useBreadcrumbs();
   }
   &__dropdown-container {
     position: relative;
+  }
+  &__getting-started {
+    margin-right: 8px;
   }
   &__dropdown-target {
     display: flex;

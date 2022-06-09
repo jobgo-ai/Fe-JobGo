@@ -72,12 +72,13 @@
 import { ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { onMounted } from "vue";
-import { useWindowScroll, useElementSize } from "@vueuse/core";
+import { useWindowScroll } from "@vueuse/core";
 
 // Composables
-import { usePost, usePut } from "@/composables/useHttp";
+import { usePut } from "@/composables/useHttp";
 import useToast from "@/composables/useToast";
 import useOpenings from "@/composables/useOpenings";
+import { useGettingStarted } from "@/composables/useGettingStarted";
 import { useBreadcrumbs } from "@/composables/useBreadcrumbs";
 
 // Views
@@ -97,9 +98,16 @@ const isCandidateListOpen = ref(route.params.openingRef);
 const state = ref("active");
 const { setToast } = useToast();
 
-const { fetchOpenings, openings, isOpeningsLoading, hasMoreData } =
-  useOpenings();
+const {
+  fetchOpenings,
+  openings,
+  isOpeningsLoading,
+  hasMoreData,
+  createOpening,
+} = useOpenings();
 const { setBreadcrumbs } = useBreadcrumbs();
+
+const { fetchChecklist } = useGettingStarted();
 
 const scrollContainer = ref(null);
 const { y } = useWindowScroll();
@@ -194,19 +202,10 @@ watch(
   { immediate: true }
 );
 
-// Handle add opening
-const postOpening = usePost("openings");
 const handleNewOpening = async () => {
-  await postOpening.post({
-    opening: {
-      name: `Opening #${openings.value.length + 1}`,
-      description: "",
-      templates: [],
-    },
-  });
-  if (postOpening.data.value) {
-    router.push(`/opening/${postOpening.data.value.opening.reference}/edit`);
-  }
+  const newOpeningRef = await createOpening();
+  router.push(`/opening/${newOpeningRef}/edit`);
+  fetchChecklist();
   fetchOpenings();
 };
 
