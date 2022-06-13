@@ -409,7 +409,7 @@ watch(
   }
 
   &__scroll-container {
-    max-height: 600px;
+    max-height: calc(100vh - 200px);
     overflow: scroll;
     padding-left: 4px;
     padding-right: 4px;
@@ -525,7 +525,7 @@ watch(
     transform: translateX(0);
     right: 16px;
     width: 400px;
-    min-height: 600px;
+    max-height: calc(100vh - 120px);
     z-index: $z-index-10;
     padding: 20px;
     padding-bottom: 0px;
