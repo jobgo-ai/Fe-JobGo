@@ -135,9 +135,11 @@
                 :candidate="candidate"
                 :isDisabled="isInfiniteLoading"
               ></hp-candidate-card>
-              <div class="stupidclass">
-                <hp-spinner size="32" v-if="isInfiniteLoading"></hp-spinner>
-              </div>
+              <hp-spinner
+                class="candidate-list__spinner"
+                size="32"
+                v-if="isInfiniteLoading"
+              ></hp-spinner>
             </ol>
             <div class="candidate-list__empty-state" v-else>
               <empty-state class="candidate-list__empty-state__image" />
@@ -324,17 +326,17 @@ watch(
 </script>
 
 <style lang="scss" scoped>
-.stupidclass {
-  padding: 24px;
-  display: flex;
-  justify-content: center;
-}
 .candidate-list {
   &__header {
     display: flex;
     justify-content: space-between;
     margin-bottom: 16px;
     align-items: center;
+    &__spinner {
+      padding: 24px;
+      display: flex;
+      justify-content: center;
+    }
     &__avatar {
       height: 40px;
       width: 40px;
@@ -525,7 +527,7 @@ watch(
     transform: translateX(0);
     right: 16px;
     width: 400px;
-    max-height: calc(100vh - 120px);
+    min-height: calc(100vh - 120px);
     z-index: $z-index-10;
     padding: 20px;
     padding-bottom: 0px;
