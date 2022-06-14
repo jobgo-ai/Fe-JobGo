@@ -372,6 +372,8 @@ const completedTemplates = computed(() => {
         font-weight: 600;
         font-size: 24px;
         line-height: 32px;
+        display: flex;
+        align-items: center;
       }
       &__current {
         font-size: 12px;
