@@ -1,258 +1,252 @@
 <template>
   <div class="edit-interview__container">
-    <hp-drawer :isOpen="isAddQuestionDrawerOpen" @close="handleCloseEditDrawer">
-      <questions
-        :handleClose="handleCloseEditDrawer"
-        v-if="isAddQuestionDrawerOpen"
-      />
-    </hp-drawer>
-    <hp-drawer
-      :isOpen="isEditQuestionDrawerOpen"
-      @close="handleCloseEditDrawer"
-    >
-      <edit-question
-        @handleClose="handleCloseEditDrawer"
-        :question="isEditQuestionDrawerOpen"
-      />
-    </hp-drawer>
-    <hp-drawer
-      :isOpen="isViewQuestionDrawerOpen"
-      @close="isViewQuestionDrawerOpen = false"
-    >
-      <view-question
-        :question="isViewQuestionDrawerOpen"
-        :handleClose="() => (isViewQuestionDrawerOpen = false)"
-        v-if="isViewQuestionDrawerOpen"
-      />
-    </hp-drawer>
-    <teleport to="#teleport-target-header">
-      <!-- <div ref="overviewTarget" class="edit-interview__overview-button">
-        <hp-button
-          @handleClick="isOverviewFlyoutOpen = !isOverviewFlyoutOpen"
-          icon="file"
-        >
-        </hp-button>
-        <transition name="flyout-transition">
-          <div
-            v-if="isOverviewFlyoutOpen"
-            class="edit-interview__overview-button__flyout"
-          >
-            <div class="edit-interview__overview-button__flyout__header">
-              Overview
-            </div>
-            <div class="edit-interview__overview-button__flyout__stats">
-              <div class="edit-interview__overview-button__flyout__stats__stat">
-                <hp-icon
-                  class="
-                    edit-interview__overview-button__flyout__stats__stat__icon
-                  "
-                  name="chronometer"
-                ></hp-icon>
-                <div
-                  class="
-                    edit-interview__overview-button__flyout__stats__stat__text
-                  "
-                >
-                  {{ (interview.statistics.duration / 60).toFixed(0) }} minutes
-                </div>
-              </div>
-              <div class="edit-interview__overview-button__flyout__stats__stat">
-                <hp-icon
-                  class="
-                    edit-interview__overview-button__flyout__stats__stat__icon
-                  "
-                  name="questions"
-                ></hp-icon>
-                <div
-                  class="
-                    edit-interview__overview-button__flyout__stats__stat__text
-                  "
-                >
-                  {{ interview.statistics.questions }} questions
-                </div>
-              </div>
-            </div>
-            <div class="edit-interview__overview-button__flyout__header">
-              Top skills evaluated
-              <ol class="edit-interview__overview-button__skills">
-                <hp-badge-tag
-                  v-for="skill in interview.statistics.skills"
-                  :quantity="skill.quantity"
-                  :label="skill.value.name"
-                ></hp-badge-tag>
-              </ol>
-            </div>
-          </div>
-        </transition>
-      </div> -->
-      <hp-save-indicator :isLoading="isSaving" :meta="meta"></hp-save-indicator>
-    </teleport>
-    <div class="edit-interview" v-if="!isInterviewLoading && !isLoading">
-      <form
-        class="edit-interview__form"
-        @submit.prevent="handleContextFormSave"
+    <form @submit.prevent="handleContextFormSave">
+      <hp-drawer
+        :isOpen="isAddQuestionDrawerOpen"
+        @close="handleCloseEditDrawer"
       >
-        <h2 class="edit-interview__title">Edit interview</h2>
-        <p class="edit-interview__subtitle">
-          Design the template by editing ceremonies and interview questions.
-        </p>
-        <hp-input @input="debouncedSubmit" label="Name" name="name"></hp-input>
-        <hp-input
-          @input="debouncedSubmit"
-          label="Description"
-          name="description"
-        ></hp-input>
-        <div class="edit-interview__ceremony">
-          <div class="edit-interview__ceremony__header">
-            <div>
-              <h3 class="edit-interview__ceremony__header__title">
-                Before the interview
-              </h3>
-              <p class="edit-question__sublabel">
-                Instructions to start dialog and kick off the interview
-              </p>
-            </div>
-            <hp-switch
-              name="ceremony.warmup.enabled"
-              :isDisabled="isSaving"
+        <questions
+          :handleClose="handleCloseEditDrawer"
+          v-if="isAddQuestionDrawerOpen"
+        />
+      </hp-drawer>
+      <hp-drawer
+        :isOpen="isEditQuestionDrawerOpen"
+        @close="handleCloseEditDrawer"
+      >
+        <edit-question
+          @handleClose="handleCloseEditDrawer"
+          :question="isEditQuestionDrawerOpen"
+        />
+      </hp-drawer>
+      <hp-drawer
+        :isOpen="isViewQuestionDrawerOpen"
+        @close="isViewQuestionDrawerOpen = false"
+      >
+        <view-question
+          :question="isViewQuestionDrawerOpen"
+          :handleClose="() => (isViewQuestionDrawerOpen = false)"
+          v-if="isViewQuestionDrawerOpen"
+        />
+      </hp-drawer>
+      <teleport to="#teleport-target-header">
+        <hp-save-indicator
+          :isLoading="isSaving"
+          :meta="meta"
+        ></hp-save-indicator>
+      </teleport>
+      <div class="edit-interview" v-if="!isInterviewLoading && !isLoading">
+        <div class="edit-interview__overview">
+          <router-link
+            class="edit-question__back"
+            :to="`/opening/${opening.reference}/edit`"
+          >
+            <hp-icon name="arrow-left"></hp-icon>Back
+          </router-link>
+          <div class="edit-interview__overview__input">
+            <hp-input
               @input="debouncedSubmit"
-            ></hp-switch>
+              label="Name"
+              name="name"
+            ></hp-input>
           </div>
-          <transition name="ceremony-transition">
-            <div v-show="values.ceremony.warmup.enabled">
-              <hp-textarea
-                @input="debouncedSubmit"
-                :rows="6"
-                name="ceremony.warmup.content"
-              />
-              <div class="edit-question__duration__container">
-                <div class="edit-question__duration__labels">
-                  <div class="edit-question__label">Estimated duration</div>
-                </div>
-                <hp-counter
-                  class="edit-interview__ceremony__duration"
-                  @input="debouncedSubmit"
-                  name="ceremony.warmup.duration"
-                />
+          <div class="edit-interview__overview__input">
+            <hp-input
+              @input="debouncedSubmit"
+              label="Description"
+              name="description"
+            ></hp-input>
+          </div>
+          <div class="edit-interview__overview__stats">
+            <div class="edit-interview__overview__stats__stat">
+              <hp-icon
+                class="edit-interview__overview__stats__stat__icon"
+                name="chronometer"
+              ></hp-icon>
+              <div class="edit-interview__overview__stats__stat__text">
+                {{ (interview.statistics.duration / 60).toFixed(0) }} minutes
               </div>
             </div>
-          </transition>
+            <div class="edit-interview__overview__stats__stat">
+              <hp-icon
+                class="edit-interview__overview__stats__stat__icon"
+                name="questions"
+              ></hp-icon>
+              <div class="edit-interview__overview__stats__stat__text">
+                {{ interview.statistics.questions }} questions
+              </div>
+            </div>
+          </div>
+          <div class="edit-interview__overview__cta">
+            <hp-button
+              @handleClick="isAddQuestionDrawerOpen = true"
+              label="Add question"
+              type="button"
+              icon="plus"
+              dropzone
+            ></hp-button>
+          </div>
+          <div class="edit-interview__overview__header">
+            Top skills evaluated
+            <ol class="edit-interview__overview__skills">
+              <hp-badge-tag
+                v-for="skill in interview.statistics.skills"
+                :quantity="skill.quantity"
+                :label="skill.value.name"
+              ></hp-badge-tag>
+            </ol>
+          </div>
+          <hp-danger-zone
+            v-if="hasEditPermission(interview)"
+            class="edit-interview__danger-zone"
+            label="Delete interview template"
+            :onConfirm="handleDeleteInterviewTemplate"
+          ></hp-danger-zone>
         </div>
-        <h3 class="edit-interview__ceremony__header__title">Questions</h3>
-        <ol class="edit-interview__question-cards">
-          <draggable
-            v-model="interview.questions"
-            tag="transition-group"
-            item-key="reference"
-            handle=".edit-interview__handle"
-            @change="handleDragChange"
-            v-bind="dragOptions"
-            @start="drag = true"
-            @end="drag = false"
-          >
-            <template #item="{ element, index }">
-              <li class="edit-interview__question-card" :key="index">
-                <div class="edit-interview__question-card__container">
-                  <hp-badge icon="questions" :content="index + 1" />
-                  <hp-icon name="drag" class="edit-interview__handle"></hp-icon>
+        <div class="edit-interview__form">
+          <div class="edit-interview__ceremony">
+            <div class="edit-interview__ceremony__header">
+              <div>
+                <h3 class="edit-interview__ceremony__header__title">
+                  Before the interview
+                </h3>
+                <p class="edit-question__sublabel">
+                  Instructions to start dialog and kick off the interview
+                </p>
+              </div>
+              <hp-switch
+                name="ceremony.warmup.enabled"
+                :isDisabled="isSaving"
+                @input="debouncedSubmit"
+              ></hp-switch>
+            </div>
+            <transition name="ceremony-transition">
+              <div v-show="values.ceremony.warmup.enabled">
+                <hp-textarea
+                  @input="debouncedSubmit"
+                  :rows="6"
+                  name="ceremony.warmup.content"
+                />
+                <div class="edit-question__duration__container">
+                  <div class="edit-question__duration__labels">
+                    <div class="edit-question__label">Estimated duration</div>
+                  </div>
+                  <hp-counter
+                    class="edit-interview__ceremony__duration"
+                    @input="debouncedSubmit"
+                    name="ceremony.warmup.duration"
+                  />
                 </div>
-                <div class="edit-interview__question-card__content">
-                  {{ element.content }}
-                </div>
-                <hp-question-card-stats hasTooltips :question="element" />
-                <div class="edit-interview__question-card__actions">
-                  <div
-                    class="edit-interview__question-card__actions__button-group"
-                  >
-                    <hp-button
-                      v-if="hasEditPermission(element)"
-                      class="edit-interview__question-card__actions__button"
-                      label="Edit question"
-                      @handleClick="isEditQuestionDrawerOpen = element"
-                    ></hp-button>
+              </div>
+            </transition>
+          </div>
+          <ol class="edit-interview__question-cards">
+            <draggable
+              v-model="interview.questions"
+              tag="transition-group"
+              item-key="reference"
+              handle=".edit-interview__handle"
+              @change="handleDragChange"
+              v-bind="dragOptions"
+              @start="drag = true"
+              @end="drag = false"
+            >
+              <template #item="{ element, index }">
+                <li class="edit-interview__question-card" :key="index">
+                  <div class="edit-interview__question-card__container">
+                    <hp-badge icon="questions" :content="index + 1" />
+                    <hp-icon
+                      name="drag"
+                      class="edit-interview__handle"
+                    ></hp-icon>
+                  </div>
+                  <div class="edit-interview__question-card__content">
+                    {{ element.content }}
+                  </div>
+                  <hp-question-card-stats hasTooltips :question="element" />
+                  <div class="edit-interview__question-card__actions">
+                    <div
+                      class="
+                        edit-interview__question-card__actions__button-group
+                      "
+                    >
+                      <hp-button
+                        v-if="hasEditPermission(element)"
+                        class="edit-interview__question-card__actions__button"
+                        label="Edit question"
+                        @handleClick="isEditQuestionDrawerOpen = element"
+                      ></hp-button>
+                      <hp-tooltip
+                        :delay="500"
+                        class="edit-interview__question-card__actions__button"
+                      >
+                        <hp-button
+                          @handleClick="isViewQuestionDrawerOpen = element"
+                          icon="eye"
+                        ></hp-button>
+                        <template #content>View question</template>
+                      </hp-tooltip>
+                    </div>
                     <hp-tooltip
                       :delay="500"
                       class="edit-interview__question-card__actions__button"
                     >
                       <hp-button
-                        @handleClick="isViewQuestionDrawerOpen = element"
-                        icon="eye"
+                        @handleClick="handleRemoveQuestion(element)"
+                        icon="trash"
+                        danger
                       ></hp-button>
-                      <template #content>View question</template>
+                      <template #content
+                        >Remove question from interview</template
+                      >
                     </hp-tooltip>
                   </div>
-                  <hp-tooltip
-                    :delay="500"
-                    class="edit-interview__question-card__actions__button"
-                  >
-                    <hp-button
-                      @handleClick="handleRemoveQuestion(element)"
-                      icon="trash"
-                      danger
-                    ></hp-button>
-                    <template #content>Remove question from interview</template>
-                  </hp-tooltip>
-                </div>
-              </li>
-            </template>
-          </draggable>
-        </ol>
-        <div class="edit-interview__questions-button">
-          <hp-button
-            @handleClick="isAddQuestionDrawerOpen = true"
-            label="Add question"
-            type="button"
-            icon="plus"
-            dropzone
-          ></hp-button>
-        </div>
-        <div
-          class="edit-interview__ceremony edit-interview__ceremony--cooldown"
-        >
-          <div class="edit-interview__ceremony__header">
-            <div>
-              <h3 class="edit-interview__ceremony__header__title">
-                After the interview
-              </h3>
-              <p class="edit-interview__ceremony__header__subtitle">
-                Instructions for finishing the interview
-              </p>
-            </div>
-            <hp-switch
-              name="ceremony.cooldown.enabled"
-              :isDisabled="isSaving"
-              @input="debouncedSubmit"
-            ></hp-switch>
-          </div>
-          <transition name="ceremony-transition">
-            <div v-show="values.ceremony.cooldown.enabled">
-              <hp-textarea
-                @input="debouncedSubmit"
-                :rows="6"
-                name="ceremony.cooldown.content"
-              />
-              <div class="edit-question__duration__container">
-                <div class="edit-question__duration__labels">
-                  <div class="edit-question__label">Estimated duration</div>
-                </div>
-                <hp-counter
-                  class="edit-interview__ceremony__duration"
-                  @input="debouncedSubmit"
-                  name="ceremony.cooldown.duration"
-                />
+                </li>
+              </template>
+            </draggable>
+          </ol>
+          <div
+            class="edit-interview__ceremony edit-interview__ceremony--cooldown"
+          >
+            <div class="edit-interview__ceremony__header">
+              <div>
+                <h3 class="edit-interview__ceremony__header__title">
+                  After the interview
+                </h3>
+                <p class="edit-interview__ceremony__header__subtitle">
+                  Instructions for finishing the interview
+                </p>
               </div>
+              <hp-switch
+                name="ceremony.cooldown.enabled"
+                :isDisabled="isSaving"
+                @input="debouncedSubmit"
+              ></hp-switch>
             </div>
-          </transition>
+            <transition name="ceremony-transition">
+              <div v-show="values.ceremony.cooldown.enabled">
+                <hp-textarea
+                  @input="debouncedSubmit"
+                  :rows="6"
+                  name="ceremony.cooldown.content"
+                />
+                <div class="edit-question__duration__container">
+                  <div class="edit-question__duration__labels">
+                    <div class="edit-question__label">Estimated duration</div>
+                  </div>
+                  <hp-counter
+                    class="edit-interview__ceremony__duration"
+                    @input="debouncedSubmit"
+                    name="ceremony.cooldown.duration"
+                  />
+                </div>
+              </div>
+            </transition>
+          </div>
         </div>
-        <hp-danger-zone
-          v-if="hasEditPermission(interview)"
-          class="edit-interview__danger-zone"
-          label="Delete interview template"
-          :onConfirm="handleDeleteInterviewTemplate"
-        ></hp-danger-zone>
-      </form>
-    </div>
-    <hp-spinner v-else size="24" content />
+      </div>
+      <hp-spinner v-else size="24" content />
+    </form>
   </div>
 </template>
 
@@ -279,6 +273,7 @@ import HpCounter from "@/components/hp-counter.vue";
 import HpSwitch from "@/components/hp-switch.vue";
 import HpIcon from "@/components/hp-icon.vue";
 import HpBadge from "@/components/hp-badge.vue";
+import HpBadgeTag from "@/components/hp-badge-tag.vue";
 import HpDrawer from "@/components/hp-drawer.vue";
 import HpTextarea from "@/components/form/hp-textarea.vue";
 import HpSpinner from "@/components/hp-spinner.vue";
@@ -519,14 +514,13 @@ const handleCloseEditDrawer = () => {
 <styles lang="scss">
 .edit-interview {
   display: flex;
-  flex-direction: column;
-  padding: 26px;
   &__container {
     display: flex;
     flex-direction: column;
     align-self: center;
     align-items: center;
-    overflow: auto;
+    position: relative;
+    overflow: hidden;
   }
   &::-webkit-scrollbar {
     display: none;
@@ -606,70 +600,80 @@ const handleCloseEditDrawer = () => {
     cursor: grab;
   }
 
-  &__overview-button {
-    margin-right: 6px;
+  &__overview {
     display: none;
     position: relative;
+    flex-direction: column;
+    background-color: var(--color-panel);
+    border: 1px solid var(--color-border);
+    padding: 24px;
+    border-radius: 16px;
+    &__input {
+      margin-top: -8px;
+    }
     &__skills {
       display: flex;
       flex-wrap: wrap;
-      gap: 6px;
+      gap: 8px;
       margin-top: 6px;
+      margin-bottom: 32px;
     }
-    &__flyout {
-      @include flyout;
-      position: absolute;
-      right: 0;
-      top: calc(100% + 6px);
-      width: 600px;
-      &__header {
-        color: var(--color-text-secondary);
-        font-weight: 500;
-        @include text-h5;
-        padding-bottom: 12px;
-      }
-      &__stats {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        grid-gap: 16px;
-        padding-bottom: 16px;
-        border-bottom: 1px dashed var(--color-border);
-        margin-bottom: 16px;
-        &__stat {
-          border-radius: $border-radius-sm;
-          border: $border;
-          padding: 4px;
-          display: flex;
-          align-content: center;
-          align-items: center;
-          padding: 8px;
-          &__icon {
-            color: var(--color-text-secondary);
-            margin-right: 6px;
-          }
-          &__text {
-            white-space: nowrap;
-          }
+    &__header {
+      font-weight: 500;
+      font-size: 16px;
+      line-height: 24px;
+      margin-bottom: 4px;
+    }
+    &__description {
+      color: var(--color-text-secondary);
+      margin-bottom: 12px;
+    }
+    &__cta {
+      border-bottom: 1px dashed var(--color-border);
+      margin-bottom: 16px;
+      padding-bottom: 16px;
+    }
+    &__stats {
+      display: flex;
+      gap: 12px;
+      padding-bottom: 16px;
+      border-bottom: 1px dashed var(--color-border);
+      margin-bottom: 16px;
+      &__stat {
+        border-radius: $border-radius-sm;
+        border: $border;
+        padding: 4px;
+        display: flex;
+        align-content: center;
+        align-items: center;
+        padding: 8px;
+        width: 100%;
+        &__icon {
+          color: var(--color-text-secondary);
+          margin-right: 6px;
+        }
+        &__text {
+          white-space: nowrap;
         }
       }
     }
-  }
-  &__danger-zone {
-    margin-bottom: 164px;
   }
 }
 
 @media (min-width: $breakpoint-tablet) {
   .edit-interview {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
     width: 100%;
+    display: grid;
+    grid-template-columns: 30% auto;
     &__form {
-      width: 552px;
+      padding: 0px 32px;
+      height: calc(100vh - 140px);
+      overflow: scroll;
     }
-    &__overview-button {
-      display: block;
+    &__overview {
+      display: flex;
+      overflow: scroll;
+      max-height: calc(100vh - 120px);
     }
   }
 }
