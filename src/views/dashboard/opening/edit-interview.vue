@@ -616,6 +616,7 @@ const handleCloseEditDrawer = () => {
     display: none;
     @include panel;
     margin-bottom: 24px;
+    overscroll-behavior: none;
     &__title {
       @include text-h4;
       font-weight: 500;
