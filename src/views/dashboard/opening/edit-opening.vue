@@ -325,11 +325,7 @@ const archiveOpening = async () => {
     margin-top: 24px;
   }
   &__edit-container {
-    background-color: var(--color-panel);
-    padding: 24px;
-    border-radius: $border-radius-lg;
-    display: flex;
-    flex-direction: column;
+    @include panel;
     &__title {
       @include text-h4;
       font-weight: 500;

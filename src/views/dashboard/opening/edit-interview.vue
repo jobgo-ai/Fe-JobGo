@@ -43,7 +43,11 @@
           >
             <hp-icon name="arrow-left"></hp-icon>Back
           </router-link>
-          <div class="edit-interview__overview__input">
+          <h3 class="edit-interview__overview__title">Edit interview</h3>
+          <p class="edit-interview__overview__subtitle">
+            Main information for your interview
+          </p>
+          <div>
             <hp-input
               @input="debouncedSubmit"
               label="Name"
@@ -51,11 +55,11 @@
             ></hp-input>
           </div>
           <div class="edit-interview__overview__input">
-            <hp-input
+            <hp-textarea
               @input="debouncedSubmit"
               label="Description"
               name="description"
-            ></hp-input>
+            ></hp-textarea>
           </div>
           <div class="edit-interview__overview__stats">
             <div class="edit-interview__overview__stats__stat">
@@ -104,6 +108,11 @@
           ></hp-danger-zone>
         </div>
         <div class="edit-interview__form">
+          <h2 class="edit-interview__form__title">Interview structure</h2>
+          <p class="edit-interview__form__subtitle">
+            Use questions and warmup and cooldown to define the order and
+            structure of your interview
+          </p>
           <div class="edit-interview__ceremony">
             <div class="edit-interview__ceremony__header">
               <div>
@@ -602,14 +611,20 @@ const handleCloseEditDrawer = () => {
 
   &__overview {
     display: none;
-    position: relative;
-    flex-direction: column;
-    background-color: var(--color-panel);
-    border: 1px solid var(--color-border);
-    padding: 24px;
-    border-radius: 16px;
+    @include panel;
+    &__title {
+      @include text-h4;
+      font-weight: 500;
+    }
+    &__subtitle {
+      @include text-h5;
+      margin: 0;
+      color: var(--color-text-secondary);
+      margin-bottom: 24px;
+    }
     &__input {
-      margin-top: -8px;
+      border-bottom: 1px dashed var(--color-border);
+      margin-bottom: 16px;
     }
     &__skills {
       display: flex;
@@ -666,9 +681,18 @@ const handleCloseEditDrawer = () => {
     display: grid;
     grid-template-columns: 30% auto;
     &__form {
-      padding: 0px 32px;
+      margin-left: 96px;
       height: calc(100vh - 140px);
       overflow: scroll;
+      &__title {
+        @include text-h2;
+        font-weight: 500;
+      }
+      &__subtitle {
+        @include text-h5;
+        color: var(--color-text-secondary);
+        margin-bottom: 24px;
+      }
     }
     &__overview {
       display: flex;
