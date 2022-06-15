@@ -523,13 +523,16 @@ const handleCloseEditDrawer = () => {
 <styles lang="scss">
 .edit-interview {
   display: flex;
+  flex-direction: column;
+  &__overview-container {
+    height: 100%;
+  }
   &__container {
     display: flex;
     flex-direction: column;
     align-self: center;
     align-items: center;
     position: relative;
-    overflow: hidden;
   }
   &::-webkit-scrollbar {
     display: none;
@@ -612,6 +615,7 @@ const handleCloseEditDrawer = () => {
   &__overview {
     display: none;
     @include panel;
+    margin-bottom: 24px;
     &__title {
       @include text-h4;
       font-weight: 500;
@@ -682,8 +686,7 @@ const handleCloseEditDrawer = () => {
     grid-template-columns: 30% auto;
     &__form {
       margin-left: 96px;
-      height: calc(100vh - 140px);
-      overflow: scroll;
+      padding-bottom: 120px;
       &__title {
         @include text-h2;
         font-weight: 500;
@@ -698,6 +701,8 @@ const handleCloseEditDrawer = () => {
       display: flex;
       overflow: scroll;
       max-height: calc(100vh - 120px);
+      position: sticky;
+      top: 90px;
     }
   }
 }
