@@ -26,7 +26,7 @@ export const useGettingStarted = () => {
     await getGettingStarted.get();
     checklist.value = {
       ...checklist.value,
-      ...getGettingStarted.data.value.gettingStarted,
+      ...getGettingStarted.data.value?.gettingStarted,
     };
   };
 
