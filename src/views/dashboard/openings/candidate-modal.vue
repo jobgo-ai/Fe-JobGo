@@ -39,76 +39,97 @@
           name="email"
         ></hp-input>
       </div>
-    </form>
-    <div class="candidate-modal__dropzone" v-else>
-      <p class="candidate-modal__dropzone__description">
-        Headers are email, and name.
-        <a
-          class="candidate-modal__header__subtitle__link"
-          href="../../public/csvs/bulk-candidate-example.csv"
-          download="bulk-candidate-example.csv"
-          >Download example file</a
-        >.
-      </p>
-      <hp-dropzone @change="handleFileUpload">
-        <div class="candidate-modal__dropzone__container">
-          <hp-icon
-            class="candidate-modal__dropzone__container__icon"
-            size="28"
-            name="upload"
-            accept=".csv"
-          >
-          </hp-icon>
-          Upload a csv file to add multiple candidates
-        </div></hp-dropzone
+      <div
+        :class="`candidate-modal__actions ${
+          !isAddNew ? 'candidate-modal__actions--two-button' : ''
+        }`"
       >
-    </div>
-    <div
-      :class="`candidate-modal__actions ${
-        !isAddNew ? 'candidate-modal__actions--two-button' : ''
-      }`"
-    >
-      <hp-tooltip>
+        <hp-tooltip>
+          <hp-button
+            @handleClick="archiveCandidate(candidate)"
+            v-if="!isAddNew"
+            :isLoading="isArchivingCandidate"
+            :isDisabled="isArchivingCandidate || isUpdatingCandidate"
+            icon="archive"
+            danger
+          ></hp-button>
+          <template #content> Archive candidate </template>
+        </hp-tooltip>
         <hp-button
-          @handleClick="archiveCandidate(candidate)"
-          v-if="!isAddNew"
-          :isLoading="isArchivingCandidate"
-          :isDisabled="isArchivingCandidate || isUpdatingCandidate"
-          icon="archive"
-          danger
+          primary
+          type="submit"
+          v-if="!isBulkUploadOpen"
+          :isLoading="isUpdatingCandidate"
+          :isDisabled="
+            !meta.valid || isArchivingCandidate || isUpdatingCandidate
+          "
+          :label="content.buttonLabel"
         ></hp-button>
-        <template #content> Archive candidate </template>
-      </hp-tooltip>
-      <hp-button
-        primary
-        type="submit"
-        v-if="!isBulkUploadOpen"
-        :isLoading="isUpdatingCandidate"
-        :isDisabled="!meta.valid || isArchivingCandidate || isUpdatingCandidate"
-        :label="content.buttonLabel"
-      ></hp-button>
-      <hp-button
-        primary
-        v-if="isBulkUploadOpen"
-        :handleClick="handleCsvUpload"
-        :isLoading="isUpdatingCandidate"
-        :isDisabled="isFileUploadValid"
-        label="Upload csv"
-      ></hp-button>
+      </div>
+    </form>
+    <div v-else>
+      <div class="candidate-modal__dropzone">
+        <p class="candidate-modal__dropzone__description">
+          Headers are email, and name.
+          <a
+            class="candidate-modal__header__subtitle__link"
+            href="../../public/csvs/bulk-candidate-example.csv"
+            download="bulk-candidate-example.csv"
+            >Download example file</a
+          >.
+        </p>
+        <hp-dropzone @change="handleFileUpload">
+          <div v-if="!isMultipleCandidatesProcessing">
+            <div class="candidate-modal__dropzone__container">
+              <hp-icon
+                class="candidate-modal__dropzone__container__icon"
+                size="28"
+                name="upload"
+                accept=".csv"
+              >
+              </hp-icon>
+              <div v-if="!csv.name">
+                Upload a csv file to add multiple candidates
+              </div>
+              <div v-else>{{ csv.name }}</div>
+            </div>
+          </div>
+          <div class="candidate-modal__dropzone__container" v-else>
+            <div class="candidate-modal__dropzone__container__icon">
+              Candidates processing
+            </div>
+            <hp-spinner size="28"></hp-spinner>
+          </div>
+        </hp-dropzone>
+      </div>
+      <div class="candidate-modal__actions">
+        <hp-button
+          primary
+          type="button"
+          v-if="isBulkUploadOpen"
+          @handleClick="handleCsvUpload"
+          :isLoading="isMultipleCandidatesProcessing"
+          :isDisabled="isMultipleCandidatesProcessing"
+          label="Upload csv"
+        ></hp-button>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
+// Vendor
 import { computed, ref } from "vue";
 import * as yup from "yup";
 import { useForm } from "vee-validate";
 import { useRoute, useRouter } from "vue-router";
+import Papa from "papaparse";
 
 //Components
 import HpInput from "@/components/form/hp-input.vue";
 import HpButton from "@/components/hp-button.vue";
 import HpIcon from "@/components/hp-icon.vue";
+import HpSpinner from "@/components/hp-spinner.vue";
 import HpTooltip from "@/components/hp-tooltip.vue";
 import HpDropzone from "@/components/hp-dropzone.vue";
 
@@ -135,8 +156,10 @@ const emits = defineEmits(["close"]);
 
 const isUpdatingCandidate = ref(false);
 const isArchivingCandidate = ref(false);
+const isMultipleCandidatesProcessing = ref(false);
 const isBulkUploadOpen = ref(false);
 const isAddNew = props.candidate.name === "";
+const csv = ref([]);
 
 const nameInput = ref(null);
 
@@ -177,7 +200,9 @@ const { fetchOpening, updateOpenings } = useOpenings();
 const { fetchCandidates, candidates, fetchCandidate, candidate } =
   useCandidates();
 
-const handleFileUpload = (files) => {};
+const handleFileUpload = (files) => {
+  csv.value = files[0];
+};
 
 const onSubmit = handleSubmit(async (values) => {
   isUpdatingCandidate.value = true;
@@ -264,8 +289,30 @@ const archiveCandidate = async () => {
   emits("close");
 };
 
-const handleCsvUpload = async () => {
-  console.log("fuck");
+const handleCsvUpload = () => {
+  isMultipleCandidatesProcessing.value = true;
+  Papa.parse(csv.value, {
+    header: true,
+    complete: async (csvCandidates) => {
+      const reqs = csvCandidates.data.map((newCandidate) => {
+        const postCandidate = usePost("candidates");
+        const payload = {
+          candidate: { ...newCandidate, opening: route.params.openingRef },
+        };
+        return postCandidate.post(payload);
+      });
+
+      await Promise.all(reqs);
+      setToast({
+        type: "positive",
+        title: "Candidates uploaded",
+        message: "Candidate list added",
+      });
+      fetchCandidates();
+      emits("close");
+      isMultipleCandidatesProcessing.value = false;
+    },
+  });
 };
 </script>
 
@@ -303,7 +350,8 @@ const handleCsvUpload = async () => {
     }
   }
   &__dropzone {
-    padding: 32px;
+    padding: 0 32px;
+    padding-top: 32px;
     color: var(--color-text-secondary);
     &__description {
       margin-bottom: 18px;

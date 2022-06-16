@@ -89,12 +89,6 @@
           >
             <div class="hp-getting-started__flyout__step__description">
               Complete an interview
-              <hp-button
-                class="hp-getting-started__flyout__step__cta"
-                label="Create opening"
-                primary
-                @click="console.log('fuck')"
-              ></hp-button>
             </div>
           </hp-getting-started-step>
           <hp-getting-started-step
