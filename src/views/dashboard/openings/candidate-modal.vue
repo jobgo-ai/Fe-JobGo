@@ -109,7 +109,7 @@
           v-if="isBulkUploadOpen"
           @handleClick="handleCsvUpload"
           :isLoading="isMultipleCandidatesProcessing"
-          :isDisabled="isMultipleCandidatesProcessing"
+          :isDisabled="isMultipleCandidatesProcessing || !csv.name"
           label="Upload csv"
         ></hp-button>
       </div>
