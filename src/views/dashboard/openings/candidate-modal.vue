@@ -4,9 +4,26 @@
       <h3 class="candidate-modal__header__title">{{ content.title }}</h3>
       <p class="candidate-modal__header__subtitle">
         {{ content.subtitle }}
+        <span v-if="isAddNew">
+          <span v-if="!isBulkUploadOpen">
+            Add multiple candidates with
+            <span
+              @click="isBulkUploadOpen = true"
+              class="candidate-modal__header__subtitle__link"
+              >bulk upload csv</span
+            ></span
+          >
+          <span v-if="isBulkUploadOpen">
+            <span
+              @click="isBulkUploadOpen = false"
+              class="candidate-modal__header__subtitle__link"
+              >Add single candidate</span
+            ></span
+          >.</span
+        >
       </p>
     </div>
-    <form @submit="onSubmit">
+    <form v-if="!isBulkUploadOpen" @submit="onSubmit">
       <div class="candidate-modal__form">
         <hp-input
           placeholder="Enter candidate name"
@@ -22,38 +39,68 @@
           name="email"
         ></hp-input>
       </div>
-      <div
-        :class="`candidate-modal__actions ${
-          !isAddNew ? 'candidate-modal__actions--two-button' : ''
-        }`"
-      >
-        <hp-tooltip>
-          <hp-button
-            @handleClick="archiveCandidate(candidate)"
-            v-if="!isAddNew"
-            :isLoading="isArchivingCandidate"
-            :isDisabled="isArchivingCandidate || isUpdatingCandidate"
-            icon="archive"
-            danger
-          ></hp-button>
-          <template #content> Archive candidate </template>
-        </hp-tooltip>
-        <hp-button
-          primary
-          type="submit"
-          :isLoading="isUpdatingCandidate"
-          :isDisabled="
-            !meta.valid || isArchivingCandidate || isUpdatingCandidate
-          "
-          :label="content.buttonLabel"
-        ></hp-button>
-      </div>
     </form>
+    <div class="candidate-modal__dropzone" v-else>
+      <p class="candidate-modal__dropzone__description">
+        Headers are email, and name.
+        <a
+          class="candidate-modal__header__subtitle__link"
+          href="../../public/csvs/bulk-candidate-example.csv"
+          download="bulk-candidate-example.csv"
+          >Download example file</a
+        >.
+      </p>
+      <hp-dropzone @change="handleFileUpload">
+        <div class="candidate-modal__dropzone__container">
+          <hp-icon
+            class="candidate-modal__dropzone__container__icon"
+            size="28"
+            name="upload"
+            accept=".csv"
+          >
+          </hp-icon>
+          Upload a csv file to add multiple candidates
+        </div></hp-dropzone
+      >
+    </div>
+    <div
+      :class="`candidate-modal__actions ${
+        !isAddNew ? 'candidate-modal__actions--two-button' : ''
+      }`"
+    >
+      <hp-tooltip>
+        <hp-button
+          @handleClick="archiveCandidate(candidate)"
+          v-if="!isAddNew"
+          :isLoading="isArchivingCandidate"
+          :isDisabled="isArchivingCandidate || isUpdatingCandidate"
+          icon="archive"
+          danger
+        ></hp-button>
+        <template #content> Archive candidate </template>
+      </hp-tooltip>
+      <hp-button
+        primary
+        type="submit"
+        v-if="!isBulkUploadOpen"
+        :isLoading="isUpdatingCandidate"
+        :isDisabled="!meta.valid || isArchivingCandidate || isUpdatingCandidate"
+        :label="content.buttonLabel"
+      ></hp-button>
+      <hp-button
+        primary
+        v-if="isBulkUploadOpen"
+        :handleClick="handleCsvUpload"
+        :isLoading="isUpdatingCandidate"
+        :isDisabled="isFileUploadValid"
+        label="Upload csv"
+      ></hp-button>
+    </div>
   </div>
 </template>
 
 <script setup>
-import { computed, ref, watchEffect } from "vue";
+import { computed, ref } from "vue";
 import * as yup from "yup";
 import { useForm } from "vee-validate";
 import { useRoute, useRouter } from "vue-router";
@@ -61,7 +108,9 @@ import { useRoute, useRouter } from "vue-router";
 //Components
 import HpInput from "@/components/form/hp-input.vue";
 import HpButton from "@/components/hp-button.vue";
+import HpIcon from "@/components/hp-icon.vue";
 import HpTooltip from "@/components/hp-tooltip.vue";
+import HpDropzone from "@/components/hp-dropzone.vue";
 
 // Composables
 import { usePost, usePut } from "@/composables/useHttp";
@@ -86,15 +135,10 @@ const emits = defineEmits(["close"]);
 
 const isUpdatingCandidate = ref(false);
 const isArchivingCandidate = ref(false);
+const isBulkUploadOpen = ref(false);
 const isAddNew = props.candidate.name === "";
 
 const nameInput = ref(null);
-
-watchEffect(() => {
-  if (nameInput.value) {
-    nameInput.value.inputRef.focus();
-  }
-});
 
 const { setToast } = useToast();
 
@@ -102,7 +146,7 @@ const content = computed(() => {
   return isAddNew
     ? {
         title: "Add candidate",
-        subtitle: `New candidate for ${props.opening.name}`,
+        subtitle: `New candidate for ${props.opening.name}.`,
         buttonLabel: "Create candidate",
       }
     : {
@@ -132,6 +176,8 @@ const { fetchOpening, updateOpenings } = useOpenings();
 
 const { fetchCandidates, candidates, fetchCandidate, candidate } =
   useCandidates();
+
+const handleFileUpload = (files) => {};
 
 const onSubmit = handleSubmit(async (values) => {
   isUpdatingCandidate.value = true;
@@ -217,6 +263,10 @@ const archiveCandidate = async () => {
   updateOpenings();
   emits("close");
 };
+
+const handleCsvUpload = async () => {
+  console.log("fuck");
+};
 </script>
 
 <style lang="scss">
@@ -231,6 +281,11 @@ const archiveCandidate = async () => {
     }
     &__subtitle {
       color: var(--color-text-secondary);
+      &__link {
+        cursor: pointer;
+        text-decoration: underline;
+        color: var(--color-text-primary);
+      }
     }
   }
   &__form {
@@ -245,6 +300,22 @@ const archiveCandidate = async () => {
     justify-content: flex-end;
     &--two-button {
       justify-content: space-between;
+    }
+  }
+  &__dropzone {
+    padding: 32px;
+    color: var(--color-text-secondary);
+    &__description {
+      margin-bottom: 18px;
+    }
+    &__container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      &__icon {
+        margin-bottom: 12px;
+      }
     }
   }
 }
