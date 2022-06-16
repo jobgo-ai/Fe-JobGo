@@ -12,6 +12,7 @@
         :type="type"
         :autocomplete="autocomplete"
         :placeholder="placeholder"
+        :autofocus="autofocus"
         :value="modelValue"
         v-on="validationListeners"
         v-bind="$attrs"
@@ -84,6 +85,10 @@ const props = defineProps({
     type: String,
     default: "off",
   },
+  autofocus: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const emits = defineEmits(["update:modelValue"]);
@@ -124,7 +129,6 @@ const validationListeners = computed(() => {
   // lazy
   if (!errorMessage.value) {
     return {
-      blur: handleChange,
       change: handleChange,
       // disable `shouldValidate` to avoid validating on input
       input: (e) => {
@@ -137,7 +141,6 @@ const validationListeners = computed(() => {
     };
   } else {
     return {
-      blur: handleChange,
       change: handleChange,
       input: handleChange, // only switched this
     };

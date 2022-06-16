@@ -29,6 +29,7 @@
           placeholder="Enter candidate name"
           label="Name"
           ref="nameInput"
+          :autofocus="true"
           :isDisabled="isArchivingCandidate || isUpdatingCandidate"
           name="name"
         ></hp-input>
@@ -119,7 +120,7 @@
 
 <script setup>
 // Vendor
-import { computed, ref } from "vue";
+import { computed, ref, onMounted, nextTick } from "vue";
 import * as yup from "yup";
 import { useForm } from "vee-validate";
 import { useRoute, useRouter } from "vue-router";
@@ -164,6 +165,10 @@ const csv = ref([]);
 const nameInput = ref(null);
 
 const { setToast } = useToast();
+
+onMounted(async () => {
+  nameInput.value.inputRef.focus();
+});
 
 const content = computed(() => {
   return isAddNew
