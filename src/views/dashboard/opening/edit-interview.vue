@@ -7,6 +7,7 @@
       >
         <questions
           :handleClose="handleCloseEditDrawer"
+          @questionAdded="handleQuestionAdded"
           v-if="isAddQuestionDrawerOpen"
         />
       </hp-drawer>
@@ -16,7 +17,8 @@
       >
         <questions
           :handleClose="handleCloseEditDrawer"
-          isScratch="true"
+          :isScratch="true"
+          @questionAdded="handleQuestionAdded"
           v-if="isCreateQuestionDrawerOpen"
         />
       </hp-drawer>
@@ -371,6 +373,19 @@ const { handleSubmit, resetForm, meta, setFieldValue, values } = useForm({
   validateOnMount: false,
   initialValues: {},
 });
+
+const handleQuestionAdded = async () => {
+  await nextTick(async () => {
+    const items = [
+      ...document.getElementsByClassName("edit-interview__question-card"),
+    ];
+    items[interview.value.questions.length - 1].focus();
+    items[interview.value.questions.length - 1].scrollIntoView({
+      behavior: "auto",
+      block: "center",
+    });
+  });
+};
 
 const moveItem = async (moveDown, index) => {
   const newIndex = moveDown ? index + 1 : index - 1;

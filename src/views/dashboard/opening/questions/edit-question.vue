@@ -126,7 +126,7 @@ const content = isEdit
     }
   : { title: "Create question", action: "Create question" };
 
-const emits = defineEmits(["handleTabChange", "handleClose"]);
+const emits = defineEmits(["handleClose", "questionAdded"]);
 
 const skillOptions = ref([]);
 
@@ -247,6 +247,7 @@ const onSubmit = handleSubmit(async (values) => {
     });
     setInterview(postTemplateQuestion.data.value.template);
     fetchChecklist();
+    emits("questionAdded");
     setToast({
       type: "positive",
       title: "Well done!",
@@ -259,11 +260,6 @@ const onSubmit = handleSubmit(async (values) => {
   emits("handleClose");
   isSaving.value = false;
 });
-const handleClose = () => {
-  if (!meta.dirty && meta.valid) {
-    emits("handleTabChange");
-  }
-};
 
 const handleDeleteQuestiontemplate = async () => {
   const deleteQuestion = useDelete(`questions/${props.question.reference}`);

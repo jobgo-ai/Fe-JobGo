@@ -4,6 +4,7 @@
       <component
         :is="currentComponent"
         :handleClose="handleClose"
+        @questionAdded="handleQuestionAdded"
         @handleClose="handleClose"
         @handleTabChange="
           isCurrentViewQuestionList = !isCurrentViewQuestionList
@@ -32,7 +33,11 @@ const props = defineProps({
 });
 
 const isCurrentViewQuestionList = ref(true);
-const emits = defineEmits(["updateQuestionList"]);
+const emits = defineEmits(["updateQuestionList, questionAdded"]);
+
+const handleQuestionAdded = () => {
+  emits("questionAdded");
+};
 
 const currentComponent = computed(() => {
   return !props.isScratch ? QuestionList : EditQuestion;

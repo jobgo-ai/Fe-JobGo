@@ -89,7 +89,7 @@ const props = defineProps({
 
 const { setToast } = useToast();
 
-const emits = defineEmits(["handleTabChange"]);
+const emits = defineEmits(["handleTabChange", "questionAdded"]);
 
 const isQuestionsLoading = ref(true);
 const listContainer = ref(null);
@@ -185,6 +185,7 @@ const addToInterview = async (question) => {
     title: "Well done!",
     message: `Question added to interview`,
   });
+  emits("questionAdded");
   props.handleClose();
 };
 </script>
