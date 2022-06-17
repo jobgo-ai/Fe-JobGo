@@ -161,7 +161,15 @@
               @end="drag = false"
             >
               <template #item="{ element, index }">
-                <li class="edit-interview__question-card" :key="index">
+                <li
+                  :class="`edit-interview__question-card`"
+                  :key="index"
+                  role="option"
+                  draggable="true"
+                  tabindex="0"
+                  @keydown.down.prevent="moveItem(true, index)"
+                  @keydown.up.prevent="moveItem(false, index)"
+                >
                   <div class="edit-interview__question-card__container">
                     <hp-badge icon="questions" :content="index + 1" />
                     <hp-icon
@@ -261,7 +269,7 @@
 
 <script setup>
 // Vendor
-import { onMounted, ref, computed } from "vue";
+import { onMounted, ref, computed, nextTick } from "vue";
 import { useForm } from "vee-validate";
 import { useRoute, useRouter } from "vue-router";
 import { useDebounceFn } from "@vueuse/core";
@@ -343,6 +351,32 @@ const { handleSubmit, resetForm, meta, setFieldValue, values } = useForm({
   validateOnMount: false,
   initialValues: {},
 });
+
+const moveItem = async (moveDown, index) => {
+  const newIndex = moveDown ? index + 1 : index - 1;
+  if (newIndex < 0 || newIndex >= interview.value.questions.length) {
+    return;
+  }
+
+  const copy = [...interview.value.questions];
+  const draggedItem = copy[index];
+
+  copy.splice(index, 1);
+  copy.splice(newIndex, 0, draggedItem);
+
+  interview.value = {
+    ...interview.value,
+    questions: copy,
+  };
+
+  await nextTick(() => {
+    const items = [
+      ...document.getElementsByClassName("edit-interview__question-card"),
+    ];
+    console.log(items[newIndex]);
+    items[newIndex].focus();
+  });
+};
 
 const onSubmit = handleSubmit(async () => {
   const formattedQuestions =
@@ -584,6 +618,9 @@ const handleCloseEditDrawer = () => {
     padding: 16px;
     box-shadow: none;
     margin-bottom: 16px;
+    &:focus {
+      outline: 4px solid var(--color-focus);
+    }
     &__container {
       display: flex;
       justify-content: space-between;
