@@ -1,5 +1,5 @@
 <template>
-  <div class="edit-interview__container">
+  <div ref="containerRef" class="edit-interview__container">
     <form @submit.prevent="handleContextFormSave">
       <hp-drawer
         :isOpen="isAddQuestionDrawerOpen"
@@ -318,6 +318,7 @@ const isLoading = ref(true);
 const isSaving = ref(false);
 const route = useRoute();
 const router = useRouter();
+const containerRef = ref(null);
 const isOverviewFlyoutOpen = ref(false);
 const isAddQuestionDrawerOpen = ref(false);
 const isViewQuestionDrawerOpen = ref(false);
@@ -373,8 +374,8 @@ const moveItem = async (moveDown, index) => {
     const items = [
       ...document.getElementsByClassName("edit-interview__question-card"),
     ];
-    console.log(items[newIndex]);
     items[newIndex].focus();
+    items[newIndex].scrollIntoView({ behavior: "auto", block: "center" });
   });
 };
 
