@@ -1,12 +1,5 @@
 <template>
   <div class="edit-question">
-    <div
-      v-if="!question"
-      class="edit-question__back"
-      @click="$emit('handleTabChange')"
-    >
-      <hp-icon name="arrow-left"></hp-icon>Back
-    </div>
     <div class="edit-question__header">
       <h2 class="edit-question__title">{{ content.title }}</h2>
       <p class="edit-question__subtitle">

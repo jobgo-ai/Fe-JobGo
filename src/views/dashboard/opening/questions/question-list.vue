@@ -33,12 +33,6 @@
           v-model="filter.jobLevels"
         ></hp-multi-select>
       </div>
-      <hp-button
-        dropzone
-        icon="plus"
-        label="Start from scratch"
-        @handleClick="$emit('handleTabChange')"
-      />
     </div>
     <ol
       ref="listContainer"

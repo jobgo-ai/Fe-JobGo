@@ -25,13 +25,17 @@ const props = defineProps({
   handleClose: {
     type: Function,
   },
+  isScratch: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const isCurrentViewQuestionList = ref(true);
 const emits = defineEmits(["updateQuestionList"]);
 
 const currentComponent = computed(() => {
-  return isCurrentViewQuestionList.value ? QuestionList : EditQuestion;
+  return !props.isScratch ? QuestionList : EditQuestion;
 });
 </script>
 

@@ -11,6 +11,16 @@
         />
       </hp-drawer>
       <hp-drawer
+        :isOpen="isCreateQuestionDrawerOpen"
+        @close="handleCloseEditDrawer"
+      >
+        <questions
+          :handleClose="handleCloseEditDrawer"
+          isScratch="true"
+          v-if="isCreateQuestionDrawerOpen"
+        />
+      </hp-drawer>
+      <hp-drawer
         :isOpen="isEditQuestionDrawerOpen"
         @close="handleCloseEditDrawer"
       >
@@ -83,8 +93,16 @@
           </div>
           <div class="edit-interview__overview__cta">
             <hp-button
+              class="edit-interview__overview__dropzone-button"
+              @handleClick="isCreateQuestionDrawerOpen = true"
+              label="Create question"
+              type="button"
+              icon="plus"
+              dropzone
+            ></hp-button>
+            <hp-button
               @handleClick="isAddQuestionDrawerOpen = true"
-              label="Add question"
+              label="Add existing template"
               type="button"
               icon="plus"
               dropzone
@@ -321,6 +339,7 @@ const router = useRouter();
 const containerRef = ref(null);
 const isOverviewFlyoutOpen = ref(false);
 const isAddQuestionDrawerOpen = ref(false);
+const isCreateQuestionDrawerOpen = ref(false);
 const isViewQuestionDrawerOpen = ref(false);
 const isEditQuestionDrawerOpen = ref(false);
 const { interview, fetchInterview, isInterviewLoading, setInterview } =
@@ -534,6 +553,7 @@ const handleCloseEditDrawer = () => {
   const handleClose = () => {
     isEditQuestionDrawerOpen.value = false;
     isAddQuestionDrawerOpen.value = false;
+    isCreateQuestionDrawerOpen.value = false;
   };
 
   const { isDirty, type, clearIsDirty } = useQuestionContext();
@@ -655,6 +675,9 @@ const handleCloseEditDrawer = () => {
     @include panel;
     margin-bottom: 24px;
     overscroll-behavior: none;
+    &__dropzone-button {
+      margin-bottom: 16px;
+    }
     &__title {
       @include text-h4;
       font-weight: 500;
