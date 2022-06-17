@@ -46,7 +46,7 @@
 
 <script setup>
 //Vendor
-import { computed, onMounted, ref, watch, watchEffect } from "vue";
+import { computed, ref, watch } from "vue";
 import { onClickOutside } from "@vueuse/core";
 
 // Components

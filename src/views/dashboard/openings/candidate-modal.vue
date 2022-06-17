@@ -79,28 +79,13 @@
             >Download example file</a
           >.
         </p>
-        <hp-dropzone @change="handleFileUpload">
-          <div v-if="!isMultipleCandidatesProcessing">
-            <div class="candidate-modal__dropzone__container">
-              <hp-icon
-                class="candidate-modal__dropzone__container__icon"
-                size="28"
-                name="upload"
-                accept=".csv"
-              >
-              </hp-icon>
-              <div v-if="!csv.name">
-                Upload a csv file to add multiple candidates
-              </div>
-              <div v-else>{{ csv.name }}</div>
-            </div>
-          </div>
-          <div class="candidate-modal__dropzone__container" v-else>
-            <div class="candidate-modal__dropzone__container__icon">
-              Candidates processing
-            </div>
-            <hp-spinner size="28"></hp-spinner>
-          </div>
+        <hp-dropzone
+          @change="handleFileUpload"
+          :isLoading="isMultipleCandidatesProcessing"
+          accept=".csv"
+          loadingLabel="Candidates processing"
+          label="Upload a csv file to add multiple candidates"
+        >
         </hp-dropzone>
       </div>
       <div class="candidate-modal__actions">
@@ -205,8 +190,8 @@ const { fetchOpening, updateOpenings } = useOpenings();
 const { fetchCandidates, candidates, fetchCandidate, candidate } =
   useCandidates();
 
-const handleFileUpload = (files) => {
-  csv.value = files[0];
+const handleFileUpload = (file) => {
+  csv.value = file;
 };
 
 const onSubmit = handleSubmit(async (values) => {

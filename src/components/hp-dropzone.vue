@@ -1,6 +1,23 @@
 <template>
   <div @click="handleClick" class="hp-dropzone">
-    <slot></slot>
+    <div v-if="!isLoading">
+      <div class="candidate-modal__dropzone__container">
+        <hp-icon
+          class="candidate-modal__dropzone__container__icon"
+          size="28"
+          name="upload"
+        >
+        </hp-icon>
+        <div v-if="!file">{{ label }}</div>
+        <div v-else>{{ file.name }}</div>
+      </div>
+    </div>
+    <div class="candidate-modal__dropzone__container" v-else>
+      <div class="candidate-modal__dropzone__container__icon">
+        Candidates processing
+      </div>
+      <hp-spinner size="28"></hp-spinner>
+    </div>
     <input
       @change.prevent="handleChange"
       class="hp-dropzone__hidden-input"
@@ -13,9 +30,26 @@
 </template>
 
 <script setup>
+// Vendor
 import { ref } from "vue";
 
+// Components
+import HpIcon from "@/components/hp-icon.vue";
+import HpSpinner from "@/components/hp-spinner.vue";
+
 const props = defineProps({
+  label: {
+    type: String,
+    default: "Upload files",
+  },
+  loadingLabel: {
+    type: String,
+    default: "Processing...",
+  },
+  isLoading: {
+    type: Boolean,
+    default: false,
+  },
   multiple: {
     type: Boolean,
     default: false,
@@ -28,6 +62,7 @@ const props = defineProps({
 
 const emits = defineEmits(["change"]);
 
+const file = ref(null);
 const inputRef = ref(null);
 
 const handleClick = () => {
@@ -35,7 +70,8 @@ const handleClick = () => {
 };
 
 const handleChange = (e) => {
-  emits("change", e.target.files);
+  emits("change", e.target.files[0]);
+  file.value = e.target.files[0];
 };
 </script>
 
