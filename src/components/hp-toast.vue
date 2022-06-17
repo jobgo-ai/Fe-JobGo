@@ -114,7 +114,7 @@ const { toastQueue, dismissToast } = useToast();
     bottom: 84px;
     right: 24px;
     width: 380px;
-    z-index: $z-index-10;
+    z-index: $z-index-500;
   }
 }
 
