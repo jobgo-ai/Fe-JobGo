@@ -389,12 +389,13 @@ const moveItem = async (moveDown, index) => {
     questions: copy,
   };
 
-  await nextTick(() => {
+  await nextTick(async () => {
     const items = [
       ...document.getElementsByClassName("edit-interview__question-card"),
     ];
     items[newIndex].focus();
     items[newIndex].scrollIntoView({ behavior: "auto", block: "center" });
+    onSubmitWithDebounce();
   });
 };
 
@@ -455,9 +456,9 @@ const onSubmit = handleSubmit(async () => {
   );
 });
 
-const onSubmitWithDebounce = useDebounceFn(() => {
-  onSubmit();
-}, 300);
+const onSubmitWithDebounce = useDebounceFn((isListItem = false) => {
+  onSubmit(isListItem);
+}, 500);
 
 const debouncedSubmit = () => {
   isSaving.value = true;
