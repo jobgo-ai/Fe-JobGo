@@ -80,7 +80,7 @@
                 {{
                   candidate.opening.statistics.candidateScore?.toFixed(2) || "~"
                 }}
-                <div>
+                <div v-if="candidate.opening.statistics.candidateScore">
                   <hp-icon
                     class="candidate-details__arrow"
                     :size="24"
