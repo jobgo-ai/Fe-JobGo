@@ -11,7 +11,7 @@ describe("questions", () => {
       .find("a")
       .contains("Edit interview")
       .click();
-    cy.contains("Add question").click();
+    cy.contains("Search questions").click();
     cy.contains("TEST_QUESTION_DO_NOT_DELETE").should(
       "contain",
       "TEST_QUESTION_DO_NOT_DELETE"
@@ -26,8 +26,7 @@ describe("questions", () => {
       .find("a")
       .contains("Edit interview")
       .click();
-    cy.contains("Add question").click();
-    cy.contains("Start from scratch").click();
+    cy.contains("Create question").click();
     cy.get(".edit-question")
       .get(`[name='content']`)
       .type("THIS_IS_A_FAKE_QUESTION");

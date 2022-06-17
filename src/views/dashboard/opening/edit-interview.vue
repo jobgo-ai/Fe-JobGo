@@ -102,7 +102,7 @@
             ></hp-button>
             <hp-button
               @handleClick="isAddQuestionDrawerOpen = true"
-              label="Add existing template"
+              label="Search questions"
               type="button"
               icon="plus"
               dropzone

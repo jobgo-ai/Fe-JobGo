@@ -80,21 +80,23 @@
                 {{
                   candidate.opening.statistics.candidateScore?.toFixed(2) || "~"
                 }}
-                <hp-icon
-                  class="candidate-details__arrow"
-                  :size="24"
-                  v-if="
-                    candidate.opening.statistics.candidateScore >
-                    candidate.opening.statistics.averageOpeningScore
-                  "
-                  name="arrow-top"
-                ></hp-icon>
-                <hp-icon
-                  v-else
-                  class="candidate-details__arrow"
-                  :size="24"
-                  name="arrow-down"
-                ></hp-icon>
+                <div>
+                  <hp-icon
+                    class="candidate-details__arrow"
+                    :size="24"
+                    v-if="
+                      candidate.opening.statistics.candidateScore >
+                      candidate.opening.statistics.averageOpeningScore
+                    "
+                    name="arrow-top"
+                  ></hp-icon>
+                  <hp-icon
+                    v-else
+                    class="candidate-details__arrow"
+                    :size="24"
+                    name="arrow-down"
+                  ></hp-icon>
+                </div>
               </div>
               <div class="candidate-details__overview__score__current">
                 Current score
