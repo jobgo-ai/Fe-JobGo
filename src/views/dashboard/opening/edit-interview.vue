@@ -93,24 +93,28 @@
               </div>
             </div>
           </div>
-          <div class="edit-interview__overview__cta">
+          <div class="edit-interview__overview__buttons">
             <hp-button
               class="edit-interview__overview__dropzone-button"
               @handleClick="isCreateQuestionDrawerOpen = true"
               label="Create question"
               type="button"
-              icon="plus"
-              dropzone
+              icon="add-note"
+              fullWidth
+              primary
             ></hp-button>
             <hp-button
               @handleClick="isAddQuestionDrawerOpen = true"
               label="Search questions"
               type="button"
-              icon="plus"
-              dropzone
+              fullWidth
+              icon="search"
             ></hp-button>
           </div>
-          <div class="edit-interview__overview__header">
+          <div
+            v-if="interview.statistics.skills.length > 0"
+            class="edit-interview__overview__header"
+          >
             Top skills evaluated
             <ol class="edit-interview__overview__skills">
               <hp-badge-tag
@@ -691,8 +695,13 @@ const handleCloseEditDrawer = () => {
     @include panel;
     margin-bottom: 24px;
     overscroll-behavior: none;
-    &__dropzone-button {
+    &__buttons {
+      display: flex;
+      justify-content: space-between;
+      padding-bottom: 16px;
       margin-bottom: 16px;
+      border-bottom: 1px dashed var(--color-border);
+      gap: 12px;
     }
     &__title {
       @include text-h4;
