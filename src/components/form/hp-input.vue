@@ -230,7 +230,6 @@ const containerClasses = computed(() => {
     transition: border-color 0.15s cubic-bezier(0.17, 0.67, 0.83, 0.67);
     color: var(--color-text-primary);
     &--search {
-      background-color: var(--color-underground);
       max-height: 32px;
       line-height: 32px;
     }
