@@ -1,6 +1,7 @@
 <template>
   <div>
     <div class="candidate-modal__dropzone">
+      <h3 class="bulk-question-modal__title">Add questions</h3>
       <p class="candidate-modal__dropzone__description">
         Upload a csv of questions, no headers required
         <a
@@ -92,4 +93,9 @@ const handleBulkAdd = async () => {
 };
 </script>
 
-<styles></styles>
+<style>
+.bulk-question-modal__title {
+  @include text-h2;
+  margin-bottom: 12px;
+}
+</style>
