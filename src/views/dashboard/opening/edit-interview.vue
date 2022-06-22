@@ -1,5 +1,11 @@
 <template>
   <div ref="containerRef" class="edit-interview__container">
+    <hp-modal
+      :isOpen="isAddQuestionsModalOpen"
+      @close="isAddQuestionsModalOpen = false"
+    >
+      <bulk-question-modal @questionsAdded="handleQuestionsAdded"
+    /></hp-modal>
     <form @submit.prevent="handleContextFormSave">
       <hp-drawer
         :isOpen="isAddQuestionDrawerOpen"
@@ -57,7 +63,13 @@
           </router-link>
           <h3 class="edit-interview__overview__title">Edit interview</h3>
           <p class="edit-interview__overview__subtitle">
-            Main information for your interview
+            Main information for your interview. If you already have questions,
+            you can add
+            <span
+              @click="isAddQuestionsModalOpen = true"
+              class="edit-interview__overview__subtitle__link"
+              >upload in bulk</span
+            >.
           </p>
           <div>
             <hp-input
@@ -310,6 +322,7 @@ import ViewQuestion from "@/views/dashboard/opening/questions/view-question.vue"
 import HpInput from "@/components/form/hp-input.vue";
 import HpTooltip from "@/components/hp-tooltip.vue";
 import HpButton from "@/components/hp-button.vue";
+import HpModal from "@/components/hp-modal.vue";
 import HpCounter from "@/components/hp-counter.vue";
 import HpSwitch from "@/components/hp-switch.vue";
 import HpIcon from "@/components/hp-icon.vue";
@@ -321,6 +334,7 @@ import HpSpinner from "@/components/hp-spinner.vue";
 import HpQuestionCardStats from "@/components/cards/hp-question-card-stats.vue";
 import HpDangerZone from "@/components/cards/hp-danger-zone-card.vue";
 import HpSaveIndicator from "@/components/hp-save-indicator.vue";
+import BulkQuestionModal from "@/components/modals/bulk-question-modal.vue";
 
 // Composables
 import { hasEditPermission } from "@/composables/usePermissions";
@@ -346,6 +360,7 @@ const containerRef = ref(null);
 const isOverviewFlyoutOpen = ref(false);
 const isAddQuestionDrawerOpen = ref(false);
 const isCreateQuestionDrawerOpen = ref(false);
+const isAddQuestionsModalOpen = ref(false);
 const isViewQuestionDrawerOpen = ref(false);
 const isEditQuestionDrawerOpen = ref(false);
 const { interview, fetchInterview, isInterviewLoading, setInterview } =
@@ -377,6 +392,11 @@ const { handleSubmit, resetForm, meta, setFieldValue, values } = useForm({
   validateOnMount: false,
   initialValues: {},
 });
+
+const handleQuestionsAdded = () => {
+  isAddQuestionsModalOpen.value = false;
+  fetchInterview(route.params.interviewRef);
+};
 
 const handleQuestionAdded = async () => {
   await nextTick(async () => {
@@ -712,6 +732,10 @@ const handleCloseEditDrawer = () => {
       margin: 0;
       color: var(--color-text-secondary);
       margin-bottom: 24px;
+      &__link {
+        text-decoration: underline;
+        cursor: pointer;
+      }
     }
     &__input {
       border-bottom: 1px dashed var(--color-border);

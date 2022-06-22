@@ -74,7 +74,7 @@
           Headers are email, and name.
           <a
             class="candidate-modal__header__subtitle__link"
-            href="../../public/csvs/bulk-candidate-example.csv"
+            href="/csvs/bulk-candidate-example.csv"
             download="bulk-candidate-example.csv"
             >Download example file</a
           >.
