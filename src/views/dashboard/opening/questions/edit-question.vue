@@ -46,20 +46,6 @@
           :max="3"
         ></hp-tagger>
       </div>
-      <div class="edit-question__dropdowns">
-        <div class="edit-question__duration__labels">
-          <div class="edit-question__label">Levels</div>
-          <div class="edit-question__sublabel">
-            Which candidate seniority levels can this question be used for?
-          </div>
-        </div>
-        <hp-tagger
-          label="Levels"
-          :options="jobLevelOptions"
-          name="jobLevels"
-          v-model="levels"
-        ></hp-tagger>
-      </div>
       <div class="edit-question__guidelines">
         <div class="edit-question__label">Guidelines</div>
         <div class="edit-question__sublabel">
@@ -104,7 +90,6 @@ import HpMultiInput from "@/components/form/hp-multi-input.vue";
 
 // Composables
 import useSkillSearch from "@/composables/useSkillSearch";
-import useConstants from "@/composables/useConstants";
 import useInterviews from "@/composables/useInterviews";
 import { useGettingStarted } from "@/composables/useGettingStarted";
 import useToast from "@/composables/useToast";
@@ -131,10 +116,8 @@ const emits = defineEmits(["handleClose", "questionAdded"]);
 const skillOptions = ref([]);
 
 const skills = ref([]);
-const levels = ref([]);
 
 const { handleSkillSearch } = useSkillSearch();
-const { jobLevels } = useConstants();
 const { fetchChecklist } = useGettingStarted();
 
 const isSaving = ref(false);
@@ -144,10 +127,6 @@ watchEffect(() => {
   if (questionInputRef.value) {
     questionInputRef.value.inputRef.focus();
   }
-});
-
-const jobLevelOptions = computed(() => {
-  return jobLevels.value.map((j) => ({ label: j.name, value: j.slug }));
 });
 
 const searchFunction = async (value) => {
@@ -169,7 +148,6 @@ const schema = yup.object({
     .max(60)
     .required("A duration is required"),
   skills: yup.array().nullable(),
-  levels: yup.array(),
   guidelines: yup.array(),
 });
 
@@ -183,17 +161,11 @@ if (props.question) {
     value: s.slug,
   }));
 
-  levels.value = props.question.jobLevels.map((s) => ({
-    label: s.name,
-    value: s.slug,
-  }));
-
   const formattedInitialValues = {
     content: props.question.content,
     duration: props.question.duration / 60,
     guidelines: props.question.guidelines,
     skills: skills.value,
-    jobLevels: levels.value,
   };
   initialValues = formattedInitialValues;
 }
@@ -216,7 +188,6 @@ const onSubmit = handleSubmit(async (values) => {
     scoring: "likert",
     type: "open",
     duration: values.duration * 60,
-    jobLevels: values.jobLevels.map((l) => l.value),
     skills: values.skills.map((s) => s.value),
     guidelines: values.guidelines
       ? values.guidelines.filter((g) => g !== "")

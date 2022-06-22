@@ -83,49 +83,6 @@
         </div>
       </div>
       <teleport to="#teleport-target-header">
-        <!-- <div
-          ref="overviewArea"
-          class="
-            edit-openings__teleport-button
-            edit-openings__teleport-button--overview
-          "
-        >
-          <hp-button
-            @handleClick="isOverviewFlyoutOpen = !isOverviewFlyoutOpen"
-            icon="file"
-          >
-          </hp-button>
-          <transition name="flyout-transition">
-            <div
-              v-if="isOverviewFlyoutOpen"
-              class="edit-interview__overview-button__flyout"
-            >
-              <div class="edit-interview__overview-button__flyout__header">
-                Overview
-              </div>
-              <div class="edit-interview__overview-button__flyout__header">
-                Levels
-                <ol class="edit-interview__overview-button__skills">
-                  <hp-badge-tag
-                    v-for="level in opening.statistics.jobLevels"
-                    :quantity="level.quantity"
-                    :label="level.value.name"
-                  ></hp-badge-tag>
-                </ol>
-              </div>
-              <div class="edit-interview__overview-button__flyout__header">
-                Top skills evaluated
-                <ol class="edit-interview__overview-button__skills">
-                  <hp-badge-tag
-                    v-for="skill in opening.statistics.skills"
-                    :quantity="skill.quantity"
-                    :label="skill.value.name"
-                  ></hp-badge-tag>
-                </ol>
-              </div>
-            </div>
-          </transition>
-        </div> -->
         <hp-save-indicator
           :meta="meta"
           :isLoading="isSaving"

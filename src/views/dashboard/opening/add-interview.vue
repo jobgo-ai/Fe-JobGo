@@ -34,13 +34,6 @@
           :onSearch="searchFunction"
           v-model="filter.skills"
         ></hp-multi-select>
-        <hp-multi-select
-          :options="jobLevelOptions"
-          class="add-interview__filter__dropdowns__dropdown"
-          label="Experience levels"
-          name="levels"
-          v-model="filter.jobLevels"
-        ></hp-multi-select>
       </div>
       <ol v-if="!isInterviewsLoading" class="add-interview__interview-grid">
         <hp-add-interview-card isAddCard></hp-add-interview-card>
@@ -83,7 +76,6 @@ import HpAddInterviewCard from "@/components/cards/hp-add-interview-card.vue";
 
 // Composables
 import useSkillSearch from "@/composables/useSkillSearch";
-import useConstants from "@/composables/useConstants";
 import { useBreadcrumbs } from "@/composables/useBreadcrumbs";
 import { useGet, usePost, useDelete } from "@/composables/useHttp";
 
@@ -100,16 +92,11 @@ const hasLoadMore = ref(true);
 const offset = ref(0);
 const limit = 20;
 
-const filter = ref({ search: "", skills: [], jobLevels: [] });
+const filter = ref({ search: "", skills: [] });
 
 const skillOptions = ref([]);
 
 const { handleSkillSearch } = useSkillSearch();
-const { jobLevels } = useConstants();
-
-const jobLevelOptions = computed(() => {
-  return jobLevels.value.map((j) => ({ label: j.name, value: j.slug }));
-});
 
 const searchFunction = async (value) => {
   skillOptions.value = await handleSkillSearch(value);
@@ -132,10 +119,6 @@ const getUrl = () => {
   var params = new URLSearchParams([["limit", limit]]);
 
   params.append("offset", offset.value);
-  if (filter.value.jobLevels.length > 0) {
-    const onlySlugs = filter.value.jobLevels.map((j) => j.value);
-    params.append("job-levels", onlySlugs.join(","));
-  }
   if (filter.value.skills.length > 0) {
     const onlySlugs = filter.value.skills.map((s) => s.value);
     params.append("skills", onlySlugs.join(","));

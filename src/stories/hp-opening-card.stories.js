@@ -50,7 +50,6 @@ const Template = (args) => ({
           },
           { quantity: 1, value: { slug: "typography", name: "Typography" } },
         ],
-        jobLevels: [],
         types: [{ quantity: 5, value: { slug: "open", name: "Open" } }],
         scorings: [{ quantity: 5, value: { slug: "likert", name: "Likert" } }],
       },

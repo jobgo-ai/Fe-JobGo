@@ -24,14 +24,6 @@
           :onSearch="searchFunction"
           v-model="filter.skills"
         ></hp-multi-select>
-        <hp-multi-select
-          :options="jobLevelOptions"
-          class="question-list__filters__dropdown"
-          label="Experience levels"
-          standalone
-          name="levels"
-          v-model="filter.jobLevels"
-        ></hp-multi-select>
       </div>
     </div>
     <ol
@@ -78,7 +70,6 @@ import useToast from "@/composables/useToast";
 import { useGet, usePost } from "@/composables/useHttp";
 import useSkillSearch from "@/composables/useSkillSearch";
 import useInterviews from "@/composables/useInterviews";
-import useConstants from "@/composables/useConstants";
 
 const props = defineProps({
   handleClose: {
@@ -103,17 +94,11 @@ const { setInterview } = useInterviews();
 const filter = ref({
   search: useDebounce(search, 300),
   skills: [],
-  jobLevels: [],
 });
 
 const skillOptions = ref([]);
 
 const { handleSkillSearch } = useSkillSearch();
-const { jobLevels } = useConstants();
-
-const jobLevelOptions = computed(() => {
-  return jobLevels.value.map((j) => ({ label: j.name, value: j.slug }));
-});
 
 const searchFunction = async (value) => {
   skillOptions.value = await handleSkillSearch(value);
@@ -142,10 +127,6 @@ const getUrl = (loadingMore) => {
   var params = new URLSearchParams([["limit", limit]]);
   if (loadingMore) {
     params.append("offset", next);
-  }
-  if (filter.value.jobLevels.length > 0) {
-    const onlySlugs = filter.value.jobLevels.map((j) => j.value);
-    params.append("job-levels", onlySlugs.join(","));
   }
   if (filter.value.skills.length > 0) {
     const onlySlugs = filter.value.skills.map((s) => s.value);
