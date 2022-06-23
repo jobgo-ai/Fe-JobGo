@@ -29,14 +29,6 @@
         </li>
       </ul>
     </div>
-    <div class="view-question__section" v-if="question.jobLevels?.length > 0">
-      <div class="view-question__header">Levels</div>
-      <ul class="view-question__tag-list">
-        <li class="view-question__tag" v-for="level in question.jobLevels">
-          {{ level.name }}
-        </li>
-      </ul>
-    </div>
   </div>
 </template>
 

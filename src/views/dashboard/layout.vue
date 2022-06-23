@@ -10,21 +10,8 @@
 </template>
 
 <script setup>
-// Vendor
-import { onMounted, onUnmounted } from "vue";
-
-//  Hooks
-import useConstants from "@/composables/useConstants";
-
 // Components
 import HpHeader from "@/components/hp-header.vue";
-
-const { loadQuestionLevels } = useConstants();
-
-onMounted(() => {
-  loadQuestionLevels();
-});
-onUnmounted(() => {});
 </script>
 
 <style lang="scss" scoped>

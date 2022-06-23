@@ -13,19 +13,6 @@
         class="hp-question-card-stats__stats__stat__icon"
         name="skills"
       ></hp-icon>
-      {{ question.jobLevels.length }}
-      Levels
-      <hp-info-circle
-        class="hp-question-card-stats__stats__stat__info-circle"
-        v-if="hasTooltips && question.jobLevels.length > 0"
-        :content="question.jobLevels.map((level) => level.name).join(', ')"
-      ></hp-info-circle>
-    </div>
-    <div class="hp-question-card-stats__stats__stat">
-      <hp-icon
-        class="hp-question-card-stats__stats__stat__icon"
-        name="skills"
-      ></hp-icon>
       {{ question.skills.length }}
       Skills
       <hp-info-circle
