@@ -12,6 +12,7 @@
         >.
       </p>
       <hp-dropzone
+        :isLoading="isBulkQuestionsProcessing"
         @change="handleFileUpload"
         accept=".csv"
         loadingLabel="Candidates processing"
