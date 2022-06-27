@@ -21,7 +21,7 @@ import Opening from "@/views/dashboard/opening/opening.vue";
 import EditOpening from "@/views/dashboard/opening/edit-opening.vue";
 import AddInterview from "@/views/dashboard/opening/add-interview.vue";
 import EditInterview from "@/views/dashboard/opening/edit-interview.vue";
-import CompareCandidates from "@/views/dashboard/opening/compare-candidates.vue";
+import Compare from "@/views/dashboard/opening/compare.vue";
 
 const routes = [
   { path: "/", redirect: "/openings" },
@@ -56,8 +56,8 @@ const routes = [
           },
           {
             path: "compare",
-            name: "compare-candidates",
-            component: CompareCandidates,
+            name: "compare",
+            component: Compare,
           },
           {
             path: "results/:templateRef/:evaluationRef",
