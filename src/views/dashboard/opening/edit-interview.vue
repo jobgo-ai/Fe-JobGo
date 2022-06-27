@@ -412,6 +412,9 @@ const handleQuestionAdded = async () => {
 };
 
 const moveItem = async (moveDown, index) => {
+  if (isSaving.value) {
+    return;
+  }
   const newIndex = moveDown ? index + 1 : index - 1;
   if (newIndex < 0 || newIndex >= interview.value.questions.length) {
     return;
