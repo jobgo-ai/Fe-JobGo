@@ -352,6 +352,7 @@ const props = defineProps({
   },
 });
 
+const drag = ref(false);
 const isLoading = ref(true);
 const isSaving = ref(false);
 const route = useRoute();
@@ -437,11 +438,11 @@ const moveItem = async (moveDown, index) => {
     ];
     items[newIndex].focus();
     items[newIndex].scrollIntoView({ behavior: "auto", block: "center" });
-    onSubmitWithDebounce();
+    onSubmitWithDebounce(true);
   });
 };
 
-const onSubmit = handleSubmit(async () => {
+const onSubmit = handleSubmit(async (isListItem) => {
   const formattedQuestions =
     interview.value?.questions.map((q) => q.reference) || [];
 
@@ -472,7 +473,9 @@ const onSubmit = handleSubmit(async () => {
   };
   await putInterview.put(payload);
   isSaving.value = false;
-  setInterview(putInterview.data.value.template);
+  if (!isListItem) {
+    setInterview(putInterview.data.value.template);
+  }
 
   resetForm({
     touched: false,
@@ -828,6 +831,8 @@ const handleCloseEditDrawer = () => {
   transition: transform 0s;
 }
 .ghost {
+  background-color: var(--color-panel);
+  border: 1px solid var(--blue--500);
   opacity: 0.5;
 }
 .list-group {
