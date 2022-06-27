@@ -10,9 +10,27 @@ const Template = (args) => ({
   components: { HpTable },
   setup() {
     const data = [
-      { name: "Booty Chance Ohallahan", score1: 3, score2: 5 },
-      { name: "Shaft Factory Johnson", score1: 3, score2: 4 },
-      { name: "Poundtown Mayor O'Keefe", score1: 1, score2: 5 },
+      {
+        name: "Booty Chance Ohallahan",
+        score1: 3,
+        score2: 2,
+        score3: 5,
+        score4: 2,
+      },
+      {
+        name: "Shaft Factory Johnson",
+        score1: 2,
+        score2: 3,
+        score3: 5,
+        score4: 2,
+      },
+      {
+        name: "Poundtown Mayor O'Keefe",
+        score1: 1,
+        score2: 4,
+        score3: 5,
+        score4: 2,
+      },
     ];
 
     const headers = [
@@ -23,16 +41,30 @@ const Template = (args) => ({
       {
         value: "score1",
         label: "Interview #1",
+        sortable: true,
       },
       {
         value: "score2",
+        label: "Interview #2",
+        sortable: true,
+      },
+      {
+        value: "score3",
+        label: "Interview #2",
+      },
+      {
+        value: "score4",
         label: "Interview #2",
       },
     ];
     return { args, headers, data };
   },
   template: `<div>
-  <hp-table :data="data" :headers="headers"></hp-table>
+  <hp-table :data="data" :headers="headers">
+    <template v-slot:name="{ row }">
+        {{row.name}}
+    </template>
+  </hp-table>
   </div>`,
 });
 
