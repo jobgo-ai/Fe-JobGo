@@ -1,10 +1,25 @@
 <template>
   <div>
-    <h2 class="compare__title">Compare candidates</h2>
-    <h2 class="compare__subtitle">
-      Review your candidates scores and compare them
-    </h2>
-    <hp-table :data="tableData" :headers="headers">
+    <div>
+      <div>
+        <h2 class="compare__title">Compare candidates</h2>
+        <h2 class="compare__subtitle">
+          Review your candidates scores and compare them
+        </h2>
+      </div>
+      <div class="compare__filters">
+        <hp-input
+          class="add-interview__filter__search"
+          name="search"
+          variant="search"
+          icon="search"
+          standalone
+          v-model="filter.search"
+          placeholder="Search by candidate"
+        />
+      </div>
+    </div>
+    <hp-table :data="filteredTableData" :headers="headers">
       <template
         v-for="template in templateList"
         v-slot:[template.value]="{ row }"
@@ -35,12 +50,14 @@
 
 <script setup>
 // Vendor
-import { onMounted, ref } from "vue";
+import { onMounted, ref, computed } from "vue";
 import { formatDistance } from "date-fns";
 
 // Components
 import HpTable from "@/components/hp-table.vue";
 import HpBadge from "@/components/hp-badge.vue";
+import HpInput from "@/components/form/hp-input.vue";
+import HpDropdown from "@/components/hp-dropdown.vue";
 
 // Composables
 import { useGet } from "@/composables/useHttp";
@@ -53,6 +70,19 @@ const { setBreadcrumbs } = useBreadcrumbs();
 const tableData = ref([]);
 const headers = ref([]);
 const templateList = ref([]);
+const filter = ref({
+  search: "",
+});
+
+const filteredTableData = computed(() => {
+  let sortedData = tableData.value;
+  if (filter.value.search !== "") {
+    sortedData = tableData.value.filter((row) => {
+      return row.name.toLowerCase().includes(filter.value.search.toLowerCase());
+    });
+  }
+  return sortedData;
+});
 
 onMounted(async () => {
   const getComparison = useGet(
