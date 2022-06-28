@@ -12,16 +12,19 @@
         <div v-if="!row[template.value]">-</div>
         <hp-badge
           v-else
-          class="hp-opening-card__content__badges__badge"
           type="positive"
           :content="row[template.value].toFixed(1)"
         ></hp-badge>
+      </template>
+      <template v-slot:time="{ row }">
+        <div class="compare__time">
+          {{ row.time }}
+        </div>
       </template>
       <template v-slot:averageScore="{ row }">
         <div v-if="!row.averageScore">-</div>
         <hp-badge
           v-else
-          class="hp-opening-card__content__badges__badge"
           type="positive"
           :content="row.averageScore.toFixed(1)"
         ></hp-badge>
@@ -33,6 +36,7 @@
 <script setup>
 // Vendor
 import { onMounted, ref } from "vue";
+import { formatDistance } from "date-fns";
 
 // Components
 import HpTable from "@/components/hp-table.vue";
@@ -72,8 +76,12 @@ onMounted(async () => {
       label: "Name",
     },
     {
+      value: "time",
+      label: "Created",
+    },
+    {
       value: "averageScore",
-      label: "Special score",
+      label: "Average Score",
       sortable: true,
     },
     ...templateList.value,
@@ -91,8 +99,17 @@ onMounted(async () => {
         {}
       );
 
+      const timeAgo = formatDistance(
+        new Date(item.candidate.created),
+        new Date(),
+        {
+          addSuffix: true,
+        }
+      );
+
       return {
         name: item.candidate.name,
+        time: timeAgo,
         averageScore: item.averageScore,
         ...templatesWithScores,
       };
@@ -129,6 +146,9 @@ onMounted(async () => {
     font-weight: 400;
     color: var(--color-text-secondary);
     margin-bottom: 32px;
+  }
+  &__time {
+    color: var(--color-text-secondary);
   }
 }
 </styles>
