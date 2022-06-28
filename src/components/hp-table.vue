@@ -10,25 +10,27 @@
             :key="index"
           >
             <div class="hp-table__table__head__col__content">
-              {{ header.label }}
-              <div
-                class="hp-table__table__head__col__icon"
-                :class="
-                  header.sortable &&
-                  selectedRow === header.value &&
-                  'hp-table__table__head__col__icon--visible'
-                "
-              >
-                <hp-icon
-                  v-show="sortDirection === 'asc'"
-                  size="18"
-                  name="chevron-down"
-                ></hp-icon>
-                <hp-icon
-                  v-show="sortDirection === 'desc'"
-                  size="18"
-                  name="chevron-up"
-                ></hp-icon>
+              <div class="hp-table__table__head__col__content__content">
+                {{ header.label }}
+                <div
+                  class="hp-table__table__head__col__icon"
+                  :class="
+                    header.sortable &&
+                    selectedRow === header.value &&
+                    'hp-table__table__head__col__icon--visible'
+                  "
+                >
+                  <hp-icon
+                    v-show="sortDirection === 'desc'"
+                    size="18"
+                    name="chevron-down"
+                  ></hp-icon>
+                  <hp-icon
+                    v-show="sortDirection === 'asc'"
+                    size="18"
+                    name="chevron-up"
+                  ></hp-icon>
+                </div>
               </div>
             </div>
           </th>
@@ -121,8 +123,8 @@ const sortedData = computed(() => {
   const isAscended = sortDirection.value === "asc";
 
   const ascSortedData = props.data.sort((a, b) => {
-    const aValue = a[selectedHeader.value];
-    const bValue = b[selectedHeader.value];
+    const aValue = a[selectedHeader.value] || 0;
+    const bValue = b[selectedHeader.value] || 0;
     if (aValue < bValue) {
       return isAscended ? -1 : 1;
     }
@@ -131,6 +133,7 @@ const sortedData = computed(() => {
     }
     return 0;
   });
+
   return ascSortedData;
 });
 </script>
@@ -161,6 +164,9 @@ const sortedData = computed(() => {
           border-top-left-radius: 12px;
           border: 1px solid var(--color-border);
           border-right: none;
+          .hp-table__table__head__col__content {
+            justify-content: start;
+          }
         }
         &:last-child {
           padding: 12px 24px;
@@ -173,12 +179,18 @@ const sortedData = computed(() => {
           align-items: center;
           justify-content: center;
           position: relative;
+          &__content {
+            display: block;
+            position: relative;
+          }
         }
         &__icon {
           transition: opacity 0.15s ease-in-out;
           opacity: 0;
           position: absolute;
-          right: 0px;
+          right: -18px;
+          top: 50%;
+          transform: translateY(-50%);
           &--visible {
             opacity: 1;
           }

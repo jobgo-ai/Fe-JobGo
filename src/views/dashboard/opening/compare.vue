@@ -4,23 +4,101 @@
     <h2 class="compare__subtitle">
       Review your candidates scores and compare them
     </h2>
+    <hp-table :data="tableData" :headers="headers">
+      <template
+        v-for="template in templateList"
+        v-slot:[template.value]="{ row }"
+      >
+        <div v-if="!row[template.value]">-</div>
+        <hp-badge
+          v-else
+          class="hp-opening-card__content__badges__badge"
+          type="positive"
+          :content="row[template.value].toFixed(1)"
+        ></hp-badge>
+      </template>
+      <template v-slot:averageScore="{ row }">
+        <div v-if="!row.averageScore">-</div>
+        <hp-badge
+          v-else
+          class="hp-opening-card__content__badges__badge"
+          type="positive"
+          :content="row.averageScore.toFixed(1)"
+        ></hp-badge>
+      </template>
+    </hp-table>
   </div>
 </template>
 
 <script setup>
 // Vendor
-import { onMounted } from "vue";
+import { onMounted, ref } from "vue";
 
 // Components
+import HpTable from "@/components/hp-table.vue";
+import HpBadge from "@/components/hp-badge.vue";
 
 // Composables
+import { useGet } from "@/composables/useHttp";
 import { useBreadcrumbs } from "@/composables/useBreadcrumbs";
 import useOpenings from "@/composables/useOpenings";
 
 const { opening } = useOpenings();
 const { setBreadcrumbs } = useBreadcrumbs();
 
-onMounted(() => {
+const tableData = ref([]);
+const headers = ref([]);
+const templateList = ref([]);
+
+onMounted(async () => {
+  const getComparison = useGet(
+    `openings/${opening.value.reference}/comparisons/templates`
+  );
+  await getComparison.get();
+
+  const { templates } = getComparison.data.value.comparisons;
+
+  templateList.value = templates.map((template) => {
+    return {
+      label: template.name,
+      value: template.reference,
+      sortable: true,
+    };
+  });
+
+  headers.value = [
+    {
+      value: "name",
+      label: "Name",
+    },
+    {
+      value: "averageScore",
+      label: "Special score",
+      sortable: true,
+    },
+    ...templateList.value,
+  ];
+
+  tableData.value = getComparison.data.value.comparisons.candidates.map(
+    (item) => {
+      const templatesWithScores = templateList.value.reduce(
+        (acc, template, index) => {
+          return {
+            ...acc,
+            [template.value]: item.templateScores[index],
+          };
+        },
+        {}
+      );
+
+      return {
+        name: item.candidate.name,
+        averageScore: item.averageScore,
+        ...templatesWithScores,
+      };
+    }
+  );
+
   setBreadcrumbs([
     {
       label: "Openings",
@@ -50,6 +128,7 @@ onMounted(() => {
     line-height: 20px;
     font-weight: 400;
     color: var(--color-text-secondary);
+    margin-bottom: 32px;
   }
 }
 </styles>
