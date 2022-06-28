@@ -45,21 +45,28 @@
         </div>
       </template>
       <template
-        v-for="template in templateList"
+        v-for="(template, index) in templateList"
         v-slot:[template.value]="{ row }"
       >
         <div v-if="!row[template.value]">-</div>
         <hp-badge
+          :type="
+            determineOutcome(row[template.value], averageTemplateScores[index])
+          "
           v-else
-          type="positive"
           :content="row[template.value].toFixed(1)"
         ></hp-badge>
       </template>
-      <template v-for="skill in skillList" v-slot:[skill.value]="{ row }">
+      <template
+        v-for="(skill, index) in skillList"
+        v-slot:[skill.value]="{ row }"
+      >
         <div v-if="!row[skill.value]">-</div>
         <hp-badge
+          :type="
+            determineOutcome(row[skill.value], averageSkillScores[skill.index])
+          "
           v-else
-          type="positive"
           :content="row[skill.value].toFixed(1)"
         ></hp-badge>
       </template>
@@ -72,7 +79,7 @@
         <div v-if="!row.averageScore">-</div>
         <hp-badge
           v-else
-          type="positive"
+          :type="determineOutcome(row.averageScore, averageOpeningScore)"
           :content="row.averageScore.toFixed(1)"
         ></hp-badge>
       </template>
@@ -100,6 +107,9 @@ import useOpenings from "@/composables/useOpenings";
 const { opening } = useOpenings();
 const { setBreadcrumbs } = useBreadcrumbs();
 
+const averageOpeningScore = ref(0);
+const averageSkillScores = ref([]);
+const averageTemplateScores = ref([]);
 const templateData = ref([]);
 const fullSkillData = ref([]);
 const skillData = ref([]);
@@ -112,6 +122,16 @@ const filter = ref({
   dataset: "skills",
   skills: [],
 });
+
+const determineOutcome = (a, b) => {
+  if (a.toFixed(1) > b.toFixed(1)) {
+    return "positive";
+  }
+  if (b.toFixed(1) > a.toFixed(1)) {
+    return "negative";
+  }
+  return "neutral";
+};
 
 watch(
   () => filter.value.skills,
@@ -175,6 +195,11 @@ const loadComparisonData = async (dataset) => {
   if (dataset === "templates") {
     const { templates } = getComparison.data.value.comparisons;
 
+    averageTemplateScores.value =
+      getComparison.data.value.comparisons.averageOpeningTemplateScores;
+    averageOpeningScore.value =
+      getComparison.data.value.comparisons.averageOpeningScore;
+
     templateList.value = templates.map((template) => {
       return {
         label: template.name,
@@ -233,12 +258,16 @@ const loadComparisonData = async (dataset) => {
   //Handle skill data
   if (dataset === "skills") {
     const { skills } = getComparison.data.value.comparisons;
+    averageSkillScores.value =
+      getComparison.data.value.comparisons.averageOpeningSkillScores;
+
     fullSkillData.value = getComparison.data.value.comparisons;
-    skillList.value = skills.map((skill) => {
+    skillList.value = skills.map((skill, index) => {
       return {
         label: skill.name,
         value: skill.slug,
         sortable: true,
+        index: index,
       };
     });
 
@@ -252,10 +281,10 @@ const loadComparisonData = async (dataset) => {
     ];
     skillData.value = getComparison.data.value.comparisons.candidates.map(
       (item) => {
-        const skillScores = filter.value.skills.reduce((acc, skill, index) => {
+        const skillScores = filter.value.skills.reduce((acc, skill) => {
           return {
             ...acc,
-            [skill.value]: item.skillScores[index],
+            [skill.value]: item.skillScores[skill.index],
           };
         }, {});
 
