@@ -17,7 +17,10 @@
         <ul class="hp-multi-select__flyout__options">
           <button
             v-if="optionsList.length > 0 && !isLoading"
-            class="hp-multi-select__flyout__options__option"
+            :class="`hp-multi-select__flyout__options__option ${
+              isDisabledAndNotIncludedInModelValue(option) &&
+              'hp-multi-select__flyout__options__option--disabled'
+            }`"
             v-for="option in optionsList"
             @click="handleChangeEmit(option)"
             :tabindex="1"
@@ -176,7 +179,21 @@ const optionsList = computed(() => {
   }
 });
 
+const isDisabledAndNotIncludedInModelValue = (option) => {
+  if (!props.maxItemsSelected) {
+    return false;
+  }
+  const isInModelValue = props.modelValue.some((item) => {
+    return item.value === option.value;
+  });
+  return props.modelValue.length >= props.maxItemsSelected && !isInModelValue;
+};
+
 const handleChangeEmit = (change) => {
+  if (isDisabledAndNotIncludedInModelValue(change)) {
+    return;
+  }
+
   let newValue = [...props.modelValue];
   if (newValue.find((v) => v.value === change.value)) {
     newValue = newValue.filter((item) => item.value !== change.value);
@@ -232,6 +249,11 @@ const handleChangeEmit = (change) => {
         display: flex;
         text-align: left;
         width: 100%;
+        transition: 0.15s ease-in-out opacity;
+        &--disabled {
+          opacity: 0.5;
+          cursor: not-allowed;
+        }
         &:hover {
           background-color: var(--color-forground-floating);
         }

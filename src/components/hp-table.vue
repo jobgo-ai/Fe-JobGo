@@ -141,7 +141,7 @@ const sortedData = computed(() => {
 <style lang="scss">
 .hp-table {
   &__table {
-    table-layout: auto;
+    table-layout: fixed;
     width: 100%;
     text-align: center;
     border-spacing: 0;

@@ -68,7 +68,6 @@ const handleBulkAdd = async () => {
   isBulkQuestionsProcessing.value = true;
   Papa.parse(csv.value, {
     complete: async (csvQuestions) => {
-      console.log(csvQuestions.data);
       const reqs = csvQuestions.data.map(async (question) => {
         const postQuestion = usePost("questions");
         await postQuestion.post({
