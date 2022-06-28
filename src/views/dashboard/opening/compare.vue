@@ -6,8 +6,6 @@
         <h2 class="compare__subtitle">
           Review your candidates scores and compare them
         </h2>
-      </div>
-      <div class="compare__filters">
         <hp-tabs
           class="openings__tabs"
           :options="[
@@ -16,7 +14,9 @@
           ]"
           v-model="filter.dataset"
         />
-        <div class="compare__filter__search">
+      </div>
+      <div class="compare__filters">
+        <div class="compare__filters__search">
           <hp-input
             name="search"
             variant="search"
@@ -26,12 +26,12 @@
             placeholder="Search by candidate"
           />
         </div>
-        <div class="compare__filter__dropdown">
+        <div class="compare__filters__dropdown">
           <hp-multi-select
-            class="add-interview__filter__dropdowns__dropdown"
             label="All Skills"
             :options="skillList"
             name="skills"
+            :isDisabled="filter.dataset === 'templates'"
             :maxItemsSelected="5"
             v-model="filter.skills"
           ></hp-multi-select>
@@ -294,9 +294,7 @@ onMounted(() => {
   &__header {
     display: flex;
     justify-content: space-between;
-    align-items: center;
-  }
-  &__header-container {
+    align-items: flex-end;
     margin-bottom: 16px;
   }
   &__filters {
@@ -304,9 +302,13 @@ onMounted(() => {
     flex-direction: row;
     align-items: end;
     > * {
-      margin-right: 8px;
+      margin-left: 8px;
     }
     &__search {
+      color: red;
+      .hp-input__input-container {
+        margin-bottom: 0;
+      }
     }
     &__dropdown {
       width: 200px;

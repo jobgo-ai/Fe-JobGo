@@ -12,25 +12,25 @@
             <div class="hp-table__table__head__col__content">
               <div class="hp-table__table__head__col__content__content">
                 {{ header.label }}
-                <div
-                  class="hp-table__table__head__col__icon"
-                  :class="
-                    header.sortable &&
-                    selectedRow === header.value &&
-                    'hp-table__table__head__col__icon--visible'
-                  "
-                >
-                  <hp-icon
-                    v-show="sortDirection === 'desc'"
-                    size="18"
-                    name="chevron-down"
-                  ></hp-icon>
-                  <hp-icon
-                    v-show="sortDirection === 'asc'"
-                    size="18"
-                    name="chevron-up"
-                  ></hp-icon>
-                </div>
+              </div>
+              <div
+                class="hp-table__table__head__col__icon"
+                :class="
+                  header.sortable &&
+                  selectedRow === header.value &&
+                  'hp-table__table__head__col__icon--visible'
+                "
+              >
+                <hp-icon
+                  v-show="sortDirection === 'desc'"
+                  size="18"
+                  name="chevron-down"
+                ></hp-icon>
+                <hp-icon
+                  v-show="sortDirection === 'asc'"
+                  size="18"
+                  name="chevron-up"
+                ></hp-icon>
               </div>
             </div>
           </th>
@@ -57,7 +57,7 @@
 
 <script setup>
 // Vendor
-import { ref, computed } from "vue";
+import { ref, computed, watch } from "vue";
 
 // Composables
 import HpIcon from "@/components/hp-icon.vue";
@@ -136,6 +136,15 @@ const sortedData = computed(() => {
 
   return ascSortedData;
 });
+
+watch(
+  () => props.headers,
+  () => {
+    if (!props.headers.some((h) => h.value === selectedRow.value)) {
+      selectedRow.value = null;
+    }
+  }
+);
 </script>
 
 <style lang="scss">
@@ -188,7 +197,7 @@ const sortedData = computed(() => {
           transition: opacity 0.15s ease-in-out;
           opacity: 0;
           position: absolute;
-          right: -18px;
+          right: 0px;
           top: 50%;
           transform: translateY(-50%);
           &--visible {

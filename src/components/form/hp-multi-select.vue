@@ -1,6 +1,10 @@
 <template>
   <div class="hp-multi-select">
-    <hp-dropdown @onChange="handleDropdownChange" :label="computedLabel">
+    <hp-dropdown
+      @onChange="handleDropdownChange"
+      :isDisabled="isDisabled"
+      :label="computedLabel"
+    >
       <template v-slot:dropdown>
         <div v-if="searchable" class="hp-multi-select__flyout__search">
           <hp-input
