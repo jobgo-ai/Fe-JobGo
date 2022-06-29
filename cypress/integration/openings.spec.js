@@ -20,7 +20,7 @@ describe("openings", () => {
     cy.get(".hp-opening-card").each(($el, index, $list) => {
       if ($el[0].textContent.includes("TEST_OPENING")) {
         cy.contains("TEST_OPENING").click();
-        cy.contains("Edit opening").click();
+        cy.get(".candidate-list__header__button-group__edit-button").click();
         cy.contains("Archive opening").click();
         cy.visit("/openings");
       } else {
@@ -29,7 +29,7 @@ describe("openings", () => {
   });
   it("Can add an interview", () => {
     cy.contains("PERMANENT_OPENING").click();
-    cy.contains("Edit opening").click();
+    cy.get(".candidate-list__header__button-group__edit-button").click();
     cy.contains("Add interview").click();
     cy.contains("Add interview")
       .parents(".hp-interview-card")
@@ -43,7 +43,7 @@ describe("openings", () => {
 
   it("Can remove interview from opening", () => {
     cy.contains("PERMANENT_OPENING").click();
-    cy.contains("Edit opening").click();
+    cy.get(".candidate-list__header__button-group__edit-button").click();
 
     cy.get(".hp-interview-card").each(($el, index, $list) => {
       // Sticky hacky, but increment if we add more data
