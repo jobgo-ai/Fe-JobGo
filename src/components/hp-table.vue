@@ -227,6 +227,9 @@ watch(
         &--sortable {
           cursor: pointer;
           user-select: none;
+          &:hover {
+            background-color: var(--color-underground);
+          }
         }
         &--active {
           background-color: var(--color-underground);

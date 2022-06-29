@@ -376,7 +376,7 @@ onMounted(() => {
   }
   &__table {
     &__name {
-      text-decoration: underline;
+      font-weight: 500;
       margin-bottom: 2px;
     }
     &__email {
