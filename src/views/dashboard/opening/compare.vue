@@ -132,7 +132,7 @@ const skillList = ref([]);
 const isLoading = ref(false);
 const filter = ref({
   search: "",
-  dataset: "skills",
+  dataset: "templates",
   skills: [],
 });
 
@@ -323,7 +323,7 @@ onMounted(() => {
     },
     {
       label: opening.value.name,
-      to: `/opening/${opening.value.reference}/edit`,
+      to: `/openings/${opening.value.reference}`,
     },
     {
       label: "Compare",
