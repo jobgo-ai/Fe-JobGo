@@ -60,11 +60,27 @@ const Template = (args) => ({
     return { args, headers, data };
   },
   template: `<div>
+  <div style="margin-bottom:24px">
   <hp-table :data="data" :headers="headers">
     <template v-slot:name="{ row }">
         {{row.name}}
     </template>
   </hp-table>
+  </div>
+  <div style="margin-bottom:24px">
+  <hp-table :data="[]" :headers="headers">
+  <template v-slot:name="{ row }">
+      {{row.name}}
+  </template>
+  </hp-table>
+  </div>
+  <div style="margin-bottom:24px">
+  <hp-table :data="data" :headers="headers" isLoading="true">
+    <template v-slot:name="{ row }">
+        {{row.name}}
+    </template>
+  </hp-table>
+  </div>
   </div>`,
 });
 

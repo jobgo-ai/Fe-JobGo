@@ -1,6 +1,6 @@
 <template>
   <div class="hp-table">
-    <table class="hp-table__table">
+    <table v-if="!isLoading" class="hp-table__table">
       <thead class="hp-table__table__head">
         <tr class="hp-table__table__head__row">
           <th
@@ -38,6 +38,7 @@
       </thead>
       <tbody class="hp-table__table__body">
         <tr
+          v-if="sortedData.length > 0"
           class="hp-table__table__body__row"
           v-for="(row, index) in sortedData"
           :key="index"
@@ -50,8 +51,19 @@
             <slot :name="header.value" :row="row">{{ row[header.value] }}</slot>
           </td>
         </tr>
+        <tr v-else>
+          <td :colspan="headers.length" class="hp-table__no-data">
+            <div class="hp-table__no-data__image">
+              <EmptyState class="hp-table__no-data__src" />
+              <div>There is no data</div>
+            </div>
+          </td>
+        </tr>
       </tbody>
     </table>
+    <div v-if="isLoading" class="hp-table__loading">
+      <hp-spinner size="32"></hp-spinner>
+    </div>
   </div>
 </template>
 
@@ -59,8 +71,12 @@
 // Vendor
 import { ref, computed, watch } from "vue";
 
+// Components
+import EmptyState from "@/assets/abstracts/empty-state.svg";
+
 // Composables
 import HpIcon from "@/components/hp-icon.vue";
+import HpSpinner from "@/components/hp-spinner.vue";
 
 const props = defineProps({
   data: {
@@ -70,6 +86,10 @@ const props = defineProps({
   headers: {
     type: Array,
     default: () => [],
+  },
+  isLoading: {
+    type: Boolean,
+    default: false,
   },
 });
 
@@ -249,6 +269,23 @@ watch(
           border-right: 1px solid var(--color-border);
         }
       }
+    }
+  }
+  &__loading {
+    padding: 120px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+  &__no-data {
+    padding: 120px;
+    width: 100%;
+    &__image {
+      width: 100%;
+      text-align: center;
+    }
+    &__src {
+      max-width: 300px;
     }
   }
 }

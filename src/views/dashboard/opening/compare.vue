@@ -1,15 +1,15 @@
 <template>
-  <div>
+  <div class="compare">
     <div class="compare__header">
       <div class="compare__header-container">
         <h2 class="compare__title">Compare candidates</h2>
         <h2 class="compare__subtitle">
-          Review your candidates scores and compare them
+          Review and compare your candidate scores
         </h2>
         <hp-tabs
           class="openings__tabs"
           :options="[
-            { label: 'Templates', value: 'templates' },
+            { label: 'Interviews', value: 'templates' },
             { label: 'Skills', value: 'skills' },
           ]"
           v-model="filter.dataset"
@@ -38,10 +38,22 @@
         </div>
       </div>
     </div>
-    <hp-table :data="filteredTableData" :headers="headers">
+    <hp-table
+      :isLoading="isLoading"
+      :data="filteredTableData"
+      :headers="headers"
+    >
       <template v-slot:name="{ row }">
         <div>
-          <router-link to="/">{{ row.name }}</router-link>
+          <div class="compare__table__name">
+            <router-link
+              :to="`/openings/${opening.reference}?candidate=${row.reference}`"
+              >{{ row.name }}</router-link
+            >
+          </div>
+          <div v-if="row.email" class="compare__table__email">
+            {{ row.email }}
+          </div>
         </div>
       </template>
       <template
@@ -117,6 +129,7 @@ const skillHeaders = ref([]);
 const templateHeaders = ref([]);
 const templateList = ref([]);
 const skillList = ref([]);
+const isLoading = ref(false);
 const filter = ref({
   search: "",
   dataset: "skills",
@@ -173,6 +186,7 @@ const filteredTableData = computed(() => {
       return row.name.toLowerCase().includes(filter.value.search.toLowerCase());
     });
   }
+  isLoading.value = false;
   return sortedData;
 });
 
@@ -186,6 +200,7 @@ const headers = computed(() => {
 });
 
 const loadComparisonData = async (dataset) => {
+  isLoading.value = true;
   const getComparison = useGet(
     `openings/${opening.value.reference}/comparisons/${dataset}`
   );
@@ -211,7 +226,7 @@ const loadComparisonData = async (dataset) => {
     templateHeaders.value = [
       {
         value: "name",
-        label: "Name",
+        label: "Candidate",
       },
       {
         value: "time",
@@ -219,7 +234,7 @@ const loadComparisonData = async (dataset) => {
       },
       {
         value: "averageScore",
-        label: "Average Score",
+        label: "Overall score",
         sortable: true,
       },
       ...templateList.value,
@@ -320,6 +335,7 @@ onMounted(() => {
 
 <styles lang="scss">
 .compare {
+  margin-bottom: 60px;
   &__header {
     display: flex;
     justify-content: space-between;
@@ -353,10 +369,20 @@ onMounted(() => {
     line-height: 20px;
     font-weight: 400;
     color: var(--color-text-secondary);
-    margin-bottom: 12px;
+    margin-bottom: 24px;
   }
   &__time {
     color: var(--color-text-secondary);
+  }
+  &__table {
+    &__name {
+      text-decoration: underline;
+      margin-bottom: 2px;
+    }
+    &__email {
+      font-size: 12px;
+      color: var(--color-text-secondary);
+    }
   }
 }
 </styles>
