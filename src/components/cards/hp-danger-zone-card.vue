@@ -10,7 +10,7 @@
           <p class="hp-danger-zone__subtitle">
             This is a permanent deletion, all related data will be lost.
           </p>
-          <p class="hp-danger-zone__warning">This action is not reversable</p>
+          <p class="hp-danger-zone__warning">This action is not reversible</p>
           <hp-input
             ref="inputRef"
             icon="locked"

@@ -303,6 +303,7 @@ const completedTemplates = computed(() => {
     &__button-group {
       display: flex;
       align-items: center;
+      gap: 6px;
       &__button {
         margin-right: 8px;
       }
