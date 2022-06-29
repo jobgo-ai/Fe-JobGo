@@ -27,7 +27,7 @@
           />
         </div>
         <div
-          v-if="filter.dataset === 'templates'"
+          v-if="filter.dataset === 'skills'"
           class="compare__filters__dropdown"
         >
           <hp-multi-select
