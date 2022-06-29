@@ -26,12 +26,14 @@
             placeholder="Search by candidate"
           />
         </div>
-        <div class="compare__filters__dropdown">
+        <div
+          v-if="filter.dataset === 'templates'"
+          class="compare__filters__dropdown"
+        >
           <hp-multi-select
             label="All Skills"
             :options="skillList"
             name="skills"
-            :isDisabled="filter.dataset === 'templates'"
             :maxItemsSelected="5"
             v-model="filter.skills"
           ></hp-multi-select>
