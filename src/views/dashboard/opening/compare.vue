@@ -137,10 +137,10 @@ const filter = ref({
 });
 
 const determineOutcome = (a, b) => {
-  if (a.toFixed(1) > b.toFixed(1)) {
+  if (a?.toFixed(1) > b?.toFixed(1)) {
     return "positive";
   }
-  if (b.toFixed(1) > a.toFixed(1)) {
+  if (b?.toFixed(1) > a?.toFixed(1)) {
     return "negative";
   }
   return "neutral";
