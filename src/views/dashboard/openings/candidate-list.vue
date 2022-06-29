@@ -15,12 +15,22 @@
     <div v-if="opening.statistics">
       <div class="candidate-list__header">
         <hp-abstract-avatar :abstractKey="opening.artwork" />
-        <div class="candidate-list__header__button-group">
+        <div
+          v-if="!isCandidateListLoading"
+          class="candidate-list__header__button-group"
+        >
           <hp-button
             :to="`/opening/${opening.reference}/edit`"
             icon="pencil"
-            label="Edit opening"
+            :label="candidates.length <= 1 ? 'Edit interview' : null"
           ></hp-button>
+          <div v-if="candidates.length > 1">
+            <hp-button
+              :to="`/opening/${opening.reference}/compare`"
+              label="Compare"
+              icon="discover"
+            ></hp-button>
+          </div>
         </div>
       </div>
       <div ref="scrollContainer" class="candidate-list__scroll-container">
@@ -344,8 +354,8 @@ watch(
     &__button-group {
       display: flex;
       align-items: center;
-      &__button {
-        margin-right: 6px;
+      > * {
+        margin-left: 8px;
       }
     }
   }

@@ -27,11 +27,6 @@
               @click="isEditCandidateModalOpen = true"
               icon="pencil"
             ></hp-button>
-            <hp-button
-              :to="`/opening/${opening.reference}/compare`"
-              label="Compare candidates"
-              primary
-            ></hp-button>
           </div>
         </div>
         <div class="candidate-details__interviews">
