@@ -187,6 +187,7 @@ watch(
         background-color: var(--color-panel);
         text-transform: uppercase;
         letter-spacing: 0.01em;
+        position: relative;
         &:first-child {
           padding: 12px 24px;
           text-align: left;
@@ -207,10 +208,8 @@ watch(
           display: flex;
           align-items: center;
           justify-content: center;
-          position: relative;
           &__content {
             display: block;
-            position: relative;
           }
         }
         &__icon {
