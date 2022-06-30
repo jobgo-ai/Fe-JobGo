@@ -23,7 +23,7 @@
             :to="`/opening/${opening.reference}/edit`"
             icon="pencil"
             class="candidate-list__header__button-group__edit-button"
-            :label="candidates.length <= 1 ? 'Edit interview' : null"
+            :label="candidates.length <= 1 ? 'Edit opening' : null"
           ></hp-button>
           <div v-if="candidates.length > 1">
             <hp-button
