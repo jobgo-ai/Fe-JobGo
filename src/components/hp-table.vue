@@ -189,7 +189,7 @@ watch(
         letter-spacing: 0.01em;
         position: relative;
         &:first-child {
-          padding: 12px 24px;
+          padding: 12px 12px;
           text-align: left;
           border-top-left-radius: 12px;
           border: 1px solid var(--color-border);
@@ -208,8 +208,13 @@ watch(
           display: flex;
           align-items: center;
           justify-content: center;
+          margin: 0 12px;
           &__content {
             display: block;
+            overflow: hidden;
+            max-width: 100%;
+            text-overflow: ellipsis;
+            white-space: nowrap;
           }
         }
         &__icon {
