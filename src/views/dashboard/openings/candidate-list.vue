@@ -76,7 +76,7 @@
             <div
               class="candidate-list__candidate-list__dropdown-target"
               @click="isCandidateFlyoutOpen = !isCandidateFlyoutOpen"
-              ref="dropdownTarget"
+              ref="candidateDropdownTarget"
             >
               <div class="candidate-list__candidate-list__dropdown-target__tag">
                 {{ filters.state }} candidates
@@ -98,7 +98,7 @@
                   >
                     <button
                       class="candidate-list__flyout__options__button"
-                      @click="handleFilterChange(state)"
+                      @click="handleCandidateFilterChange(state)"
                       type="button"
                     >
                       {{ state.label }}
@@ -119,7 +119,7 @@
             <div
               class="candidate-list__candidate-list__dropdown-target"
               @click="isTemplateFlyoutOpen = !isTemplateFlyoutOpen"
-              ref="dropdownTarget"
+              ref="templateDropdownTarget"
               v-if="templateList && templateList.length > 1"
             >
               <div
@@ -147,7 +147,7 @@
                   >
                     <button
                       class="candidate-list__flyout__options__button"
-                      @click="handleFilterChange(template)"
+                      @click="handleTemplateFilterChange(template)"
                       type="button"
                     >
                       {{ template.label }}
@@ -259,7 +259,7 @@ const search = ref("");
 const filters = ref({
   search: useDebounce(search, 300),
   template: "all",
-  state: "all",
+  state: "active",
 });
 const offset = ref(0);
 
@@ -270,13 +270,15 @@ const getUrl = () => {
   const limit = 15;
   let url = `openings/${route.params.openingRef}/candidates`;
   var params = new URLSearchParams([["limit", limit]]);
-  params.append("state", "active");
   params.append("offset", offset.value);
   if (filters.value.search !== "") {
     params.append("search", filters.value.search);
   }
   if (filters.value.template !== "all") {
     params.append("template", filters.value.template);
+  }
+  if (filters.value.state !== "all") {
+    params.append("state", filters.value.state);
   }
 
   return `${url}?${params.toString()}`;
@@ -295,7 +297,8 @@ const route = useRoute();
 const isAddCandidateModalOpen = ref(false);
 const isTemplateFlyoutOpen = ref(false);
 const isCandidateFlyoutOpen = ref(false);
-const dropdownTarget = ref(null);
+const candidateDropdownTarget = ref(null);
+const templateDropdownTarget = ref(null);
 
 const stateOptions = [
   {
@@ -335,12 +338,17 @@ const templateLabel = computed(() => {
   )?.label;
 });
 
-const handleFilterChange = (template) => {
+const handleCandidateFilterChange = (template) => {
+  isCandidateFlyoutOpen.value = false;
+  filters.value.state = template.value;
+};
+
+const handleTemplateFilterChange = (template) => {
   isTemplateFlyoutOpen.value = false;
   filters.value.template = template.value;
 };
 
-onClickOutside(dropdownTarget, (event) => {
+onClickOutside(templateDropdownTarget, (event) => {
   if (!isTemplateFlyoutOpen.value) {
     return;
   }
@@ -348,6 +356,16 @@ onClickOutside(dropdownTarget, (event) => {
     return;
   }
   isTemplateFlyoutOpen.value = false;
+});
+
+onClickOutside(candidateDropdownTarget, (event) => {
+  if (!isCandidateFlyoutOpen.value) {
+    return;
+  }
+  if (event.target.className.includes("candidate-list__flyout")) {
+    return;
+  }
+  isCandidateFlyoutOpen.value = false;
 });
 
 watch(

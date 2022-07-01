@@ -39,31 +39,29 @@
           :isDisabled="isArchivingCandidate || isUpdatingCandidate"
           name="email"
         ></hp-input>
-
-        <hp-dropdown
-          class="candidate-interview-card__dropdown"
-          name="state"
-          label="Status"
-          :options="stateOptions"
-          left
-        >
-        </hp-dropdown>
       </div>
       <div
         :class="`candidate-modal__actions ${
           !isAddNew ? 'candidate-modal__actions--two-button' : ''
         }`"
       >
-        <hp-tooltip>
+        <hp-tooltip v-if="!isAddNew && candidate.state !== 'archived'">
           <hp-button
-            @handleClick="archiveCandidate(candidate)"
-            v-if="!isAddNew"
+            @handleClick="changeCandidateState('archived')"
             :isLoading="isArchivingCandidate"
             :isDisabled="isArchivingCandidate || isUpdatingCandidate"
             icon="archive"
-            danger
           ></hp-button>
           <template #content> Archive candidate </template>
+        </hp-tooltip>
+        <hp-tooltip v-if="!isAddNew && candidate.state === 'archived'">
+          <hp-button
+            @handleClick="changeCandidateState('active')"
+            :isLoading="isArchivingCandidate"
+            :isDisabled="isArchivingCandidate || isUpdatingCandidate"
+            icon="folder"
+          ></hp-button>
+          <template #content> Unarchive candidate </template>
         </hp-tooltip>
         <hp-button
           primary
@@ -182,17 +180,6 @@ const content = computed(() => {
 const route = useRoute();
 const router = useRouter();
 
-const stateOptions = [
-  {
-    label: "Active",
-    value: "active",
-  },
-  {
-    label: "Archived",
-    value: "archived",
-  },
-];
-
 const { setBreadcrumbs } = useBreadcrumbs();
 
 const schema = yup.object({
@@ -276,13 +263,13 @@ const onSubmit = handleSubmit(async (values) => {
   emits("close");
 });
 
-const archiveCandidate = async () => {
+const changeCandidateState = async (state) => {
   isArchivingCandidate.value = true;
   const archiveCandidate = usePut(
     `candidates/${props.candidate.reference}/state`
   );
   await archiveCandidate.put({
-    state: "archived",
+    state,
   });
   await fetchCandidates();
   setToast({
