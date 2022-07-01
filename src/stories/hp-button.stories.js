@@ -17,6 +17,7 @@ const Template = (args) => ({
   template: `<div>
     <div style="display:flex; margin-bottom: 16px; margin-top:100px;">
       <hp-button style="margin-right: 12px" v-bind="args"> </hp-button>
+      <hp-button style="margin-right: 12px" label="Link button" tooltip="im a tooltip"> </hp-button>
       <hp-button style="margin-right: 12px" :to="{ name: 'home' }" label="Link button"> </hp-button>
       <hp-button style="margin-right: 12px" @click="buttonIsLoading = !buttonIsLoading" label="Loading" :isLoading="buttonIsLoading" />
       <hp-button style="margin-right: 12px" :isDisabled="true" label="Disabled" />
@@ -28,6 +29,7 @@ const Template = (args) => ({
     </div>
     <div style="display:flex">
       <hp-button primary style="margin-right: 12px" v-bind="args"> </hp-button>
+      <hp-button style="margin-right: 12px" label="Link button" tooltip="im a tooltip"> </hp-button>
       <hp-button primary style="margin-right: 12px" :to="{ name: 'home' }" label="Link button"> </hp-button>
       <hp-button primary style="margin-right: 12px" @click="buttonIsLoading = !buttonIsLoading" label="Loading" :isLoading="buttonIsLoading" />
       <hp-button primary style="margin-right: 12px" :isDisabled="true" label="Disabled" />

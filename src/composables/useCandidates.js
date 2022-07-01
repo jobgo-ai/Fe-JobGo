@@ -8,6 +8,7 @@ const hasMoreToLoad = ref(true);
 const isCandidateLoading = ref(true);
 const candidate = ref({});
 const candidates = ref([]);
+const candidateListFilter = ref("active");
 
 export default () => {
   const route = useRoute();
@@ -31,10 +32,10 @@ export default () => {
     isInfiniteLoading.value = false;
   };
 
-  const fetchCandidates = async (url, state = "active") => {
+  const fetchCandidates = async (url) => {
     const endpoint = url
       ? url
-      : `openings/${route.params.openingRef}/candidates?state=${state}`;
+      : `openings/${route.params.openingRef}/candidates?state=${candidateListFilter.value}`;
     isCandidateListLoading.value = true;
     const getCandidates = useGet(endpoint);
     await getCandidates.get();
@@ -60,5 +61,6 @@ export default () => {
     fetchMoreCandidates,
     fetchCandidates,
     fetchCandidate,
+    candidateListFilter,
   };
 };

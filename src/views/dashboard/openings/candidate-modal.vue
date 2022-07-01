@@ -197,8 +197,13 @@ const { handleSubmit, meta } = useForm({
 const { fetchChecklist } = useGettingStarted();
 const { fetchOpening, updateOpenings } = useOpenings();
 
-const { fetchCandidates, candidates, fetchCandidate, candidate } =
-  useCandidates();
+const {
+  fetchCandidates,
+  candidates,
+  fetchCandidate,
+  candidate,
+  candidateListFilter,
+} = useCandidates();
 
 const handleFileUpload = (file) => {
   csv.value = file;
@@ -221,7 +226,7 @@ const onSubmit = handleSubmit(async (values) => {
       title: "Well done!",
       message: "Candidate created successfully",
     });
-    fetchCandidates();
+    candidateListFilter.value = "active";
     router.push(
       `/openings/${route.params.openingRef}?candidate=${postCandidate.data.value.candidate.reference}`
     );
@@ -274,8 +279,8 @@ const changeCandidateState = async (state) => {
   });
 
   fetchCandidate(props.candidate.reference);
+  candidateListFilter.value = "active";
   // Passing the opossite of the state, thus the list filter state
-  await fetchCandidates(null, state === "archived" ? "active" : "archived");
   setToast({
     type: "success",
     title: "What a change!",

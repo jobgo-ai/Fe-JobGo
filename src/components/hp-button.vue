@@ -4,7 +4,7 @@
       :is="computedTag"
       :to="to"
       :href="href"
-      @click="emit('handleClick')"
+      @click="handleInternalClick"
       class="hp-button__button"
       :class="buttonClasses"
       :type="type ? type : 'button'"
@@ -117,15 +117,14 @@ const props = defineProps({
 });
 
 const isDropdownOpen = ref(false);
-
 const isFocused = ref(false);
 
 const computedTag = computed(() => {
-  if (props.to !== undefined && props.to !== null) {
+  if (props.to !== undefined && props.to !== null && !props.isDisabled) {
     return "router-link";
   }
 
-  if (props.href !== undefined && props.href !== null) {
+  if (props.href !== undefined && props.href !== null && !props.isDisabled) {
     return "a";
   }
 
@@ -134,6 +133,13 @@ const computedTag = computed(() => {
 
 const handleFocus = () => {
   isFocused.value = true;
+};
+
+const handleInternalClick = () => {
+  if (props.isDisabled) {
+    return;
+  }
+  emit("handleClick");
 };
 
 const containerClasses = computed(() => {
@@ -209,6 +215,10 @@ const emit = defineEmits(["handleClick"]);
     color: var(--color-accent-forground);
   }
 
+  &--primary .hp-button__button__icon--solo {
+    color: var(--color-accent-forground);
+  }
+
   // Default
   &__button {
     font-family: "Inter", sans-serif;
@@ -268,8 +278,8 @@ const emit = defineEmits(["handleClick"]);
         color: var(--color-error);
       }
       &--disabled {
-        pointer-events: none;
         opacity: 0.4;
+        pointer-events: none;
       }
     }
 
@@ -294,6 +304,7 @@ const emit = defineEmits(["handleClick"]);
         opacity: 0.7;
         color: var(--color-accent-forground);
         background-color: var(--color-error);
+        cursor: not-allowed;
         &:hover {
           background-color: var(--color-error);
         }

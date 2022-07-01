@@ -76,7 +76,7 @@
               ref="candidateDropdownTarget"
             >
               <div class="candidate-list__candidate-list__dropdown-target__tag">
-                {{ filters.state }} candidates
+                {{ candidateListFilter }} candidates
               </div>
               <hp-icon
                 class="candidate-list__candidate-list__dropdown-target__icon"
@@ -102,7 +102,7 @@
                       <hp-radio
                         name="template"
                         tabindex="-1"
-                        :checked="state.value === filters.state"
+                        :checked="state.value === candidateListFilter"
                       />
                     </button>
                     <div
@@ -252,11 +252,20 @@ const props = defineProps({
   },
 });
 
+const {
+  fetchCandidates,
+  isCandidateListLoading,
+  hasMoreToLoad,
+  candidates,
+  fetchMoreCandidates,
+  isInfiniteLoading,
+  candidateListFilter,
+} = useCandidates();
+
 const search = ref("");
 const filters = ref({
   search: useDebounce(search, 300),
   template: "all",
-  state: "active",
 });
 const offset = ref(0);
 
@@ -274,21 +283,10 @@ const getUrl = () => {
   if (filters.value.template !== "all") {
     params.append("template", filters.value.template);
   }
-  if (filters.value.state !== "all") {
-    params.append("state", filters.value.state);
-  }
+  params.append("state", candidateListFilter.value);
 
   return `${url}?${params.toString()}`;
 };
-
-const {
-  fetchCandidates,
-  isCandidateListLoading,
-  hasMoreToLoad,
-  candidates,
-  fetchMoreCandidates,
-  isInfiniteLoading,
-} = useCandidates();
 
 const route = useRoute();
 const isAddCandidateModalOpen = ref(false);
@@ -335,9 +333,9 @@ const templateLabel = computed(() => {
   )?.label;
 });
 
-const handleCandidateFilterChange = (template) => {
+const handleCandidateFilterChange = (state) => {
   isCandidateFlyoutOpen.value = false;
-  filters.value.state = template.value;
+  candidateListFilter.value = state.value;
 };
 
 const handleTemplateFilterChange = (template) => {
@@ -403,6 +401,17 @@ watch(
 
 watch(
   () => filters,
+  () => {
+    offset.value = 0;
+    hasMoreToLoad.value = true;
+    const url = getUrl();
+    fetchCandidates(url);
+  },
+  { deep: true }
+);
+
+watch(
+  () => candidateListFilter,
   () => {
     offset.value = 0;
     hasMoreToLoad.value = true;
