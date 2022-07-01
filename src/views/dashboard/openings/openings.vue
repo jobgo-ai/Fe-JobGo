@@ -54,7 +54,7 @@
             >
             </hp-opening-card>
             <div v-if="state === 'archived' && openings.length === 0">
-              No archived interviews
+              No archived openings
             </div>
           </ol>
           <hp-spinner

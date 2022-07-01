@@ -279,9 +279,8 @@ const changeCandidateState = async (state) => {
   });
 
   fetchCandidate(props.candidate.reference);
+  candidateListFilter.value = state !== "active" ? "archived" : "active";
   fetchCandidates();
-  candidateListFilter.value = "active";
-  // Passing the opossite of the state, thus the list filter state
   setToast({
     type: "success",
     title: "What a change!",
