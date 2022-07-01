@@ -73,10 +73,52 @@
         </div>
         <div class="candidate-list__candidate-list">
           <div class="candidate-list__candidate-list__header">
-            <div>Candidates</div>
             <div
               class="candidate-list__candidate-list__dropdown-target"
-              @click="isFlyoutOpen = !isFlyoutOpen"
+              @click="isCandidateFlyoutOpen = !isCandidateFlyoutOpen"
+              ref="dropdownTarget"
+            >
+              <div class="candidate-list__candidate-list__dropdown-target__tag">
+                {{ filters.state }} candidates
+              </div>
+              <hp-icon
+                class="candidate-list__candidate-list__dropdown-target__icon"
+                name="chevron-down"
+              ></hp-icon>
+            </div>
+            <transition name="flyout-transition">
+              <div
+                v-if="isCandidateFlyoutOpen"
+                class="candidate-list__flyout candidate-list__flyout--left"
+              >
+                <ol class="candidate-list__flyout__options">
+                  <li
+                    v-for="(state, index) in stateOptions"
+                    class="candidate-list__flyout__options__option"
+                  >
+                    <button
+                      class="candidate-list__flyout__options__button"
+                      @click="handleFilterChange(state)"
+                      type="button"
+                    >
+                      {{ state.label }}
+                      <hp-radio
+                        name="template"
+                        tabindex="-1"
+                        :checked="state.value === filters.state"
+                      />
+                    </button>
+                    <div
+                      class="candidate-list__flyout__items__divider"
+                      v-if="index === stateOptions.length - 2"
+                    ></div>
+                  </li>
+                </ol>
+              </div>
+            </transition>
+            <div
+              class="candidate-list__candidate-list__dropdown-target"
+              @click="isTemplateFlyoutOpen = !isTemplateFlyoutOpen"
               ref="dropdownTarget"
               v-if="templateList && templateList.length > 1"
             >
@@ -94,7 +136,10 @@
               ></hp-icon>
             </div>
             <transition name="flyout-transition">
-              <div v-if="isFlyoutOpen" class="candidate-list__flyout">
+              <div
+                v-if="isTemplateFlyoutOpen"
+                class="candidate-list__flyout candidate-list__flyout--right"
+              >
                 <ol class="candidate-list__flyout__options">
                   <li
                     v-for="(template, index) in templateList"
@@ -214,6 +259,7 @@ const search = ref("");
 const filters = ref({
   search: useDebounce(search, 300),
   template: "all",
+  state: "all",
 });
 const offset = ref(0);
 
@@ -247,8 +293,24 @@ const {
 
 const route = useRoute();
 const isAddCandidateModalOpen = ref(false);
-const isFlyoutOpen = ref(false);
+const isTemplateFlyoutOpen = ref(false);
+const isCandidateFlyoutOpen = ref(false);
 const dropdownTarget = ref(null);
+
+const stateOptions = [
+  {
+    label: "Active",
+    value: "active",
+  },
+  {
+    label: "Archived",
+    value: "archived",
+  },
+  {
+    label: "All",
+    value: "all",
+  },
+];
 
 const templateList = computed(() => {
   return opening.value.templates
@@ -274,18 +336,18 @@ const templateLabel = computed(() => {
 });
 
 const handleFilterChange = (template) => {
-  isFlyoutOpen.value = false;
+  isTemplateFlyoutOpen.value = false;
   filters.value.template = template.value;
 };
 
 onClickOutside(dropdownTarget, (event) => {
-  if (!isFlyoutOpen.value) {
+  if (!isTemplateFlyoutOpen.value) {
     return;
   }
   if (event.target.className.includes("candidate-list__flyout")) {
     return;
   }
-  isFlyoutOpen.value = false;
+  isTemplateFlyoutOpen.value = false;
 });
 
 watch(
@@ -442,6 +504,9 @@ watch(
       align-items: center;
       position: relative;
       cursor: pointer;
+      :first-letter {
+        text-transform: uppercase;
+      }
       &__view {
         margin-right: 4px;
         color: var(--color-text-secondary);
@@ -461,9 +526,14 @@ watch(
     width: 256px;
     padding: 8px;
     z-index: $z-index-1000;
-    right: 0;
     top: 30px;
     transition: all 0.25s cubic-bezier(0.17, 0.67, 0.83, 0.67);
+    &--left {
+      left: 0;
+    }
+    &--right {
+      right: 0;
+    }
     &__items {
       display: flex;
       flex-direction: column;

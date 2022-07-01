@@ -39,6 +39,15 @@
           :isDisabled="isArchivingCandidate || isUpdatingCandidate"
           name="email"
         ></hp-input>
+
+        <hp-dropdown
+          class="candidate-interview-card__dropdown"
+          name="state"
+          label="Status"
+          :options="stateOptions"
+          left
+        >
+        </hp-dropdown>
       </div>
       <div
         :class="`candidate-modal__actions ${
@@ -116,6 +125,7 @@ import HpInput from "@/components/form/hp-input.vue";
 import HpButton from "@/components/hp-button.vue";
 import HpIcon from "@/components/hp-icon.vue";
 import HpSpinner from "@/components/hp-spinner.vue";
+import HpDropdown from "@/components/form/hp-dropdown.vue";
 import HpTooltip from "@/components/hp-tooltip.vue";
 import HpDropzone from "@/components/hp-dropzone.vue";
 
@@ -172,11 +182,23 @@ const content = computed(() => {
 const route = useRoute();
 const router = useRouter();
 
+const stateOptions = [
+  {
+    label: "Active",
+    value: "active",
+  },
+  {
+    label: "Archived",
+    value: "archived",
+  },
+];
+
 const { setBreadcrumbs } = useBreadcrumbs();
 
 const schema = yup.object({
   name: yup.string().max(50).required("First name is required"),
   email: yup.string().max(100).email("Email must be valid").nullable(),
+  state: yup.string(),
 });
 
 const { handleSubmit, meta } = useForm({
@@ -329,7 +351,7 @@ const handleCsvUpload = () => {
     padding: 24px;
     border-bottom: 1px dashed var(--color-border);
     width: 100%;
-    padding-bottom: 0;
+    padding-bottom: 58px;
   }
   &__actions {
     padding: 16px 24px;
