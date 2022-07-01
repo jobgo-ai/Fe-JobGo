@@ -283,7 +283,9 @@ const getUrl = () => {
   if (filters.value.template !== "all") {
     params.append("template", filters.value.template);
   }
-  params.append("state", candidateListFilter.value);
+  if (candidateListFilter.value !== "all") {
+    params.append("state", candidateListFilter.value);
+  }
 
   return `${url}?${params.toString()}`;
 };
