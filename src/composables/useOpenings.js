@@ -10,6 +10,10 @@ const openings = ref([]);
 const opening = ref([]);
 const getOpenings = useGet();
 
+import useCandidates from "@/composables/useCandidates";
+
+const { candidateListFilter } = useCandidates();
+
 const fetchOpenings = async (isLoadMore = false, state = "active") => {
   if (getOpenings.loading.value) {
     getOpenings.controller.abort();
@@ -78,6 +82,7 @@ const createOpening = async (opening) => {
 const fetchOpening = async (openingRef) => {
   const getOpening = useGet(`openings/${openingRef}`);
   await getOpening.get();
+  candidateListFilter.value = "active";
   opening.value = getOpening.data.value.opening;
 };
 
