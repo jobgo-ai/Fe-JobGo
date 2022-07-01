@@ -273,6 +273,7 @@ const changeCandidateState = async (state) => {
     state,
   });
 
+  fetchCandidate(props.candidate.reference);
   // Passing the opossite of the state, thus the list filter state
   await fetchCandidates(null, state === "archived" ? "active" : "archived");
   setToast({

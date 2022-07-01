@@ -32,7 +32,6 @@ export default () => {
   };
 
   const fetchCandidates = async (url, state = "active") => {
-    console.log(state);
     const endpoint = url
       ? url
       : `openings/${route.params.openingRef}/candidates?state=${state}`;
@@ -50,6 +49,7 @@ export default () => {
     candidate.value = getCandidate.data.value.candidate;
     isCandidateLoading.value = false;
   };
+
   return {
     isCandidateListLoading,
     isCandidateLoading,
