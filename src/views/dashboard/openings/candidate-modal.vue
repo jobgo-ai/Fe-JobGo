@@ -47,6 +47,7 @@
       >
         <hp-tooltip v-if="!isAddNew && candidate.state !== 'archived'">
           <hp-button
+            class="candidate-modal__archive"
             @handleClick="changeCandidateState('archived')"
             :isLoading="isArchivingCandidate"
             :isDisabled="isArchivingCandidate || isUpdatingCandidate"

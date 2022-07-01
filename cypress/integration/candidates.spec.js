@@ -25,6 +25,6 @@ describe("candidates", () => {
     cy.contains("PERMANENT_OPENING").click();
     cy.contains("Testing person").click();
     cy.contains("Edit details").click();
-    cy.get(".hp-button__button__icon--danger").click();
+    cy.get(".candidate-modal__archive").click();
   });
 });
