@@ -338,7 +338,6 @@ const handleCsvUpload = () => {
     padding: 24px;
     border-bottom: 1px dashed var(--color-border);
     width: 100%;
-    padding-bottom: 58px;
   }
   &__actions {
     padding: 16px 24px;

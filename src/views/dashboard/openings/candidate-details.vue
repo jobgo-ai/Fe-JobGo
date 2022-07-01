@@ -54,6 +54,7 @@
                 :interview="interview"
                 :index="index"
                 :opening="opening"
+                :candidate="candidate"
               />
             </li>
           </ul>

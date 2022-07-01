@@ -15,10 +15,7 @@
     <div v-if="opening.statistics">
       <div class="candidate-list__header">
         <hp-abstract-avatar :abstractKey="opening.artwork" />
-        <div
-          v-if="!isCandidateListLoading"
-          class="candidate-list__header__button-group"
-        >
+        <div class="candidate-list__header__button-group">
           <hp-button
             :to="`/opening/${opening.reference}/edit`"
             icon="pencil"
