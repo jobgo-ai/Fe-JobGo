@@ -66,7 +66,7 @@
       <hp-button
         class="candidate-details__interview-grid__item__actions--icon"
         icon="copy"
-        v-if="candidate.state !== 'archived'"
+        :isDisabled="candidate.state === 'archived'"
         @click="copyInterview(interview)"
       ></hp-button>
     </div>
@@ -97,7 +97,7 @@
       <hp-button
         class="candidate-details__interview-grid__item__actions--icon"
         icon="copy"
-        v-if="candidate.state !== 'archived'"
+        :isDisabled="candidate.state === 'archived'"
         @click="copyInterview(interview)"
       ></hp-button>
     </div>
@@ -138,7 +138,7 @@
       <hp-button
         class="candidate-details__interview-grid__item__actions--icon"
         icon="copy"
-        v-if="candidate.state !== 'archived'"
+        :isDisabled="candidate.state === 'archived'"
         @click="copyInterview(interview)"
       ></hp-button>
     </div>
@@ -169,19 +169,19 @@
         :href="calculateInterviewLink(interview)"
         primary
         label="Start interview"
-        v-if="candidate.state !== 'archived'"
+        :isDisabled="candidate.state === 'archived'"
       ></hp-button>
       <hp-button
         class="candidate-details__interview-grid__item__actions--icon"
         icon="copy"
-        v-if="candidate.state !== 'archived'"
+        :isDisabled="candidate.state === 'archived'"
         @click="copyInterview(interview)"
       ></hp-button>
     </div>
     <div class="candidate-details__interview-grid__item__actions" v-else>
       <hp-button
         @click="copyInterview(interview)"
-        v-if="candidate.state !== 'archived'"
+        :isDisabled="candidate.state === 'archived'"
         icon="copy"
         label="Copy link"
       ></hp-button>

@@ -268,6 +268,7 @@ const emit = defineEmits(["handleClick"]);
         color: var(--color-error);
       }
       &--disabled {
+        pointer-events: none;
         opacity: 0.4;
       }
     }

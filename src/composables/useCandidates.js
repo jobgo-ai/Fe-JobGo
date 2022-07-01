@@ -31,10 +31,11 @@ export default () => {
     isInfiniteLoading.value = false;
   };
 
-  const fetchCandidates = async (url) => {
+  const fetchCandidates = async (url, state = "active") => {
+    console.log(state);
     const endpoint = url
       ? url
-      : `openings/${route.params.openingRef}/candidates?state=active`;
+      : `openings/${route.params.openingRef}/candidates?state=${state}`;
     isCandidateListLoading.value = true;
     const getCandidates = useGet(endpoint);
     await getCandidates.get();

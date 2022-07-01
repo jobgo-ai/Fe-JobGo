@@ -272,19 +272,14 @@ const changeCandidateState = async (state) => {
   await archiveCandidate.put({
     state,
   });
-  await fetchCandidates();
+
+  // Passing the opossite of the state, thus the list filter state
+  await fetchCandidates(null, state === "archived" ? "active" : "archived");
   setToast({
     type: "success",
     title: "What a change!",
     message: "Candidate updated successfully",
   });
-  if (candidates.value.length === 0) {
-    router.push(`/openings/${route.params.openingRef}`);
-  } else {
-    router.push(
-      `/openings/${route.params.openingRef}?candidate=${candidates.value[0].reference}`
-    );
-  }
   updateOpenings();
   emits("close");
 };
