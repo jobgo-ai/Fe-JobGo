@@ -260,9 +260,9 @@ const onSubmit = handleSubmit(async (values) => {
         to: `/opening/${route.params.openingRef}?candidate=${candidate.value.reference}`,
       },
     ]);
-    fetchCandidates();
   }
   fetchOpening(route.params.openingRef);
+  fetchCandidates();
   updateOpenings();
   fetchChecklist();
   isUpdatingCandidate.value = false;
