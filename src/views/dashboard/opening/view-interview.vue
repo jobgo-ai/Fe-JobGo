@@ -45,7 +45,7 @@
           <h3 class="view-interview__header">Warmup</h3>
           <hp-badge
             icon="chronometer"
-            :content="(interview.ceremony.warmup.duration / 60).toFixed(0)"
+            :content="interview.ceremony.warmup.duration"
           ></hp-badge>
         </div>
         <div class="view-interview__ceremony__textarea">
@@ -57,7 +57,7 @@
           <h3 class="view-interview__header">Cooldown</h3>
           <hp-badge
             icon="chronometer"
-            :content="(interview.ceremony.cooldown.duration / 60).toFixed(0)"
+            :content="interview.ceremony.cooldown.duration"
           ></hp-badge>
         </div>
         <div class="view-interview__ceremony__textarea">
