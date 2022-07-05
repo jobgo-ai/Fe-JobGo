@@ -125,7 +125,11 @@
         :size="15"
       ></hp-icon>
 
-      {{ formatDate(interview.interview.evaluations[0].terminated) }}
+      {{
+        formatDate(
+          interview.interview.evaluations.find((e) => e.terminated).terminated
+        )
+      }}
     </div>
     <div class="candidate-details__interview-grid__item__actions">
       <hp-dropdown :label="'View full results'" left>
