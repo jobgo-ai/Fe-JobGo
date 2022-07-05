@@ -78,7 +78,10 @@
         name="user"
         :size="15"
       ></hp-icon>
-      {{ interview.interview.evaluations[0].interviewerName }}
+      {{
+        interview.interview.evaluations.find((e) => e.terminated)
+          .interviewerName
+      }}
     </div>
     <div class="candidate-details__interview-grid__item__icon-text">
       <hp-icon
@@ -87,7 +90,11 @@
         :size="15"
       ></hp-icon>
 
-      {{ formatDate(interview.interview.evaluations[0].terminated) }}
+      {{
+        formatDate(
+          interview.interview.evaluations.find((e) => e.terminated).terminated
+        )
+      }}
     </div>
     <div class="candidate-details__interview-grid__item__actions">
       <hp-button
