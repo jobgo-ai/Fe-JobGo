@@ -1,5 +1,5 @@
 <template>
-  <div ref="containerRef" class="edit-interview__container">
+  <div class="edit-interview__container">
     <hp-modal
       :isOpen="isAddQuestionsModalOpen"
       @close="isAddQuestionsModalOpen = false"
@@ -190,7 +190,7 @@
               v-model="interview.questions"
               tag="transition-group"
               item-key="reference"
-              handle=".edit-interview__handle"
+              handle=".edit-interview__question-card__handle"
               @change="handleDragChange"
               v-bind="dragOptions"
               @start="drag = true"
@@ -207,52 +207,64 @@
                   @keydown.up.prevent="moveItem(false, index)"
                 >
                   <div class="edit-interview__question-card__container">
-                    <hp-badge icon="questions" :content="index + 1" />
-                    <hp-icon
-                      name="drag"
-                      class="edit-interview__handle"
-                    ></hp-icon>
-                  </div>
-                  <div class="edit-interview__question-card__content">
-                    {{ element.content }}
-                  </div>
-                  <hp-question-card-stats hasTooltips :question="element" />
-                  <div class="edit-interview__question-card__actions">
                     <div
-                      class="
-                        edit-interview__question-card__actions__button-group
-                      "
+                      class="edit-interview__question-card__handler-container"
                     >
-                      <hp-button
-                        v-if="hasEditPermission(element)"
-                        class="edit-interview__question-card__actions__button"
-                        label="Edit question"
-                        @handleClick="isEditQuestionDrawerOpen = element"
-                      ></hp-button>
-                      <hp-tooltip
-                        :delay="500"
-                        class="edit-interview__question-card__actions__button"
-                      >
-                        <hp-button
-                          @handleClick="isViewQuestionDrawerOpen = element"
-                          icon="eye"
-                        ></hp-button>
-                        <template #content>View question</template>
-                      </hp-tooltip>
+                      <hp-badge icon="questions" :content="index + 1" />
+                      <hp-icon
+                        name="drag"
+                        class="edit-interview__question-card__handle"
+                      ></hp-icon>
                     </div>
-                    <hp-tooltip
-                      :delay="500"
-                      class="edit-interview__question-card__actions__button"
-                    >
-                      <hp-button
-                        @handleClick="handleRemoveQuestion(element)"
-                        icon="trash"
-                        danger
-                      ></hp-button>
-                      <template #content
-                        >Remove question from interview</template
-                      >
-                    </hp-tooltip>
+                    <div class="edit-interview__question-card__content">
+                      {{ element.content }}
+                    </div>
+                    <div class="edit-interview__question-card__flyout">
+                      <hp-options-dropdown>
+                        <div class="edit-interview__question-card__options">
+                          <li
+                            v-if="hasEditPermission(element)"
+                            class="edit-interview__question-card__option"
+                            @click="isEditQuestionDrawerOpen = element"
+                          >
+                            <div
+                              class="
+                                edit-interview__question-card__option__icon
+                              "
+                            >
+                              <hp-icon size="16" name="pencil"></hp-icon>
+                            </div>
+                            Edit question
+                          </li>
+                          <li
+                            class="edit-interview__question-card__option"
+                            @click="isViewQuestionDrawerOpen = element"
+                          >
+                            <div
+                              class="
+                                edit-interview__question-card__option__icon
+                              "
+                            >
+                              <hp-icon size="16" name="eye"></hp-icon>
+                            </div>
+                            View question
+                          </li>
+                          <li
+                            class="edit-interview__question-card__option"
+                            @click="handleRemoveQuestion(element)"
+                          >
+                            <div
+                              class="
+                                edit-interview__question-card__option__icon
+                              "
+                            >
+                              <hp-icon size="16" name="trash"></hp-icon>
+                            </div>
+                            Remove question
+                          </li>
+                        </div>
+                      </hp-options-dropdown>
+                    </div>
                   </div>
                 </li>
               </template>
@@ -311,7 +323,6 @@ import { useRoute, useRouter } from "vue-router";
 import { useDebounceFn } from "@vueuse/core";
 import * as yup from "yup";
 import draggable from "vuedraggable";
-import { onClickOutside } from "@vueuse/core";
 
 // Views
 import Questions from "@/views/dashboard/opening/questions/questions.vue";
@@ -323,6 +334,7 @@ import HpInput from "@/components/form/hp-input.vue";
 import HpTooltip from "@/components/hp-tooltip.vue";
 import HpButton from "@/components/hp-button.vue";
 import HpModal from "@/components/hp-modal.vue";
+import HpOptionsDropdown from "@/components/hp-options-dropdown.vue";
 import HpCounter from "@/components/hp-counter.vue";
 import HpSwitch from "@/components/hp-switch.vue";
 import HpIcon from "@/components/hp-icon.vue";
@@ -331,7 +343,6 @@ import HpBadgeTag from "@/components/hp-badge-tag.vue";
 import HpDrawer from "@/components/hp-drawer.vue";
 import HpTextarea from "@/components/form/hp-textarea.vue";
 import HpSpinner from "@/components/hp-spinner.vue";
-import HpQuestionCardStats from "@/components/cards/hp-question-card-stats.vue";
 import HpDangerZone from "@/components/cards/hp-danger-zone-card.vue";
 import HpSaveIndicator from "@/components/hp-save-indicator.vue";
 import BulkQuestionModal from "@/components/modals/bulk-question-modal.vue";
@@ -357,13 +368,13 @@ const isLoading = ref(true);
 const isSaving = ref(false);
 const route = useRoute();
 const router = useRouter();
-const containerRef = ref(null);
-const isOverviewFlyoutOpen = ref(false);
+const isOptionFlyoutOpen = ref(false);
 const isAddQuestionDrawerOpen = ref(false);
 const isCreateQuestionDrawerOpen = ref(false);
 const isAddQuestionsModalOpen = ref(false);
 const isViewQuestionDrawerOpen = ref(false);
 const isEditQuestionDrawerOpen = ref(false);
+const flyoutTargets = ref([]);
 const { interview, fetchInterview, isInterviewLoading, setInterview } =
   useInterviews();
 const putInterview = usePut(`templates/${route.params.interviewRef}`);
@@ -513,14 +524,12 @@ const debouncedSubmit = () => {
 const { setBreadcrumbs } = useBreadcrumbs();
 useContextSave(meta);
 
-const overviewTarget = ref(null);
-
-onClickOutside(overviewTarget, (event) => {
-  if (!isOverviewFlyoutOpen.value) {
+const handleOptionHandleClick = (ref) => {
+  if (isOptionFlyoutOpen.value) {
     return;
   }
-  isOverviewFlyoutOpen.value = false;
-});
+  isOptionFlyoutOpen.value = ref;
+};
 
 onMounted(async () => {
   await fetchInterview(route.params.interviewRef);
@@ -677,11 +686,9 @@ const handleCloseEditDrawer = () => {
       }
     }
   }
-  &__question-cards {
-    padding-top: 16px;
-  }
   &__question-card {
     @include flyout;
+    border-radius: 8px;
     padding: 16px;
     box-shadow: none;
     margin-bottom: 16px;
@@ -690,13 +697,37 @@ const handleCloseEditDrawer = () => {
     }
     &__container {
       display: flex;
-      justify-content: space-between;
-      margin-bottom: 16px;
+    }
+    &__option {
+      display: flex;
+      align-items: center;
+      padding: 8px;
+      border-radius: $border-radius-sm;
+      line-height: 20px;
+      cursor: pointer;
+      white-space: pre;
+      transition: all 0.15s cubic-bezier(0.17, 0.67, 0.83, 0.67);
+      &:hover {
+        background-color: var(--color-forground-floating);
+      }
+      &__icon {
+        margin-right: 8px;
+        color: var(--color-text-secondary);
+      }
     }
     &__content {
       @include text-h5;
       font-weight: 500;
-      margin-bottom: 16px;
+      flex: 1;
+    }
+    &__handle {
+      cursor: grab;
+    }
+    &__handler-container {
+      display: flex;
+      flex-direction: row-reverse;
+      align-items: center;
+      margin-right: 16px;
     }
     &__actions {
       display: flex;
@@ -711,9 +742,6 @@ const handleCloseEditDrawer = () => {
         margin-right: 6px;
       }
     }
-  }
-  &__handle {
-    cursor: grab;
   }
 
   &__overview {
