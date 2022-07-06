@@ -32,7 +32,7 @@ describe("questions", () => {
       .type("THIS_IS_A_FAKE_QUESTION");
     cy.get(".hp-tagger__target").contains("Skills").click();
     cy.get(`[name='skills']`).type("Pepper");
-    cy.contains(`Pepper Spray`).click();
+    cy.contains(`Pepper Spray`).click({ force: true });
     cy.get(`[name='guidelines-0']`).type("TESTING_GUIDELINE_0");
     cy.contains("Add guideline").click();
     cy.get(`[name='guidelines-1']`).type("TESTING_GUIDELINE_1");
