@@ -722,6 +722,10 @@ const handleCloseEditDrawer = () => {
     }
     &__handle {
       cursor: grab;
+      margin-right: 8px;
+      &:active {
+        cursor: grabbing;
+      }
     }
     &__handler-container {
       display: flex;
