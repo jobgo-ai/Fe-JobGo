@@ -92,7 +92,8 @@
                 name="chronometer"
               ></hp-icon>
               <div class="edit-interview__overview__stats__stat__text">
-                {{ (interview.statistics.duration / 60).toFixed(0) }} minutes
+                {{ (interview.statistics.duration / 60).toFixed(0) }}
+                minutes
               </div>
             </div>
             <div class="edit-interview__overview__stats__stat">
@@ -368,6 +369,7 @@ const isLoading = ref(true);
 const isSaving = ref(false);
 const route = useRoute();
 const router = useRouter();
+const isListItemMoving = ref(false);
 const isOptionFlyoutOpen = ref(false);
 const isAddQuestionDrawerOpen = ref(false);
 const isCreateQuestionDrawerOpen = ref(false);
@@ -449,11 +451,12 @@ const moveItem = async (moveDown, index) => {
     ];
     items[newIndex].focus();
     items[newIndex].scrollIntoView({ behavior: "auto", block: "center" });
-    onSubmitWithDebounce(true);
+    isListItemMoving.value = true;
+    onSubmitWithDebounce();
   });
 };
 
-const onSubmit = handleSubmit(async (isListItem) => {
+const onSubmit = handleSubmit(async () => {
   const formattedQuestions =
     interview.value?.questions.map((q) => q.reference) || [];
 
@@ -484,9 +487,10 @@ const onSubmit = handleSubmit(async (isListItem) => {
   };
   await putInterview.put(payload);
   isSaving.value = false;
-  if (!isListItem) {
+  if (!isListItemMoving.value) {
     setInterview(putInterview.data.value.template);
   }
+  isListItemMoving.value = false;
 
   resetForm({
     touched: false,
@@ -512,8 +516,8 @@ const onSubmit = handleSubmit(async (isListItem) => {
   );
 });
 
-const onSubmitWithDebounce = useDebounceFn((isListItem = false) => {
-  onSubmit(isListItem);
+const onSubmitWithDebounce = useDebounceFn(() => {
+  onSubmit();
 }, 500);
 
 const debouncedSubmit = () => {
@@ -523,13 +527,6 @@ const debouncedSubmit = () => {
 
 const { setBreadcrumbs } = useBreadcrumbs();
 useContextSave(meta);
-
-const handleOptionHandleClick = (ref) => {
-  if (isOptionFlyoutOpen.value) {
-    return;
-  }
-  isOptionFlyoutOpen.value = ref;
-};
 
 onMounted(async () => {
   await fetchInterview(route.params.interviewRef);
