@@ -356,6 +356,7 @@ const archiveOpening = async () => {
   }
   .edit-openings__edit-container__cover-selector {
     display: block;
+    position: relative;
   }
 }
 

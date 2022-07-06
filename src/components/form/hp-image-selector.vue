@@ -14,7 +14,7 @@
     </div>
     <transition name="hp-image-selector-transition">
       <div v-if="isFlyoutOpen" class="hp-image-selector__flyout">
-        <div class="hp-image-selector__flyout__flyout-label">Select image</div>
+        <div class="hp-image-selector__flyout__flyout-label">Select cover</div>
         <div class="hp-image-selector__flyout__flyout-container">
           <button
             v-for="(image, index) in Object.keys(CoverDict)"
@@ -116,6 +116,8 @@ const handleImageSelect = (index) => {
     position: absolute;
     left: 105%;
     top: -50%;
+    transform: translate(0px, 50%);
+    padding: 16px;
     box-shadow: 0px 16px 24px rgba(45, 51, 54, 0.06),
       0px 2px 6px rgba(33, 44, 51, 0.04), 0px 0px 1px rgba(33, 44, 51, 0.04);
 
@@ -139,7 +141,6 @@ const handleImageSelect = (index) => {
 
     &__flyout-label {
       @include text-h5;
-      color: var(--color-text-secondary);
       margin-bottom: 12px;
     }
     &__flyout-container {
@@ -204,6 +205,6 @@ const handleImageSelect = (index) => {
 .hp-image-selector-transition-enter-from,
 .hp-image-selector-transition-leave-to {
   opacity: 0;
-  transform: translateY(20px);
+  transform: translateY(calc(50% - 10px));
 }
 </style>
