@@ -194,15 +194,12 @@
               handle=".edit-interview__question-card__handle"
               @change="handleDragChange"
               v-bind="dragOptions"
-              @start="drag = true"
-              @end="drag = false"
             >
               <template #item="{ element, index }">
                 <li
                   :class="`edit-interview__question-card`"
                   :key="index"
                   role="option"
-                  draggable="true"
                   tabindex="0"
                   @keydown.down.prevent="moveItem(true, index)"
                   @keydown.up.prevent="moveItem(false, index)"
@@ -332,7 +329,6 @@ import ViewQuestion from "@/views/dashboard/opening/questions/view-question.vue"
 
 // Components
 import HpInput from "@/components/form/hp-input.vue";
-import HpTooltip from "@/components/hp-tooltip.vue";
 import HpButton from "@/components/hp-button.vue";
 import HpModal from "@/components/hp-modal.vue";
 import HpOptionsDropdown from "@/components/hp-options-dropdown.vue";
