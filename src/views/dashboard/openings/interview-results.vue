@@ -37,7 +37,7 @@
         >
           <div class="results__details__score-container">
             <div class="results__details__score__average">
-              {{ evaluation.statistics.candidateScore }}
+              {{ evaluation.statistics.candidateScore || "~" }}
             </div>
             <div class="results__details__score__current">Score</div>
             <div class="results__details__score__average-score">
@@ -87,7 +87,7 @@
             <hp-badge-tag
               v-for="(skill, index) in evaluation.statistics
                 .candidateSkillScores"
-              :quantity="skill.score.value"
+              :quantity="skill.score.value || '~'"
               :label="skill.name"
               :type="calculateSkillScoreColor(skill)"
             ></hp-badge-tag>
