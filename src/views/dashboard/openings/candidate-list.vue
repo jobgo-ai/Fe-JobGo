@@ -17,14 +17,14 @@
         <hp-abstract-avatar :abstractKey="opening.artwork" />
         <div class="candidate-list__header__button-group">
           <hp-button
-            :to="`/opening/${opening.reference}/edit`"
+            :href="`/opening/${opening.reference}/edit`"
             icon="pencil"
             class="candidate-list__header__button-group__edit-button"
             :label="candidates.length <= 1 ? 'Edit opening' : null"
           ></hp-button>
           <div v-if="candidates.length > 1">
             <hp-button
-              :to="`/opening/${opening.reference}/compare`"
+              :href="`/opening/${opening.reference}/compare`"
               label="Compare"
               icon="discover"
             ></hp-button>
