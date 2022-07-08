@@ -31,7 +31,7 @@
           class="compare__filters__dropdown"
         >
           <hp-multi-select
-            label="All Skills"
+            selectedMessage="skills selected"
             :options="skillList"
             name="skills"
             :maxItemsSelected="5"
