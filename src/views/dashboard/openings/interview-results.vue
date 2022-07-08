@@ -177,7 +177,7 @@ const isLoading = ref(true);
 
 onMounted(async () => {
   const getEvaluation = useGet(
-    `interviews/${route.params.templateRef}/evaluations/${route.params.evaluationRef}`
+    `interview-evaluations/${route.params.evaluationRef}`
   );
 
   await getEvaluation.get();
