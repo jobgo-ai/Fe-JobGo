@@ -35,12 +35,6 @@
       {{ inProgressInterviews.length }} interviewers
     </div>
     <div class="candidate-details__interview-grid__item__icon-text">
-      <hp-icon
-        class="candidate-details__interview-grid__item__icon-text__icon"
-        name="loader"
-        :size="15"
-      ></hp-icon>
-
       In progress
     </div>
     <div class="candidate-details__interview-grid__item__actions">
@@ -51,27 +45,12 @@
       >
         <template v-slot:dropdown>
           <ul class="hp-multi-select__flyout__options">
-            <a
-              v-for="evaluation in inProgressInterviews"
-              target="_blank"
-              :href="generateInProgressInterviewLink(evaluation.token)"
-            >
-              <li class="hp-multi-select__flyout__options__option">
-                {{ evaluation.interviewerName }}
-              </li>
-            </a>
             <li v-for="evaluation in inProgressInterviews">
               {{ evaluation.interviewerName }}
             </li>
           </ul>
         </template>
       </hp-dropdown>
-      <hp-button
-        class="candidate-details__interview-grid__item__actions--icon"
-        icon="copy"
-        :isDisabled="candidate.state === 'archived'"
-        @handleClick="copyInterview(interview)"
-      ></hp-button>
     </div>
   </div>
   <div v-else-if="hasTerminatedInterview && completedEvaluations.length === 1">
@@ -102,13 +81,7 @@
     <div class="candidate-details__interview-grid__item__actions">
       <hp-button
         label="View full results"
-        :to="`/opening/${route.params.openingRef}/results/${interview.interview.token}/${interview.interview.evaluations[0].token}`"
-      ></hp-button>
-      <hp-button
-        class="candidate-details__interview-grid__item__actions--icon"
-        icon="copy"
-        :isDisabled="candidate.state === 'archived'"
-        @handleClick="copyInterview(interview)"
+        :to="`/reports/${candidate.key}/evaluations/${interview.interview.evaluations[0].key}`"
       ></hp-button>
     </div>
   </div>
@@ -149,12 +122,6 @@
           </ul>
         </template>
       </hp-dropdown>
-      <hp-button
-        class="candidate-details__interview-grid__item__actions--icon"
-        icon="copy"
-        :isDisabled="candidate.state === 'archived'"
-        @handleClick="copyInterview(interview)"
-      ></hp-button>
     </div>
   </div>
   <div v-else>
@@ -178,28 +145,7 @@
     <div
       class="candidate-details__interview-grid__item__actions"
       v-if="isNextAction(interview, opening.templates)"
-    >
-      <hp-button
-        :href="calculateInterviewLink(interview)"
-        primary
-        label="Start interview"
-        :isDisabled="candidate.state === 'archived'"
-      ></hp-button>
-      <hp-button
-        class="candidate-details__interview-grid__item__actions--icon"
-        icon="copy"
-        :isDisabled="candidate.state === 'archived'"
-        @handleClick="copyInterview(interview)"
-      ></hp-button>
-    </div>
-    <div class="candidate-details__interview-grid__item__actions" v-else>
-      <hp-button
-        @handleClick="copyInterview(interview)"
-        :isDisabled="candidate.state === 'archived'"
-        icon="copy"
-        label="Copy link"
-      ></hp-button>
-    </div>
+    ></div>
   </div>
 </template>
 
@@ -237,6 +183,10 @@ const props = defineProps({
   candidate: {
     type: Object,
     required: true,
+  },
+  isReport: {
+    type: Boolean,
+    default: false,
   },
 });
 

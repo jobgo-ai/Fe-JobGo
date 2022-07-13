@@ -15,7 +15,7 @@
           </hp-button>
           <hp-button
             primary
-            :to="`/reports/${candidate.token}`"
+            :to="`/reports/${candidate.key}`"
             label="Share report"
             icon="share"
           >
@@ -323,9 +323,7 @@ const completedTemplates = computed(() => {
 });
 
 const copyReportToClipBoard = () => {
-  const url = `${import.meta.env.VITE_APP_URL}/reports/${
-    candidate.value.token
-  }`;
+  const url = `${import.meta.env.VITE_APP_URL}/reports/${candidate.value.key}`;
   navigator.clipboard.writeText(url);
   isShareReportOpen.value = false;
   setToast({

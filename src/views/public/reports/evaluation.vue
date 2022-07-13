@@ -1,144 +1,160 @@
 <template>
-  <div v-if="!isLoading" class="results">
-    <div class="results__details">
-      <p class="results__details__candidate">{{ candidate.name }}</p>
-      <h2 class="results__details__interview-name">
-        {{ evaluation.interview.template.name }}
-      </h2>
-      <div class="results__details__stats">
-        <div class="results__details__stats__stat">
-          <hp-icon
-            class="results__details__stats__stat__icon"
-            name="user"
-          ></hp-icon>
-          {{ evaluation.interviewerName }}
-        </div>
-        <div class="results__details__stats__stat">
-          <hp-icon
-            class="results__details__stats__stat__icon"
-            name="chronometer"
-          ></hp-icon>
-          {{ timeTaken }}
-        </div>
-        <div class="results__details__stats__stat">
-          <hp-icon
-            class="results__details__stats__stat__icon"
-            name="calendar"
-          ></hp-icon>
-          {{ createdTime }}
-        </div>
-      </div>
-      <div class="results__details__grid">
-        <div
-          :class="`results__details__score results__details__score--${calculateColor(
-            evaluation.statistics.candidateScore,
-            evaluation.statistics.averageInterviewScore
-          )}`"
-        >
-          <div class="results__details__score-container">
-            <div class="results__details__score__average">
-              {{ evaluation.statistics.candidateScore || "~" }}
-            </div>
-            <div class="results__details__score__current">Score</div>
-            <div class="results__details__score__average-score">
-              The average score is
-              {{ evaluation.statistics.averageInterviewScore }}
+  <div>
+    <hp-reports-header />
+    <div class="evaluation__pageContainer">
+      <div class="evaluation" v-if="!isLoading">
+        <div class="evaluation__details">
+          <router-link
+            class="evaluation__details__back-link"
+            :to="`/reports/${candidate.key}`"
+          >
+            <hp-icon size="16" name="chevron-left"></hp-icon>Back to candidate
+            report
+          </router-link>
+          <h2 class="evaluation__details__interview-name">
+            {{ evaluation.interview.template.name }}
+          </h2>
+          <div class="evaluation__details__stats">
+            <div class="evaluation__details__stats__stat">
               <hp-icon
-                :name="
-                  calculateArrowDirection(
-                    evaluation.statistics.candidateScore,
-                    evaluation.statistics.averageInterviewScore
-                  )
-                "
+                class="evaluation__details__stats__stat__icon"
+                name="user"
               ></hp-icon>
+              {{ evaluation.interviewerName }}
+            </div>
+            <div class="evaluation__details__stats__stat">
+              <hp-icon
+                class="evaluation__details__stats__stat__icon"
+                name="chronometer"
+              ></hp-icon>
+              {{ timeTaken }}
+            </div>
+            <div class="evaluation__details__stats__stat">
+              <hp-icon
+                class="evaluation__details__stats__stat__icon"
+                name="calendar"
+              ></hp-icon>
+              {{ createdTime }}
+            </div>
+          </div>
+          <div class="evaluation__details__grid">
+            <div
+              :class="`evaluation__details__score evaluation__details__score--${calculateColor(
+                evaluation.statistics.candidateScore,
+                evaluation.statistics.averageInterviewScore
+              )}`"
+            >
+              <div class="evaluation__details__score-container">
+                <div class="evaluation__details__score__average">
+                  {{ evaluation.statistics.candidateScore || "~" }}
+                </div>
+                <div class="evaluation__details__score__current">Score</div>
+                <div class="evaluation__details__score__average-score">
+                  The average score is
+                  {{ evaluation.statistics.averageInterviewScore }}
+                  <hp-icon
+                    :name="
+                      calculateArrowDirection(
+                        evaluation.statistics.candidateScore,
+                        evaluation.statistics.averageInterviewScore
+                      )
+                    "
+                  ></hp-icon>
+                </div>
+              </div>
+            </div>
+            <div :class="`evaluation__details__score`">
+              <div class="evaluation__details__score-container">
+                <div class="evaluation__details__score__average">
+                  {{
+                    (evaluation.statistics.candidateCompletion * 100).toFixed(
+                      0
+                    )
+                  }}%
+                </div>
+                <div class="evaluation__details__score__current">
+                  Completion rate
+                </div>
+                <div class="evaluation__details__score__average-score">
+                  Average completion is
+                  {{
+                    (
+                      evaluation.statistics.averageInterviewCompletion * 100
+                    ).toFixed(0)
+                  }}
+                  %
+                  <hp-icon
+                    :name="
+                      calculateArrowDirection(
+                        evaluation.statistics.candidateCompletion,
+                        evaluation.statistics.averageInterviewCompletion
+                      )
+                    "
+                  ></hp-icon>
+                </div>
+              </div>
+            </div>
+            <div class="evaluation__details__skill-container">
+              <div class="evaluation__details__skills-title">
+                Evaluated skills
+              </div>
+              <ol class="evaluation__details__skills">
+                <hp-badge-tag
+                  v-for="(skill, index) in evaluation.statistics
+                    .candidateSkillScores"
+                  :quantity="skill.score.value || '~'"
+                  :label="skill.name"
+                  :type="calculateSkillScoreColor(skill)"
+                ></hp-badge-tag>
+              </ol>
             </div>
           </div>
         </div>
-        <div :class="`results__details__score`">
-          <div class="results__details__score-container">
-            <div class="results__details__score__average">
-              {{
-                (evaluation.statistics.candidateCompletion * 100).toFixed(0)
-              }}%
-            </div>
-            <div class="results__details__score__current">Completion rate</div>
-            <div class="results__details__score__average-score">
-              Average completion is
-              {{
-                (
-                  evaluation.statistics.averageInterviewCompletion * 100
-                ).toFixed(0)
-              }}
-              %
-              <hp-icon
-                :name="
-                  calculateArrowDirection(
-                    evaluation.statistics.candidateCompletion,
-                    evaluation.statistics.averageInterviewCompletion
-                  )
-                "
-              ></hp-icon>
-            </div>
-          </div>
-        </div>
-        <div class="results__details__skill-container">
-          <div class="results__details__skills-title">Evaluated skills</div>
-          <ol class="results__details__skills">
-            <hp-badge-tag
-              v-for="(skill, index) in evaluation.statistics
-                .candidateSkillScores"
-              :quantity="skill.score.value || '~'"
-              :label="skill.name"
-              :type="calculateSkillScoreColor(skill)"
-            ></hp-badge-tag>
+        <div class="evaluation__questions">
+          <div class="evaluation__questions__title">Questions</div>
+          <ol class="evaluation__questions__list">
+            <li
+              v-for="(interaction, index) in interactionList"
+              class="evaluation__questions__container"
+            >
+              <div class="evaluation__questions__question">
+                <div class="evaluation__questions__container__header">
+                  <hp-badge icon="questions" :content="index + 1" />
+                  <div
+                    v-if="interaction.interaction?.answer"
+                    :class="`
+                  evaluation__questions__container__header__little-badge
+                  evaluation__questions__container__header__little-badge--${interaction.interaction.answer?.value}
+                `"
+                  >
+                    {{ interaction.interaction.answer?.value }} / 5
+                  </div>
+                </div>
+                <div class="evaluation__questions__container__content">
+                  {{ interaction.question.content }}
+                </div>
+                <hp-question-card-stats
+                  hasTooltips
+                  :question="interaction.question"
+                />
+              </div>
+              <div
+                v-if="interaction.comment"
+                class="evaluation__questions__notes"
+              >
+                <hp-icon
+                  name="file"
+                  class="evaluation__questions__notes__icon"
+                ></hp-icon>
+                {{ interaction.comment }}
+              </div>
+            </li>
           </ol>
         </div>
       </div>
-    </div>
-    <div class="results__container">
-      <div class="results__questions__title">Notes</div>
-      {{ evaluation.comment }}
-    </div>
-    <div class="results__questions">
-      <div class="results__questions__title">Questions</div>
-      <ol class="results__questions__list">
-        <li
-          v-for="(interaction, index) in interactionList"
-          class="results__questions__container"
-        >
-          <div class="results__questions__question">
-            <div class="results__questions__container__header">
-              <hp-badge icon="questions" :content="index + 1" />
-              <div
-                v-if="interaction.interaction?.answer"
-                :class="`
-                  results__questions__container__header__little-badge
-                  results__questions__container__header__little-badge--${interaction.interaction.answer?.value}
-                `"
-              >
-                {{ interaction.interaction.answer?.value }} / 5
-              </div>
-            </div>
-            <div class="results__questions__container__content">
-              {{ interaction.question.content }}
-            </div>
-            <hp-question-card-stats
-              hasTooltips
-              :question="interaction.question"
-            />
-          </div>
-          <div v-if="interaction.comment" class="results__questions__notes">
-            <hp-icon
-              name="file"
-              class="results__questions__notes__icon"
-            ></hp-icon>
-            {{ interaction.comment }}
-          </div>
-        </li>
-      </ol>
+      <hp-spinner :size="24" class="candidate-details__spinner" v-else />
     </div>
   </div>
-  <hp-spinner :size="24" class="candidate-details__spinner" v-else />
 </template>
 
 <script setup>
@@ -148,6 +164,7 @@ import { useRouter, useRoute } from "vue-router";
 import { format, formatDistanceStrict } from "date-fns";
 
 //Components
+import HpReportsHeader from "@/components/hp-reports-header.vue";
 import HpIcon from "@/components/hp-icon.vue";
 import HpBadge from "@/components/hp-badge.vue";
 import HpSpinner from "@/components/hp-spinner.vue";
@@ -165,11 +182,8 @@ const props = defineProps({
   },
 });
 
-const { setBreadcrumbs } = useBreadcrumbs();
-const router = useRouter();
 const route = useRoute();
 const candidate = ref({});
-const interview = ref({});
 const evaluation = ref({});
 const isLoading = ref(true);
 
@@ -236,11 +250,15 @@ const calculateSkillScoreColor = (skill) => {
 };
 </script>
 
-<swag lang="scss">
-.results {
+<swag lang="scss" scoped>
+.evaluation {
   display: flex;
   flex-direction: column;
-  padding: 26px;
+  &__pageContainer {
+    max-width: 1400px;
+    margin: auto;
+    padding: 0px 26px;
+  }
 
   &__container {
     display: flex;
@@ -291,7 +309,16 @@ const calculateSkillScoreColor = (skill) => {
       @include text-h2;
       color: var(--color-text-primary);
       font-weight: 500;
-      margin-bottom: 26px;
+      margin-bottom: 12px;
+    }
+    &__back-link {
+      margin-bottom: 8px;
+      font-weight: 400;
+      display: flex;
+      align-items: center;
+      &:hover {
+        opacity: 0.75;
+      }
     }
     &__stats {
       display: flex;
@@ -479,7 +506,7 @@ const calculateSkillScoreColor = (skill) => {
 }
 
 @media (min-width: $breakpoint-tablet) {
-  .results {
+  .evaluation {
     flex-direction: row;
     &__details {
       flex-shrink: 0;

@@ -14,7 +14,7 @@
 .hp-reports-header {
   width: 100%;
   display: flex;
-  padding: 12px 0;
+  padding: 12px 12px;
   justify-content: space-between;
   align-items: center;
   background-color: var(--color-background);

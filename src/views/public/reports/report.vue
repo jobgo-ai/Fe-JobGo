@@ -1,104 +1,109 @@
 <template>
-  <div v-if="!isPageLoading" class="report">
+  <div>
     <hp-reports-header />
-    <div class="report__header">
-      <div class="report__info">
-        <div class="report__info__name">
-          {{ candidate.name }}
-        </div>
-        <div class="report__info__email">
-          {{ candidate.email }}
+    <div v-if="!isPageLoading" class="report">
+      <div class="report__header">
+        <div class="report__info">
+          <div class="report__info__name">
+            {{ candidate.name }}
+          </div>
+          <div class="report__info__email">
+            {{ candidate.email }}
+          </div>
         </div>
       </div>
-    </div>
-    <div class="report__interviews">
-      <div class="report__interviews__header">
-        <div>
-          <h3 class="report__interviews__title">Report</h3>
-          <p class="report__interviews__subtitle">Anonymized interview data</p>
+      <div class="report__interviews">
+        <div class="report__interviews__header">
+          <div>
+            <h3 class="report__interviews__title">Report</h3>
+            <p class="report__interviews__subtitle">
+              Anonymized interview data
+            </p>
+          </div>
+          <hp-circular-badge
+            :upper="candidate.opening.templates.length"
+            :lower="completedTemplates"
+          ></hp-circular-badge>
         </div>
-        <hp-circular-badge
-          :upper="candidate.opening.templates.length"
-          :lower="completedTemplates"
-        ></hp-circular-badge>
+        <ul v-if="opening.templates.length > 0" class="report__interview-grid">
+          <li
+            :class="createClasses(interview)"
+            v-for="(interview, index) in opening.templates"
+          >
+            <hp-candidate-interview-report-card
+              :interview="interview"
+              :index="index"
+              :opening="opening"
+              :candidate="candidate"
+            />
+          </li>
+        </ul>
       </div>
-      <ul v-if="opening.templates.length > 0" class="report__interview-grid">
-        <li
-          :class="createClasses(interview)"
-          v-for="(interview, index) in opening.templates"
+      <div class="report__overview">
+        <div
+          :class="`report__overview__score report__overview__score--${calculateColor(
+            candidate.opening.statistics.candidateScore,
+            candidate.opening.statistics.averageOpeningScore
+          )}`"
         >
-          <hp-candidate-interview-card
-            :interview="interview"
-            :index="index"
-            :opening="opening"
-            :candidate="candidate"
-            :isReport="true"
-          />
-        </li>
-      </ul>
-    </div>
-    <div class="report__overview">
-      <div
-        :class="`report__overview__score report__overview__score--${calculateColor(
-          candidate.opening.statistics.candidateScore,
-          candidate.opening.statistics.averageOpeningScore
-        )}`"
-      >
-        <div class="report__overview__score-container">
-          <div class="report__overview__score__average">
-            {{ candidate.opening.statistics.candidateScore?.toFixed(2) || "~" }}
-            <div v-if="candidate.opening.statistics.candidateScore">
-              <hp-icon
-                class="report__arrow"
-                :size="24"
-                v-if="
-                  candidate.opening.statistics.candidateScore >
-                  candidate.opening.statistics.averageOpeningScore
-                "
-                name="arrow-top"
-              ></hp-icon>
-              <hp-icon
-                v-else
-                class="report__arrow"
-                :size="24"
-                name="arrow-down"
-              ></hp-icon>
+          <div class="report__overview__score-container">
+            <div class="report__overview__score__average">
+              {{
+                candidate.opening.statistics.candidateScore?.toFixed(2) || "~"
+              }}
+              <div v-if="candidate.opening.statistics.candidateScore">
+                <hp-icon
+                  class="report__arrow"
+                  :size="24"
+                  v-if="
+                    candidate.opening.statistics.candidateScore >
+                    candidate.opening.statistics.averageOpeningScore
+                  "
+                  name="arrow-top"
+                ></hp-icon>
+                <hp-icon
+                  v-else
+                  class="report__arrow"
+                  :size="24"
+                  name="arrow-down"
+                ></hp-icon>
+              </div>
+            </div>
+            <div class="report__overview__score__current">Current score</div>
+            <div
+              v-if="candidate.opening.statistics.averageOpeningScore"
+              class="report__overview__score__average-score"
+            >
+              The average score is
+              {{ candidate.opening.statistics.averageOpeningScore?.toFixed(2) }}
             </div>
           </div>
-          <div class="report__overview__score__current">Current score</div>
-          <div
-            v-if="candidate.opening.statistics.averageOpeningScore"
-            class="report__overview__score__average-score"
-          >
-            The average score is
-            {{ candidate.opening.statistics.averageOpeningScore?.toFixed(2) }}
+        </div>
+        <div class="report__overview__skill-container">
+          <div class="report__overview__skills-title">
+            Evaluated skills
+            <hp-badge
+              class="report__overview__skills-title__badge"
+              icon="skills"
+              :content="skillList ? skillList.length : 0"
+            ></hp-badge>
           </div>
+          <ol class="report__overview__skills">
+            <hp-badge-tag
+              v-for="skill in skillList"
+              :label="skill.label"
+              :quantity="skill.value"
+              :type="calculateColor(skill.value, skill.average)"
+            ></hp-badge-tag>
+          </ol>
         </div>
       </div>
-      <div class="report__overview__skill-container">
-        <div class="report__overview__skills-title">
-          Evaluated skills
-          <hp-badge
-            class="report__overview__skills-title__badge"
-            icon="skills"
-            :content="skillList ? skillList.length : 0"
-          ></hp-badge>
-        </div>
-        <ol class="report__overview__skills">
-          <hp-badge-tag
-            v-for="skill in skillList"
-            :label="skill.label"
-            :quantity="skill.value"
-            :type="calculateColor(skill.value, skill.average)"
-          ></hp-badge-tag>
-        </ol>
-      </div>
+      <hp-spinner
+        :size="24"
+        class="report__spinner"
+        v-if="isPageLoading"
+      ></hp-spinner>
     </div>
-    <hp-spinner
-      :size="24"
-      class="report__spinner"
-      v-if="isPageLoading"
-    ></hp-spinner>
   </div>
 </template>
 
@@ -114,7 +119,7 @@ import HpBadgeTag from "@/components/hp-badge-tag.vue";
 import HpIcon from "@/components/hp-icon.vue";
 import HpSpinner from "@/components/hp-spinner.vue";
 import HpCircularBadge from "@/components/hp-circular-badge.vue";
-import HpCandidateInterviewCard from "@/components/cards/hp-candidate-interview-card.vue";
+import HpCandidateInterviewReportCard from "@/components/cards/hp-candidate-interview-report-card.vue";
 
 const route = useRoute();
 const isPageLoading = ref(true);
@@ -122,9 +127,9 @@ const opening = ref({});
 const candidate = ref({});
 
 onMounted(async () => {
-  const { token } = route.params;
+  const { candidateKey } = route.params;
   const API_URL = import.meta.env.VITE_API_URL;
-  const res = await fetch(`${API_URL}/candidates/${token}`, {
+  const res = await fetch(`${API_URL}/candidates/${candidateKey}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",

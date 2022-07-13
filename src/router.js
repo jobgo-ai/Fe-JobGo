@@ -92,7 +92,7 @@ const routes = [
     },
   },
   {
-    path: "/reports/:token",
+    path: "/reports/:candidateKey",
     name: "report",
     component: Report,
     meta: {
@@ -100,7 +100,7 @@ const routes = [
     },
   },
   {
-    path: "/reports/:token/evaluation/:evaluationRef",
+    path: "/reports/:candidateKey/evaluations/:evaluationRef",
     name: "evaluation",
     component: Evaluation,
     meta: {

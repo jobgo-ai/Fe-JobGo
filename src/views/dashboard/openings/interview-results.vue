@@ -264,7 +264,7 @@ const calculateSkillScoreColor = (skill) => {
 };
 </script>
 
-<swag lang="scss">
+<swag lang="scss" scoped>
 .results {
   display: flex;
   flex-direction: column;
