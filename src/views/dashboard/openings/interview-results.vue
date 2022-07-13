@@ -109,7 +109,12 @@
           >
             <div class="results__questions__question">
               <div class="results__questions__container__header">
-                <hp-badge icon="questions" :content="index + 1" />
+                <div class="results__questions__container__time">
+                  <hp-badge icon="questions" :content="index + 1" />
+                  <div v-if="interaction.interaction?.duration">
+                    {{ formatDistance(0, interaction.interaction?.duration) }}
+                  </div>
+                </div>
                 <div
                   v-if="interaction.interaction?.answer"
                   :class="`
@@ -123,10 +128,36 @@
               <div class="results__questions__container__content">
                 {{ interaction.question.content }}
               </div>
-              <hp-question-card-stats
-                hasTooltips
-                :question="interaction.question"
-              />
+              <div class="hp-question-card-stats">
+                <div class="hp-question-card-stats__stats__stat">
+                  <hp-icon
+                    class="hp-question-card-stats__stats__stat__icon"
+                    name="chronometer"
+                  ></hp-icon>
+                  {{
+                    formatDistance(0, interaction.question.duration * 1000, {
+                      includeSeconds: true,
+                    })
+                  }}
+                </div>
+                <div class="hp-question-card-stats__stats__stat">
+                  <hp-icon
+                    class="hp-question-card-stats__stats__stat__icon"
+                    name="skills"
+                  ></hp-icon>
+                  {{ interaction.question.skills.length }}
+                  Skills
+                  <hp-info-circle
+                    class="hp-question-card-stats__stats__stat__info-circle"
+                    :content="
+                      interaction.question.skills
+                        .map((level) => level.name)
+                        .join(', ')
+                    "
+                    v-if="interaction.question.skills.length > 0"
+                  ></hp-info-circle>
+                </div>
+              </div>
             </div>
             <div v-if="interaction.comment" class="results__questions__notes">
               <hp-icon
@@ -147,7 +178,7 @@
 //Vendor
 import { ref, onMounted, computed } from "vue";
 import { useRouter, useRoute } from "vue-router";
-import { format, formatDistanceStrict } from "date-fns";
+import { format, formatDistanceStrict, formatDistance } from "date-fns";
 
 //Components
 import HpIcon from "@/components/hp-icon.vue";
@@ -455,6 +486,11 @@ const calculateSkillScoreColor = (skill) => {
       border-radius: $border-radius-md;
       border: $border;
       margin-bottom: 16px;
+      &__time {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
       &__header {
         display: flex;
         justify-content: space-between;
