@@ -1,14 +1,19 @@
 <template>
   <div class="hp-reports-header">
     <div class="hp-reports-header__left">
-      <a href="https://hireproof.io/"
-        ><img class="hp-reports-header__logo" src="@/assets/logo-text.png"
-      /></a>
+      <a
+        class="hp-reports-header__logo"
+        target="_blank"
+        href="https://hireproof.io/"
+        ><Logo></Logo
+      ></a>
     </div>
   </div>
 </template>
 
-<script setup></script>
+<script setup>
+import Logo from "@/assets/logo.svg";
+</script>
 
 <style lang="scss" scoped>
 .hp-reports-header {
@@ -20,7 +25,7 @@
   background-color: var(--color-background);
   &__logo {
     display: flex;
-    width: 148px;
+    width: 32px;
   }
 }
 </style>
