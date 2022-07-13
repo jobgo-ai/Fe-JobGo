@@ -8,6 +8,7 @@ import Signup from "@/views/public/signup.vue";
 
 // Reports
 import Report from "@/views/public/reports/report.vue";
+import Evaluation from "@/views/public/reports/evaluation.vue";
 
 // Private
 import Layout from "@/views/dashboard/layout.vue";
@@ -94,6 +95,14 @@ const routes = [
     path: "/reports/:token",
     name: "report",
     component: Report,
+    meta: {
+      public: true,
+    },
+  },
+  {
+    path: "/reports/:token/evaluation/:evaluationRef",
+    name: "evaluation",
+    component: Evaluation,
     meta: {
       public: true,
     },

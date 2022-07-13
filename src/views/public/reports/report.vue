@@ -137,14 +137,14 @@ onMounted(async () => {
 });
 
 const skillList = computed(() => {
-  // const skills = openingTemplate.value.statistics.skills.map((skill) => {
-  //   return {
-  //     name: skill.value.name,
-  //     slug: skill.value.slug,
-  //   };
-  // });
-
-  const skills = [];
+  const skills = opening.value.statistics.averageOpeningSkillScores.map(
+    (skill) => {
+      return {
+        name: skill.name,
+        slug: skill.slug,
+      };
+    }
+  );
 
   const isSkillsTheSameAsAverage = skills.every((skill) => {
     const candidateSkillScore =
@@ -216,6 +216,7 @@ const completedTemplates = computed(() => {
 <style lang="scss">
 .report {
   @include pageContainer;
+  height: 100%;
   &__spinner {
     margin-top: 64px;
     display: flex;
