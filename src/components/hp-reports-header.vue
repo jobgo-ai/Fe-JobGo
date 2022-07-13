@@ -19,7 +19,7 @@ import Logo from "@/assets/logo.svg";
 .hp-reports-header {
   width: 100%;
   display: flex;
-  padding: 12px 12px;
+  padding: 24px;
   justify-content: space-between;
   align-items: center;
   background-color: var(--color-background);
