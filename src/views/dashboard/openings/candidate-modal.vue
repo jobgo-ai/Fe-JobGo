@@ -337,7 +337,7 @@ const handleCsvUpload = () => {
     }
   }
   &__form {
-    padding: 24px;
+    padding: 24px 16px;
     border-bottom: 1px dashed var(--color-border);
     width: 100%;
   }

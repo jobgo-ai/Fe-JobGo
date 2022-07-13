@@ -1,5 +1,6 @@
 <template>
   <div v-if="!isPageLoading" class="report">
+    <hp-reports-header />
     <div class="report__header">
       <div class="report__info">
         <div class="report__info__name">
@@ -96,21 +97,19 @@
     <hp-spinner
       :size="24"
       class="report__spinner"
-      v-if="isCandidateLoading"
+      v-if="isPageLoading"
     ></hp-spinner>
   </div>
 </template>
 
 <script setup>
 // Vendor
-import { onMounted, watch, ref, computed } from "vue";
+import { onMounted, ref, computed } from "vue";
 import { useRoute } from "vue-router";
-
-// Composables
-import { useBreadcrumbs } from "@/composables/useBreadcrumbs";
 
 // Components
 import HpBadge from "@/components/hp-badge.vue";
+import HpReportsHeader from "@/components/hp-reports-header.vue";
 import HpBadgeTag from "@/components/hp-badge-tag.vue";
 import HpIcon from "@/components/hp-icon.vue";
 import HpSpinner from "@/components/hp-spinner.vue";

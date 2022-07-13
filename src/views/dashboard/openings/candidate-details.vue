@@ -1,8 +1,27 @@
 <template>
   <div class="candidate-details">
     <hp-modal :isOpen="isShareReportOpen" @close="isShareReportOpen = false">
-      This will create and share a report for this candidate
-      {{ `http://localhost:3000/reports/${candidate.token}` }}
+      <generic-modal
+        title="Share report"
+        subtitle="This will create and share a report for this candidate"
+      >
+        <div>
+          The following link creates a anonymized and PUBLIC report of this
+          candidate evaluation. Candidate details and interviewer comments are
+          sanitized and removed.
+        </div>
+        <template #actions>
+          <hp-button @handleClick="copyReportToClipBoard" icon="copy">
+          </hp-button>
+          <hp-button
+            primary
+            :to="`/reports/${candidate.token}`"
+            label="Share report"
+            icon="share"
+          >
+          </hp-button>
+        </template>
+      </generic-modal>
     </hp-modal>
     <hp-modal
       :isOpen="isEditCandidateModalOpen"
@@ -158,6 +177,7 @@ import { useRoute } from "vue-router";
 // Composables
 import useCandidates from "@/composables/useCandidates";
 import { useBreadcrumbs } from "@/composables/useBreadcrumbs";
+import useToast from "@/composables/useToast.js";
 
 // Components
 import HpButton from "@/components/hp-button.vue";
@@ -165,6 +185,7 @@ import HpBadge from "@/components/hp-badge.vue";
 import HpBadgeTag from "@/components/hp-badge-tag.vue";
 import HpIcon from "@/components/hp-icon.vue";
 import CandidateModal from "./candidate-modal.vue";
+import GenericModal from "@/components/modals/generic-modal.vue";
 import HpSpinner from "@/components/hp-spinner.vue";
 import HpModal from "@/components/hp-modal.vue";
 import HpCircularBadge from "@/components/hp-circular-badge.vue";
@@ -180,6 +201,8 @@ const props = defineProps({
     default: [],
   },
 });
+
+const { setToast } = useToast();
 
 const { fetchCandidate, candidate, isCandidateLoading } = useCandidates();
 
@@ -298,6 +321,19 @@ const completedTemplates = computed(() => {
     t.interview.evaluations.some((e) => e.terminated)
   ).length;
 });
+
+const copyReportToClipBoard = () => {
+  const url = `${import.meta.env.VITE_APP_URL}/reports/${
+    candidate.value.token
+  }`;
+  navigator.clipboard.writeText(url);
+  isShareReportOpen.value = false;
+  setToast({
+    type: "positive",
+    title: "Copy that!",
+    message: `Report link copied to clipboard`,
+  });
+};
 </script>
 
 <style lang="scss">
