@@ -113,7 +113,7 @@
           <ul class="hp-multi-select__flyout__options">
             <router-link
               v-for="evaluation in completedEvaluations"
-              :to="`/opening/${route.params.openingRef}/results/${interview.interview.token}/${evaluation.token}`"
+              :to="`/reports/${candidate.key}/evaluations/${evaluation.key}`"
             >
               <li class="hp-multi-select__flyout__options__option">
                 {{ evaluation.interviewerName }}
