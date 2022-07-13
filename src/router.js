@@ -6,6 +6,9 @@ import NotFound from "@/views/public/not-found.vue";
 import Signin from "@/views/public/signin.vue";
 import Signup from "@/views/public/signup.vue";
 
+// Reports
+import Report from "@/views/public/reports/report.vue";
+
 // Private
 import Layout from "@/views/dashboard/layout.vue";
 import ChangePassword from "@/views/public/change-password.vue";
@@ -83,6 +86,14 @@ const routes = [
     path: "/signin",
     name: "signin",
     component: Signin,
+    meta: {
+      public: true,
+    },
+  },
+  {
+    path: "/reports/:token",
+    name: "report",
+    component: Report,
     meta: {
       public: true,
     },

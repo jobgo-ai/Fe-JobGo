@@ -1,5 +1,9 @@
 <template>
   <div class="candidate-details">
+    <hp-modal :isOpen="isShareReportOpen" @close="isShareReportOpen = false">
+      This will create and share a report for this candidate
+      {{ `http://localhost:3000/reports/${candidate.token}` }}
+    </hp-modal>
     <hp-modal
       :isOpen="isEditCandidateModalOpen"
       @close="isEditCandidateModalOpen = false"
@@ -22,6 +26,10 @@
             </div>
           </div>
           <div class="candidate-details__header__button-group">
+            <hp-button
+              @click="isShareReportOpen = true"
+              icon="share"
+            ></hp-button>
             <hp-button
               label="Edit details"
               @click="isEditCandidateModalOpen = true"
@@ -177,6 +185,7 @@ const { fetchCandidate, candidate, isCandidateLoading } = useCandidates();
 
 const route = useRoute();
 const isEditCandidateModalOpen = ref(false);
+const isShareReportOpen = ref(false);
 const isPageLoading = ref(true);
 const opening = ref({});
 const { opening: openingTemplate } = useOpenings();

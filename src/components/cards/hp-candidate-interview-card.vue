@@ -39,6 +39,7 @@
         class="candidate-details__interview-grid__item__icon-text__icon"
         name="loader"
         :size="15"
+        v-if="!isReport"
       ></hp-icon>
 
       In progress
@@ -52,6 +53,7 @@
         <template v-slot:dropdown>
           <ul class="hp-multi-select__flyout__options">
             <a
+              v-if="!isReport"
               v-for="evaluation in inProgressInterviews"
               target="_blank"
               :href="generateInProgressInterviewLink(evaluation.token)"
@@ -60,12 +62,16 @@
                 {{ evaluation.interviewerName }}
               </li>
             </a>
+            <li v-for="evaluation in inProgressInterviews" v-else>
+              {{ evaluation.interviewerName }}
+            </li>
           </ul>
         </template>
       </hp-dropdown>
       <hp-button
         class="candidate-details__interview-grid__item__actions--icon"
         icon="copy"
+        v-if="!isReport"
         :isDisabled="candidate.state === 'archived'"
         @handleClick="copyInterview(interview)"
       ></hp-button>
@@ -102,6 +108,7 @@
         :to="`/opening/${route.params.openingRef}/results/${interview.interview.token}/${interview.interview.evaluations[0].token}`"
       ></hp-button>
       <hp-button
+        v-if="!isReport"
         class="candidate-details__interview-grid__item__actions--icon"
         icon="copy"
         :isDisabled="candidate.state === 'archived'"
@@ -149,6 +156,7 @@
       <hp-button
         class="candidate-details__interview-grid__item__actions--icon"
         icon="copy"
+        v-if="!isReport"
         :isDisabled="candidate.state === 'archived'"
         @handleClick="copyInterview(interview)"
       ></hp-button>
@@ -180,11 +188,13 @@
         :href="calculateInterviewLink(interview)"
         primary
         label="Start interview"
+        v-if="!isReport"
         :isDisabled="candidate.state === 'archived'"
       ></hp-button>
       <hp-button
         class="candidate-details__interview-grid__item__actions--icon"
         icon="copy"
+        v-if="!isReport"
         :isDisabled="candidate.state === 'archived'"
         @handleClick="copyInterview(interview)"
       ></hp-button>
@@ -194,6 +204,7 @@
         @handleClick="copyInterview(interview)"
         :isDisabled="candidate.state === 'archived'"
         icon="copy"
+        v-if="!isReport"
         label="Copy link"
       ></hp-button>
     </div>
@@ -234,6 +245,10 @@ const props = defineProps({
   candidate: {
     type: Object,
     required: true,
+  },
+  isReport: {
+    type: Boolean,
+    default: false,
   },
 });
 
