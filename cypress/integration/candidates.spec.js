@@ -3,7 +3,7 @@ describe("candidates", () => {
     cy.login();
   });
 
-  it.only("Can view candidates", () => {
+  it("Can view candidates", () => {
     cy.visit("/openings");
     cy.contains("PERMANENT_OPENING").click();
     cy.get(`[name='search']`).type("TEST_CANDIDATE_1_DONT_LET_ME_DIE");
