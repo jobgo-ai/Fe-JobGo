@@ -168,6 +168,7 @@
               variant="search"
               v-model="search"
               icon="search"
+              name="search"
               standalone
               placeholder="Search..."
             />

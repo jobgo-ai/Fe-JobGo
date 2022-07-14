@@ -3,9 +3,10 @@ describe("candidates", () => {
     cy.login();
   });
 
-  it("Can view candidates", () => {
+  it.only("Can view candidates", () => {
     cy.visit("/openings");
     cy.contains("PERMANENT_OPENING").click();
+    cy.get(`[name='search']`).type("TEST_CANDIDATE_1_DONT_LET_ME_DIE");
     cy.contains("TEST_CANDIDATE_1_DONT_LET_ME_DIE").click();
     cy.contains("Current score");
   });
