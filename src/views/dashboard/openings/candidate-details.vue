@@ -5,18 +5,20 @@
         title="Share report"
         subtitle="This will create and share a report for this candidate"
       >
-        <div>
-          The following link creates a anonymized and PUBLIC report of this
-          candidate evaluation. Candidate details and interviewer comments are
-          sanitized and removed.
-        </div>
+        <p class="candidate-details__warning">
+          The following link exposes an anonymized and
+          <span class="candidate-details__warning-bold">public</span> report of
+          this candidate's evaluation.
+        </p>
+        <p>
+          Candidate details and interviewer comments are sanitized and removed.
+        </p>
         <template #actions>
           <hp-button @handleClick="copyReportToClipBoard" icon="copy">
           </hp-button>
           <hp-button
-            primary
             :to="`/reports/${candidate.key}`"
-            label="Share report"
+            label="Visit report"
             icon="share"
           >
           </hp-button>
@@ -352,6 +354,12 @@ const copyReportToClipBoard = () => {
         margin-right: 8px;
       }
     }
+  }
+  &__warning {
+    margin-bottom: 12px;
+  }
+  &__warning-bold {
+    font-weight: 600;
   }
   &__info {
     display: flex;

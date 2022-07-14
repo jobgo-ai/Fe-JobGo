@@ -17,7 +17,13 @@
           <div>
             <h3 class="report__interviews__title">Report</h3>
             <p class="report__interviews__subtitle">
-              Anonymized interview data
+              This is a public but anonymized report of a candidate on
+              <a
+                class="report__interviews__link"
+                target="_blank"
+                href="https://hireproof.io/"
+                >Hireproof</a
+              >.
             </p>
           </div>
           <hp-circular-badge
@@ -370,6 +376,12 @@ const completedTemplates = computed(() => {
       font-size: 14px;
       line-height: 20px;
       color: var(--color-text-secondary);
+    }
+    &__link {
+      color: var(--color-text-primary);
+      &:hover {
+        opacity: 0.8;
+      }
     }
   }
   &__interview-grid {
