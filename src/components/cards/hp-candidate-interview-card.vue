@@ -60,9 +60,6 @@
                 {{ evaluation.interviewerName }}
               </li>
             </a>
-            <li v-for="evaluation in inProgressInterviews">
-              {{ evaluation.interviewerName }}
-            </li>
           </ul>
         </template>
       </hp-dropdown>
