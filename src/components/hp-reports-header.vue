@@ -35,6 +35,7 @@ const isLoggedIn = user;
   justify-content: space-between;
   align-items: center;
   background-color: var(--color-background);
+  height: 90px;
   &__logo {
     display: flex;
     width: 32px;
