@@ -133,10 +133,47 @@
                 <div class="evaluation__questions__container__content">
                   {{ interaction.question.content }}
                 </div>
-                <hp-question-card-stats
-                  hasTooltips
-                  :question="interaction.question"
-                />
+                <div class="hp-question-card-stats">
+                  <div
+                    v-if="interaction.interaction?.duration"
+                    class="hp-question-card-stats__stats__stat"
+                  >
+                    <hp-icon
+                      class="hp-question-card-stats__stats__stat__icon"
+                      name="flag"
+                    ></hp-icon>
+                    <div>
+                      {{ formatDistance(0, interaction.interaction?.duration) }}
+                    </div>
+                  </div>
+                  <div class="hp-question-card-stats__stats__stat">
+                    <hp-icon
+                      class="hp-question-card-stats__stats__stat__icon"
+                      name="chronometer"
+                    ></hp-icon>
+                    {{
+                      formatDistance(0, interaction.question.duration * 1000, {
+                        includeSeconds: true,
+                      })
+                    }}
+                  </div>
+                  <div class="hp-question-card-stats__stats__stat">
+                    <hp-icon
+                      class="hp-question-card-stats__stats__stat__icon"
+                      name="skills"
+                    ></hp-icon>
+                    {{ interaction.question.skills.length }}
+                    Skills
+                    <hp-info-circle
+                      class="hp-question-card-stats__stats__stat__info-circle"
+                      :content="
+                        interaction.question.skills
+                          .map((level) => level.name)
+                          .join(', ')
+                      "
+                    ></hp-info-circle>
+                  </div>
+                </div>
               </div>
               <div
                 v-if="interaction.comment"
@@ -160,8 +197,8 @@
 <script setup>
 //Vendor
 import { ref, onMounted, computed } from "vue";
-import { useRouter, useRoute } from "vue-router";
-import { format, formatDistanceStrict } from "date-fns";
+import { useRoute } from "vue-router";
+import { format, formatDistanceStrict, formatDistance } from "date-fns";
 
 //Components
 import HpReportsHeader from "@/components/hp-reports-header.vue";
@@ -169,7 +206,7 @@ import HpIcon from "@/components/hp-icon.vue";
 import HpBadge from "@/components/hp-badge.vue";
 import HpSpinner from "@/components/hp-spinner.vue";
 import HpBadgeTag from "@/components/hp-badge-tag.vue";
-import HpQuestionCardStats from "@/components/cards/hp-question-card-stats.vue";
+import HpInfoCircle from "@/components/hp-info-circle.vue";
 
 // Composables
 import { useGet } from "@/composables/useHttp";
