@@ -127,7 +127,7 @@
               </div>
               <div class="hp-question-card-stats">
                 <div
-                  v-if="interaction.interaction?.duration"
+                  v-if="interaction.interaction?.answer"
                   class="hp-question-card-stats__stats__stat"
                 >
                   <hp-icon
@@ -194,7 +194,6 @@ import HpBadge from "@/components/hp-badge.vue";
 import HpSpinner from "@/components/hp-spinner.vue";
 import HpBadgeTag from "@/components/hp-badge-tag.vue";
 import HpInfoCircle from "@/components/hp-info-circle.vue";
-import HpQuestionCardStats from "@/components/cards/hp-question-card-stats.vue";
 
 // Composables
 import { useGet } from "@/composables/useHttp";
