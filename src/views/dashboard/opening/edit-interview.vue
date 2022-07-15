@@ -6,22 +6,22 @@
     >
       <bulk-question-modal @questionsAdded="handleQuestionsAdded"
     /></hp-modal>
-    <form @submit.prevent="handleContextFormSave">
+    <form>
       <hp-drawer
-        :isOpen="isAddQuestionDrawerOpen"
+        :isOpen="isSearchQuestionsListOpen"
         @close="handleCloseEditDrawer"
       >
-        <questions
+        <question-list
           :handleClose="handleCloseEditDrawer"
           @questionAdded="handleQuestionAdded"
-          v-if="isAddQuestionDrawerOpen"
+          v-if="isSearchQuestionsListOpen"
         />
       </hp-drawer>
       <hp-drawer
         :isOpen="isCreateQuestionDrawerOpen"
         @close="handleCloseEditDrawer"
       >
-        <questions
+        <edit-question
           :handleClose="handleCloseEditDrawer"
           :isScratch="true"
           @questionAdded="handleQuestionAdded"
@@ -117,7 +117,7 @@
               primary
             ></hp-button>
             <hp-button
-              @handleClick="isAddQuestionDrawerOpen = true"
+              @handleClick="isSearchQuestionsListOpen = true"
               label="Search questions"
               type="button"
               fullWidth
@@ -323,7 +323,7 @@ import * as yup from "yup";
 import draggable from "vuedraggable";
 
 // Views
-import Questions from "@/views/dashboard/opening/questions/questions.vue";
+import QuestionList from "@/views/dashboard/opening/questions/question-list.vue";
 import EditQuestion from "@/views/dashboard/opening/questions/edit-question.vue";
 import ViewQuestion from "@/views/dashboard/opening/questions/view-question.vue";
 
@@ -367,7 +367,7 @@ const route = useRoute();
 const router = useRouter();
 const isListItemMoving = ref(false);
 const isOptionFlyoutOpen = ref(false);
-const isAddQuestionDrawerOpen = ref(false);
+const isSearchQuestionsListOpen = ref(false);
 const isCreateQuestionDrawerOpen = ref(false);
 const isAddQuestionsModalOpen = ref(false);
 const isViewQuestionDrawerOpen = ref(false);
@@ -597,28 +597,21 @@ const handleDeleteInterviewTemplate = async () => {
   });
 };
 
-const handleCloseEditDrawer = () => {
+const handleCloseEditDrawer = async () => {
   const handleClose = () => {
     isEditQuestionDrawerOpen.value = false;
-    isAddQuestionDrawerOpen.value = false;
+    isSearchQuestionsListOpen.value = false;
     isCreateQuestionDrawerOpen.value = false;
   };
 
-  const { isDirty, type, clearIsDirty } = useQuestionContext();
+  const { isDirty, type, clearIsDirty, handleSubmitFunc } =
+    useQuestionContext();
 
-  if (!isDirty.value) {
+  if (isDirty.value) {
+    await handleSubmitFunc.value();
     handleClose();
   } else {
-    const dialogText =
-      "You have unsaved changes, are you sure you want to continue?";
-    const confirm = window.confirm(dialogText);
-    if (!confirm) {
-      return;
-    }
-    if (confirm) {
-      clearIsDirty();
-      handleClose();
-    }
+    handleClose();
   }
 };
 </script>

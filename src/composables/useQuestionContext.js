@@ -2,6 +2,7 @@ import { ref, watch, computed } from "vue";
 
 const isDirty = ref(false);
 const type = ref(false);
+const handleSubmitFunc = ref(() => {});
 
 export function clearIsDirty() {
   isDirty.value = false;
@@ -21,5 +22,6 @@ export default function (metaReference, drawerType) {
     type,
     isDirty,
     clearIsDirty,
+    handleSubmitFunc,
   };
 }

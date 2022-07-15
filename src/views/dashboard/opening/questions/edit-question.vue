@@ -75,7 +75,7 @@
 <script setup>
 //Vendor
 import * as yup from "yup";
-import { ref, computed, onMounted, watchEffect } from "vue";
+import { ref, onMounted, watchEffect } from "vue";
 import { useForm } from "vee-validate";
 import { useRoute } from "vue-router";
 
@@ -85,7 +85,6 @@ import HpCounter from "@/components/hp-counter.vue";
 import HpButton from "@/components/hp-button.vue";
 import HpTagger from "@/components/form/hp-tagger.vue";
 import HpDangerZone from "@/components/cards/hp-danger-zone-card.vue";
-import HpIcon from "@/components/hp-icon.vue";
 import HpMultiInput from "@/components/form/hp-multi-input.vue";
 
 // Composables
@@ -176,7 +175,7 @@ const { handleSubmit, meta, errors } = useForm({
 });
 
 // State that interacts with parent to make sure we don't accidently close the modal
-const { clearIsDirty } = useQuestionContext(meta, "edit");
+const { clearIsDirty, handleSubmitFunc } = useQuestionContext(meta, "edit");
 
 const { fetchInterview, setInterview } = useInterviews();
 const { setToast } = useToast();
@@ -243,6 +242,8 @@ const handleDeleteQuestiontemplate = async () => {
     message: `That question is now in the trash bin`,
   });
 };
+
+handleSubmitFunc.value = onSubmit;
 </script>
 
 <style lang="scss">
