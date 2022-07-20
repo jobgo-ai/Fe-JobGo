@@ -18,7 +18,7 @@ describe("questions", () => {
     );
   });
 
-  it("Can add a new question", () => {
+  it.only("Can add a new question", () => {
     cy.contains("PERMANENT_OPENING").click();
     cy.get(".candidate-list__header__button-group__edit-button").click();
     cy.contains("DONT_DELETE")
@@ -33,9 +33,9 @@ describe("questions", () => {
     cy.get(".hp-tagger__target").contains("Skills").click();
     cy.get(`[name='skills']`).type("Pepper");
     cy.contains(`Pepper Spray`).click({ force: true });
-    cy.get(`[name='guidelines-0']`).type("TESTING_GUIDELINE_0");
-    cy.contains("Add guideline").click();
-    cy.get(`[name='guidelines-1']`).type("TESTING_GUIDELINE_1");
+    cy.get(`[name='guideline-0']`).type("TESTING_GUIDELINE_0");
+    cy.contains("Add evaluation criteria").click();
+    cy.get(`[name='guideline-1']`).type("TESTING_GUIDELINE_1");
     cy.get(".edit-question__actions").find("button").click();
     cy.contains("THIS_IS_A_FAKE_QUESTION").should("exist");
   });

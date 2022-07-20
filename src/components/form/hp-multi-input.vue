@@ -20,7 +20,7 @@
             class="hp-multi-input__input-container__input"
             :disabled="isDisabled"
             :value="element.text"
-            :name="`guidelines-${index}`"
+            :name="`guideline-${index}`"
             @input="handleInput($event, index)"
             :id="index"
             rows="3"
@@ -45,7 +45,7 @@
       @handleClick="handleAddItem"
       dropzone
       icon="plus"
-      label="Add guideline"
+      label="Add evaluation criteria"
     ></hp-button>
   </div>
 </template>

@@ -47,7 +47,7 @@
         ></hp-tagger>
       </div>
       <div class="edit-question__guidelines">
-        <div class="edit-question__label">Guidelines</div>
+        <div class="edit-question__label">Evaluation criteria</div>
         <div class="edit-question__sublabel">
           Describe what you would see in a perfect answer
         </div>

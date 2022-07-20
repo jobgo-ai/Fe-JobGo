@@ -3,7 +3,7 @@ describe("candidates", () => {
     cy.login();
   });
 
-  it.only("Can view and search for candidates", () => {
+  it("Can view and search for candidates", () => {
     cy.intercept({
       method: "GET",
       url: "**/candidates?limit=15&offset=0&search=TEST_CANDIDATE_1_DONT_LET_ME_DIE&state=active",
