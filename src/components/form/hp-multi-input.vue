@@ -16,21 +16,27 @@
             class="hp-multi-input__input-container__icon"
             name="drag"
           ></hp-icon>
-          <input
+          <textarea
             class="hp-multi-input__input-container__input"
             :disabled="isDisabled"
             :value="element.text"
             :name="`guidelines-${index}`"
             @input="handleInput($event, index)"
             :id="index"
+            rows="3"
             :maxlength="maxChars"
           />
-          <hp-icon
-            class="hp-multi-input__button"
-            @click="removeItem(element)"
-            name="trash"
-            danger
-          ></hp-icon>
+          <div class="hp-multi-input__trashcontainer">
+            <hp-icon
+              class="hp-multi-input__button"
+              @click="removeItem(element)"
+              name="trash"
+              danger
+            ></hp-icon>
+            <div class="hp-multi-input__max-chars">
+              {{ element.text.length }}/{{ maxChars }}
+            </div>
+          </div>
         </div>
       </template>
     </draggable>
@@ -153,23 +159,41 @@ const handleKeydown = (index) => {
   display: flex;
   flex-direction: column;
   margin-top: 6px;
+  &__trashcontainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+    justify-content: space-between;
+    margin: 6px 0px 0px 6px;
+    position: relative;
+  }
+  &__max-chars {
+    font-size: 8px;
+    position: absolute;
+    bottom: -6px;
+    right: -6px;
+  }
+
   &__input-container {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     background-color: var(--color-panel);
     border: $border;
     width: 100%;
-    padding: 6px;
+    padding: 12px;
     border-radius: $border-radius-sm;
     margin-bottom: 6px;
+    position: relative;
 
     &__input {
       background-color: var(--color-background);
       border: 1px solid var(--color-border);
       border-radius: $border-radius-sm;
-      padding: 8px 8px 8px 12px;
-      line-height: 36px;
-      max-height: 32px;
+      padding: 8px;
+      padding-top: 4px;
+      line-height: 18px;
+      resize: none;
       flex-grow: 1;
       transition: border-color 0.15s cubic-bezier(0.17, 0.67, 0.83, 0.67);
       color: var(--color-text-primary);
@@ -188,7 +212,7 @@ const handleKeydown = (index) => {
     }
 
     &__icon {
-      margin-right: 16px;
+      margin: 6px 6px 0px 0px;
       cursor: grab;
     }
   }
@@ -196,10 +220,9 @@ const handleKeydown = (index) => {
     width: 100%;
   }
   &__button {
-    margin-left: 12px;
-    margin-right: 6px;
     cursor: pointer;
     color: var(--color-forground-negative);
+    margin-bottom: 32px;
   }
 }
 
