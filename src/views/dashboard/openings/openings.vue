@@ -76,6 +76,7 @@ import { useWindowScroll } from "@vueuse/core";
 
 // Composables
 import { usePut } from "@/composables/useHttp";
+import useAuth from "@/composables/useAuth";
 import useToast from "@/composables/useToast";
 import useOpenings from "@/composables/useOpenings";
 import { useGettingStarted } from "@/composables/useGettingStarted";
@@ -111,6 +112,8 @@ const { fetchChecklist } = useGettingStarted();
 
 const scrollContainer = ref(null);
 const { y } = useWindowScroll();
+
+const { user } = useAuth();
 
 watch(
   () => y.value,
@@ -168,6 +171,9 @@ watch(
 watch(
   () => route.params.openingRef,
   async () => {
+    if (!user.value?.token) {
+      return;
+    }
     if (route.params.openingRef) {
       if (openings.value.length === 0 || state.value === "archived") {
         state.value = "active";
