@@ -19,12 +19,18 @@
 <script setup>
 import HpIcon from "@/components/hp-icon.vue";
 import { watch } from "vue";
+import { onKeyStroke } from "@vueuse/core";
+
 const emits = defineEmits(["close"]);
 const props = defineProps({
   isOpen: {
     type: Boolean,
     default: false,
   },
+});
+
+onKeyStroke("Escape", (e) => {
+  emits("close");
 });
 
 watch(

@@ -26,6 +26,12 @@ const props = defineProps({
   },
 });
 
+import { onKeyStroke } from "@vueuse/core";
+
+onKeyStroke("Escape", (e) => {
+  emits("close");
+});
+
 // Corresponds to scroll disabling while overlay is open, found in app scss
 watch(
   () => props.isOpen,

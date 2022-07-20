@@ -23,6 +23,7 @@
 
 <script setup>
 import { computed, ref } from "vue";
+import { useField } from "vee-validate";
 
 const props = defineProps({
   label: String,
@@ -44,8 +45,6 @@ const props = defineProps({
 });
 
 const emits = defineEmits(["input"]);
-
-import { useField } from "vee-validate";
 
 const { value: modelValue, errorMessage } = useField(props.name);
 
