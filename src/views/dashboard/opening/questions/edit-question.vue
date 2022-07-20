@@ -12,6 +12,7 @@
           ref="questionInputRef"
           name="content"
           placeholder="Type the question"
+          maxlength="240"
         ></hp-textarea>
       </div>
       <div class="edit-question__duration">

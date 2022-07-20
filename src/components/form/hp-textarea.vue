@@ -12,6 +12,7 @@
       :disabled="isDisabled"
       v-on:input="handleInput"
       :rows="rows"
+      :maxlength="maxlength"
     ></textarea>
     <transition name="hp-textarea__error-transition">
       <div class="hp-textarea__error" v-if="errorMessage">
@@ -30,6 +31,7 @@ const props = defineProps({
   modelValue: String,
   name: String,
   type: String,
+  maxlength: String,
   placeholder: {
     type: String,
     default: "",

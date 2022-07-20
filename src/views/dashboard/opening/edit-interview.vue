@@ -318,7 +318,7 @@
 import { onMounted, ref, computed, nextTick } from "vue";
 import { useForm } from "vee-validate";
 import { useRoute, useRouter } from "vue-router";
-import { useDebounceFn } from "@vueuse/core";
+import { useDebounceFn, onKeyStroke } from "@vueuse/core";
 import * as yup from "yup";
 import draggable from "vuedraggable";
 
@@ -366,13 +366,11 @@ const isSaving = ref(false);
 const route = useRoute();
 const router = useRouter();
 const isListItemMoving = ref(false);
-const isOptionFlyoutOpen = ref(false);
 const isSearchQuestionsListOpen = ref(false);
 const isCreateQuestionDrawerOpen = ref(false);
 const isAddQuestionsModalOpen = ref(false);
 const isViewQuestionDrawerOpen = ref(false);
 const isEditQuestionDrawerOpen = ref(false);
-const flyoutTargets = ref([]);
 const { interview, fetchInterview, isInterviewLoading, setInterview } =
   useInterviews();
 const putInterview = usePut(`templates/${route.params.interviewRef}`);
@@ -596,6 +594,10 @@ const handleDeleteInterviewTemplate = async () => {
     message: "That nasty interview is finally gone",
   });
 };
+
+onKeyStroke("Escape", (e) => {
+  handleCloseEditDrawer();
+});
 
 const handleCloseEditDrawer = async () => {
   const handleClose = () => {

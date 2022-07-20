@@ -17,6 +17,7 @@
 
 <script setup>
 import { watch } from "vue";
+import { onKeyDown } from "@vueuse/core";
 
 const emits = defineEmits(["close"]);
 const props = defineProps({
@@ -24,12 +25,6 @@ const props = defineProps({
     type: [Boolean, Object],
     default: false,
   },
-});
-
-import { onKeyStroke } from "@vueuse/core";
-
-onKeyStroke("Escape", (e) => {
-  emits("close");
 });
 
 // Corresponds to scroll disabling while overlay is open, found in app scss
