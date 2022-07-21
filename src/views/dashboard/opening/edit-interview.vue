@@ -417,6 +417,7 @@ const handleQuestionAdded = async () => {
       block: "center",
     });
   });
+  handleCloseEditDrawer();
 };
 
 const moveItem = async (moveDown, index) => {

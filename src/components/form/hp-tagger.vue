@@ -54,7 +54,22 @@
               <hp-spinner />
             </div>
             <div class="hp-tagger__empty-state" v-else>
-              <EmptyState /> No options
+              <div class="hp-tagger__add-skill">
+                <p class="hp-tagger__add-skill__text">
+                  We couldn't find any relevant skills, however, you can create
+                  and add a new skill
+                </p>
+                <div class="hp-tagger__add-skill__button">
+                  <hp-button
+                    primary
+                    icon="plus"
+                    :isLoading="isAddingNewSkill"
+                    :isDisabled="isAddingNewSkill || modelValue.length > 2"
+                    :label="`Add ${search}`"
+                    @handleClick="addNewSkill"
+                  ></hp-button>
+                </div>
+              </div>
             </div>
           </ul>
         </div>
@@ -77,15 +92,19 @@
 </template>
 
 <script setup>
-import { useField } from "vee-validate";
+// Vendor
 import { computed, ref, watch, watchEffect } from "vue";
+import { useField } from "vee-validate";
+import { useElementBounding } from "@vueuse/core";
+import { onClickOutside } from "@vueuse/core";
+import { usePost } from "@/composables/useHttp";
+
+// Components
 import HpCheckbox from "@/components/hp-checkbox.vue";
 import HpInput from "@/components/form/hp-input.vue";
 import HpSpinner from "@/components/hp-spinner.vue";
 import HpIcon from "@/components/hp-icon.vue";
-import EmptyState from "@/assets/abstracts/empty-state.svg";
-import { useElementBounding } from "@vueuse/core";
-import { onClickOutside } from "@vueuse/core";
+import HpButton from "@/components/hp-button.vue";
 
 const emits = defineEmits(["update:modelValue"]);
 const props = defineProps({
@@ -155,6 +174,7 @@ const isLoading = ref(false);
 const searchInput = ref(null);
 const isFlyoutOpen = ref(false);
 const target = ref(null);
+const isAddingNewSkill = ref(false);
 
 onClickOutside(target, (event) => {
   if (!isFlyoutOpen.value) {
@@ -246,6 +266,23 @@ const isDisabled = (option) => {
   const isIncluded = props.modelValue.find((v) => v.value === option.value);
   const isMax = props.max && props.modelValue.length >= props.max;
   return !isIncluded && isMax;
+};
+
+const addNewSkill = async () => {
+  isAddingNewSkill.value = true;
+  const postSkill = usePost("skills");
+  await postSkill.post({
+    skill: {
+      name: search.value,
+    },
+  });
+  const newSkill = {
+    value: postSkill.data.value.skill.reference,
+    label: postSkill.data.value.skill.name,
+  };
+  handleChangeEmit(newSkill);
+  isAddingNewSkill.value = false;
+  handleAsyncSearch();
 };
 </script>
 
@@ -361,12 +398,17 @@ const isDisabled = (option) => {
       }
     }
   }
-  &__empty-state {
+  &__add-skill {
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding-bottom: 12px;
+    color: var(--color-text-secondary);
+    padding: 12px;
+    &__button {
+      display: flex;
+    }
+    &__text {
+      margin-bottom: 12px;
+    }
   }
 }
 </style>
