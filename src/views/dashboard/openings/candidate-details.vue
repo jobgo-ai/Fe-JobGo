@@ -253,19 +253,19 @@ const skillList = computed(() => {
   const skills = openingTemplate.value.statistics.skills.map((skill) => {
     return {
       name: skill.value.name,
-      slug: skill.value.slug,
+      reference: skill.value.reference,
     };
   });
 
   const isSkillsTheSameAsAverage = skills.every((skill) => {
     const candidateSkillScore =
       candidate.value?.opening?.statistics?.candidateSkillScores.find(
-        (s) => s.slug === skill.slug
+        (s) => s.reference === skill.reference
       )?.score?.value;
 
     const averageSkillScore =
       candidate.value?.opening?.statistics?.averageOpeningSkillScores.find(
-        (s) => s.slug === skill.slug
+        (s) => s.reference === skill.reference
       )?.score?.value;
 
     return candidateSkillScore === averageSkillScore;
@@ -274,7 +274,7 @@ const skillList = computed(() => {
   const formattedSkills = skills.map((skill) => {
     const skillValue =
       candidate.value?.opening?.statistics?.candidateSkillScores.find(
-        (s) => s.slug === skill.slug
+        (s) => s.reference === skill.reference
       )?.score?.value;
 
     return {
@@ -283,7 +283,7 @@ const skillList = computed(() => {
       average: isSkillsTheSameAsAverage
         ? 3
         : candidate.value?.opening?.statistics?.averageOpeningSkillScores.find(
-            (s) => s.slug === skill.slug
+            (s) => s.reference === skill.reference
           )?.score?.value,
     };
   });

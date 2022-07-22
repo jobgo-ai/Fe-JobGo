@@ -13,7 +13,7 @@ export default function useSkillSearch() {
     await getSkills.get();
 
     return getSkills.data.value?.skills?.map((c) => {
-      return { label: c.name, value: c.slug };
+      return { label: c.name, value: c.reference };
     });
   };
   return {

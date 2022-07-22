@@ -279,7 +279,7 @@ const calculateColor = (candidate, avg) => {
 
 const calculateSkillScoreColor = (skill) => {
   const average = evaluation.value.statistics.averageInterviewSkillScores.find(
-    (i) => i.slug === skill.slug
+    (i) => i.reference === skill.reference
   );
   if (average) {
     return calculateColor(skill.score.value, average.score.value);

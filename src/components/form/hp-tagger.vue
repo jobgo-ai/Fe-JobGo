@@ -33,43 +33,48 @@
             />
           </div>
           <ul class="hp-tagger__flyout__options">
-            <button
-              v-if="optionsList.length > 0 && !isLoading"
-              :class="`hp-tagger__flyout__options__option ${
-                isDisabled(option) &&
-                'hp-tagger__flyout__options__option--disabled'
-              }`"
-              v-for="option in optionsList"
-              @click="handleChangeEmit(option)"
-              type="button"
-            >
-              {{ option.label }}
-              <hp-checkbox
-                class="hp-tagger__checkbox"
-                :checked="modelValue.find((v) => v.value === option.value)"
-                :tabindex="-1"
-              />
-            </button>
+            <div v-if="!isLoading">
+              <button
+                class="
+                  hp-tagger__flyout__options__option
+                  hp-tagger__flyout__options__option--add
+                "
+                v-if="
+                  search.length > 2 &&
+                  !options.some(
+                    (e) => e.label.toLowerCase() === search.toLowerCase()
+                  )
+                "
+                type="button"
+                @click="addNewSkill"
+              >
+                <hp-icon
+                  class="hp-tagger__flyout__options__option__add-icon"
+                  name="plus"
+                  size="14"
+                ></hp-icon>
+                {{ `Add "${search}"` }}
+              </button>
+              <button
+                v-if="optionsList.length > 0"
+                :class="`hp-tagger__flyout__options__option ${
+                  isDisabled(option) &&
+                  'hp-tagger__flyout__options__option--disabled'
+                }`"
+                v-for="option in optionsList"
+                @click="handleChangeEmit(option)"
+                type="button"
+              >
+                {{ option.label }}
+                <hp-checkbox
+                  class="hp-tagger__checkbox"
+                  :checked="modelValue.find((v) => v.value === option.value)"
+                  :tabindex="-1"
+                />
+              </button>
+            </div>
             <div class="hp-tagger__spinner" v-else-if="isLoading">
               <hp-spinner />
-            </div>
-            <div class="hp-tagger__empty-state" v-else>
-              <div class="hp-tagger__add-skill">
-                <p class="hp-tagger__add-skill__text">
-                  We couldn't find any relevant skills, however, you can create
-                  and add a new skill
-                </p>
-                <div class="hp-tagger__add-skill__button">
-                  <hp-button
-                    primary
-                    icon="plus"
-                    :isLoading="isAddingNewSkill"
-                    :isDisabled="isAddingNewSkill || modelValue.length > 2"
-                    :label="`Add ${search}`"
-                    @handleClick="addNewSkill"
-                  ></hp-button>
-                </div>
-              </div>
             </div>
           </ul>
         </div>
@@ -274,6 +279,7 @@ const addNewSkill = async () => {
   await postSkill.post({
     skill: {
       name: search.value,
+      type: "technical",
     },
   });
   const newSkill = {
@@ -283,6 +289,7 @@ const addNewSkill = async () => {
   handleChangeEmit(newSkill);
   isAddingNewSkill.value = false;
   handleAsyncSearch();
+  searchInput.value.inputRef.focus();
 };
 </script>
 
@@ -384,6 +391,9 @@ const addNewSkill = async () => {
         text-align: left;
         color: var(--color-text-primary);
         width: 100%;
+        &__add-icon {
+          margin-right: 6px;
+        }
         &:hover {
           background-color: var(--color-forground-floating);
         }
@@ -394,6 +404,9 @@ const addNewSkill = async () => {
         &--disabled {
           opacity: 0.4;
           cursor: not-allowed;
+        }
+        &--add {
+          justify-content: flex-start;
         }
       }
     }

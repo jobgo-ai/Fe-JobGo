@@ -158,7 +158,7 @@ let initialValues = {
 if (props.question) {
   skills.value = props.question.skills.map((s) => ({
     label: s.name,
-    value: s.slug,
+    value: s.reference,
   }));
 
   const formattedInitialValues = {

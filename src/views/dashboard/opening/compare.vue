@@ -282,7 +282,7 @@ const loadComparisonData = async (dataset) => {
     skillList.value = skills.map((skill, index) => {
       return {
         label: skill.name,
-        value: skill.slug,
+        value: skill.reference,
         sortable: true,
         index: index,
       };
