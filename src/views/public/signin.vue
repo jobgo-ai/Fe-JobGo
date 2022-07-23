@@ -4,7 +4,7 @@
     <div class="signin__container">
       <div class="signin__image-container"></div>
       <p class="signin__subtitle">Welcome back!</p>
-      <h2 class="signin__title">Log into Hireproof</h2>
+      <h1 class="signin__title">Log into Hireproof</h1>
       <form @submit="onSubmit">
         <hp-input name="email" placeholder="Type your email" label="Email" />
         <div class="signin__password-container">
@@ -31,10 +31,10 @@
         ></hp-button>
       </form>
     </div>
-    <router-link class="signin__signup" to="/signup"
+    <!-- <router-link class="signin__signup" to="/signup"
       >Don't have an account?
       <span class="signin__signup__link">Sign up</span></router-link
-    >
+    > -->
     <div class="forgot-password__tos">
       <a
         href="https://www.hireproof.io/terms-of-service"
