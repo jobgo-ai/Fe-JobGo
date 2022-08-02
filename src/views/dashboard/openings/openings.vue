@@ -80,6 +80,7 @@ import useToast from "@/composables/useToast";
 import useOpenings from "@/composables/useOpenings";
 import { useGettingStarted } from "@/composables/useGettingStarted";
 import { useBreadcrumbs } from "@/composables/useBreadcrumbs";
+import useAuth from "@/composables/useAuth";
 
 // Views
 import CandidateList from "@/views/dashboard/openings/candidate-list.vue";
@@ -96,6 +97,7 @@ const selectedOpening = ref({});
 const isCandidateDetailsOpen = ref(route.query.candidate);
 const isCandidateListOpen = ref(route.params.openingRef);
 const state = ref("active");
+const { user } = useAuth();
 const { setToast } = useToast();
 
 const {
@@ -195,7 +197,9 @@ watch(
       if (openings.value.length > 0) {
         return;
       } else {
-        await fetchOpenings();
+        if (user.value) {
+          await fetchOpenings();
+        }
       }
     }
   },

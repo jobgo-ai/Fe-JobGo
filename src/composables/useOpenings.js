@@ -1,4 +1,4 @@
-import { ref, computed } from "vue";
+import { ref } from "vue";
 import { useGet, usePost } from "./useHttp";
 
 const limit = 20;
