@@ -1,7 +1,7 @@
 <template>
-  <div class="candidate-details__interview-grid__item__header">
+  <div class="hp-candidate-interview-report-card__item__header">
     <div
-      class="candidate-details__interview-grid__item__header__badge-container"
+      class="hp-candidate-interview-report-card__item__header__badge-container"
     >
       <hp-badge icon="layers" :content="index + 1"></hp-badge>
       <hp-badge
@@ -16,7 +16,7 @@
       ></hp-badge>
     </div>
     <h3
-      class="candidate-details__interview-grid__item__header__title"
+      class="hp-candidate-interview-report-card__item__header__title"
       :title="interview.name"
     >
       {{ interview.name }}
@@ -24,20 +24,20 @@
   </div>
   <div
     v-if="inProgressInterview"
-    class="candidate-details__interview-grid__item__progress-wrapper"
+    class="hp-candidate-interview-report-card__item__progress-wrapper"
   >
-    <div class="candidate-details__interview-grid__item__icon-text">
+    <div class="hp-candidate-interview-report-card__item__icon-text">
       <hp-icon
-        class="candidate-details__interview-grid__item__icon-text__icon"
+        class="hp-candidate-interview-report-card__item__icon-text__icon"
         name="user"
         :size="15"
       ></hp-icon>
       {{ inProgressInterviews.length }} interviewers
     </div>
-    <div class="candidate-details__interview-grid__item__icon-text">
+    <div class="hp-candidate-interview-report-card__item__icon-text">
       In progress
     </div>
-    <div class="candidate-details__interview-grid__item__actions">
+    <div class="hp-candidate-interview-report-card__item__actions">
       <hp-dropdown
         class="candidate-interview-card__dropdown"
         :label="'In progress'"
@@ -54,9 +54,9 @@
     </div>
   </div>
   <div v-else-if="hasTerminatedInterview && completedEvaluations.length === 1">
-    <div class="candidate-details__interview-grid__item__icon-text">
+    <div class="hp-candidate-interview-report-card__item__icon-text">
       <hp-icon
-        class="candidate-details__interview-grid__item__icon-text__icon"
+        class="hp-candidate-interview-report-card__item__icon-text__icon"
         name="user"
         :size="15"
       ></hp-icon>
@@ -65,9 +65,9 @@
           .interviewerName
       }}
     </div>
-    <div class="candidate-details__interview-grid__item__icon-text">
+    <div class="hp-candidate-interview-report-card__item__icon-text">
       <hp-icon
-        class="candidate-details__interview-grid__item__icon-text__icon"
+        class="hp-candidate-interview-report-card__item__icon-text__icon"
         name="calendar"
         :size="15"
       ></hp-icon>
@@ -78,7 +78,7 @@
         )
       }}
     </div>
-    <div class="candidate-details__interview-grid__item__actions">
+    <div class="hp-candidate-interview-report-card__item__actions">
       <hp-button
         label="View full results"
         :to="`/reports/${candidate.key}/evaluations/${interview.interview.evaluations[0].key}`"
@@ -86,17 +86,17 @@
     </div>
   </div>
   <div v-else-if="hasTerminatedInterview && completedEvaluations.length > 1">
-    <div class="candidate-details__interview-grid__item__icon-text">
+    <div class="hp-candidate-interview-report-card__item__icon-text">
       <hp-icon
-        class="candidate-details__interview-grid__item__icon-text__icon"
+        class="hp-candidate-interview-report-card__item__icon-text__icon"
         name="user"
         :size="15"
       ></hp-icon>
       {{ interview.interview.evaluations.length }} Interviewers
     </div>
-    <div class="candidate-details__interview-grid__item__icon-text">
+    <div class="hp-candidate-interview-report-card__item__icon-text">
       <hp-icon
-        class="candidate-details__interview-grid__item__icon-text__icon"
+        class="hp-candidate-interview-report-card__item__icon-text__icon"
         name="calendar"
         :size="15"
       ></hp-icon>
@@ -107,7 +107,7 @@
         )
       }}
     </div>
-    <div class="candidate-details__interview-grid__item__actions">
+    <div class="hp-candidate-interview-report-card__item__actions">
       <hp-dropdown :label="'View full results'" left>
         <template v-slot:dropdown>
           <ul class="hp-multi-select__flyout__options">
@@ -125,17 +125,17 @@
     </div>
   </div>
   <div v-else>
-    <div class="candidate-details__interview-grid__item__icon-text">
+    <div class="hp-candidate-interview-report-card__item__icon-text">
       <hp-icon
-        class="candidate-details__interview-grid__item__icon-text__icon"
+        class="hp-candidate-interview-report-card__item__icon-text__icon"
         name="chronometer"
         :size="15"
       ></hp-icon>
       {{ secondsToMinutes(interview.statistics.duration) }} minutes
     </div>
-    <div class="candidate-details__interview-grid__item__icon-text">
+    <div class="hp-candidate-interview-report-card__item__icon-text">
       <hp-icon
-        class="candidate-details__interview-grid__item__icon-text__icon"
+        class="hp-candidate-interview-report-card__item__icon-text__icon"
         name="questions"
         :size="15"
       ></hp-icon>
@@ -143,7 +143,7 @@
       {{ interview.statistics.questions }} questions
     </div>
     <div
-      class="candidate-details__interview-grid__item__actions"
+      class="hp-candidate-interview-report-card__item__actions"
       v-if="isNextAction(interview, opening.templates)"
     ></div>
   </div>
@@ -152,7 +152,6 @@
 <script setup>
 //Vendor
 import { computed } from "vue";
-import { useRoute } from "vue-router";
 import { format } from "date-fns";
 
 //Components
@@ -160,12 +159,6 @@ import HpBadge from "@/components/hp-badge.vue";
 import HpIcon from "@/components/hp-icon.vue";
 import HpButton from "@/components/hp-button.vue";
 import HpDropdown from "@/components/hp-dropdown.vue";
-
-//Composables
-import useToast from "@/composables/useToast";
-
-const route = useRoute();
-const { setToast } = useToast();
 
 const props = defineProps({
   interview: {
@@ -206,8 +199,6 @@ const hasTerminatedInterview = computed(() => {
   return props.interview.interview.evaluations.some((i) => i.terminated);
 });
 
-const URL = import.meta.env.VITE_INTERVIEW_URL;
-
 const completedEvaluations = computed(() => {
   return props.opening.templates
     .find((t) => props.interview.reference === t.reference)
@@ -242,31 +233,50 @@ const isNextAction = (template, templates) => {
 
   return template.interview.token === nextRef;
 };
-
-const copyInterview = (interview) => {
-  const interviewLink = `${URL}/token/${interview.interview.token}`;
-  navigator.permissions.query({ name: "clipboard-write" }).then((result) => {
-    if (result.state == "granted" || result.state == "prompt") {
-      navigator.clipboard.writeText(interviewLink);
-      setToast({
-        type: "positive",
-        title: "Copy that!",
-        message: `Interview link copied to clipboard`,
-      });
-    }
-  });
-};
-
-const calculateInterviewLink = (interview) => {
-  const URL = `${import.meta.env.VITE_INTERVIEW_URL}/token/${
-    interview?.interview?.token
-  }`;
-  return URL;
-};
-
-const generateInProgressInterviewLink = (token) => {
-  return `${import.meta.env.VITE_INTERVIEW_URL}/token/${
-    props.interview.interview.token
-  }/${token}`;
-};
 </script>
+
+<style lang="scss" scoped>
+.hp-candidate-interview-report-card__item {
+  border-radius: $border-radius-lg;
+  border: 1px solid var(--color-border);
+  width: 264px;
+  padding: 16px;
+  &--terminated {
+    background: var(--color-panel);
+  }
+  &__header {
+    &__badge-container {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+    &__title {
+      font-weight: 500;
+      font-size: 14px;
+      line-height: 20px;
+      margin-bottom: 16px;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+  }
+  &__icon-text {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+    &__icon {
+      margin-right: 4px;
+      color: var(--color-text-secondary);
+    }
+  }
+  &__actions {
+    align-items: center;
+    display: inline-flex;
+    margin-top: 22px;
+    &--icon {
+      color: var(--color-text-primary);
+      margin-left: 6px;
+    }
+  }
+}
+</style>
