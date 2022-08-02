@@ -321,6 +321,7 @@ const calculateSkillScoreColor = (skill) => {
       padding: 16px;
       font-size: 12px;
       grid-column: 1 / 3;
+      margin-bottom: 12px;
     }
     &__skills-title {
       display: flex;
@@ -360,6 +361,7 @@ const calculateSkillScoreColor = (skill) => {
     &__stats {
       display: flex;
       margin-bottom: 16px;
+      flex-direction: column;
       &__stat {
         display: flex;
         align-items: center;
@@ -371,9 +373,9 @@ const calculateSkillScoreColor = (skill) => {
       }
     }
     &__grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      grid-gap: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
       &__item {
         @include flyout;
       }
@@ -426,6 +428,7 @@ const calculateSkillScoreColor = (skill) => {
     border-radius: $border-radius-lg;
     padding: 16px;
     font-size: 12px;
+    margin-bottom: 12px;
   }
   &__skills-title {
     display: flex;
@@ -548,6 +551,14 @@ const calculateSkillScoreColor = (skill) => {
     &__details {
       flex-shrink: 0;
       width: 552px;
+      &__grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-gap: 16px;
+      }
+      &__stats {
+        flex-direction: row;
+      }
     }
   }
 }
