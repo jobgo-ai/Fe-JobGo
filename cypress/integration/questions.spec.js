@@ -18,7 +18,7 @@ describe("questions", () => {
     );
   });
 
-  it.only("Can add a new question", () => {
+  it("Can add a new question", () => {
     cy.contains("PERMANENT_OPENING").click();
     cy.get(".candidate-list__header__button-group__edit-button").click();
     cy.contains("DONT_DELETE")
@@ -48,7 +48,7 @@ describe("questions", () => {
       .find("a")
       .contains("Edit interview")
       .click();
-    cy.get(".hp-options-dropdown__flyout").click();
+    cy.get(".hp-options-dropdown__flyout").first().click();
     cy.contains("Edit question").click();
     cy.contains("Delete question template").click();
     cy.get(`[name='confirmation']`).type("DELETE");
