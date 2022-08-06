@@ -3,7 +3,7 @@ import { useGet } from "@/composables/useHttp";
 export default function useSkillSearch() {
   const handleSkillSearch = (query) => {
     const queryToSearch = query ? query : "";
-    const endpoint = `skills?limit=20&search=${queryToSearch}`;
+    const endpoint = `skill?limit=20&search=${queryToSearch}`;
 
     return querySkills(endpoint);
   };

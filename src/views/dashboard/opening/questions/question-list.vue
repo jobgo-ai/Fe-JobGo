@@ -10,21 +10,11 @@
         name="search"
         variant="search"
         icon="search"
+        placeholder="Search by content"
         v-model="search"
         standalone
       />
-      <div class="question-list__filters">
-        <hp-multi-select
-          class="question-list__filters__dropdown"
-          label="Skills"
-          :options="skillOptions"
-          name="skills"
-          searchable
-          standalone
-          :onSearch="searchFunction"
-          v-model="filter.skills"
-        ></hp-multi-select>
-      </div>
+      <hp-skill-search placeholder="Search by skill" />
     </div>
     <ol
       ref="listContainer"
@@ -59,15 +49,14 @@ import { useDebounce } from "@vueuse/core";
 
 // Components
 import HpInput from "@/components/form/hp-input.vue";
-import HpMultiSelect from "@/components/form/hp-multi-select.vue";
 import HpQuestionCard from "@/components/cards/hp-question-card.vue";
 import HpSpinner from "@/components/hp-spinner.vue";
 import EmptyState from "@/assets/abstracts/empty-state.svg";
+import HpSkillSearch from "@/components/hp-skill-search.vue";
 
 // Composables
 import useToast from "@/composables/useToast";
 import { useGet, usePost } from "@/composables/useHttp";
-import useSkillSearch from "@/composables/useSkillSearch";
 import useInterviews from "@/composables/useInterviews";
 
 const props = defineProps({
@@ -95,20 +84,11 @@ const filter = ref({
   skills: [],
 });
 
-const skillOptions = ref([]);
-
-const { handleSkillSearch } = useSkillSearch();
-
-const searchFunction = async (value) => {
-  skillOptions.value = await handleSkillSearch(value);
-};
-
 let next = null;
 const questions = ref([]);
 const limit = 20;
 
 onMounted(async () => {
-  skillOptions.value = await handleSkillSearch("");
   listContainerMaxHeight.value =
     window.innerHeight - listContainer.value?.getBoundingClientRect().top;
 });

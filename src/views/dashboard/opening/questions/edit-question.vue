@@ -32,20 +32,9 @@
           <div class="edit-question__label">Skills</div>
           <div class="edit-question__sublabel">
             What does this question measure?
-            <span class="edit-question__sublabel--bold"
-              >Maximum of 3 skills</span
-            >.
           </div>
         </div>
-        <hp-tagger
-          label="Skills"
-          :options="skillOptions"
-          name="skills"
-          searchable
-          :onSearch="searchFunction"
-          v-model="skills"
-          :max="3"
-        ></hp-tagger>
+        <hp-skill-search />
       </div>
       <div class="edit-question__guidelines">
         <div class="edit-question__label">Evaluation criteria</div>
@@ -84,7 +73,7 @@ import { useRoute } from "vue-router";
 import HpTextarea from "@/components/form/hp-textarea.vue";
 import HpCounter from "@/components/hp-counter.vue";
 import HpButton from "@/components/hp-button.vue";
-import HpTagger from "@/components/form/hp-tagger.vue";
+import HpSkillSearch from "@/components/hp-skill-search.vue";
 import HpDangerZone from "@/components/cards/hp-danger-zone-card.vue";
 import HpMultiInput from "@/components/form/hp-multi-input.vue";
 
