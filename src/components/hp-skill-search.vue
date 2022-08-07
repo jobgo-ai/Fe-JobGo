@@ -4,23 +4,39 @@
       icon="skills"
       standalone
       :placeholder="placeholder"
-      @update:modelValue="handleInputChange"
-      v-model="skillSearch"
+      :value="skillSearch"
+      @input="onInput($event.target.value)"
     ></hp-input>
     <transition name="flyout-transition">
       <div v-if="isFlyoutOpen" class="hp-skill-search__flyout">
-        <div class="hp-skill-search__flyout__option" v-if="isAdd">
+        <button
+          class="
+            hp-skill-search__flyout__option hp-skill-search__flyout__option--add
+          "
+          v-if="isAvailableToAddSkill"
+          type="button"
+          @click="addNewSkill"
+        >
+          <hp-icon
+            class="hp-skill-search__flyout__option__icon"
+            :size="14"
+            name="plus"
+          ></hp-icon>
           Add "{{ skillSearch }}" to list of skills
-        </div>
-        <div v-if="isLoading">
+        </button>
+        <div class="hp-skill-search__flyout__loader" v-if="isLoading">
           <hp-spinner></hp-spinner>
         </div>
-        <div v-if="true">
-          <ul>
-            <li class="hp-skill-search__flyout__option" v-for="skill in skills">
-              {{ skill }}
-            </li>
-          </ul>
+        <div v-if="skills.length > 0 && !isLoading">
+          <button
+            tabIndex="0"
+            type="button"
+            class="hp-skill-search__flyout__option"
+            v-for="skill in skills"
+            @click="handleSkillSelection(skill)"
+          >
+            {{ skill.label }}
+          </button>
         </div>
       </div>
     </transition>
@@ -28,17 +44,25 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+// Vendor
+import { ref, computed } from "vue";
+import { useDebounceFn } from "@vueuse/core";
 
 // Components
+import HpIcon from "@/components/hp-icon.vue";
 import HpInput from "@/components/form/hp-input.vue";
 import HpSpinner from "@/components/hp-spinner.vue";
 import useSkillSearch from "@/composables/useSkillSearch";
-import { useDebounceFn } from "@vueuse/core";
+import useToast from "@/composables/useToast";
+
+// Composables
+import { usePost } from "@/composables/useHttp";
+
+const { setToast } = useToast();
 
 const props = defineProps({
   canAdd: {
-    type: String,
+    type: Boolean,
     default: false,
   },
   placeholder: {
@@ -47,22 +71,68 @@ const props = defineProps({
   },
 });
 
-const skills = ["JavaScript", "Vue", "Vuex", "Vue Router", "Vuex Router"];
+const emits = defineEmits(["onChange"]);
+
+const skills = ref([]);
 
 const { handleSkillSearch } = useSkillSearch();
 
 const isFlyoutOpen = ref(false);
+const isLoading = ref(false);
 const skillSearch = ref("");
 
-const handleInputChange = useDebounceFn((value) => {
-  if (value === "") {
+const onInput = (value) => {
+  skillSearch.value = value;
+  handleInputChange();
+};
+
+const handleInputChange = useDebounceFn(async () => {
+  if (skillSearch.value === "") {
     isFlyoutOpen.value = false;
   }
 
-  if (!isFlyoutOpen.value && value !== "") {
+  isLoading.value = true;
+
+  if (!isFlyoutOpen.value && skillSearch.value !== "") {
     isFlyoutOpen.value = true;
   }
-}, 500);
+
+  const results = await handleSkillSearch(skillSearch.value);
+  skills.value = results;
+  isLoading.value = false;
+}, 150);
+
+const handleSkillSelection = (skill) => {
+  isFlyoutOpen.value = false;
+  skillSearch.value = skill.label;
+  emits("onChange", skill);
+};
+
+const isAvailableToAddSkill = computed(() => {
+  const skillAnExactMatch = skills.value.find(
+    (skill) => skill.label.toLowerCase() === skillSearch.value.toLowerCase()
+  );
+  return props.canAdd && !skillAnExactMatch;
+});
+
+const addNewSkill = async () => {
+  const postSkill = usePost("skills");
+  await postSkill.post({
+    skill: {
+      name: skillSearch.value,
+      type: "technical",
+    },
+  });
+  const newSkill = {
+    value: postSkill.data.value.skill.reference,
+    label: postSkill.data.value.skill.name,
+  };
+  handleSkillSelection(newSkill);
+  setToast({
+    type: "positive",
+    title: "Skill added",
+  });
+};
 </script>
 
 <style lang="scss">
@@ -77,6 +147,11 @@ const handleInputChange = useDebounceFn((value) => {
     top: 42px;
     width: 100%;
     border-radius: 8px;
+    &__loader {
+      padding: 24px;
+      display: flex;
+      justify-content: center;
+    }
     &__option {
       cursor: pointer;
       display: flex;
@@ -92,6 +167,14 @@ const handleInputChange = useDebounceFn((value) => {
       text-align: left;
       width: 100%;
       transition: 0.15s ease-in-out opacity;
+      &__icon {
+        margin-right: 4px;
+      }
+      &--add {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+      }
       &--disabled {
         opacity: 0.5;
         cursor: not-allowed;

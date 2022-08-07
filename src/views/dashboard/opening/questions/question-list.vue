@@ -14,7 +14,10 @@
         v-model="search"
         standalone
       />
-      <hp-skill-search placeholder="Search by skill" />
+      <hp-skill-search
+        placeholder="Search by skill"
+        @onChange="handleSkillSelection"
+      />
     </div>
     <ol
       ref="listContainer"
@@ -81,12 +84,16 @@ const { setInterview } = useInterviews();
 
 const filter = ref({
   search: useDebounce(search, 300),
-  skills: [],
+  skill: null,
 });
 
 let next = null;
 const questions = ref([]);
 const limit = 20;
+
+const handleSkillSelection = (skill) => {
+  filter.value.skill = skill.value;
+};
 
 onMounted(async () => {
   listContainerMaxHeight.value =
@@ -107,9 +114,8 @@ const getUrl = (loadingMore) => {
   if (loadingMore) {
     params.append("offset", next);
   }
-  if (filter.value.skills.length > 0) {
-    const onlySlugs = filter.value.skills.map((s) => s.value);
-    params.append("skills", onlySlugs.join(","));
+  if (filter.value.skill) {
+    params.append("skill", filter.value.skill);
   }
   if (filter.value.search !== "") {
     params.append("search", filter.value.search);

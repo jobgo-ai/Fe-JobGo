@@ -16,6 +16,19 @@
         ></hp-textarea>
       </div>
       <div class="edit-question__duration">
+        <div class="edit-question__duration__labels">
+          <div class="edit-question__label">Skill</div>
+          <div class="edit-question__sublabel">
+            What does this question measure?
+          </div>
+        </div>
+        <hp-skill-search
+          @onChange="handleSkillChange"
+          :canAdd="true"
+          placeholder="Search for skills"
+        />
+      </div>
+      <div class="edit-question__dropdowns">
         <div class="edit-question__duration__container">
           <div class="edit-question__duration__labels">
             <div class="edit-question__label">Duration time</div>
@@ -26,15 +39,6 @@
           <hp-counter name="duration" />
         </div>
         <div class="edit-question__duration__error">{{ errors.duration }}</div>
-      </div>
-      <div class="edit-question__dropdowns">
-        <div class="edit-question__duration__labels">
-          <div class="edit-question__label">Skills</div>
-          <div class="edit-question__sublabel">
-            What does this question measure?
-          </div>
-        </div>
-        <hp-skill-search />
       </div>
       <div class="edit-question__guidelines">
         <div class="edit-question__label">Evaluation criteria</div>
@@ -65,7 +69,7 @@
 <script setup>
 //Vendor
 import * as yup from "yup";
-import { ref, onMounted, watchEffect } from "vue";
+import { ref, watchEffect } from "vue";
 import { useForm } from "vee-validate";
 import { useRoute } from "vue-router";
 
@@ -78,7 +82,6 @@ import HpDangerZone from "@/components/cards/hp-danger-zone-card.vue";
 import HpMultiInput from "@/components/form/hp-multi-input.vue";
 
 // Composables
-import useSkillSearch from "@/composables/useSkillSearch";
 import useInterviews from "@/composables/useInterviews";
 import { useGettingStarted } from "@/composables/useGettingStarted";
 import useToast from "@/composables/useToast";
@@ -102,11 +105,8 @@ const content = isEdit
 
 const emits = defineEmits(["handleClose", "questionAdded"]);
 
-const skillOptions = ref([]);
+const skill = ref(null);
 
-const skills = ref([]);
-
-const { handleSkillSearch } = useSkillSearch();
 const { fetchChecklist } = useGettingStarted();
 
 const isSaving = ref(false);
@@ -116,14 +116,6 @@ watchEffect(() => {
   if (questionInputRef.value) {
     questionInputRef.value.inputRef.focus();
   }
-});
-
-const searchFunction = async (value) => {
-  skillOptions.value = await handleSkillSearch(value);
-};
-
-onMounted(async () => {
-  skillOptions.value = await handleSkillSearch("");
 });
 
 const route = useRoute();
@@ -136,7 +128,7 @@ const schema = yup.object({
     .min(0)
     .max(60)
     .required("A duration is required"),
-  skills: yup.array().nullable(),
+  skill: yup.string().required(),
   guidelines: yup.array(),
 });
 
@@ -145,21 +137,16 @@ let initialValues = {
 };
 
 if (props.question) {
-  skills.value = props.question.skills.map((s) => ({
-    label: s.name,
-    value: s.reference,
-  }));
-
   const formattedInitialValues = {
     content: props.question.content,
     duration: props.question.duration / 60,
     guidelines: props.question.guidelines,
-    skills: skills.value,
+    skill: skill.value,
   };
   initialValues = formattedInitialValues;
 }
 
-const { handleSubmit, meta, errors } = useForm({
+const { handleSubmit, meta, errors, setFieldValue } = useForm({
   validationSchema: schema,
   initialValues: initialValues,
 });
@@ -177,11 +164,12 @@ const onSubmit = handleSubmit(async (values) => {
     scoring: "likert",
     type: "open",
     duration: values.duration * 60,
-    skills: values.skills.map((s) => s.value),
     guidelines: values.guidelines
       ? values.guidelines.filter((g) => g !== "")
       : [],
   };
+
+  console.log(formattedValues);
 
   if (props.question?.reference) {
     const putQuestion = usePut(`questions/${props.question.reference}`);
@@ -231,6 +219,11 @@ const handleDeleteQuestiontemplate = async () => {
     title: "Oh my!",
     message: `That question is now in the trash bin`,
   });
+};
+
+const handleSkillChange = (newSkill) => {
+  console.log(newSkill);
+  setFieldValue("skill", newSkill.value);
 };
 
 handleSubmitFunc.value = onSubmit;
@@ -287,7 +280,6 @@ handleSubmitFunc.value = onSubmit;
   &__duration {
     display: flex;
     flex-direction: column;
-    padding-bottom: 16px;
     border-bottom: 1px dashed var(--color-border);
     &__container {
       display: flex;
