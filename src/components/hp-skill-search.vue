@@ -32,7 +32,10 @@
           <button
             tabIndex="0"
             type="button"
-            class="hp-skill-search__flyout__option"
+            class="
+              hp-skill-search__flyout__option
+              hp-skill-search__flyout__option--value
+            "
             v-for="skill in skills"
             @click="handleSkillSelection(skill)"
           >

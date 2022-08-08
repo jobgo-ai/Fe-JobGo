@@ -31,7 +31,7 @@ describe("questions", () => {
       .get(`[name='content']`)
       .type("THIS_IS_A_FAKE_QUESTION");
     cy.get(`[name='skillSearch']`).type("Pepper");
-    cy.contains(`Pepper Spray`).click({ force: true });
+    cy.get(".hp-skill-search__flyout__option--value").click({ force: true });
     cy.get(`[name='guideline-0']`).type("TESTING_GUIDELINE_0");
     cy.contains("Add evaluation criteria").click();
     cy.get(`[name='guideline-1']`).type("TESTING_GUIDELINE_1");
