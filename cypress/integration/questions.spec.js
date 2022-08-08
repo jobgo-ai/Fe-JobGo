@@ -18,7 +18,7 @@ describe("questions", () => {
     );
   });
 
-  it.only("Can add a new question", () => {
+  it("Can add a new question", () => {
     cy.contains("PERMANENT_OPENING").click();
     cy.get(".candidate-list__header__button-group__edit-button").click();
     cy.contains("DONT_DELETE")
