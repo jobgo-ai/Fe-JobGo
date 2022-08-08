@@ -120,7 +120,7 @@ const isAvailableToAddSkill = computed(() => {
   const skillAnExactMatch = skills.value.find(
     (skill) => skill.label.toLowerCase() === skillSearch.value.toLowerCase()
   );
-  return props.canAdd && !skillAnExactMatch;
+  return props.canAdd && !skillAnExactMatch && !isLoading.value;
 });
 
 const addNewSkill = async () => {
