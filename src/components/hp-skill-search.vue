@@ -3,6 +3,7 @@
     <hp-input
       icon="skills"
       standalone
+      name="skillSearch"
       :placeholder="placeholder"
       :value="skillSearch"
       @input="onInput($event.target.value)"

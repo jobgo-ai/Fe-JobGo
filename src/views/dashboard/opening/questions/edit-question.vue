@@ -224,7 +224,6 @@ const handleDeleteQuestiontemplate = async () => {
 
 const handleSkillChange = (newSkill) => {
   setValues({ ...values, skill: newSkill.value });
-  console.log(errors.value);
 };
 
 handleSubmitFunc.value = onSubmit;
