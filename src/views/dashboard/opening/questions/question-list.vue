@@ -10,14 +10,21 @@
         name="search"
         variant="search"
         icon="search"
-        placeholder="Search by content"
         v-model="search"
         standalone
       />
-      <hp-skill-search
-        placeholder="Search by skill"
-        @onChange="handleSkillSelection"
-      />
+      <div class="question-list__filters">
+        <hp-multi-select
+          class="question-list__filters__dropdown"
+          label="Skills"
+          :options="skillOptions"
+          name="skills"
+          searchable
+          standalone
+          :onSearch="searchFunction"
+          v-model="filter.skills"
+        ></hp-multi-select>
+      </div>
     </div>
     <ol
       ref="listContainer"
@@ -52,14 +59,15 @@ import { useDebounce } from "@vueuse/core";
 
 // Components
 import HpInput from "@/components/form/hp-input.vue";
+import HpMultiSelect from "@/components/form/hp-multi-select.vue";
 import HpQuestionCard from "@/components/cards/hp-question-card.vue";
 import HpSpinner from "@/components/hp-spinner.vue";
 import EmptyState from "@/assets/abstracts/empty-state.svg";
-import HpSkillSearch from "@/components/hp-skill-search.vue";
 
 // Composables
 import useToast from "@/composables/useToast";
 import { useGet, usePost } from "@/composables/useHttp";
+import useSkillSearch from "@/composables/useSkillSearch";
 import useInterviews from "@/composables/useInterviews";
 
 const props = defineProps({
@@ -84,18 +92,23 @@ const { setInterview } = useInterviews();
 
 const filter = ref({
   search: useDebounce(search, 300),
-  skill: null,
+  skills: [],
 });
+
+const skillOptions = ref([]);
+
+const { handleSkillSearch } = useSkillSearch();
+
+const searchFunction = async (value) => {
+  skillOptions.value = await handleSkillSearch(value);
+};
 
 let next = null;
 const questions = ref([]);
 const limit = 20;
 
-const handleSkillSelection = (skill) => {
-  filter.value.skill = skill.value;
-};
-
 onMounted(async () => {
+  skillOptions.value = await handleSkillSearch("");
   listContainerMaxHeight.value =
     window.innerHeight - listContainer.value?.getBoundingClientRect().top;
 });
@@ -114,8 +127,9 @@ const getUrl = (loadingMore) => {
   if (loadingMore) {
     params.append("offset", next);
   }
-  if (filter.value.skill) {
-    params.append("skill", filter.value.skill);
+  if (filter.value.skills.length > 0) {
+    const onlySlugs = filter.value.skills.map((s) => s.value);
+    params.append("skills", onlySlugs.join(","));
   }
   if (filter.value.search !== "") {
     params.append("search", filter.value.search);
