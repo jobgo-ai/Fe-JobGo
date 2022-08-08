@@ -69,6 +69,10 @@ const props = defineProps({
     type: String,
     required: false,
   },
+  value: {
+    type: String,
+    default: "",
+  },
 });
 
 const emits = defineEmits(["onChange"]);
@@ -79,7 +83,7 @@ const { handleSkillSearch } = useSkillSearch();
 
 const isFlyoutOpen = ref(false);
 const isLoading = ref(false);
-const skillSearch = ref("");
+const skillSearch = ref(props.value);
 
 const onInput = (value) => {
   skillSearch.value = value;

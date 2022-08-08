@@ -10,6 +10,14 @@
         />
       </div>
     </div>
+    <div class="view-question__section" v-if="question.skill">
+      <div class="view-question__header">Skill</div>
+      <ul class="view-question__tag-list">
+        {{
+          question.skill.name
+        }}
+      </ul>
+    </div>
     <div class="view-question__section" v-if="question.guidelines?.length > 0">
       <div class="view-question__header">Evaluation criteria</div>
       <ol class="view-question__guidelines">
@@ -20,14 +28,6 @@
           {{ guideline }}
         </li>
       </ol>
-    </div>
-    <div class="view-question__section" v-if="question.skills?.length > 0">
-      <div class="view-question__header">Skills</div>
-      <ul class="view-question__tag-list">
-        <li class="view-question__tag" v-for="skill in question.skills">
-          {{ skill.name }}
-        </li>
-      </ul>
     </div>
   </div>
 </template>

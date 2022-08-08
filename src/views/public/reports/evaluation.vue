@@ -162,16 +162,7 @@
                       class="hp-question-card-stats__stats__stat__icon"
                       name="skills"
                     ></hp-icon>
-                    {{ interaction.question.skills.length }}
-                    Skills
-                    <hp-info-circle
-                      class="hp-question-card-stats__stats__stat__info-circle"
-                      :content="
-                        interaction.question.skills
-                          .map((level) => level.name)
-                          .join(', ')
-                      "
-                    ></hp-info-circle>
+                    {{ interaction.question.skill.name }}
                   </div>
                 </div>
               </div>

@@ -26,6 +26,7 @@
           @onChange="handleSkillChange"
           :canAdd="true"
           placeholder="Search for skills"
+          :value="question?.skill?.name || ''"
         />
       </div>
       <div class="edit-question__dropdowns">
@@ -128,7 +129,7 @@ const schema = yup.object({
     .min(0)
     .max(60)
     .required("A duration is required"),
-  skill: yup.string().required(),
+  skill: yup.string().required("A skill is required"),
   guidelines: yup.array(),
 });
 
@@ -146,7 +147,7 @@ if (props.question) {
   initialValues = formattedInitialValues;
 }
 
-const { handleSubmit, meta, errors, setFieldValue } = useForm({
+const { handleSubmit, meta, errors, setValues, values } = useForm({
   validationSchema: schema,
   initialValues: initialValues,
 });
@@ -169,7 +170,7 @@ const onSubmit = handleSubmit(async (values) => {
       : [],
   };
 
-  console.log(formattedValues);
+  console.log(values);
 
   if (props.question?.reference) {
     const putQuestion = usePut(`questions/${props.question.reference}`);
@@ -222,8 +223,8 @@ const handleDeleteQuestiontemplate = async () => {
 };
 
 const handleSkillChange = (newSkill) => {
-  console.log(newSkill);
-  setFieldValue("skill", newSkill.value);
+  setValues({ ...values, skill: newSkill.value });
+  console.log(errors.value);
 };
 
 handleSubmitFunc.value = onSubmit;
