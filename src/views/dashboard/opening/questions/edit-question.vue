@@ -106,13 +106,13 @@ const content = isEdit
 
 const emits = defineEmits(["handleClose", "questionAdded"]);
 
-const skill = ref(null);
+const skill = ref(props.question?.skill?.reference);
 
 const { fetchChecklist } = useGettingStarted();
 
 const isSaving = ref(false);
-
 const questionInputRef = ref(null);
+
 watchEffect(() => {
   if (questionInputRef.value) {
     questionInputRef.value.inputRef.focus();
