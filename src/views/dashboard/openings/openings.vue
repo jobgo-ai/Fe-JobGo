@@ -296,7 +296,6 @@ const handleUnarchiveOpening = async (opening) => {
     width: 100%;
     padding-right: 4px;
     padding-left: 4px;
-    overflow: scroll;
   }
 
   .candidate-details::-webkit-scrollbar {

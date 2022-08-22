@@ -8,25 +8,21 @@
       {{ question.duration / 60 }}
       Minutes
     </div>
-    <div class="hp-question-card-stats__stats__stat">
+    <div
+      v-if="question.skill?.name"
+      class="hp-question-card-stats__stats__stat"
+    >
       <hp-icon
         class="hp-question-card-stats__stats__stat__icon"
         name="skills"
       ></hp-icon>
-      {{ question.skills.length }}
-      Skills
-      <hp-info-circle
-        class="hp-question-card-stats__stats__stat__info-circle"
-        :content="question.skills.map((level) => level.name).join(', ')"
-        v-if="hasTooltips && question.skills.length > 0"
-      ></hp-info-circle>
+      {{ question.skill.name }}
     </div>
   </div>
 </template>
 
 <script setup>
 import HpIcon from "@/components/hp-icon.vue";
-import HpInfoCircle from "@/components/hp-info-circle.vue";
 const props = defineProps({
   question: {
     type: Object,
