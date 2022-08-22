@@ -29,7 +29,6 @@ watch(
       return;
     }
     if (!user) {
-      console.log("FUCKCKFUKCITFYUCNKSANFJSABFHAD FASFUSANDJSABDHSJAB");
       return;
     }
     await fetchOpening(newOpeningRef);

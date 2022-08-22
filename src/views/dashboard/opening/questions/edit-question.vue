@@ -170,8 +170,6 @@ const onSubmit = handleSubmit(async (values) => {
       : [],
   };
 
-  console.log(values);
-
   if (props.question?.reference) {
     const putQuestion = usePut(`questions/${props.question.reference}`);
     await putQuestion.put({
