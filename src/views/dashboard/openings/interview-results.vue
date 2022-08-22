@@ -149,12 +149,15 @@
                     })
                   }}
                 </div>
-                <div class="hp-question-card-stats__stats__stat">
+                <div
+                  v-if="interaction.question.skill"
+                  class="hp-question-card-stats__stats__stat"
+                >
                   <hp-icon
                     class="hp-question-card-stats__stats__stat__icon"
                     name="skills"
                   ></hp-icon>
-                  {{ interaction.question.skill.name }}
+                  {{ interaction.question.skill?.name }}
                 </div>
               </div>
             </div>
