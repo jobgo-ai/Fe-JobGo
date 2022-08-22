@@ -19,7 +19,7 @@
         <div class="edit-question__duration__labels">
           <div class="edit-question__label">Skill</div>
           <div class="edit-question__sublabel">
-            What does this question measure?
+            Which job-related skill or attribute does this question measure?
           </div>
         </div>
         <hp-skill-search
