@@ -3,62 +3,31 @@
     <div class="signup__logo"><Logo /></div>
     <div class="signup__container">
       <div class="signup__image-container"></div>
-      <div class="signup__section">
-        <h3 class="signup__title">Sign up with SSO</h3>
-        <hp-google-auth />
-      </div>
-      <div class="">
-        <h3 class="signup__title">Sign up with Email</h3>
+      <h3 class="signup__title">Sign up for Hireproof</h3>
+      <div class="signup__section signup__section--border">
         <form @submit="onSubmit">
-          <hp-input name="name" placeholder="Type your name" label="Name" />
           <hp-input
-            :isDisabled="true"
             name="email"
+            autocomplete="email"
             placeholder="Type your email"
             label="Email"
           />
-          <div class="signup__password-container">
-            <hp-input
-              name="password"
-              placeholder="Enter your password"
-              label="Password"
-              type="password"
-            />
+          <div class="signup__checkbox-container__text">
+            By signing up, you agree to the
+            <a
+              class="signup__checkbox-container__link"
+              target="_blank"
+              href="https://www.hireproof.io/terms-of-service"
+              >Terms of Service</a
+            >
+            and acknowledge our
+            <a
+              class="signup__checkbox-container__link"
+              target="_blank"
+              href="https://www.hireproof.io/privacy-policy"
+              >Privacy Policy</a
+            >
           </div>
-          <div class="signup__password-container">
-            <hp-input
-              name="passwordConfirmation"
-              placeholder="Repeat your password"
-              label="Repeat password"
-              type="password"
-            />
-          </div>
-          <button
-            class="signup__checkbox-container"
-            type="button"
-            @click="toggleTerms"
-          >
-            <hp-checkbox
-              :isLoading="postLogin.loading.value"
-              name="terms"
-            ></hp-checkbox>
-            <div class="signup__checkbox-container__text">
-              Agree to the
-              <a
-                class="signup__checkbox-container__link"
-                target="_blank"
-                href="https://www.hireproof.io/terms-of-service"
-                >Terms of Service</a
-              >
-              and
-              <a
-                class="signup__checkbox-container__link"
-                target="_blank"
-                href="https://www.hireproof.io/privacy-policy"
-                >Privacy Policy</a
-              >
-            </div>
-          </button>
           <div v-if="error" class="signup__error">{{ error }}</div>
           <hp-button
             :isLoading="isLoading"
@@ -69,6 +38,10 @@
             fullWidth
           ></hp-button>
         </form>
+        <div class="signup__section__or">OR</div>
+      </div>
+      <div class="signup__section">
+        <hp-google-auth />
       </div>
     </div>
     <router-link
@@ -212,11 +185,28 @@ const onSubmit = handleSubmit(async (values) => {
 .signup {
   display: flex;
   flex-direction: column;
-  padding: 24px;
+  padding: 12px;
   &__section {
     margin: 24px 0px;
-    padding-bottom: 24px;
-    border-bottom: 1px solid var(--color-border);
+    position: relative;
+    &--border {
+      border-bottom: 1px solid var(--color-border);
+      padding-bottom: 24px;
+    }
+    &__or {
+      top: 100%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-transform: uppercase;
+      color: var(--color-text-secondary);
+      position: absolute;
+      background: white;
+      padding: 0 4px;
+      font-weight: 300;
+      font-size: 12px;
+      letter-spacing: 1.2px;
+      box-shadow: 0px 0px 24px 24px rgb(255 255 255 / 75%);
+    }
   }
   &__subtitle {
     @include text-h3;
@@ -226,17 +216,18 @@ const onSubmit = handleSubmit(async (values) => {
   &__title {
     @include text-h3;
     font-weight: 500;
-    margin-bottom: 24px;
+    margin-top: 12px;
+    margin-bottom: 12px;
   }
   &__logo {
     margin: auto;
-    margin-bottom: 48px;
+    margin-bottom: 24px;
     height: 48px;
     width: 48px;
   }
   &__container {
     margin: auto;
-    padding: 24px;
+    padding: 12px 24px;
     width: 100%;
     border: $border;
     border-radius: $border-radius-md;
@@ -280,7 +271,8 @@ const onSubmit = handleSubmit(async (values) => {
     &__text {
       color: var(--color-text-secondary);
       font-weight: 400;
-      margin-left: 6px;
+      margin-top: -12px;
+      margin-bottom: 12px;
     }
     &__link {
       font-weight: 500;

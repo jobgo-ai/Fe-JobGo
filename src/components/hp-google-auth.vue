@@ -1,9 +1,9 @@
 <template>
-  <div v-if="!isLoading">
+  <div class="hp-google-auth" v-if="!isLoading">
     <div
       id="g_id_onload"
       :data-client_id="gapiKey"
-      data-context="signin"
+      data-context="signup"
       data-ux_mode="popup"
       data-callback="handleLogin"
       data-auto_select="false"
@@ -14,10 +14,10 @@
       data-type="standard"
       data-shape="rectangular"
       data-theme="outline"
-      data-text="signin_with"
+      data-text="signup_with"
       data-size="large"
       data-logo_alignment="left"
-      data-width="288"
+      data-max-width="10000"
     ></div>
   </div>
 </template>
@@ -45,4 +45,8 @@ onMounted(() => {
 });
 </script>
 
-<style></style>
+<style lang="scss">
+.hp-google-auth {
+  max-width: 100%;
+}
+</style>
