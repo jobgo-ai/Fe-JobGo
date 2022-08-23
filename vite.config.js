@@ -6,6 +6,7 @@ export default defineConfig({
   plugins: [vue(), svgLoader()],
   resolve: {
     alias: [{ find: "@", replacement: "/src" }],
+    preserveSymlinks: true,
   },
   css: {
     preprocessorOptions: {

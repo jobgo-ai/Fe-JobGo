@@ -8,7 +8,10 @@
     </hp-drawer>
     <div class="hp-add-opening-card__add-new" v-if="isAddCard">
       <div>
-        <div class="hp-add-opening-card__add-new__icon-container">
+        <div
+          @click="handleCreateInterview"
+          class="hp-add-opening-card__add-new__icon-container"
+        >
           <hp-icon :size="24" name="plus"></hp-icon>
         </div>
         <p class="hp-add-opening-card__content__name">Start from scratch</p>
@@ -73,14 +76,24 @@
           ></hp-button>
           <template #content>View interview</template>
         </hp-tooltip>
-        <hp-tooltip :delay="500" class="hp-add-opening-card__actions__button">
+        <hp-tooltip
+          v-if="hasEditPermission(template)"
+          :delay="500"
+          class="hp-add-opening-card__actions__button"
+        >
           <hp-button
             :to="`/opening/${route.params.openingRef}/edit/edit-interview/${template.reference}`"
             icon="pencil"
-            tooltipLabel="Edit interview"
-            v-if="hasEditPermission(template)"
           ></hp-button>
           <template #content>Edit interview</template>
+        </hp-tooltip>
+        <hp-tooltip :delay="500" class="hp-add-opening-card__actions__button">
+          <hp-button
+            icon="copy"
+            @click="handleCloneInterview(template.reference)"
+            v-if="!hasEditPermission(template)"
+          ></hp-button>
+          <template #content>Clone interview</template>
         </hp-tooltip>
       </div>
     </div>
@@ -102,6 +115,7 @@ import HpDrawer from "@/components/hp-drawer.vue";
 // Composables
 import { hasEditPermission } from "@/composables/usePermissions";
 import { usePost } from "@/composables/useHttp";
+import { useGettingStarted } from "@/composables/useGettingStarted";
 import useToast from "@/composables/useToast";
 import useOpenings from "@/composables/useOpenings";
 
@@ -129,6 +143,8 @@ const props = defineProps({
 
 const emits = defineEmits(["handleDelete"]);
 
+const { fetchChecklist } = useGettingStarted();
+
 const isLoading = ref(false);
 const isCreatingInterview = ref(false);
 const isViewInterviewDrawerOpen = ref(false);
@@ -137,7 +153,7 @@ const router = useRouter();
 const route = useRoute();
 
 const { setToast } = useToast();
-const { fetchOpening } = useOpenings();
+const { fetchOpening, updateOpenings } = useOpenings();
 
 const secondsToMinutes = (seconds) => {
   return Math.floor(seconds / 60);
@@ -157,6 +173,7 @@ const handleCreateInterview = async () => {
   await postOpening.post(payload);
   const url = `/opening/${route.params.openingRef}/edit/edit-interview/${postInterview.data.value.template.reference}`;
   await fetchOpening(route.params.openingRef);
+  fetchChecklist();
   router.push(url);
   isCreatingInterview.value = false;
 };
@@ -170,6 +187,7 @@ const handleAddToInterview = async () => {
 
   await postOpening.post(payload);
   await fetchOpening(route.params.openingRef);
+  updateOpenings();
   isLoading.value = false;
   router.push(`/opening/${route.params.openingRef}/edit`);
   setToast({
@@ -182,11 +200,19 @@ const handleAddToInterview = async () => {
 const formatSkills = (skills) => {
   return skills.map((skill) => skill.value.name).join(", ");
 };
+
+const handleCloneInterview = async (ref) => {
+  const postInterview = usePost(`clone/templates/${ref}`);
+  await postInterview.post();
+  router.push(
+    `/opening/${route.params.openingRef}/edit/edit-interview/${postInterview.data.value.template.reference}`
+  );
+};
 </script>
 
 <style lang="scss">
 .hp-add-opening-card {
-  width: 264px;
+  width: 100%;
   height: 208px;
   list-style: none;
   border-radius: $border-radius-lg;
@@ -236,10 +262,6 @@ const formatSkills = (skills) => {
   &--selected {
     background-color: var(--color-panel);
   }
-  &:hover {
-    box-shadow: inset 0px 0px 4px rgba(33, 44, 51, 0.01),
-      inset 0px 0px 48px rgba(33, 44, 51, 0.03);
-  }
   &__add-new {
     padding: 16px;
     flex: 1;
@@ -253,9 +275,13 @@ const formatSkills = (skills) => {
       align-items: center;
       height: 40px;
       width: 40px;
+      cursor: pointer;
       border: 1px dashed var(--color-border);
       border-radius: $border-radius-lg;
       margin-bottom: 16px;
+      &:hover {
+        background: var(--color-panel);
+      }
     }
   }
 }

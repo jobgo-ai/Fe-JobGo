@@ -1,12 +1,5 @@
 <template>
   <div class="edit-question">
-    <div
-      v-if="!question"
-      class="edit-question__back"
-      @click="$emit('handleTabChange')"
-    >
-      <hp-icon name="arrow-left"></hp-icon>Back
-    </div>
     <div class="edit-question__header">
       <h2 class="edit-question__title">{{ content.title }}</h2>
       <p class="edit-question__subtitle">
@@ -19,9 +12,24 @@
           ref="questionInputRef"
           name="content"
           placeholder="Type the question"
+          maxlength="240"
         ></hp-textarea>
       </div>
       <div class="edit-question__duration">
+        <div class="edit-question__duration__labels">
+          <div class="edit-question__label">Skill</div>
+          <div class="edit-question__sublabel">
+            Which job-related skill or attribute does this question measure?
+          </div>
+        </div>
+        <hp-skill-search
+          @onChange="handleSkillChange"
+          :canAdd="true"
+          placeholder="Search for skills"
+          :value="question?.skill?.name || ''"
+        />
+      </div>
+      <div class="edit-question__dropdowns">
         <div class="edit-question__duration__container">
           <div class="edit-question__duration__labels">
             <div class="edit-question__label">Duration time</div>
@@ -33,39 +41,8 @@
         </div>
         <div class="edit-question__duration__error">{{ errors.duration }}</div>
       </div>
-      <div class="edit-question__dropdowns">
-        <div class="edit-question__duration__labels">
-          <div class="edit-question__label">Skills</div>
-          <div class="edit-question__sublabel">
-            What does this question measure? Max of 3 skills.
-          </div>
-        </div>
-        <hp-tagger
-          label="Skills"
-          :options="skillOptions"
-          name="skills"
-          searchable
-          :onSearch="searchFunction"
-          v-model="skills"
-          :max="3"
-        ></hp-tagger>
-      </div>
-      <div class="edit-question__dropdowns">
-        <div class="edit-question__duration__labels">
-          <div class="edit-question__label">Levels</div>
-          <div class="edit-question__sublabel">
-            Which candidate seniority levels can this question be used for?
-          </div>
-        </div>
-        <hp-tagger
-          label="Levels"
-          :options="jobLevelOptions"
-          name="jobLevels"
-          v-model="levels"
-        ></hp-tagger>
-      </div>
       <div class="edit-question__guidelines">
-        <div class="edit-question__label">Guidelines</div>
+        <div class="edit-question__label">Evaluation criteria</div>
         <div class="edit-question__sublabel">
           Describe what you would see in a perfect answer
         </div>
@@ -92,25 +69,22 @@
 
 <script setup>
 //Vendor
-import { ref, computed, onMounted, watchEffect } from "vue";
-import { useForm } from "vee-validate";
 import * as yup from "yup";
+import { ref, watchEffect } from "vue";
+import { useForm } from "vee-validate";
 import { useRoute } from "vue-router";
 
 //Components
 import HpTextarea from "@/components/form/hp-textarea.vue";
 import HpCounter from "@/components/hp-counter.vue";
 import HpButton from "@/components/hp-button.vue";
-import HpTagger from "@/components/form/hp-tagger.vue";
+import HpSkillSearch from "@/components/hp-skill-search.vue";
 import HpDangerZone from "@/components/cards/hp-danger-zone-card.vue";
-import HpIcon from "@/components/hp-icon.vue";
 import HpMultiInput from "@/components/form/hp-multi-input.vue";
 
 // Composables
-import { hasEditPermission } from "@/composables/usePermissions.js";
-import useSkillSearch from "@/composables/useSkillSearch";
-import useConstants from "@/composables/useConstants";
 import useInterviews from "@/composables/useInterviews";
+import { useGettingStarted } from "@/composables/useGettingStarted";
 import useToast from "@/composables/useToast";
 import { usePost, usePut, useDelete } from "@/composables/useHttp";
 import useQuestionContext from "@/composables/useQuestionContext";
@@ -126,39 +100,23 @@ const isEdit = props.question;
 const content = isEdit
   ? {
       title: "Edit question",
-      action: "Edit question",
+      action: "Save changes",
     }
   : { title: "Create question", action: "Create question" };
 
-const emits = defineEmits(["handleTabChange", "handleClose"]);
+const emits = defineEmits(["handleClose", "questionAdded"]);
 
-const skillOptions = ref([]);
+const skill = ref(props.question?.skill?.reference);
 
-const skills = ref([]);
-const levels = ref([]);
-
-const { handleSkillSearch } = useSkillSearch();
-const { jobLevels } = useConstants();
+const { fetchChecklist } = useGettingStarted();
 
 const isSaving = ref(false);
-
 const questionInputRef = ref(null);
+
 watchEffect(() => {
   if (questionInputRef.value) {
     questionInputRef.value.inputRef.focus();
   }
-});
-
-const jobLevelOptions = computed(() => {
-  return jobLevels.value.map((j) => ({ label: j.name, value: j.slug }));
-});
-
-const searchFunction = async (value) => {
-  skillOptions.value = await handleSkillSearch(value);
-};
-
-onMounted(async () => {
-  skillOptions.value = await handleSkillSearch("");
 });
 
 const route = useRoute();
@@ -171,8 +129,7 @@ const schema = yup.object({
     .min(0)
     .max(60)
     .required("A duration is required"),
-  skills: yup.array().nullable(),
-  levels: yup.array(),
+  skill: yup.string().required("A skill is required"),
   guidelines: yup.array(),
 });
 
@@ -181,33 +138,22 @@ let initialValues = {
 };
 
 if (props.question) {
-  skills.value = props.question.skills.map((s) => ({
-    label: s.name,
-    value: s.slug,
-  }));
-
-  levels.value = props.question.jobLevels.map((s) => ({
-    label: s.name,
-    value: s.slug,
-  }));
-
   const formattedInitialValues = {
     content: props.question.content,
     duration: props.question.duration / 60,
     guidelines: props.question.guidelines,
-    skills: skills.value,
-    jobLevels: levels.value,
+    skill: skill.value,
   };
   initialValues = formattedInitialValues;
 }
 
-const { handleSubmit, meta, errors } = useForm({
+const { handleSubmit, meta, errors, setValues, values } = useForm({
   validationSchema: schema,
   initialValues: initialValues,
 });
 
 // State that interacts with parent to make sure we don't accidently close the modal
-const { clearIsDirty } = useQuestionContext(meta, "edit");
+const { clearIsDirty, handleSubmitFunc } = useQuestionContext(meta, "edit");
 
 const { fetchInterview, setInterview } = useInterviews();
 const { setToast } = useToast();
@@ -219,8 +165,9 @@ const onSubmit = handleSubmit(async (values) => {
     scoring: "likert",
     type: "open",
     duration: values.duration * 60,
-    jobLevels: values.jobLevels.map((l) => l.value),
-    skills: values.skills.map((s) => s.value),
+    guidelines: values.guidelines
+      ? values.guidelines.filter((g) => g !== "")
+      : [],
   };
 
   if (props.question?.reference) {
@@ -246,6 +193,8 @@ const onSubmit = handleSubmit(async (values) => {
       question: postQuestion.data.value.question.reference,
     });
     setInterview(postTemplateQuestion.data.value.template);
+    fetchChecklist();
+    emits("questionAdded");
     setToast({
       type: "positive",
       title: "Well done!",
@@ -258,11 +207,6 @@ const onSubmit = handleSubmit(async (values) => {
   emits("handleClose");
   isSaving.value = false;
 });
-const handleClose = () => {
-  if (!meta.dirty && meta.valid) {
-    emits("handleTabChange");
-  }
-};
 
 const handleDeleteQuestiontemplate = async () => {
   const deleteQuestion = useDelete(`questions/${props.question.reference}`);
@@ -275,6 +219,12 @@ const handleDeleteQuestiontemplate = async () => {
     message: `That question is now in the trash bin`,
   });
 };
+
+const handleSkillChange = (newSkill) => {
+  setValues({ ...values, skill: newSkill.value });
+};
+
+handleSubmitFunc.value = onSubmit;
 </script>
 
 <style lang="scss">
@@ -316,6 +266,9 @@ const handleDeleteQuestiontemplate = async () => {
     @include text-h5;
     font-weight: 300;
     color: var(--color-text-secondary);
+    &--bold {
+      font-weight: 500;
+    }
   }
   &__guidelines {
     padding-top: 16px;
@@ -325,7 +278,6 @@ const handleDeleteQuestiontemplate = async () => {
   &__duration {
     display: flex;
     flex-direction: column;
-    padding-bottom: 16px;
     border-bottom: 1px dashed var(--color-border);
     &__container {
       display: flex;
@@ -355,7 +307,7 @@ const handleDeleteQuestiontemplate = async () => {
     display: flex;
     justify-content: start;
     background-color: var(--color-background);
-    z-index: 1000;
+    z-index: $z-index-1000;
     position: fixed;
     bottom: 0;
     padding: 16px;

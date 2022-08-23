@@ -18,7 +18,7 @@
         type="password"
       />
       <hp-input
-        name="password2"
+        name="passwordConfirmation"
         placeholder="Confirm your new password"
         label="Password"
         type="password"
@@ -72,7 +72,7 @@ const token = route.query.token;
 
 const schema = yup.object().shape({
   password: yup.string().min(6).required().label("Password"),
-  password2: yup
+  passwordConfirmation: yup
     .string()
     .required("Must enter password twice")
     .oneOf([yup.ref("password")], "Passwords do not match"),
@@ -80,7 +80,7 @@ const schema = yup.object().shape({
 
 const { handleSubmit, meta } = useForm({
   validationSchema: schema,
-  initialValues: { password: "", password2: "" },
+  initialValues: { password: "", passwordConfirmation: "" },
 });
 
 const postChangePassword = usePost("self/reset-password");
@@ -120,6 +120,8 @@ const handlePasswordReset = handleSubmit(async (values) => {
     margin: auto;
     margin-bottom: 48px;
     margin-top: 64px;
+    height: 48px;
+    width: 48px;
   }
   &__container {
     margin: auto;
@@ -140,7 +142,7 @@ const handlePasswordReset = handleSubmit(async (values) => {
     width: 588px;
     left: 50%;
     transform: translateX(-50%) translateY(-50%);
-    z-index: -1;
+    z-index: $z-index-negative;
   }
   &__password-container {
     position: relative;

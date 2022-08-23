@@ -1,6 +1,10 @@
 <template>
   <div v-if="!isInterviewLoading" class="view-interview">
     <h2 class="view-interview__title">{{ interview.name }}</h2>
+    <div v-if="interview.description">
+      <div class="view-interview__header">Description</div>
+      <p class="view-interview__description">{{ interview.description }}</p>
+    </div>
     <div class="view-interview__header">Overview</div>
     <div class="view-interview__stats">
       <div class="view-interview__stats__stat">
@@ -22,7 +26,10 @@
         </div>
       </div>
     </div>
-    <div class="view-interview__header">
+    <div
+      v-if="interview.statistics.skills.length > 0"
+      class="view-interview__header"
+    >
       Top skills evaluated
       <ol class="view-interview__skills">
         <hp-badge-tag
@@ -38,7 +45,7 @@
           <h3 class="view-interview__header">Warmup</h3>
           <hp-badge
             icon="chronometer"
-            :content="(interview.ceremony.warmup.duration / 60).toFixed(0)"
+            :content="interview.ceremony.warmup.duration"
           ></hp-badge>
         </div>
         <div class="view-interview__ceremony__textarea">
@@ -50,7 +57,7 @@
           <h3 class="view-interview__header">Cooldown</h3>
           <hp-badge
             icon="chronometer"
-            :content="(interview.ceremony.cooldown.duration / 60).toFixed(0)"
+            :content="interview.ceremony.cooldown.duration"
           ></hp-badge>
         </div>
         <div class="view-interview__ceremony__textarea">
@@ -140,6 +147,7 @@ onMounted(async () => {
 <styles lang="scss">
 .view-interview {
   padding: 26px;
+  padding-bottom: 0px;
   height: 100vh;
   display: flex;
   flex-direction: column;
@@ -148,9 +156,12 @@ onMounted(async () => {
     margin-bottom: 6px;
   }
   &__header {
-    color: var(--color-text-secondary);
     font-weight: 500;
     @include text-h5;
+  }
+  &__description {
+    margin-bottom: 12px;
+    margin-top: 6px;
   }
   &__stats {
     display: grid;

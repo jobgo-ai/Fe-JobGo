@@ -19,12 +19,18 @@
 <script setup>
 import HpIcon from "@/components/hp-icon.vue";
 import { watch } from "vue";
+import { onKeyStroke } from "@vueuse/core";
+
 const emits = defineEmits(["close"]);
 const props = defineProps({
   isOpen: {
     type: Boolean,
     default: false,
   },
+});
+
+onKeyStroke("Escape", (e) => {
+  emits("close");
 });
 
 watch(
@@ -46,7 +52,7 @@ watch(
 .hp-modal {
   &__overlay {
     position: fixed;
-    z-index: 100;
+    z-index: $z-index-600;
     top: 0;
     left: 0;
     width: 100%;
@@ -55,7 +61,7 @@ watch(
   }
 
   &__modal {
-    z-index: 101;
+    z-index: $z-index-601;
     border-radius: $border-radius-lg;
     position: fixed;
     top: 16px;
@@ -66,7 +72,7 @@ watch(
       position: relative;
       &__close {
         position: absolute;
-        z-index: 10;
+        z-index: $z-index-10;
         top: 10px;
         right: 10px;
         cursor: pointer;
@@ -76,7 +82,7 @@ watch(
   }
   @media (min-width: $breakpoint-tablet) {
     &__modal {
-      width: 320px;
+      max-width: 480px;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);

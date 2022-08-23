@@ -30,10 +30,15 @@
       </div>
       <hp-switch
         @click.prevent="handleDarkModeToggle"
-        v-model:checked="isDarkmode"
+        v-model="isDarkmode"
+        standalone
       />
     </div>
     <div class="settings__card">
+      <h4 class="settings__card__title">Change password</h4>
+      <p class="settings__card__subtitle">
+        Enter current and new passwords to change password
+      </p>
       <form @submit.pervent="onSubmit" autocomplete="off">
         <div class="settings__card__field-grid">
           <hp-input

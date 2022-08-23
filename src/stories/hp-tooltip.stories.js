@@ -20,6 +20,14 @@ const Template = (args) => ({
             Yep thats a tooltip
         </template>
     </hp-tooltip>
+    <hp-tooltip position="bottom">
+      <div>
+        Hover me
+      </div>
+      <template #content>
+          Yep thats a tooltip
+      </template>
+  </hp-tooltip>
   </div>`,
 });
 

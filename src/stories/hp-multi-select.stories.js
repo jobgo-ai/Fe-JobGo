@@ -13,33 +13,18 @@ const Template = (args) => ({
   components: { HpMultiSelect },
   setup() {
     const options = ref([
-      "ECMA Script 2016",
-      "JavaScript",
-      "TypeScript",
-      "ECMA Script 2016",
-      "JavaScript",
-      "TypeScript",
-      "ECMA Script 2016",
-      "JavaScript",
-      "TypeScript",
-      "ECMA Script 2016",
-      "JavaScript",
-      "TypeScript",
+      { label: "satan", value: "satan" },
+      { label: "dagon", value: "dagon" },
     ]);
-    const values = ref(["ECMA Script 2016"]);
+    const values = ref([{ label: "dagon", value: "dagon" }]);
 
-    const searchFunction = async (value) => {
-      const { handleSkillSearch } = useSkillSearch();
-      const res = await handleSkillSearch(value);
-      options.value = ["other skills", "yes, indeed"];
-    };
-    return { args, options, values, searchFunction };
+    return { args, options, values };
   },
   template: `<div style="margin-left:200px;">
     <hp-multi-select v-model="values" label="Skills" :options="options" name="multi-select" />
   </div>
   <div style="margin-left:600px;">
-    <hp-multi-select v-model="values" selectedMessage="items selected" :onSearch="searchFunction" :options="options" name="multi-select" />
+    <hp-multi-select :maxItemsSelected="1" v-model="values" selectedMessage="items selected" :options="options" name="multi-select" />
   </div>`,
 });
 

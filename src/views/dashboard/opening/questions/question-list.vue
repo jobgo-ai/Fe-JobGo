@@ -5,42 +5,26 @@
       <p class="question-list__subtitle">
         Select a template or create your own questions.
       </p>
-      <form>
-        <hp-input
-          class="question-list__search"
-          name="search"
-          variant="search"
-          icon="search"
-          v-model="search"
+      <hp-input
+        class="question-list__search"
+        name="search"
+        variant="search"
+        icon="search"
+        v-model="search"
+        standalone
+      />
+      <div class="question-list__filters">
+        <hp-multi-select
+          class="question-list__filters__dropdown"
+          label="Skills"
+          :options="skillOptions"
+          name="skills"
+          searchable
           standalone
-        />
-        <div class="question-list__filters">
-          <hp-multi-select
-            class="question-list__filters__dropdown"
-            label="Skills"
-            :options="skillOptions"
-            name="skills"
-            searchable
-            standalone
-            :onSearch="searchFunction"
-            v-model="filter.skills"
-          ></hp-multi-select>
-          <hp-multi-select
-            :options="jobLevelOptions"
-            class="question-list__filters__dropdown"
-            label="Experience levels"
-            standalone
-            name="levels"
-            v-model="filter.jobLevels"
-          ></hp-multi-select>
-        </div>
-        <hp-button
-          dropzone
-          icon="plus"
-          label="Start from scratch"
-          @handleClick="$emit('handleTabChange')"
-        />
-      </form>
+          :onSearch="searchFunction"
+          v-model="filter.skills"
+        ></hp-multi-select>
+      </div>
     </div>
     <ol
       ref="listContainer"
@@ -74,7 +58,6 @@ import { useRoute } from "vue-router";
 import { useDebounce } from "@vueuse/core";
 
 // Components
-import HpButton from "@/components/hp-button.vue";
 import HpInput from "@/components/form/hp-input.vue";
 import HpMultiSelect from "@/components/form/hp-multi-select.vue";
 import HpQuestionCard from "@/components/cards/hp-question-card.vue";
@@ -86,7 +69,6 @@ import useToast from "@/composables/useToast";
 import { useGet, usePost } from "@/composables/useHttp";
 import useSkillSearch from "@/composables/useSkillSearch";
 import useInterviews from "@/composables/useInterviews";
-import useConstants from "@/composables/useConstants";
 
 const props = defineProps({
   handleClose: {
@@ -97,7 +79,7 @@ const props = defineProps({
 
 const { setToast } = useToast();
 
-const emits = defineEmits(["handleTabChange"]);
+const emits = defineEmits(["handleTabChange", "questionAdded"]);
 
 const isQuestionsLoading = ref(true);
 const listContainer = ref(null);
@@ -111,17 +93,11 @@ const { setInterview } = useInterviews();
 const filter = ref({
   search: useDebounce(search, 300),
   skills: [],
-  jobLevels: [],
 });
 
 const skillOptions = ref([]);
 
 const { handleSkillSearch } = useSkillSearch();
-const { jobLevels } = useConstants();
-
-const jobLevelOptions = computed(() => {
-  return jobLevels.value.map((j) => ({ label: j.name, value: j.slug }));
-});
 
 const searchFunction = async (value) => {
   skillOptions.value = await handleSkillSearch(value);
@@ -134,7 +110,7 @@ const limit = 20;
 onMounted(async () => {
   skillOptions.value = await handleSkillSearch("");
   listContainerMaxHeight.value =
-    window.innerHeight - listContainer.value.getBoundingClientRect().top;
+    window.innerHeight - listContainer.value?.getBoundingClientRect().top;
 });
 
 watch(
@@ -150,10 +126,6 @@ const getUrl = (loadingMore) => {
   var params = new URLSearchParams([["limit", limit]]);
   if (loadingMore) {
     params.append("offset", next);
-  }
-  if (filter.value.jobLevels.length > 0) {
-    const onlySlugs = filter.value.jobLevels.map((j) => j.value);
-    params.append("job-levels", onlySlugs.join(","));
   }
   if (filter.value.skills.length > 0) {
     const onlySlugs = filter.value.skills.map((s) => s.value);
@@ -193,6 +165,7 @@ const addToInterview = async (question) => {
     title: "Well done!",
     message: `Question added to interview`,
   });
+  emits("questionAdded");
   props.handleClose();
 };
 </script>

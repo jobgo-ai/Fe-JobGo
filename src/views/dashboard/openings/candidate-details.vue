@@ -1,5 +1,30 @@
 <template>
   <div class="candidate-details">
+    <hp-modal :isOpen="isShareReportOpen" @close="isShareReportOpen = false">
+      <generic-modal
+        title="Share report"
+        subtitle="This will create and share a report for this candidate"
+      >
+        <p class="candidate-details__warning">
+          The following link exposes an anonymized and
+          <span class="candidate-details__warning-bold">public</span> report of
+          this candidate's evaluation.
+        </p>
+        <p>
+          Candidate details and interviewer comments are sanitized and removed.
+        </p>
+        <template #actions>
+          <hp-button @handleClick="copyReportToClipBoard" icon="copy">
+          </hp-button>
+          <hp-button
+            :to="`/reports/${candidate.key}`"
+            label="Visit report"
+            icon="share"
+          >
+          </hp-button>
+        </template>
+      </generic-modal>
+    </hp-modal>
     <hp-modal
       :isOpen="isEditCandidateModalOpen"
       @close="isEditCandidateModalOpen = false"
@@ -23,69 +48,14 @@
           </div>
           <div class="candidate-details__header__button-group">
             <hp-button
+              @click="isShareReportOpen = true"
+              icon="share"
+            ></hp-button>
+            <hp-button
               label="Edit details"
               @click="isEditCandidateModalOpen = true"
               icon="pencil"
             ></hp-button>
-          </div>
-        </div>
-        <div class="candidate-details__overview">
-          <div
-            :class="`candidate-details__overview__score candidate-details__overview__score--${calculateColor(
-              candidate.opening.statistics.candidateScore,
-              candidate.opening.statistics.averageOpeningScore
-            )}`"
-          >
-            <div class="candidate-details__overview__score-container">
-              <div class="candidate-details__overview__score__average">
-                {{
-                  candidate.opening.statistics.candidateScore?.toFixed(2) || "~"
-                }}
-              </div>
-              <div class="candidate-details__overview__score__current">
-                Current score
-              </div>
-              <div
-                v-if="candidate.opening.statistics.averageOpeningScore"
-                class="candidate-details__overview__score__average-score"
-              >
-                The average score is
-                {{
-                  candidate.opening.statistics.averageOpeningScore?.toFixed(2)
-                }}
-                <hp-icon
-                  v-if="
-                    candidate.opening.statistics.candidateScore >
-                    candidate.opening.statistics.averageOpeningScore
-                  "
-                  name="arrow-top"
-                ></hp-icon>
-                <hp-icon v-else name="arrow-down"></hp-icon>
-              </div>
-            </div>
-          </div>
-          <div class="candidate-details__overview__skill-container">
-            <div class="candidate-details__overview__skills-title">
-              Evaluated skills
-              <hp-badge
-                class="candidate-details__overview__skills-title__badge"
-                icon="skills"
-                :content="skillList ? skillList.length : 0"
-              ></hp-badge>
-            </div>
-            <ol class="candidate-details__overview__skills">
-              <hp-badge-tag
-                v-for="skill in skillList"
-                :label="skill.label"
-                :quantity="skill.value"
-                :type="
-                  calculateColor(
-                    skill.value,
-                    candidate.opening.statistics.averageOpeningScore
-                  )
-                "
-              ></hp-badge-tag>
-            </ol>
           </div>
         </div>
         <div class="candidate-details__interviews">
@@ -109,145 +79,12 @@
               :class="createClasses(interview)"
               v-for="(interview, index) in opening.templates"
             >
-              <div class="candidate-details__interview-grid__item__header">
-                <div
-                  class="
-                    candidate-details__interview-grid__item__header__badge-container
-                  "
-                >
-                  <hp-badge icon="layers" :content="index + 1"></hp-badge>
-                  <hp-badge
-                    v-if="interview.statistics.candidateScore"
-                    :type="
-                      calculateColor(
-                        interview.statistics.candidateScore,
-                        interview.statistics.averageTemplateScore
-                      )
-                    "
-                    :content="interview.statistics.candidateScore.toFixed(2)"
-                  ></hp-badge>
-                </div>
-                <div
-                  class="candidate-details__interview-grid__item__header__title"
-                >
-                  {{ interview.name }}
-                </div>
-              </div>
-              <div v-if="interview.interview.terminated">
-                <div class="candidate-details__interview-grid__item__icon-text">
-                  <hp-icon
-                    class="
-                      candidate-details__interview-grid__item__icon-text__icon
-                    "
-                    name="user"
-                    :size="15"
-                  ></hp-icon>
-                  {{ interview.interview.interviewerName }}
-                </div>
-                <div class="candidate-details__interview-grid__item__icon-text">
-                  <hp-icon
-                    class="
-                      candidate-details__interview-grid__item__icon-text__icon
-                    "
-                    name="calendar"
-                    :size="15"
-                  ></hp-icon>
-
-                  {{ formatDate(interview.interview.terminated) }}
-                </div>
-                <div class="candidate-details__interview-grid__item__actions">
-                  <hp-button
-                    label="View full results"
-                    :to="`/opening/${route.params.openingRef}/results/${interview.interview.token}`"
-                  ></hp-button>
-                </div>
-              </div>
-              <div
-                class="
-                  candidate-details__interview-grid__item__progress-wrapper
-                "
-                v-else-if="
-                  interview.interview.started && !interview.interview.terminated
-                "
-              >
-                <div class="candidate-details__interview-grid__item__icon-text">
-                  <hp-icon
-                    class="
-                      candidate-details__interview-grid__item__icon-text__icon
-                    "
-                    name="loader"
-                    :size="15"
-                  ></hp-icon>
-                  In progress
-                </div>
-                <div class="candidate-details__interview-grid__item__icon-text">
-                  <hp-icon
-                    class="
-                      candidate-details__interview-grid__item__icon-text__icon
-                    "
-                    name="chronometer"
-                    :size="15"
-                  ></hp-icon>
-
-                  Started
-                  {{ formatMinutesAgo(interview.interview.started) }}
-                </div>
-                <hp-button
-                  :href="calculateInterviewLink(interview)"
-                  label="Got to interview"
-                  class="candidate-details__interview-grid__item__actions"
-                ></hp-button>
-              </div>
-              <div v-else>
-                <div class="candidate-details__interview-grid__item__icon-text">
-                  <hp-icon
-                    class="
-                      candidate-details__interview-grid__item__icon-text__icon
-                    "
-                    name="chronometer"
-                    :size="15"
-                  ></hp-icon>
-                  {{ secondsToMinutes(interview.statistics.duration) }} minutes
-                </div>
-                <div class="candidate-details__interview-grid__item__icon-text">
-                  <hp-icon
-                    class="
-                      candidate-details__interview-grid__item__icon-text__icon
-                    "
-                    name="questions"
-                    :size="15"
-                  ></hp-icon>
-
-                  {{ interview.statistics.questions }} questions
-                </div>
-                <div
-                  class="candidate-details__interview-grid__item__actions"
-                  v-if="isNextAction(interview, opening.templates)"
-                >
-                  <hp-button
-                    :href="calculateInterviewLink(interview)"
-                    primary
-                    label="Start interview"
-                  ></hp-button>
-                  <hp-button
-                    class="
-                      candidate-details__interview-grid__item__actions--icon
-                    "
-                    icon="copy"
-                    @click="copyInterview(interview)"
-                  ></hp-button>
-                </div>
-                <div
-                  class="candidate-details__interview-grid__item__actions"
-                  v-else
-                >
-                  <hp-button
-                    @click="copyInterview(interview)"
-                    icon="copy"
-                    label="Copy link"
-                  ></hp-button>
-                </div>
-              </div>
+              <hp-candidate-interview-card
+                :interview="interview"
+                :index="index"
+                :opening="opening"
+                :candidate="candidate"
+              />
             </li>
           </ul>
           <div class="candidate-details__interviews__empty" v-else>
@@ -259,6 +96,69 @@
               class="candidate-details__interviews__empty__button"
               :to="`/opening/${route.params.openingRef}/edit/add-interview`"
             ></hp-button>
+          </div>
+        </div>
+        <div class="candidate-details__overview">
+          <div
+            :class="`candidate-details__overview__score candidate-details__overview__score--${calculateColor(
+              candidate.opening.statistics.candidateScore,
+              candidate.opening.statistics.averageOpeningScore
+            )}`"
+          >
+            <div class="candidate-details__overview__score-container">
+              <div class="candidate-details__overview__score__average">
+                {{
+                  candidate.opening.statistics.candidateScore?.toFixed(2) || "~"
+                }}
+                <div v-if="candidate.opening.statistics.candidateScore">
+                  <hp-icon
+                    class="candidate-details__arrow"
+                    :size="24"
+                    v-if="
+                      candidate.opening.statistics.candidateScore >
+                      candidate.opening.statistics.averageOpeningScore
+                    "
+                    name="arrow-top"
+                  ></hp-icon>
+                  <hp-icon
+                    v-else
+                    class="candidate-details__arrow"
+                    :size="24"
+                    name="arrow-down"
+                  ></hp-icon>
+                </div>
+              </div>
+              <div class="candidate-details__overview__score__current">
+                Current score
+              </div>
+              <div
+                v-if="candidate.opening.statistics.averageOpeningScore"
+                class="candidate-details__overview__score__average-score"
+              >
+                The average score is
+                {{
+                  candidate.opening.statistics.averageOpeningScore?.toFixed(2)
+                }}
+              </div>
+            </div>
+          </div>
+          <div class="candidate-details__overview__skill-container">
+            <div class="candidate-details__overview__skills-title">
+              Evaluated skills
+              <hp-badge
+                class="candidate-details__overview__skills-title__badge"
+                icon="skills"
+                :content="skillList ? skillList.length : 0"
+              ></hp-badge>
+            </div>
+            <ol class="candidate-details__overview__skills">
+              <hp-badge-tag
+                v-for="skill in skillList"
+                :label="skill.label"
+                :quantity="skill.value"
+                :type="calculateColor(skill.value, skill.average)"
+              ></hp-badge-tag>
+            </ol>
           </div>
         </div>
       </div>
@@ -275,12 +175,11 @@
 // Vendor
 import { onMounted, watch, ref, computed } from "vue";
 import { useRoute } from "vue-router";
-import { formatDistance, format } from "date-fns";
 
 // Composables
 import useCandidates from "@/composables/useCandidates";
 import { useBreadcrumbs } from "@/composables/useBreadcrumbs";
-import useToast from "@/composables/useToast";
+import useToast from "@/composables/useToast.js";
 
 // Components
 import HpButton from "@/components/hp-button.vue";
@@ -288,9 +187,12 @@ import HpBadge from "@/components/hp-badge.vue";
 import HpBadgeTag from "@/components/hp-badge-tag.vue";
 import HpIcon from "@/components/hp-icon.vue";
 import CandidateModal from "./candidate-modal.vue";
+import GenericModal from "@/components/modals/generic-modal.vue";
 import HpSpinner from "@/components/hp-spinner.vue";
 import HpModal from "@/components/hp-modal.vue";
 import HpCircularBadge from "@/components/hp-circular-badge.vue";
+import HpCandidateInterviewCard from "@/components/cards/hp-candidate-interview-card.vue";
+import useOpenings from "@/composables/useOpenings";
 
 // Assets
 import EmptyState from "@/assets/abstracts/empty-state.svg";
@@ -302,15 +204,16 @@ const props = defineProps({
   },
 });
 
+const { setToast } = useToast();
+
 const { fetchCandidate, candidate, isCandidateLoading } = useCandidates();
 
 const route = useRoute();
 const isEditCandidateModalOpen = ref(false);
-const opening = ref({});
+const isShareReportOpen = ref(false);
 const isPageLoading = ref(true);
-const URL = import.meta.env.VITE_INTERVIEW_URL;
-
-const { setToast } = useToast();
+const opening = ref({});
+const { opening: openingTemplate } = useOpenings();
 
 const getCandidateDetails = async () => {
   await fetchCandidate(route.query.candidate);
@@ -347,29 +250,50 @@ watch(
 );
 
 const skillList = computed(() => {
-  return candidate.value?.opening?.statistics?.candidateSkillScores?.map(
-    (skill) => ({
-      label: skill.name,
-      value: skill.score.value?.toFixed(1) ?? "0.0",
-    })
-  );
-});
-
-const formatMinutesAgo = (date) => {
-  const distance = formatDistance(new Date(date), Date.now(), {
-    addSuffix: true,
+  const skills = openingTemplate.value.statistics.skills.map((skill) => {
+    return {
+      name: skill.value.name,
+      reference: skill.value.reference,
+    };
   });
 
-  return distance;
-};
+  const isSkillsTheSameAsAverage = skills.every((skill) => {
+    const candidateSkillScore =
+      candidate.value?.opening?.statistics?.candidateSkillScores.find(
+        (s) => s.reference === skill.reference
+      )?.score?.value;
 
-const formatDate = (date) => {
-  return format(new Date(date), "dd MMMM, yyyy");
-};
+    const averageSkillScore =
+      candidate.value?.opening?.statistics?.averageOpeningSkillScores.find(
+        (s) => s.reference === skill.reference
+      )?.score?.value;
 
-const secondsToMinutes = (seconds) => {
-  return Math.floor(seconds / 60);
-};
+    return candidateSkillScore === averageSkillScore;
+  });
+
+  const formattedSkills = skills.map((skill) => {
+    const skillValue =
+      candidate.value?.opening?.statistics?.candidateSkillScores.find(
+        (s) => s.reference === skill.reference
+      )?.score?.value;
+
+    return {
+      label: skill.name,
+      value: skillValue?.toFixed(1) ?? "0.0",
+      average: isSkillsTheSameAsAverage
+        ? 3
+        : candidate.value?.opening?.statistics?.averageOpeningSkillScores.find(
+            (s) => s.reference === skill.reference
+          )?.score?.value,
+    };
+  });
+
+  const sortedSkills = formattedSkills.sort((a, b) => {
+    return b.value - a.value;
+  });
+
+  return sortedSkills;
+});
 
 const createClasses = (interview) => {
   return {
@@ -379,13 +303,6 @@ const createClasses = (interview) => {
     "candidate-details__interview-grid__item--in-progress":
       interview.interview.started && !interview.interview.terminated,
   };
-};
-
-const isNextAction = (template, templates) => {
-  const nextRef = templates.find((t) => {
-    return !t.interview?.started;
-  }).interview?.token;
-  return template.interview.token === nextRef;
 };
 
 const calculateColor = (score, avgScore) => {
@@ -402,33 +319,24 @@ const calculateColor = (score, avgScore) => {
 };
 
 const completedTemplates = computed(() => {
-  return candidate.value.opening.templates.filter((t) => t.interview.terminated)
-    .length;
+  return candidate.value.opening.templates.filter((t) =>
+    t.interview.evaluations.some((e) => e.terminated)
+  ).length;
 });
 
-const copyInterview = (interview) => {
-  const interviewLink = `${URL}/token/${interview.interview.token}`;
-  navigator.permissions.query({ name: "clipboard-write" }).then((result) => {
-    if (result.state == "granted" || result.state == "prompt") {
-      navigator.clipboard.writeText(interviewLink);
-      setToast({
-        type: "positive",
-        title: "Copy that!",
-        message: `Interview link copied to clipboard`,
-      });
-    }
+const copyReportToClipBoard = () => {
+  const url = `${import.meta.env.VITE_APP_URL}/reports/${candidate.value.key}`;
+  navigator.clipboard.writeText(url);
+  isShareReportOpen.value = false;
+  setToast({
+    type: "positive",
+    title: "Copy that!",
+    message: `Report link copied to clipboard`,
   });
-};
-
-const calculateInterviewLink = (interview) => {
-  const URL = `${import.meta.env.VITE_INTERVIEW_URL}/token/${
-    interview?.interview?.token
-  }`;
-  return URL;
 };
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
 .candidate-details {
   &__spinner {
     margin-top: 64px;
@@ -441,10 +349,17 @@ const calculateInterviewLink = (interview) => {
     &__button-group {
       display: flex;
       align-items: center;
+      gap: 6px;
       &__button {
         margin-right: 8px;
       }
     }
+  }
+  &__warning {
+    margin-bottom: 12px;
+  }
+  &__warning-bold {
+    font-weight: 600;
   }
   &__info {
     display: flex;
@@ -467,7 +382,6 @@ const calculateInterviewLink = (interview) => {
     display: grid;
     grid-gap: 24px;
     padding-bottom: 24px;
-    border-bottom: 1px dashed var(--color-border);
     &--incomplete {
       display: flex;
       flex-direction: column;
@@ -513,6 +427,8 @@ const calculateInterviewLink = (interview) => {
         font-weight: 600;
         font-size: 24px;
         line-height: 32px;
+        display: flex;
+        align-items: center;
       }
       &__current {
         font-size: 12px;
@@ -548,7 +464,6 @@ const calculateInterviewLink = (interview) => {
   }
   &__interviews {
     padding-top: 24px;
-    margin-bottom: 200px;
     &__empty {
       display: flex;
       justify-content: center;
@@ -574,7 +489,6 @@ const calculateInterviewLink = (interview) => {
       line-height: 24px;
     }
     &__subtitle {
-      font-weight: 500;
       font-size: 14px;
       line-height: 20px;
       color: var(--color-text-secondary);
@@ -585,6 +499,8 @@ const calculateInterviewLink = (interview) => {
     display: grid;
     grid-template-columns: repeat(auto-fit, 264px);
     grid-gap: 24px;
+    padding-bottom: 24px;
+    border-bottom: 1px dashed var(--color-border);
   }
   &__interview-grid__item {
     border-radius: $border-radius-lg;
@@ -605,6 +521,9 @@ const calculateInterviewLink = (interview) => {
         font-size: 14px;
         line-height: 20px;
         margin-bottom: 16px;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
       }
     }
     &__icon-text {

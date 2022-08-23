@@ -1,13 +1,9 @@
 <template>
   <router-link
+    :class="candidateCardClasses"
     :to="`/openings/${route.params.openingRef}?candidate=${candidate.reference}`"
   >
-    <li
-      :class="`hp-candidate-card ${
-        candidate.reference === route.query.candidate &&
-        'hp-candidate-card--selected'
-      }`"
-    >
+    <div class="hp-candidate-card__container">
       <div class="hp-candidate-card__info">
         <div class="hp-candidate-card__info__details">
           <div class="hp-candidate-card__info__details__detail">
@@ -18,39 +14,37 @@
           </div>
         </div>
         <hp-badge
-          v-if="candidate.opening.statistics.candidateScore"
+          v-if="candidate?.statistics?.candidateScore"
           :type="
             calculateColor(
-              candidate.opening.statistics.candidateScore,
-              candidate.opening.statistics.averageOpeningScore
+              candidate.statistics.candidateScore,
+              candidate.statistics.averageOpeningScore
             )
           "
-          :content="candidate.opening.statistics.candidateScore.toFixed(2)"
+          :content="candidate.statistics.candidateScore.toFixed(2)"
         ></hp-badge>
       </div>
-      <div
-        v-if="candidate.opening.templates.length > 0"
-        class="hp-candidate-card__interview-ticks"
-      >
+      <div v-if="opening.templates" class="hp-candidate-card__interview-ticks">
         <div
           :class="[
             `hp-candidate-card__interview-tick`,
-            isNextAction(template, candidate.opening.templates) &&
-              'hp-candidate-card__interview-tick--next',
-            isCompleted(template) &&
+            isNextAction(index) && 'hp-candidate-card__interview-tick--next',
+            candidate.statistics.interviewProgress[index] === 'terminated' &&
               'hp-candidate-card__interview-tick--completed',
           ]"
-          v-for="template in candidate.opening.templates"
+          v-for="(template, index) in opening.templates"
           :key="template"
         ></div>
       </div>
-    </li>
+    </div>
   </router-link>
 </template>
 
 <script setup>
+import { computed } from "vue";
 import { useRoute } from "vue-router";
 import HpBadge from "@/components/hp-badge.vue";
+import useOpenings from "@/composables/useOpenings";
 
 const props = defineProps({
   candidate: {
@@ -58,19 +52,22 @@ const props = defineProps({
     default: () => ({}),
     required: true,
   },
+  isDisabled: {
+    type: Boolean,
+    default: false,
+  },
 });
+
+const { opening } = useOpenings();
 
 const route = useRoute();
 
-const isNextAction = (template, templates) => {
-  const nextRef = templates.find((t) => {
-    return !t.interview?.started;
-  })?.interview?.token;
-  return template.interview.token === nextRef;
-};
-
-const isCompleted = (template) => {
-  return template.interview.started && template.interview.terminated;
+const isNextAction = (index) => {
+  const firstNonTerminated =
+    props.candidate.statistics.interviewProgress.findIndex((progress) => {
+      return progress !== "terminated";
+    });
+  return firstNonTerminated === index;
 };
 
 const calculateColor = (candidate, avg) => {
@@ -82,22 +79,32 @@ const calculateColor = (candidate, avg) => {
     return "neutral";
   }
 };
+
+const candidateCardClasses = computed(() => {
+  return {
+    "hp-candidate-card": true,
+    "hp-candidate-card--selected":
+      route.query.candidate === props.candidate.reference,
+    "hp-candidate-card--disabled": props.isDisabled,
+  };
+});
 </script>
 
 <style lang="scss">
 .hp-candidate-card {
   border: 1px solid var(--color-border);
   background-color: var(--color-panel);
-  border-radius: $border-radius-lg;
+  border-radius: $border-radius-md;
   padding: 12px;
   margin-bottom: 12px;
   cursor: pointer;
-  &:focus {
-    background: red;
-  }
+  display: flex;
   &:hover {
     box-shadow: inset 0px 0px 4px rgba(33, 44, 51, 0.01),
       inset 0px 0px 48px rgba(33, 44, 51, 0.03);
+  }
+  &--disabled {
+    opacity: 0.4;
   }
   &--selected {
     background-color: var(--color-background);
@@ -105,8 +112,14 @@ const calculateColor = (candidate, avg) => {
       box-shadow: none;
     }
   }
+  &__container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
   &__info {
     display: flex;
+    width: 100%;
     justify-content: space-between;
     &__details__detail {
       font-weight: 500;
@@ -142,6 +155,9 @@ const calculateColor = (candidate, avg) => {
     &:last-child {
       margin-right: 0;
     }
+  }
+  &:focus {
+    outline: 4px solid var(--color-focus);
   }
 }
 </style>

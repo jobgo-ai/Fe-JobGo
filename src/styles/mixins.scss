@@ -33,9 +33,10 @@
 @mixin flyout {
   border: $border;
   border-radius: $border-radius-lg;
-  padding: 16px;
-  z-index: 100;
+  z-index: $z-index-100;
   background-color: var(--color-background);
+  box-shadow: 0px 16px 24px rgba(33, 44, 51, 0.06),
+    0px 2px 6px rgba(33, 44, 51, 0.04), 0px 0px 1px rgba(33, 44, 51, 0.04);
 }
 
 @mixin pageContainer {
@@ -45,4 +46,15 @@
   padding-right: 4px;
   overflow: auto;
   height: calc(100vh - 90px);
+}
+
+@mixin panel {
+  background-color: var(--color-panel);
+  border: 1px solid var(--color-border);
+  padding: 24px;
+  border-radius: $border-radius-lg;
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - 120px);
+  min-width: 420px;
 }

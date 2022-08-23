@@ -10,22 +10,8 @@
 </template>
 
 <script setup>
-// Vendor
-import { onMounted, onUnmounted } from "vue";
-
-//  Hooks
-import useConstants from "@/composables/useConstants";
-
 // Components
 import HpHeader from "@/components/hp-header.vue";
-
-const { loadCompetencies, loadQuestionLevels } = useConstants();
-
-onMounted(() => {
-  loadCompetencies();
-  loadQuestionLevels();
-});
-onUnmounted(() => {});
 </script>
 
 <style lang="scss" scoped>
@@ -34,6 +20,7 @@ onUnmounted(() => {});
   max-width: 1400px;
   position: relative;
   margin: auto;
+  padding-top: $header-height;
 }
 
 .router-view {

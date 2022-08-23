@@ -5,9 +5,6 @@
 
 <script setup>
 import HpToast from "@/components/hp-toast.vue";
-window.Intercom("boot", {
-  app_id: import.meta.env.VITE_INTERCOM_ID,
-});
 </script>
 
 <style lang="scss">
@@ -45,6 +42,16 @@ window.Intercom("boot", {
   --color-forground-tooltip: #ffffff;
   --color-spinner-track: rgba(51, 70, 82, 0.4);
   --color-spinner-bullet: rgba(51, 70, 82, 1);
+
+  --blue-background: #dfe8ed;
+  --blue-border: #a4bdca;
+  --blue-forground: #3b5f71;
+  --orange-background: #f0e5dc;
+  --orange-border: #d4b399;
+  --orange-forground: #80512c;
+  --yellow-background: #fcf4e3;
+  --yellow-border: #f7dfaf;
+  --yellow-forground: #b28f4b;
 
   --grey--100: #ffffff;
   --grey--200: #f9f9f9;
@@ -90,15 +97,15 @@ window.Intercom("boot", {
   --orange--600: #ad6d3b;
   --orange--700: #ad6d3b;
   --orange--800: #ad6d3b;
-  --blue--100: #508199;
-  --blue--200: #508199;
-  --blue--300: #508199;
-  --blue--400: #508199;
-  --blue--500: #508199;
-  --blue--600: #508199;
-  --blue--700: #508199;
-  --blue--800: #508199;
-  --blue--900: #508199;
+  --blue--100: rgba(80, 129, 153, 0.06);
+  --blue--200: rgba(80, 129, 153, 0.18);
+  --blue--300: rgba(80, 129, 153, 0.52);
+  --blue--400: rgba(80, 129, 153, 0.84);
+  --blue--500: rgba(80, 129, 153, 1);
+  --blue--600: rgba(80, 129, 153, 1);
+  --blue--700: rgba(80, 129, 153, 1);
+  --blue--800: rgba(80, 129, 153, 1);
+  --blue--900: rgba(80, 129, 153, 1);
   --purple--100: #505099;
   --purple--200: #505099;
   --purple--300: #505099;
@@ -192,6 +199,16 @@ window.Intercom("boot", {
   --color-forground-tooltip: #393f42;
   --color-spinner-track: rgba(255, 255, 255, 0.4);
   --color-spinner-bullet: rgba(255, 255, 255, 1);
+
+  --blue-background: rgba(80, 129, 153, 0.08);
+  --blue-border: rgba(80, 129, 153, 0.32);
+  --blue-forground: rgb(80, 129, 153);
+  --orange-background: rgba(173, 109, 59, 0.08);
+  --orange-border: rgba(173, 109, 59, 0.32);
+  --orange-forground: #ad6d3b;
+  --yellow-background: rgba(240, 193, 101, 0.08);
+  --yellow-border: rgba(240, 193, 101, 0.32);
+  --yellow-forground: rgb(240, 194, 102);
 }
 
 .flyout-transition {
@@ -219,12 +236,6 @@ html {
   background-color: var(--color-background);
   font-size: 14px;
   line-height: 20px;
-}
-
-@media (min-width: $breakpoint-tablet) {
-  html {
-    overflow: hidden;
-  }
 }
 
 ol,

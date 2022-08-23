@@ -1,13 +1,10 @@
 <template>
   <div class="openings">
-    <div class="candidate-list">
-      <transition name="candidate-list-transition" mode="in-out" appear>
-        <candidate-list
-          v-if="isCandidateListOpen"
-          :isCandidateDetailsOpen="isCandidateDetailsOpen"
-        />
-      </transition>
-    </div>
+    <transition name="candidate-list-transition" mode="in-out" appear>
+      <div v-if="isCandidateListOpen" class="candidate-list">
+        <candidate-list :isCandidateDetailsOpen="isCandidateDetailsOpen" />
+      </div>
+    </transition>
     <div :class="`view`">
       <transition
         class="candidate-details"
@@ -36,7 +33,11 @@
             ]"
             v-model="state"
           />
-          <ol v-if="!isOpeningsLoading" class="opening-list__grid">
+          <ol
+            v-if="!isOpeningsLoading"
+            ref="scrollContainer"
+            class="opening-list__grid"
+          >
             <hp-opening-card
               v-if="state === 'active'"
               @handleAddNew="handleNewOpening"
@@ -46,13 +47,15 @@
             <hp-opening-card
               v-for="opening in openings"
               :isSelected="opening.reference === route.params.openingRef"
-              @click="handleOpeningCardClick(opening)"
               :key="opening.reference"
               :opening="opening"
               @unarchiveOpening="handleUnarchiveOpening"
               :isArchived="state === 'archived'"
             >
             </hp-opening-card>
+            <div v-if="state === 'archived' && openings.length === 0">
+              No archived openings
+            </div>
           </ol>
           <hp-spinner
             class="openingslist__spinner"
@@ -68,13 +71,16 @@
 <script setup>
 import { ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { onMounted, onUnmounted } from "vue";
+import { onMounted } from "vue";
+import { useWindowScroll } from "@vueuse/core";
 
 // Composables
-import { usePost, usePut } from "@/composables/useHttp";
+import { usePut } from "@/composables/useHttp";
 import useToast from "@/composables/useToast";
 import useOpenings from "@/composables/useOpenings";
+import { useGettingStarted } from "@/composables/useGettingStarted";
 import { useBreadcrumbs } from "@/composables/useBreadcrumbs";
+import useAuth from "@/composables/useAuth";
 
 // Views
 import CandidateList from "@/views/dashboard/openings/candidate-list.vue";
@@ -91,23 +97,42 @@ const selectedOpening = ref({});
 const isCandidateDetailsOpen = ref(route.query.candidate);
 const isCandidateListOpen = ref(route.params.openingRef);
 const state = ref("active");
+const { user } = useAuth();
 const { setToast } = useToast();
 
-const { fetchOpenings, openings, isOpeningsLoading } = useOpenings();
+const {
+  fetchOpenings,
+  openings,
+  isOpeningsLoading,
+  hasMoreData,
+  createOpening,
+} = useOpenings();
 const { setBreadcrumbs } = useBreadcrumbs();
 
-const handleOpeningCardClick = (opening) => {
-  if (opening.state === "archived") {
-    return;
-  }
-  if (opening.reference === route.params.openingRef) {
-    router.push(`/openings/`);
-  } else {
-    router.push(`/openings/${opening.reference}`);
-  }
-};
+const { fetchChecklist } = useGettingStarted();
 
-onUnmounted(async () => {});
+const scrollContainer = ref(null);
+const { y } = useWindowScroll();
+
+watch(
+  () => y.value,
+  () => {
+    let documentHeight = document.body.scrollHeight;
+    let currentScroll = window.scrollY + window.innerHeight;
+
+    if (documentHeight <= currentScroll + 60) {
+      if (isOpeningsLoading.value) {
+        return;
+      }
+
+      if (route.query.candidate) {
+        return;
+      }
+
+      fetchOpenings(true, state.value);
+    }
+  }
+);
 
 onMounted(async () => {
   // Checks for openingRef in route params
@@ -125,7 +150,7 @@ onMounted(async () => {
 watch(
   () => route.query.candidate,
   async () => {
-    if (!route.query.candidate) {
+    if (!route.query.candidate && route.name === "openings") {
       setBreadcrumbs([
         {
           label: "Openings",
@@ -172,26 +197,19 @@ watch(
       if (openings.value.length > 0) {
         return;
       } else {
-        await fetchOpenings();
+        if (user.value) {
+          await fetchOpenings();
+        }
       }
     }
   },
   { immediate: true }
 );
 
-// Handle add opening
-const postOpening = usePost("openings");
 const handleNewOpening = async () => {
-  await postOpening.post({
-    opening: {
-      name: `Opening #${openings.value.length + 1}`,
-      description: "",
-      templates: [],
-    },
-  });
-  if (postOpening.data.value) {
-    router.push(`/opening/${postOpening.data.value.opening.reference}/edit`);
-  }
+  const newOpeningRef = await createOpening();
+  router.push(`/opening/${newOpeningRef}/edit`);
+  fetchChecklist();
   fetchOpenings();
 };
 
@@ -199,7 +217,8 @@ watch(state, async () => {
   if (state.value === "archived") {
     router.push(`/openings/`);
   }
-  await fetchOpenings(state.value);
+  hasMoreData.value = true;
+  await fetchOpenings(false, state.value);
 });
 
 const handleUnarchiveOpening = async (opening) => {
@@ -242,16 +261,20 @@ const handleUnarchiveOpening = async (opening) => {
 .opening-list {
   &__grid {
     position: relative;
-    overflow: scroll;
-    height: 100%;
     display: grid;
     grid-gap: 26px;
     grid-template-columns: repeat(auto-fill, 264px);
     align-content: baseline;
-    padding-bottom: 500px;
+    padding-bottom: 64px;
   }
 }
 @media (min-width: $breakpoint-tablet) {
+  .candidate-list {
+    position: sticky;
+    top: 90px;
+    z-index: $z-index-100;
+    transition: all 0.25s linear;
+  }
   .openings {
     display: flex;
     width: 100%;
@@ -269,10 +292,10 @@ const handleUnarchiveOpening = async (opening) => {
     position: absolute;
     left: 440px;
     height: 100%;
-    width: 848px;
+    max-width: 848px;
+    width: 100%;
     padding-right: 4px;
     padding-left: 4px;
-    overflow: scroll;
   }
 
   .candidate-details::-webkit-scrollbar {
@@ -281,7 +304,6 @@ const handleUnarchiveOpening = async (opening) => {
 
   .openingslist {
     position: absolute;
-    overflow: hidden;
     width: calc(100% - 440px);
     top: 0;
     left: 0;
@@ -304,7 +326,6 @@ const handleUnarchiveOpening = async (opening) => {
 }
 .candidate-list-transition-enter-active,
 .candidate-list-transition-leave-active {
-  transition: all 0.25s linear;
   transform: translateX(0);
 }
 

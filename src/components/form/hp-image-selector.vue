@@ -14,9 +14,9 @@
     </div>
     <transition name="hp-image-selector-transition">
       <div v-if="isFlyoutOpen" class="hp-image-selector__flyout">
-        <div class="hp-image-selector__flyout__flyout-label">Select image</div>
+        <div class="hp-image-selector__flyout__flyout-label">Select cover</div>
         <div class="hp-image-selector__flyout__flyout-container">
-          <div
+          <button
             v-for="(image, index) in Object.keys(CoverDict)"
             @click.prevent="handleImageSelect(index)"
             :class="`hp-image-selector__flyout__image-wrapper ${
@@ -30,7 +30,7 @@
               role="img"
               :alt="`abstract cover #${modelValue}`"
             />
-          </div>
+          </button>
         </div>
       </div>
     </transition>
@@ -38,8 +38,10 @@
 </template>
 
 <script setup>
+import { ref } from "vue";
 import { useField } from "vee-validate";
 import HpIcon from "@/components/hp-icon.vue";
+import { onClickOutside } from "@vueuse/core";
 
 // Assets
 import Cover0 from "@/assets/abstracts/covers/cover_0.svg";
@@ -66,8 +68,6 @@ const CoverDict = {
   9: Cover9,
 };
 
-import { defineAsyncComponent, ref, computed } from "vue";
-
 const props = defineProps({
   name: {
     type: String,
@@ -80,14 +80,12 @@ const props = defineProps({
 
 const { errorMessage, value: modelValue } = useField(props.name);
 
-const emits = defineEmits(["update:modelValue"]);
+const emits = defineEmits(["update:modelValue", "input"]);
 
 const target = ref(null);
 const isFlyoutOpen = ref(false);
 
 const initialValue = ref(props.modelValue);
-
-import { onClickOutside } from "@vueuse/core";
 
 onClickOutside(target, (event) => {
   if (!isFlyoutOpen.value) {
@@ -100,12 +98,14 @@ onClickOutside(target, (event) => {
 const handleImageSelect = (index) => {
   modelValue.value = index;
   isFlyoutOpen.value = false;
+  emits("input");
 };
 </script>
 
 <style lang="scss">
 .hp-image-selector {
   position: relative;
+
   &__label {
     font-weight: 500;
     margin-bottom: 8px;
@@ -116,6 +116,8 @@ const handleImageSelect = (index) => {
     position: absolute;
     left: 105%;
     top: -50%;
+    transform: translate(0px, 50%);
+    padding: 16px;
     box-shadow: 0px 16px 24px rgba(45, 51, 54, 0.06),
       0px 2px 6px rgba(33, 44, 51, 0.04), 0px 0px 1px rgba(33, 44, 51, 0.04);
 
@@ -125,8 +127,12 @@ const handleImageSelect = (index) => {
       padding: 4px;
       width: 154px;
       cursor: pointer;
+      background: transparent;
       &:hover {
         border-color: var(--color-accent-background);
+      }
+      &:focus {
+        outline: 4px solid var(--color-focus);
       }
       &--selected {
         border-color: var(--color-accent-background);
@@ -135,7 +141,6 @@ const handleImageSelect = (index) => {
 
     &__flyout-label {
       @include text-h5;
-      color: var(--color-text-secondary);
       margin-bottom: 12px;
     }
     &__flyout-container {
@@ -200,6 +205,6 @@ const handleImageSelect = (index) => {
 .hp-image-selector-transition-enter-from,
 .hp-image-selector-transition-leave-to {
   opacity: 0;
-  transform: translateY(20px);
+  transform: translateY(calc(50% - 10px));
 }
 </style>

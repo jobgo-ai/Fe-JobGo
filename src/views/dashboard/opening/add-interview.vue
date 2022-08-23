@@ -8,49 +8,54 @@
         <button type="submit">Hello</button>
       </form>
     </hp-modal>
-    <div class="add-interview__header">
-      <div class="add-interview__title">Add interviews</div>
-      <div class="add-interview__subtitle">
-        Select a template or create a new one from scratch
+    <div class="add-interview__container">
+      <div class="add-interview__header">
+        <div class="add-interview__title">Add interviews</div>
+        <div class="add-interview__subtitle">
+          Select a template or create a new one from scratch
+        </div>
       </div>
+      <div class="add-interview__filter">
+        <hp-input
+          class="add-interview__filter__search"
+          name="search"
+          variant="search"
+          icon="search"
+          standalone
+          v-model="filter.search"
+          placeholder="Search by name"
+        />
+        <hp-multi-select
+          class="add-interview__filter__dropdowns__dropdown"
+          label="All Skills"
+          :options="skillOptions"
+          name="skills"
+          searchable
+          :onSearch="searchFunction"
+          v-model="filter.skills"
+        ></hp-multi-select>
+      </div>
+      <ol v-if="!isInterviewsLoading" class="add-interview__interview-grid">
+        <hp-add-interview-card isAddCard></hp-add-interview-card>
+        <hp-add-interview-card
+          :template="template"
+          :key="template.reference"
+          v-for="template in templates"
+          @handleDelete="onDeleteTemplate"
+        ></hp-add-interview-card>
+      </ol>
+      <div class="add-interview__load-more">
+        <hp-button
+          v-if="!isInterviewsLoading && hasLoadMore"
+          label="Load more"
+          @click="fetchMoreTemplates"
+          :isLoading="isLoadingMoreLoading"
+        >
+          Load more
+        </hp-button>
+      </div>
+      <hp-spinner v-if="isInterviewsLoading" content size="24" />
     </div>
-    <div class="add-interview__filter">
-      <hp-input
-        class="add-interview__filter__search"
-        name="search"
-        variant="search"
-        icon="search"
-        standalone
-        v-model="filter.search"
-        placeholder="Search by name"
-      />
-      <hp-multi-select
-        class="add-interview__filter__dropdowns__dropdown"
-        label="All Skills"
-        :options="skillOptions"
-        name="skills"
-        searchable
-        :onSearch="searchFunction"
-        v-model="filter.skills"
-      ></hp-multi-select>
-      <hp-multi-select
-        :options="jobLevelOptions"
-        class="add-interview__filter__dropdowns__dropdown"
-        label="Experience levels"
-        name="levels"
-        v-model="filter.jobLevels"
-      ></hp-multi-select>
-    </div>
-    <ol v-if="!isInterviewsLoading" class="add-interview__interview-grid">
-      <hp-add-interview-card isAddCard></hp-add-interview-card>
-      <hp-add-interview-card
-        :template="template"
-        :key="template.reference"
-        v-for="template in templates"
-        @handleDelete="onDeleteTemplate"
-      ></hp-add-interview-card>
-    </ol>
-    <hp-spinner v-if="isInterviewsLoading" content size="24" />
   </div>
 </template>
 
@@ -63,13 +68,14 @@ import * as yup from "yup";
 
 // Components
 import HpModal from "@/components/hp-modal.vue";
+import HpButton from "@/components/hp-button.vue";
 import HpInput from "@/components/form/hp-input.vue";
 import HpSpinner from "@/components/hp-spinner.vue";
 import HpMultiSelect from "@/components/form/hp-multi-select.vue";
 import HpAddInterviewCard from "@/components/cards/hp-add-interview-card.vue";
+
 // Composables
 import useSkillSearch from "@/composables/useSkillSearch";
-import useConstants from "@/composables/useConstants";
 import { useBreadcrumbs } from "@/composables/useBreadcrumbs";
 import { useGet, usePost, useDelete } from "@/composables/useHttp";
 
@@ -81,17 +87,16 @@ const props = defineProps({
 });
 
 const isInterviewsLoading = ref(true);
+const isLoadingMoreLoading = ref(false);
+const hasLoadMore = ref(true);
+const offset = ref(0);
+const limit = 20;
 
-const filter = ref({ search: "", skills: [], jobLevels: [] });
+const filter = ref({ search: "", skills: [] });
 
 const skillOptions = ref([]);
 
 const { handleSkillSearch } = useSkillSearch();
-const { jobLevels } = useConstants();
-
-const jobLevelOptions = computed(() => {
-  return jobLevels.value.map((j) => ({ label: j.name, value: j.slug }));
-});
 
 const searchFunction = async (value) => {
   skillOptions.value = await handleSkillSearch(value);
@@ -109,16 +114,11 @@ watch(
   { deep: true }
 );
 
-const getUrl = (loadingMore) => {
+const getUrl = () => {
   let url = `templates`;
-  var params = new URLSearchParams([["limit", 20]]);
-  if (loadingMore) {
-    params.append("offset", next);
-  }
-  if (filter.value.jobLevels.length > 0) {
-    const onlySlugs = filter.value.jobLevels.map((j) => j.value);
-    params.append("job-levels", onlySlugs.join(","));
-  }
+  var params = new URLSearchParams([["limit", limit]]);
+
+  params.append("offset", offset.value);
   if (filter.value.skills.length > 0) {
     const onlySlugs = filter.value.skills.map((s) => s.value);
     params.append("skills", onlySlugs.join(","));
@@ -134,17 +134,31 @@ const getUrl = (loadingMore) => {
 };
 
 const fetchTemplates = async () => {
+  offset.value = 0;
   isInterviewsLoading.value = true;
   const getTemplates = useGet(getUrl());
   await getTemplates.get();
   templates.value = getTemplates.data.value.templates;
+  hasLoadMore.value = getTemplates.data.value.templates.length === limit;
   isInterviewsLoading.value = false;
 };
 
-onMounted(async () => {
+const fetchMoreTemplates = async () => {
+  isLoadingMoreLoading.value = true;
+  offset.value = offset.value + limit;
   const getTemplates = useGet(getUrl());
-  skillOptions.value = await handleSkillSearch("");
   await getTemplates.get();
+  templates.value = templates.value.concat(
+    [],
+    getTemplates.data.value.templates
+  );
+  hasLoadMore.value = getTemplates.data.value.templates / limit === 1;
+  isLoadingMoreLoading.value = false;
+};
+
+onMounted(async () => {
+  fetchTemplates();
+  skillOptions.value = await handleSkillSearch("");
 
   setBreadcrumbs([
     {
@@ -157,11 +171,10 @@ onMounted(async () => {
     },
     {
       label: "Add interview",
-      to: `/opening/${props.opening.reference}/view/add-interview`,
+      to: `/opening/${props.opening.reference}/edit/add-interview`,
     },
   ]);
 
-  templates.value = getTemplates.data.value.templates;
   isInterviewsLoading.value = false;
 });
 
@@ -197,8 +210,12 @@ const onDeleteTemplate = async (template) => {
 
 <style lang="scss">
 .add-interview {
-  @include pageContainer;
   padding: 26px;
+  display: flex;
+  justify-content: center;
+  &__container {
+    width: 882px;
+  }
   &__header {
     align-self: flex-start;
     margin-bottom: 24px;
@@ -220,6 +237,12 @@ const onDeleteTemplate = async (template) => {
     display: grid;
     gap: 16px;
     margin-bottom: 16px;
+    padding-bottom: 8px;
+    position: sticky;
+    top: $header-height;
+    border-bottom: 1px dashed var(--color-border);
+    background: var(--color-background);
+    z-index: $z-index-100;
     &__dropdowns {
       display: flex;
       &__dropdown {
@@ -227,10 +250,16 @@ const onDeleteTemplate = async (template) => {
       }
     }
   }
+  &__load-more {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 200px;
+  }
 }
 
 @media (min-width: $breakpoint-tablet) {
   .add-interview {
+    padding: 0;
     &__interview-grid {
       display: grid;
       grid-template-columns: 1fr 1fr 1fr;

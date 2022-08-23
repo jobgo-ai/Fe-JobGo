@@ -4,7 +4,7 @@
       :is="computedTag"
       :to="to"
       :href="href"
-      @click="emit('handleClick')"
+      @click="handleInternalClick"
       class="hp-button__button"
       :class="buttonClasses"
       :type="type ? type : 'button'"
@@ -33,7 +33,7 @@
       ></hp-spinner>
     </component>
     <button
-      @focus="isFocused = true"
+      @focus="handleFocus"
       @blur="isFocused = false"
       :class="addonClasses"
       :disabled="isDisabled"
@@ -117,20 +117,30 @@ const props = defineProps({
 });
 
 const isDropdownOpen = ref(false);
-
 const isFocused = ref(false);
 
 const computedTag = computed(() => {
-  if (props.to !== undefined && props.to !== null) {
+  if (props.to !== undefined && props.to !== null && !props.isDisabled) {
     return "router-link";
   }
 
-  if (props.href !== undefined && props.href !== null) {
+  if (props.href !== undefined && props.href !== null && !props.isDisabled) {
     return "a";
   }
 
   return "button";
 });
+
+const handleFocus = () => {
+  isFocused.value = true;
+};
+
+const handleInternalClick = () => {
+  if (props.isDisabled) {
+    return;
+  }
+  emit("handleClick");
+};
 
 const containerClasses = computed(() => {
   return {
@@ -170,6 +180,7 @@ const iconClasses = computed(() => {
     "hp-button__button__icon--solo": !props.label,
     "hp-button__button__icon--right": props.iconRight,
     "hp-button__button__icon--danger": props.danger,
+    "hp-button__button__icon--disabled": props.isDisabled,
   };
 });
 
@@ -181,7 +192,7 @@ const emit = defineEmits(["handleClick"]);
   display: inline-flex;
   height: 32px;
   position: relative;
-  z-index: 10;
+  z-index: $z-index-10;
 
   &--full-width {
     width: 100%;
@@ -198,6 +209,10 @@ const emit = defineEmits(["handleClick"]);
     border-color: var(--color-accent-background);
     filter: drop-shadow(0px 4px 8px rgba(33, 44, 51, 0.02))
       drop-shadow(0px 0px 1px rgba(33, 44, 51, 0.02));
+  }
+
+  &--primary .hp-button__button__icon--solo {
+    color: var(--color-accent-forground);
   }
 
   &--primary .hp-button__button__icon--solo {
@@ -262,6 +277,10 @@ const emit = defineEmits(["handleClick"]);
       &--danger {
         color: var(--color-error);
       }
+      &--disabled {
+        opacity: 0.4;
+        pointer-events: none;
+      }
     }
 
     &--button-icon {
@@ -285,6 +304,7 @@ const emit = defineEmits(["handleClick"]);
         opacity: 0.7;
         color: var(--color-accent-forground);
         background-color: var(--color-error);
+        cursor: not-allowed;
         &:hover {
           background-color: var(--color-error);
         }

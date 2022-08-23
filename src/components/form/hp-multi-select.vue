@@ -1,6 +1,10 @@
 <template>
   <div class="hp-multi-select">
-    <hp-dropdown @onChange="handleDropdownChange" :label="computedLabel">
+    <hp-dropdown
+      @onChange="handleDropdownChange"
+      :isDisabled="isDisabled"
+      :label="computedLabel"
+    >
       <template v-slot:dropdown>
         <div v-if="searchable" class="hp-multi-select__flyout__search">
           <hp-input
@@ -15,18 +19,23 @@
           />
         </div>
         <ul class="hp-multi-select__flyout__options">
-          <li
+          <button
             v-if="optionsList.length > 0 && !isLoading"
-            class="hp-multi-select__flyout__options__option"
+            :class="`hp-multi-select__flyout__options__option ${
+              isDisabledAndNotIncludedInModelValue(option) &&
+              'hp-multi-select__flyout__options__option--disabled'
+            }`"
             v-for="option in optionsList"
             @click="handleChangeEmit(option)"
+            :tabindex="1"
           >
             {{ option.label }}
             <hp-checkbox
               class="hp-multi-select__checkbox"
               :checked="modelValue.find((o) => o.value === option.value)"
+              :tabindex="-1"
             />
-          </li>
+          </button>
           <div class="hp-multi-select__spinner" v-else-if="isLoading">
             <hp-spinner />
           </div>
@@ -174,7 +183,21 @@ const optionsList = computed(() => {
   }
 });
 
+const isDisabledAndNotIncludedInModelValue = (option) => {
+  if (!props.maxItemsSelected) {
+    return false;
+  }
+  const isInModelValue = props.modelValue.some((item) => {
+    return item.value === option.value;
+  });
+  return props.modelValue.length >= props.maxItemsSelected && !isInModelValue;
+};
+
 const handleChangeEmit = (change) => {
+  if (isDisabledAndNotIncludedInModelValue(change)) {
+    return;
+  }
+
   let newValue = [...props.modelValue];
   if (newValue.find((v) => v.value === change.value)) {
     newValue = newValue.filter((item) => item.value !== change.value);
@@ -203,7 +226,7 @@ const handleChangeEmit = (change) => {
     border-radius: $border-radius-md;
     background-color: var(--color-background);
     padding: 0;
-    z-index: 1000;
+    z-index: $z-index-1000;
     &__search {
       padding: 8px 8px 0px 8px;
       border-bottom: 1px dashed var(--color-border);
@@ -223,8 +246,24 @@ const handleChangeEmit = (change) => {
         justify-content: space-between;
         padding: 8px;
         border-radius: $border-radius-sm;
+        outline: 0;
+        color: var(--color-text);
+        background-color: var(--color-background);
+        border: 0;
+        display: flex;
+        text-align: left;
+        width: 100%;
+        transition: 0.15s ease-in-out opacity;
+        &--disabled {
+          opacity: 0.5;
+          cursor: not-allowed;
+        }
         &:hover {
           background-color: var(--color-forground-floating);
+        }
+        &:focus {
+          background-color: var(--color-forground-floating);
+          outline: none;
         }
       }
     }

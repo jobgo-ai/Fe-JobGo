@@ -32,7 +32,12 @@
       ></hp-icon>
     </button>
     <transition name="flyout-transition">
-      <div class="hp-dropdown__flyout" v-if="isDropdownOpen">
+      <div
+        ref="flyoutRef"
+        tabindex="1"
+        :class="flyoutClasses"
+        v-if="isDropdownOpen"
+      >
         <slot name="dropdown"></slot>
       </div>
     </transition>
@@ -41,7 +46,7 @@
 
 <script setup>
 //Vendor
-import { computed, ref } from "vue";
+import { computed, ref, watch } from "vue";
 import { onClickOutside } from "@vueuse/core";
 
 // Components
@@ -59,6 +64,10 @@ const props = defineProps({
     type: String,
     default: "button",
   },
+  left: {
+    type: Boolean,
+    default: false,
+  },
   isLoading: {
     type: Boolean,
     default: false,
@@ -68,7 +77,7 @@ const props = defineProps({
     default: false,
   },
 });
-
+const flyoutRef = ref(null);
 const emits = defineEmits(["onChange"]);
 
 const isDropdownOpen = ref(false);
@@ -79,6 +88,15 @@ const handleButtonClick = () => {
   isDropdownOpen.value = !isDropdownOpen.value;
   emits("onChange", isDropdownOpen.value);
 };
+
+watch(
+  () => flyoutRef.value,
+  () => {
+    if (flyoutRef.value) {
+      flyoutRef.value.focus();
+    }
+  }
+);
 
 onClickOutside(target, (event) => {
   if (!isDropdownOpen.value) {
@@ -113,6 +131,13 @@ const iconClasses = computed(() => {
   return {
     "hp-dropdown__button__icon": true,
     "hp-dropdown__button__icon--solo": !props.label,
+  };
+});
+
+const flyoutClasses = computed(() => {
+  return {
+    "hp-dropdown__flyout": true,
+    "hp-dropdown__flyout--left": props.left,
   };
 });
 </script>
@@ -154,7 +179,15 @@ const iconClasses = computed(() => {
     padding: 4px 8px;
     right: 0;
     top: calc(100% + 6px);
-    z-index: 1000;
+    z-index: $z-index-1000;
+    &--left {
+      left: 0;
+      right: unset;
+    }
+  }
+
+  &__label {
+    padding-right: 6px;
   }
 
   // Default

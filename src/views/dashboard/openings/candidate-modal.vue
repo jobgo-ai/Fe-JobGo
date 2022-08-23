@@ -4,19 +4,37 @@
       <h3 class="candidate-modal__header__title">{{ content.title }}</h3>
       <p class="candidate-modal__header__subtitle">
         {{ content.subtitle }}
+        <span v-if="isAddNew">
+          <span v-if="!isBulkUploadOpen">
+            Add multiple candidates with
+            <span
+              @click="isBulkUploadOpen = true"
+              class="candidate-modal__header__subtitle__link"
+              >bulk upload csv</span
+            ></span
+          >
+          <span v-if="isBulkUploadOpen">
+            <span
+              @click="isBulkUploadOpen = false"
+              class="candidate-modal__header__subtitle__link"
+              >Add single candidate</span
+            ></span
+          >.</span
+        >
       </p>
     </div>
-    <form @submit="onSubmit">
+    <form v-if="!isBulkUploadOpen" @submit="onSubmit">
       <div class="candidate-modal__form">
         <hp-input
           placeholder="Enter candidate name"
           label="Name"
           ref="nameInput"
+          :autofocus="true"
           :isDisabled="isArchivingCandidate || isUpdatingCandidate"
           name="name"
         ></hp-input>
         <hp-input
-          placeholder="Enter candidate email..."
+          placeholder="Enter candidate email"
           label="Email"
           :isDisabled="isArchivingCandidate || isUpdatingCandidate"
           name="email"
@@ -27,43 +45,94 @@
           !isAddNew ? 'candidate-modal__actions--two-button' : ''
         }`"
       >
-        <hp-tooltip>
+        <hp-tooltip v-if="!isAddNew && candidate.state !== 'archived'">
           <hp-button
-            @handleClick="archiveCandidate(candidate)"
-            v-if="!isAddNew"
+            class="candidate-modal__archive"
+            @handleClick="changeCandidateState('archived')"
             :isLoading="isArchivingCandidate"
+            :isDisabled="isArchivingCandidate || isUpdatingCandidate"
             icon="archive"
-            danger
           ></hp-button>
           <template #content> Archive candidate </template>
+        </hp-tooltip>
+        <hp-tooltip v-if="!isAddNew && candidate.state === 'archived'">
+          <hp-button
+            @handleClick="changeCandidateState('active')"
+            :isLoading="isArchivingCandidate"
+            :isDisabled="isArchivingCandidate || isUpdatingCandidate"
+            icon="folder"
+          ></hp-button>
+          <template #content> Unarchive candidate </template>
         </hp-tooltip>
         <hp-button
           primary
           type="submit"
+          v-if="!isBulkUploadOpen"
           :isLoading="isUpdatingCandidate"
-          :isDisabled="!meta.valid"
+          :isDisabled="
+            !meta.valid || isArchivingCandidate || isUpdatingCandidate
+          "
           :label="content.buttonLabel"
         ></hp-button>
       </div>
     </form>
+    <div v-else>
+      <div class="candidate-modal__dropzone">
+        <p class="candidate-modal__dropzone__description">
+          Headers are email, and name.
+          <a
+            class="candidate-modal__header__subtitle__link"
+            href="/csvs/bulk-candidate-example.csv"
+            download="bulk-candidate-example.csv"
+            >Download example file</a
+          >.
+        </p>
+        <hp-dropzone
+          @change="handleFileUpload"
+          :isLoading="isMultipleCandidatesProcessing"
+          accept=".csv"
+          loadingLabel="Candidates processing"
+          label="Upload a csv file to add multiple candidates"
+        >
+        </hp-dropzone>
+      </div>
+      <div class="candidate-modal__actions">
+        <hp-button
+          primary
+          type="button"
+          v-if="isBulkUploadOpen"
+          @handleClick="handleCsvUpload"
+          :isLoading="isMultipleCandidatesProcessing"
+          :isDisabled="isMultipleCandidatesProcessing || !csv.name"
+          label="Upload csv"
+        ></hp-button>
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup>
-import { computed, ref, watchEffect } from "vue";
+// Vendor
+import { computed, ref, onMounted, nextTick } from "vue";
 import * as yup from "yup";
 import { useForm } from "vee-validate";
 import { useRoute, useRouter } from "vue-router";
+import Papa from "papaparse";
 
 //Components
 import HpInput from "@/components/form/hp-input.vue";
 import HpButton from "@/components/hp-button.vue";
+import HpIcon from "@/components/hp-icon.vue";
+import HpSpinner from "@/components/hp-spinner.vue";
+import HpDropdown from "@/components/form/hp-dropdown.vue";
 import HpTooltip from "@/components/hp-tooltip.vue";
+import HpDropzone from "@/components/hp-dropzone.vue";
 
 // Composables
 import { usePost, usePut } from "@/composables/useHttp";
 import useOpenings from "@/composables/useOpenings";
 import useCandidates from "@/composables/useCandidates";
+import { useGettingStarted } from "@/composables/useGettingStarted";
 import { useBreadcrumbs } from "@/composables/useBreadcrumbs";
 import useToast from "@/composables/useToast";
 
@@ -82,23 +151,24 @@ const emits = defineEmits(["close"]);
 
 const isUpdatingCandidate = ref(false);
 const isArchivingCandidate = ref(false);
+const isMultipleCandidatesProcessing = ref(false);
+const isBulkUploadOpen = ref(false);
 const isAddNew = props.candidate.name === "";
+const csv = ref([]);
 
 const nameInput = ref(null);
 
-watchEffect(() => {
-  if (nameInput.value) {
-    nameInput.value.inputRef.focus();
-  }
-});
-
 const { setToast } = useToast();
+
+onMounted(async () => {
+  nameInput.value.inputRef.focus();
+});
 
 const content = computed(() => {
   return isAddNew
     ? {
         title: "Add candidate",
-        subtitle: `New candidate for ${props.opening.name}`,
+        subtitle: `New candidate for ${props.opening.name}.`,
         buttonLabel: "Create candidate",
       }
     : {
@@ -115,11 +185,8 @@ const { setBreadcrumbs } = useBreadcrumbs();
 
 const schema = yup.object({
   name: yup.string().max(50).required("First name is required"),
-  email: yup
-    .string()
-    .max(100)
-    .required("Email is required")
-    .email("Email must be valid"),
+  email: yup.string().max(100).email("Email must be valid").nullable(),
+  state: yup.string(),
 });
 
 const { handleSubmit, meta } = useForm({
@@ -127,10 +194,20 @@ const { handleSubmit, meta } = useForm({
   initialValues: { ...props.candidate },
 });
 
-const { fetchOpening } = useOpenings();
+const { fetchChecklist } = useGettingStarted();
+const { fetchOpening, updateOpenings } = useOpenings();
 
-const { fetchCandidates, candidates, fetchCandidate, candidate } =
-  useCandidates();
+const {
+  fetchCandidates,
+  candidates,
+  fetchCandidate,
+  candidate,
+  candidateListFilter,
+} = useCandidates();
+
+const handleFileUpload = (file) => {
+  csv.value = file;
+};
 
 const onSubmit = handleSubmit(async (values) => {
   isUpdatingCandidate.value = true;
@@ -139,6 +216,7 @@ const onSubmit = handleSubmit(async (values) => {
     const payload = {
       candidate: {
         ...values,
+        email: values.email === "" ? null : values.email,
         opening: route.params.openingRef,
       },
     };
@@ -148,7 +226,7 @@ const onSubmit = handleSubmit(async (values) => {
       title: "Well done!",
       message: "Candidate created successfully",
     });
-    fetchCandidates(route.params.openingRef, true);
+    candidateListFilter.value = "active";
     router.push(
       `/openings/${route.params.openingRef}?candidate=${postCandidate.data.value.candidate.reference}`
     );
@@ -157,6 +235,7 @@ const onSubmit = handleSubmit(async (values) => {
     const payload = {
       candidate: {
         ...values,
+        email: values.email === "" ? null : values.email,
         opening: route.params.openingRef,
       },
     };
@@ -181,35 +260,60 @@ const onSubmit = handleSubmit(async (values) => {
         to: `/opening/${route.params.openingRef}?candidate=${candidate.value.reference}`,
       },
     ]);
-    fetchCandidates(route.params.openingRef, true);
   }
   fetchOpening(route.params.openingRef);
+  fetchCandidates();
+  updateOpenings();
+  fetchChecklist();
   isUpdatingCandidate.value = false;
   emits("close");
 });
 
-const archiveCandidate = async () => {
+const changeCandidateState = async (state) => {
   isArchivingCandidate.value = true;
   const archiveCandidate = usePut(
     `candidates/${props.candidate.reference}/state`
   );
   await archiveCandidate.put({
-    state: "archived",
+    state,
   });
-  await fetchCandidates(route.params.openingRef, true);
+
+  fetchCandidate(props.candidate.reference);
+  candidateListFilter.value = state !== "active" ? "archived" : "active";
+  fetchCandidates();
   setToast({
     type: "success",
     title: "What a change!",
     message: "Candidate updated successfully",
   });
-  if (candidates.value.length === 0) {
-    router.push(`/openings/${route.params.openingRef}`);
-  } else {
-    router.push(
-      `/openings/${route.params.openingRef}?candidate=${candidates.value[0].reference}`
-    );
-  }
+  updateOpenings();
   emits("close");
+};
+
+const handleCsvUpload = () => {
+  isMultipleCandidatesProcessing.value = true;
+  Papa.parse(csv.value, {
+    header: true,
+    complete: async (csvCandidates) => {
+      const reqs = csvCandidates.data.map((newCandidate) => {
+        const postCandidate = usePost("candidates");
+        const payload = {
+          candidate: { ...newCandidate, opening: route.params.openingRef },
+        };
+        return postCandidate.post(payload);
+      });
+
+      await Promise.all(reqs);
+      setToast({
+        type: "positive",
+        title: "Candidates uploaded",
+        message: "Candidate list added",
+      });
+      fetchCandidates();
+      emits("close");
+      isMultipleCandidatesProcessing.value = false;
+    },
+  });
 };
 </script>
 
@@ -225,14 +329,17 @@ const archiveCandidate = async () => {
     }
     &__subtitle {
       color: var(--color-text-secondary);
+      &__link {
+        cursor: pointer;
+        text-decoration: underline;
+        color: var(--color-text-primary);
+      }
     }
   }
   &__form {
-    padding: 24px;
+    padding: 24px 16px;
     border-bottom: 1px dashed var(--color-border);
     width: 100%;
-    max-width: 408px;
-    padding-bottom: 0;
   }
   &__actions {
     padding: 16px 24px;
@@ -240,6 +347,23 @@ const archiveCandidate = async () => {
     justify-content: flex-end;
     &--two-button {
       justify-content: space-between;
+    }
+  }
+  &__dropzone {
+    padding: 0 32px;
+    padding-top: 32px;
+    color: var(--color-text-secondary);
+    &__description {
+      margin-bottom: 18px;
+    }
+    &__container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      &__icon {
+        margin-bottom: 12px;
+      }
     }
   }
 }

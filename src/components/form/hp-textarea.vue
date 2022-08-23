@@ -10,8 +10,9 @@
       :placeholder="placeholder"
       :value="modelValue"
       :disabled="isDisabled"
-      v-on:input="modelValue = $event.target.value"
+      v-on:input="handleInput"
       :rows="rows"
+      :maxlength="maxlength"
     ></textarea>
     <transition name="hp-textarea__error-transition">
       <div class="hp-textarea__error" v-if="errorMessage">
@@ -23,12 +24,14 @@
 
 <script setup>
 import { computed, ref } from "vue";
+import { useField } from "vee-validate";
 
 const props = defineProps({
   label: String,
   modelValue: String,
   name: String,
   type: String,
+  maxlength: String,
   placeholder: {
     type: String,
     default: "",
@@ -43,12 +46,17 @@ const props = defineProps({
   },
 });
 
-import { useField } from "vee-validate";
+const emits = defineEmits(["input"]);
 
 const { value: modelValue, errorMessage } = useField(props.name);
 
 const inputRef = ref(null);
 defineExpose({ inputRef });
+
+const handleInput = (e) => {
+  modelValue.value = e.target.value;
+  emits("input", modelValue);
+};
 
 const containerClasses = computed(() => {
   return {

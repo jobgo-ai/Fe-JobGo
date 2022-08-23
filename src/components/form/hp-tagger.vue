@@ -33,23 +33,48 @@
             />
           </div>
           <ul class="hp-tagger__flyout__options">
-            <li
-              v-if="optionsList.length > 0 && !isLoading"
-              class="hp-tagger__flyout__options__option"
-              v-for="option in optionsList"
-              @click="handleChangeEmit(option)"
-            >
-              {{ option.label }}
-              <hp-checkbox
-                class="hp-tagger__checkbox"
-                :checked="modelValue.find((v) => v.value === option.value)"
-              />
-            </li>
+            <div v-if="!isLoading">
+              <button
+                class="
+                  hp-tagger__flyout__options__option
+                  hp-tagger__flyout__options__option--add
+                "
+                v-if="
+                  search.length > 2 &&
+                  !options.some(
+                    (e) => e.label.toLowerCase() === search.toLowerCase()
+                  )
+                "
+                type="button"
+                @click="addNewSkill"
+              >
+                <hp-icon
+                  class="hp-tagger__flyout__options__option__add-icon"
+                  name="plus"
+                  size="14"
+                ></hp-icon>
+                {{ `Add "${search}"` }}
+              </button>
+              <button
+                v-if="optionsList.length > 0"
+                :class="`hp-tagger__flyout__options__option ${
+                  isDisabled(option) &&
+                  'hp-tagger__flyout__options__option--disabled'
+                }`"
+                v-for="option in optionsList"
+                @click="handleChangeEmit(option)"
+                type="button"
+              >
+                {{ option.label }}
+                <hp-checkbox
+                  class="hp-tagger__checkbox"
+                  :checked="modelValue.find((v) => v.value === option.value)"
+                  :tabindex="-1"
+                />
+              </button>
+            </div>
             <div class="hp-tagger__spinner" v-else-if="isLoading">
               <hp-spinner />
-            </div>
-            <div class="hp-tagger__empty-state" v-else>
-              <EmptyState /> No options
             </div>
           </ul>
         </div>
@@ -72,14 +97,19 @@
 </template>
 
 <script setup>
-import { useField } from "vee-validate";
+// Vendor
 import { computed, ref, watch, watchEffect } from "vue";
+import { useField } from "vee-validate";
+import { useElementBounding } from "@vueuse/core";
+import { onClickOutside } from "@vueuse/core";
+import { usePost } from "@/composables/useHttp";
+
+// Components
 import HpCheckbox from "@/components/hp-checkbox.vue";
 import HpInput from "@/components/form/hp-input.vue";
 import HpSpinner from "@/components/hp-spinner.vue";
 import HpIcon from "@/components/hp-icon.vue";
-import EmptyState from "@/assets/abstracts/empty-state.svg";
-import { onClickOutside } from "@vueuse/core";
+import HpButton from "@/components/hp-button.vue";
 
 const emits = defineEmits(["update:modelValue"]);
 const props = defineProps({
@@ -118,9 +148,6 @@ const props = defineProps({
     type: Boolean,
     default: true,
   },
-  maxItemsSelected: {
-    type: Number,
-  },
   searchable: {
     type: Boolean,
   },
@@ -152,6 +179,7 @@ const isLoading = ref(false);
 const searchInput = ref(null);
 const isFlyoutOpen = ref(false);
 const target = ref(null);
+const isAddingNewSkill = ref(false);
 
 onClickOutside(target, (event) => {
   if (!isFlyoutOpen.value) {
@@ -231,20 +259,43 @@ const handleChangeEmit = (change) => {
 const magicNumber = 60;
 const handleOpenFlyout = () => {
   isFlyoutOpen.value = true;
-  flyoutTop.value = target.value.getBoundingClientRect().top - magicNumber;
+  flyoutTop.value = target.value?.getBoundingClientRect().top - magicNumber;
 };
 const flyoutTop = ref(0);
-import { useElementBounding } from "@vueuse/core";
 const { top } = useElementBounding(target);
 watch(top, (newValue) => {
   flyoutTop.value = newValue - magicNumber;
 });
+
+const isDisabled = (option) => {
+  const isIncluded = props.modelValue.find((v) => v.value === option.value);
+  const isMax = props.max && props.modelValue.length >= props.max;
+  return !isIncluded && isMax;
+};
+
+const addNewSkill = async () => {
+  isAddingNewSkill.value = true;
+  const postSkill = usePost("skills");
+  await postSkill.post({
+    skill: {
+      name: search.value,
+      type: "technical",
+    },
+  });
+  const newSkill = {
+    value: postSkill.data.value.skill.reference,
+    label: postSkill.data.value.skill.name,
+  };
+  handleChangeEmit(newSkill);
+  isAddingNewSkill.value = false;
+  handleAsyncSearch();
+  searchInput.value.inputRef.focus();
+};
 </script>
 
 <style lang="scss">
 .hp-tagger {
   display: flex;
-  z-index: 90;
   &__checkbox {
     pointer-events: none;
   }
@@ -310,7 +361,7 @@ watch(top, (newValue) => {
     border: $border;
     background-color: var(--color-background);
     padding: 0;
-    z-index: 1000;
+    z-index: $z-index-1000;
     position: absolute;
     right: calc(100% + 10px);
     transform: translate3d(0, 0, 0);
@@ -333,18 +384,44 @@ watch(top, (newValue) => {
         justify-content: space-between;
         padding: 8px;
         border-radius: $border-radius-sm;
+        outline: 0;
+        background-color: var(--color-background);
+        border: 0;
+        display: flex;
+        text-align: left;
+        color: var(--color-text-primary);
+        width: 100%;
+        &__add-icon {
+          margin-right: 6px;
+        }
         &:hover {
           background-color: var(--color-forground-floating);
+        }
+        &:focus {
+          background-color: var(--color-forground-floating);
+          outline: none;
+        }
+        &--disabled {
+          opacity: 0.4;
+          cursor: not-allowed;
+        }
+        &--add {
+          justify-content: flex-start;
         }
       }
     }
   }
-  &__empty-state {
+  &__add-skill {
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding-bottom: 12px;
+    color: var(--color-text-secondary);
+    padding: 12px;
+    &__button {
+      display: flex;
+    }
+    &__text {
+      margin-bottom: 12px;
+    }
   }
 }
 </style>

@@ -20,7 +20,7 @@
         ></hp-button>
       </form>
       <div v-else>
-        <h2 class="forgot-password__title">Verify your email</h2>
+        <h2 class="forgot-password__title">Check your email</h2>
         <p>We sent you an email to reset your password.</p>
       </div>
     </div>
@@ -101,6 +101,8 @@ const handlePasswordReset = handleSubmit(async (values) => {
   &__logo {
     margin: auto;
     margin-bottom: 48px;
+    height: 48px;
+    width: 48px;
   }
   &__container {
     margin: auto;
@@ -124,7 +126,7 @@ const handlePasswordReset = handleSubmit(async (values) => {
     width: 100%;
     left: 50%;
     transform: translateX(-50%) translateY(-50%);
-    z-index: -1;
+    z-index: $z-index-negative;
   }
   &__link {
     margin: auto;

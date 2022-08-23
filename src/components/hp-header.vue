@@ -6,6 +6,9 @@
     </div>
     <div class="hp-header__right">
       <div id="teleport-target-header" class="hp-header__save-container"></div>
+      <div v-if="!isDismissed" class="hp-header__getting-started">
+        <hp-getting-started />
+      </div>
       <div
         class="hp-header__dropdown-container"
         ref="dropdownTarget"
@@ -44,6 +47,20 @@
                 </div>
               </div>
             </div>
+            <div v-if="organization" class="hp-header__dropdown__options">
+              <router-link
+                to="/organization"
+                tag="div"
+                class="hp-header__dropdown__options__option"
+                @click="isAccountMenuOpen = false"
+              >
+                <hp-icon
+                  name="candidates"
+                  class="hp-header__dropdown__options__option__icon"
+                />
+                Organization
+              </router-link>
+            </div>
             <div class="hp-header__dropdown__options">
               <router-link
                 to="/settings"
@@ -57,6 +74,19 @@
                 />
                 Account Settings
               </router-link>
+            </div>
+            <div class="hp-header__dropdown__options">
+              <a
+                href="https://help.hireproof.io"
+                class="hp-header__dropdown__options__option"
+                target="_blank"
+              >
+                <hp-icon
+                  name="help"
+                  class="hp-header__dropdown__options__option__icon"
+                />
+                Help center
+              </a>
             </div>
             <div class="hp-header__dropdown__options">
               <div
@@ -73,7 +103,7 @@
                   />
                   Dark mode
                 </div>
-                <hp-switch v-model:checked="isDarkmode" />
+                <hp-switch v-model="isDarkmode" :standalone="true" />
               </div>
             </div>
             <div @click="handleLogout" class="hp-header__dropdown__options">
@@ -92,6 +122,7 @@ import { useRouter } from "vue-router";
 import { ref, computed, onMounted, onUnmounted } from "vue";
 import { onClickOutside } from "@vueuse/core";
 // Components
+import HpGettingStarted from "@/components/getting-started/hp-getting-started.vue";
 import HpAvatar from "@/components/hp-avatar.vue";
 import HpIcon from "@/components/hp-icon.vue";
 import HpSwitch from "@/components/hp-switch.vue";
@@ -101,16 +132,20 @@ import useContextSave from "@/composables/useContextSave";
 import useAuth from "@/composables/useAuth";
 import useDarkMode from "@/composables/useDarkMode";
 import { useBreadcrumbs } from "@/composables/useBreadcrumbs";
+import { useGettingStarted } from "@/composables/useGettingStarted";
+
 // Svg
 import Logo from "@/assets/logo.svg";
 
-const { logout } = useAuth();
+const { logout, organization } = useAuth();
 const router = useRouter();
 
 const { isDarkmode, handleDarkModeToggle } = useDarkMode();
 
 const dropdownTarget = ref(null);
 const isAccountMenuOpen = ref(false);
+
+const { isDismissed } = useGettingStarted();
 
 onClickOutside(dropdownTarget, (event) => {
   if (!isAccountMenuOpen.value) {
@@ -162,6 +197,9 @@ const { hasHeaderSaveButton } = useBreadcrumbs();
   justify-content: space-between;
   align-items: center;
   padding: 24px;
+  position: fixed;
+  z-index: $z-index-501;
+  background-color: var(--color-background);
   &__save-container {
     padding-right: 16px;
     border-right: $border;
@@ -188,6 +226,8 @@ const { hasHeaderSaveButton } = useBreadcrumbs();
   &__logo {
     margin-right: 24px;
     display: flex;
+    height: 34px;
+    width: 32px;
   }
   &__right {
     display: flex;
@@ -199,6 +239,9 @@ const { hasHeaderSaveButton } = useBreadcrumbs();
   }
   &__dropdown-container {
     position: relative;
+  }
+  &__getting-started {
+    margin-right: 8px;
   }
   &__dropdown-target {
     display: flex;
@@ -228,7 +271,7 @@ const { hasHeaderSaveButton } = useBreadcrumbs();
     }
   }
   &__dropdown {
-    z-index: 100;
+    z-index: $z-index-100;
     background-color: var(--color-background);
     position: absolute;
     top: calc(100% + 8px);
@@ -289,6 +332,7 @@ const { hasHeaderSaveButton } = useBreadcrumbs();
         padding: 12px 0;
         display: flex;
         flex-direction: column;
+        word-break: break-all;
       }
       &__email {
         color: var(--color-text-secondary);

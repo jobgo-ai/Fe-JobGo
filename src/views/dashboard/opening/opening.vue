@@ -14,16 +14,21 @@ import { useRoute } from "vue-router";
 // Composables
 import { useGet } from "@/composables/useHttp";
 import useOpenings from "@/composables/useOpenings";
+import useAuth from "@/composables/useAuth";
 
 const interview = ref(null);
 const route = useRoute();
 
 const { fetchOpening, opening } = useOpenings();
+const { user } = useAuth();
 
 watch(
   () => route.params.openingRef,
   async (newOpeningRef) => {
     if (!newOpeningRef) {
+      return;
+    }
+    if (!user) {
       return;
     }
     await fetchOpening(newOpeningRef);

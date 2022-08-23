@@ -17,6 +17,7 @@
 
 <script setup>
 import { watch } from "vue";
+import { onKeyDown } from "@vueuse/core";
 
 const emits = defineEmits(["close"]);
 const props = defineProps({
@@ -52,7 +53,7 @@ watch(
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.5);
-    z-index: 90;
+    z-index: $z-index-600;
   }
 
   &__drawer {
@@ -63,7 +64,7 @@ watch(
     max-width: $drawer-max-width;
     height: 100%;
     background-color: var(--color-background);
-    z-index: 100;
+    z-index: $z-index-601;
   }
 }
 

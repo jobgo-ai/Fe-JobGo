@@ -43,6 +43,8 @@ import Logo from "@/assets/logo.svg";
     position: absolute;
     top: 16px;
     left: 50%;
+    height: 48px;
+    width: 48px;
   }
   &__image {
     width: 50%;

@@ -1,9 +1,9 @@
 <template>
-  <div v-if="interview.token" class="results">
+  <div v-if="!isLoading" class="results">
     <div class="results__details">
       <p class="results__details__candidate">{{ candidate.name }}</p>
       <h2 class="results__details__interview-name">
-        {{ interview.template.name }}
+        {{ evaluation.interview.template.name }}
       </h2>
       <div class="results__details__stats">
         <div class="results__details__stats__stat">
@@ -11,7 +11,7 @@
             class="results__details__stats__stat__icon"
             name="user"
           ></hp-icon>
-          {{ interview.interviewerName }}
+          {{ evaluation.interviewerName }}
         </div>
         <div class="results__details__stats__stat">
           <hp-icon
@@ -31,23 +31,23 @@
       <div class="results__details__grid">
         <div
           :class="`results__details__score results__details__score--${calculateColor(
-            interview.statistics.candidateScore,
-            interview.statistics.averageInterviewScore
+            evaluation.statistics.candidateScore,
+            evaluation.statistics.averageInterviewScore
           )}`"
         >
           <div class="results__details__score-container">
             <div class="results__details__score__average">
-              {{ interview.statistics.candidateScore }}
+              {{ evaluation.statistics.candidateScore || "~" }}
             </div>
             <div class="results__details__score__current">Score</div>
             <div class="results__details__score__average-score">
               The average score is
-              {{ interview.statistics.averageInterviewScore }}
+              {{ evaluation.statistics.averageInterviewScore }}
               <hp-icon
                 :name="
                   calculateArrowDirection(
-                    interview.statistics.candidateScore,
-                    interview.statistics.averageInterviewScore
+                    evaluation.statistics.candidateScore,
+                    evaluation.statistics.averageInterviewScore
                   )
                 "
               ></hp-icon>
@@ -57,22 +57,24 @@
         <div :class="`results__details__score`">
           <div class="results__details__score-container">
             <div class="results__details__score__average">
-              {{ (interview.statistics.candidateCompletion * 100).toFixed(0) }}%
+              {{
+                (evaluation.statistics.candidateCompletion * 100).toFixed(0)
+              }}%
             </div>
             <div class="results__details__score__current">Completion rate</div>
             <div class="results__details__score__average-score">
               Average completion is
               {{
-                (interview.statistics.averageInterviewCompletion * 100).toFixed(
-                  0
-                )
+                (
+                  evaluation.statistics.averageInterviewCompletion * 100
+                ).toFixed(0)
               }}
               %
               <hp-icon
                 :name="
                   calculateArrowDirection(
-                    interview.statistics.candidateCompletion,
-                    interview.statistics.averageInterviewCompletion
+                    evaluation.statistics.candidateCompletion,
+                    evaluation.statistics.averageInterviewCompletion
                   )
                 "
               ></hp-icon>
@@ -83,68 +85,109 @@
           <div class="results__details__skills-title">Evaluated skills</div>
           <ol class="results__details__skills">
             <hp-badge-tag
-              v-for="(skill, index) in interview.statistics
+              v-for="(skill, index) in evaluation.statistics
                 .candidateSkillScores"
-              :quantity="skill.score.value"
+              :quantity="skill.score.value || '~'"
               :label="skill.name"
               :type="calculateSkillScoreColor(skill)"
             ></hp-badge-tag>
           </ol>
         </div>
+        <div v-if="evaluation.comment" class="results__comments">
+          <div class="results__questions__title">Notes</div>
+          {{ evaluation.comment }}
+        </div>
       </div>
     </div>
-    <div class="results__questions">
-      <div class="results__questions__title">Questions</div>
-      <ol class="results__questions__list">
-        <li
-          v-for="(interaction, index) in interactionList"
-          class="results__questions__container"
-        >
-          <div class="results__questions__question">
-            <div class="results__questions__container__header">
-              <hp-badge icon="questions" :content="index + 1" />
-              <div
-                v-if="interaction.interaction?.answer"
-                class="
+    <div class="results__container">
+      <div class="results__questions">
+        <div class="results__questions__title">Questions</div>
+        <ol class="results__questions__list">
+          <li
+            v-for="(interaction, index) in interactionList"
+            class="results__questions__container"
+          >
+            <div class="results__questions__question">
+              <div class="results__questions__container__header">
+                <div class="results__questions__container__time">
+                  <hp-badge icon="questions" :content="index + 1" />
+                </div>
+                <div
+                  v-if="interaction.interaction?.answer"
+                  :class="`
                   results__questions__container__header__little-badge
-                  results__questions__container__header__little-badge--nuetral
-                "
-              >
-                {{ interaction.interaction.answer?.value }} / 5
+                  results__questions__container__header__little-badge--${interaction.interaction.answer?.value}
+                `"
+                >
+                  {{ interaction.interaction.answer?.value }} / 5
+                </div>
+              </div>
+              <div class="results__questions__container__content">
+                {{ interaction.question.content }}
+              </div>
+              <div class="hp-question-card-stats">
+                <div
+                  v-if="interaction.interaction?.answer"
+                  class="hp-question-card-stats__stats__stat"
+                >
+                  <hp-icon
+                    class="hp-question-card-stats__stats__stat__icon"
+                    name="flag"
+                  ></hp-icon>
+                  <div>
+                    {{ formatDistance(0, interaction.interaction?.duration) }}
+                  </div>
+                </div>
+                <div class="hp-question-card-stats__stats__stat">
+                  <hp-icon
+                    class="hp-question-card-stats__stats__stat__icon"
+                    name="chronometer"
+                  ></hp-icon>
+                  {{
+                    formatDistance(0, interaction.question.duration * 1000, {
+                      includeSeconds: true,
+                    })
+                  }}
+                </div>
+                <div
+                  v-if="interaction.question.skill"
+                  class="hp-question-card-stats__stats__stat"
+                >
+                  <hp-icon
+                    class="hp-question-card-stats__stats__stat__icon"
+                    name="skills"
+                  ></hp-icon>
+                  {{ interaction.question.skill?.name }}
+                </div>
               </div>
             </div>
-            <div class="results__questions__container__content">
-              {{ interaction.question.content }}
+            <div v-if="interaction.comment" class="results__questions__notes">
+              <hp-icon
+                name="file"
+                class="results__questions__notes__icon"
+              ></hp-icon>
+              {{ interaction.comment }}
             </div>
-            <hp-question-card-stats
-              hasTooltips
-              :question="interaction.question"
-            />
-          </div>
-          <div v-if="interaction.comment" class="results__questions__notes">
-            <hp-icon
-              name="file"
-              class="results__questions__notes__icon"
-            ></hp-icon>
-            {{ interaction.comment }}
-          </div>
-        </li>
-      </ol>
+          </li>
+        </ol>
+      </div>
     </div>
   </div>
+  <hp-spinner :size="24" class="candidate-details__spinner" v-else />
 </template>
 
 <script setup>
 //Vendor
 import { ref, onMounted, computed } from "vue";
 import { useRouter, useRoute } from "vue-router";
-import { format, formatDistanceStrict } from "date-fns";
+import { format, formatDistanceStrict, formatDistance } from "date-fns";
 
 //Components
 import HpIcon from "@/components/hp-icon.vue";
 import HpBadge from "@/components/hp-badge.vue";
+import HpSpinner from "@/components/hp-spinner.vue";
 import HpBadgeTag from "@/components/hp-badge-tag.vue";
-import HpQuestionCardStats from "@/components/cards/hp-question-card-stats.vue";
+import HpInfoCircle from "@/components/hp-info-circle.vue";
 
 // Composables
 import { useGet } from "@/composables/useHttp";
@@ -160,14 +203,20 @@ const props = defineProps({
 const { setBreadcrumbs } = useBreadcrumbs();
 const router = useRouter();
 const route = useRoute();
-const interview = ref({});
 const candidate = ref({});
+const interview = ref({});
+const evaluation = ref({});
+const isLoading = ref(true);
 
 onMounted(async () => {
-  const getInterview = useGet(`interviews/${route.params.resultsRef}`);
-  await getInterview.get();
-  interview.value = getInterview.data.value.interview;
-  candidate.value = getInterview.data.value.interview.candidate;
+  const getEvaluation = useGet(
+    `interview-evaluations/${route.params.evaluationRef}`
+  );
+
+  await getEvaluation.get();
+  candidate.value =
+    getEvaluation.data.value.interviewEvaluation.interview.candidate;
+  evaluation.value = getEvaluation.data.value.interviewEvaluation;
 
   setBreadcrumbs([
     {
@@ -176,37 +225,42 @@ onMounted(async () => {
     },
     {
       label: props.opening.name,
-      to: `/openings/${props.opening.reference}?candidate=${interview.value.candidate.reference}`,
+      to: `/openings/${props.opening.reference}`,
     },
     {
-      label: interview.value.candidate.name,
+      label: candidate.value.name,
+      to: `/openings/${props.opening.reference}?candidate=${candidate.value.reference}`,
+    },
+    {
+      label: evaluation.value.interview.template.name,
       to: ``,
     },
   ]);
+
+  isLoading.value = false;
 });
 
 const createdTime = computed(() => {
-  console.log(new Date(interview.value.started));
-  return format(new Date(interview.value.started), "HH:mm, dd MMMM, yyyy");
+  return format(new Date(evaluation.value.started), "HH:mm, dd MMMM, yyyy");
 });
 
 const timeTaken = computed(() => {
   return formatDistanceStrict(
-    new Date(interview.value.terminated),
-    new Date(interview.value.started),
+    new Date(evaluation.value.terminated),
+    new Date(evaluation.value.started),
     { roundingMethod: "ceil" }
   );
 });
 
 const handleArchiveInterview = async () => {
-  const deleteInterview = useDelete(`interviews/${interview.value.token}`);
+  const deleteInterview = useDelete(`interviews/${evaluation.value.token}`);
   await deleteInterview.remove();
   isInterviewArchiveConfirmOpen.value = false;
   router.push(`/candidates/${route.params.candidateRef}`);
 };
 
 const interactionList = computed(() => {
-  return interview.value.interactions
+  return evaluation.value.interactions
     .filter((interaction) => {
       return interaction.type === "question";
     })
@@ -234,8 +288,8 @@ const calculateColor = (candidate, avg) => {
 };
 
 const calculateSkillScoreColor = (skill) => {
-  const average = interview.value.statistics.averageInterviewSkillScores.find(
-    (i) => i.slug === skill.slug
+  const average = evaluation.value.statistics.averageInterviewSkillScores.find(
+    (i) => i.reference === skill.reference
   );
   if (average) {
     return calculateColor(skill.score.value, average.score.value);
@@ -243,11 +297,26 @@ const calculateSkillScoreColor = (skill) => {
 };
 </script>
 
-<swag lang="scss">
+<swag lang="scss" scoped>
 .results {
   display: flex;
   flex-direction: column;
   padding: 26px;
+
+  &__container {
+    display: flex;
+    flex-direction: column;
+  }
+  &__comments {
+    padding: 24px;
+    padding-top: 0px;
+    border-radius: 16px;
+    border: 1px solid var(--color-border);
+    overflow: auto;
+    white-space: pre-wrap;
+    margin-bottom: 26px;
+    grid-column: 1/3;
+  }
   &__details {
     flex-shrink: 0;
     width: 100%;
@@ -397,8 +466,11 @@ const calculateSkillScoreColor = (skill) => {
       display: flex;
       padding: 16px;
       border-top: 1px dashed var(--color-border);
+      white-space: pre-wrap;
       &__icon {
+        color: var(--color-text-secondary);
         margin-right: 6px;
+        font-weight: 300;
       }
     }
     &__title {
@@ -417,6 +489,11 @@ const calculateSkillScoreColor = (skill) => {
       border-radius: $border-radius-md;
       border: $border;
       margin-bottom: 16px;
+      &__time {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
       &__header {
         display: flex;
         justify-content: space-between;
@@ -430,16 +507,31 @@ const calculateSkillScoreColor = (skill) => {
           line-height: 16px;
           letter-spacing: -0.015em;
           font-weight: 500;
-          font-feature-settings: "tnum" on, "lnum" on;
-          &--positive {
-            background: var(--color-background-positive);
-            border: 1px solid var(--color-border-positive);
-            color: var(--color-forground-positive);
-          }
-          &--negative {
+          font-variant-numeric: tabular-nums;
+          &--1 {
             background: var(--color-background-negative);
-            border: 1px solid var(--color-border-negative);
+            border-color: var(--color-border-negative);
             color: var(--color-forground-negative);
+          }
+          &--2 {
+            background: var(--orange-background);
+            border-color: var(--orange-border);
+            color: var(--orange-forground);
+          }
+          &--3 {
+            background: var(--yellow-background);
+            border-color: var(--yellow-border);
+            color: var(--yellow-forground);
+          }
+          &--4 {
+            background: var(--blue-background);
+            border-color: var(--blue-border);
+            color: var(--blue-forground);
+          }
+          &--5 {
+            background: var(--color-background-positive);
+            border-color: var(--color-border-positive);
+            color: var(--color-forground-positive);
           }
         }
       }

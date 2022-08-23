@@ -5,23 +5,29 @@
       :isOpen="isConfirmationModalOpen"
     >
       <div class="hp-danger-zone__modal">
-        <h4 class="hp-danger-zone__title">Confirm delete</h4>
-        <p class="hp-danger-zone__subtitle">
-          This is a permanent deletion, all related data will be lost.
-        </p>
-        <p class="hp-danger-zone__warning">This action is not reversable</p>
-        <hp-input
-          icon="locked"
-          label="To confirm, please type DELETE"
-          v-model="confirmation"
-          standalone
-        ></hp-input>
-        <hp-button
-          label="Confirm"
-          :isDisabled="confirmation !== 'DELETE'"
-          @handleClick="onConfirm"
-          destructive
-        ></hp-button>
+        <form @submit.prevent="">
+          <h4 class="hp-danger-zone__title">Confirm delete</h4>
+          <p class="hp-danger-zone__subtitle">
+            This is a permanent deletion, all related data will be lost.
+          </p>
+          <p class="hp-danger-zone__warning">This action is not reversible</p>
+          <hp-input
+            ref="inputRef"
+            icon="locked"
+            label="To confirm, please type DELETE"
+            name="confirmation"
+            v-model="confirmation"
+            standalone
+          ></hp-input>
+          <hp-button
+            label="Confirm"
+            type="submit"
+            :isLoading="isConfirmationLoading"
+            :isDisabled="confirmation !== 'DELETE'"
+            @handleClick="handleConfirmationClick"
+            destructive
+          ></hp-button>
+        </form>
       </div>
     </hp-modal>
     <h4 class="hp-danger-zone__title">Danger zone</h4>
@@ -29,7 +35,7 @@
       After you perform this action, there is no going back
     </p>
     <hp-button
-      @handleClick="isConfirmationModalOpen = true"
+      @handleClick="openConfirmationModal"
       destructive
       :label="label"
     ></hp-button>
@@ -37,7 +43,7 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { onMounted, ref, nextTick } from "vue";
 import HpButton from "@/components/hp-button.vue";
 import HpInput from "@/components/form/hp-input.vue";
 import HpModal from "@/components/hp-modal.vue";
@@ -57,8 +63,22 @@ const props = defineProps({
   },
 });
 
+const inputRef = ref(null);
+const isConfirmationLoading = ref(false);
+
 const isConfirmationModalOpen = ref(false);
-const confirmation = ref("eee");
+const confirmation = ref("");
+
+const openConfirmationModal = async () => {
+  isConfirmationModalOpen.value = true;
+  await nextTick();
+  inputRef.value.inputRef.focus();
+};
+
+const handleConfirmationClick = async () => {
+  isConfirmationLoading.value = true;
+  await props.onConfirm();
+};
 </script>
 
 <style lang="scss" scoped>

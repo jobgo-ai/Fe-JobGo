@@ -8,9 +8,12 @@
     </hp-drawer>
     <div class="hp-interview-card__add-new" v-if="isAddCard">
       <div>
-        <div class="hp-interview-card__add-new__icon-container">
+        <router-link
+          :to="`/opening/${route.params.openingRef}/edit/add-interview`"
+          class="hp-interview-card__add-new__icon-container"
+        >
           <hp-icon :size="24" name="plus"></hp-icon>
-        </div>
+        </router-link>
         <p class="hp-interview-card__content__name">Add interview</p>
         <p class="hp-interview-card__content__description">
           Add new interview to the process

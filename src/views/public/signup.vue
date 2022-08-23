@@ -3,50 +3,73 @@
     <div class="signup__logo"><Logo /></div>
     <div class="signup__container">
       <div class="signup__image-container"></div>
-      <p class="signup__subtitle">Welcome aboard!</p>
-      <h2 class="signup__title">Sign up with Hireproof</h2>
-      <form @submit="onSubmit">
-        <hp-input name="name" placeholder="Type your name" label="Name" />
-        <hp-input name="email" placeholder="Type your email" label="Email" />
-        <div class="signup__password-container">
-          <hp-input
-            name="password"
-            placeholder="Enter your password"
-            label="Password"
-            type="password"
-          />
-        </div>
-        <div class="signup__checkbox-container">
-          <hp-checkbox
-            :isLoading="postLogin.loading.value"
-            name="terms"
-          ></hp-checkbox>
-          <div class="signup__checkbox-container__text">
-            Agree to the
-            <a
-              class="signup__checkbox-container__link"
-              href="https://www.hireproof.io/terms-of-service"
-              >Terms of Service</a
-            >
-            and
-            <a
-              class="signup__checkbox-container__link"
-              href="https://www.hireproof.io/terms-of-service"
-              >Privacy Policy</a
-            >
-          </div>
-        </div>
-        <div v-if="error" class="signup__error">{{ error }}</div>
+      <div class="signup__section">
+        <h3 class="signup__title">Sign up with SSO</h3>
         <hp-google-auth />
-        <hp-button
-          :isLoading="isLoading"
-          primary
-          :isDisabled="!meta.dirty || !meta.valid"
-          type="submit"
-          label="Continue"
-          fullWidth
-        ></hp-button>
-      </form>
+      </div>
+      <div class="">
+        <h3 class="signup__title">Sign up with Email</h3>
+        <form @submit="onSubmit">
+          <hp-input name="name" placeholder="Type your name" label="Name" />
+          <hp-input
+            :isDisabled="true"
+            name="email"
+            placeholder="Type your email"
+            label="Email"
+          />
+          <div class="signup__password-container">
+            <hp-input
+              name="password"
+              placeholder="Enter your password"
+              label="Password"
+              type="password"
+            />
+          </div>
+          <div class="signup__password-container">
+            <hp-input
+              name="passwordConfirmation"
+              placeholder="Repeat your password"
+              label="Repeat password"
+              type="password"
+            />
+          </div>
+          <button
+            class="signup__checkbox-container"
+            type="button"
+            @click="toggleTerms"
+          >
+            <hp-checkbox
+              :isLoading="postLogin.loading.value"
+              name="terms"
+            ></hp-checkbox>
+            <div class="signup__checkbox-container__text">
+              Agree to the
+              <a
+                class="signup__checkbox-container__link"
+                target="_blank"
+                href="https://www.hireproof.io/terms-of-service"
+                >Terms of Service</a
+              >
+              and
+              <a
+                class="signup__checkbox-container__link"
+                target="_blank"
+                href="https://www.hireproof.io/privacy-policy"
+                >Privacy Policy</a
+              >
+            </div>
+          </button>
+          <div v-if="error" class="signup__error">{{ error }}</div>
+          <hp-button
+            :isLoading="isLoading"
+            primary
+            :isDisabled="!meta.dirty || !meta.valid"
+            type="submit"
+            label="Continue"
+            fullWidth
+          ></hp-button>
+        </form>
+      </div>
     </div>
     <router-link
       class="signup__signin signup__checkbox-container__text"
@@ -76,13 +99,18 @@ import Logo from "@/assets/logo.svg";
 import { usePost } from "@/composables/useHttp";
 
 const schema = yup.object().shape({
-  name: yup.string().required(),
+  name: yup.string().required().label("Name"),
   email: yup
     .string()
     .email("Must be a valid email address")
     .required()
     .label("Email"),
   password: yup.string().min(6).required().label("Password"),
+  passwordConfirmation: yup
+    .string()
+    .label("Confirm password")
+    .required()
+    .oneOf([yup.ref("password")], "Passwords do not match"),
   terms: yup
     .boolean()
     .required()
@@ -95,6 +123,23 @@ const route = useRoute();
 
 const isLoading = ref(false);
 const error = ref(null);
+
+const {
+  handleSubmit,
+  isSubmitting,
+  setFieldError,
+  setFieldValue,
+  meta,
+  values,
+} = useForm({
+  validationSchema: schema,
+  initialValues: {
+    name: "",
+    email: route.query.email,
+    password: "",
+    terms: false,
+  },
+});
 
 const handleGoogleAuth = async (credentials) => {
   const { credential } = credentials;
@@ -123,16 +168,12 @@ const handleGoogleAuth = async (credentials) => {
   router.push("/");
 };
 
-const { handleSubmit, isSubmitting, setFieldError, meta } = useForm({
-  validationSchema: schema,
-  initialValues: {
-    name: "",
-    email: route.query.email,
-    password: "",
-    terms: false,
-  },
-});
-
+const toggleTerms = (e) => {
+  if (e.target.tagName === "LABEL") {
+    e.preventDefault();
+  }
+  setFieldValue("terms", !values.terms);
+};
 const postUsers = usePost("users");
 const postLogin = usePost("self/login");
 
@@ -172,6 +213,11 @@ const onSubmit = handleSubmit(async (values) => {
   display: flex;
   flex-direction: column;
   padding: 24px;
+  &__section {
+    margin: 24px 0px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--color-border);
+  }
   &__subtitle {
     @include text-h3;
     font-weight: 500;
@@ -185,6 +231,8 @@ const onSubmit = handleSubmit(async (values) => {
   &__logo {
     margin: auto;
     margin-bottom: 48px;
+    height: 48px;
+    width: 48px;
   }
   &__container {
     margin: auto;
@@ -205,7 +253,7 @@ const onSubmit = handleSubmit(async (values) => {
     width: 100%;
     left: 50%;
     transform: translateX(-50%) translateY(-50%);
-    z-index: -1;
+    z-index: $z-index-negative;
   }
   &__password-container {
     position: relative;
@@ -223,7 +271,10 @@ const onSubmit = handleSubmit(async (values) => {
 
   &__checkbox-container {
     display: flex;
+    background-color: var(--color-background);
+    border: none;
     align-items: center;
+    width: 100%;
     @include text-h5;
     margin-bottom: 24px;
     &__text {
@@ -234,6 +285,10 @@ const onSubmit = handleSubmit(async (values) => {
     &__link {
       font-weight: 500;
       color: var(--color-text-primary);
+    }
+    &:focus {
+      outline: 4px solid var(--color-focus);
+      border-radius: 4px;
     }
   }
   &__signin {

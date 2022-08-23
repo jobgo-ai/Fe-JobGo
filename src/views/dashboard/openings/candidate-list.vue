@@ -1,29 +1,37 @@
 <template>
-  <div>
-    <hp-modal
-      :isOpen="isAddCandidateModalOpen"
+  <hp-modal
+    :isOpen="isAddCandidateModalOpen"
+    @close="isAddCandidateModalOpen = false"
+  >
+    <candidate-modal
       @close="isAddCandidateModalOpen = false"
-    >
-      <candidate-modal
-        @close="isAddCandidateModalOpen = false"
-        :opening="opening"
-      />
-    </hp-modal>
-    <div
-      class="candidate-list"
-      :class="{ 'candidate-list--left': isCandidateDetailsOpen }"
-    >
-      <div v-if="opening.statistics">
-        <div class="candidate-list__header">
-          <hp-abstract-avatar :abstractKey="opening.artwork" />
-          <div class="candidate-list__header__button-group">
+      :opening="opening"
+    />
+  </hp-modal>
+  <div
+    class="candidate-list"
+    :class="{ 'candidate-list--left': isCandidateDetailsOpen }"
+  >
+    <div v-if="opening.statistics">
+      <div class="candidate-list__header">
+        <hp-abstract-avatar :abstractKey="opening.artwork" />
+        <div class="candidate-list__header__button-group">
+          <hp-button
+            :href="`/opening/${opening.reference}/edit`"
+            icon="pencil"
+            class="candidate-list__header__button-group__edit-button"
+            :label="candidates.length <= 1 ? 'Edit opening' : null"
+          ></hp-button>
+          <div v-if="candidates.length > 1">
             <hp-button
-              :to="`/opening/${opening.reference}/edit`"
-              icon="pencil"
-              label="Edit opening"
+              :href="`/opening/${opening.reference}/compare`"
+              label="Compare"
+              icon="discover"
             ></hp-button>
           </div>
         </div>
+      </div>
+      <div ref="scrollContainer" class="candidate-list__scroll-container">
         <h2 class="candidate-list__opening-title">{{ opening.name }}</h2>
         <p class="candidate-list__opening-description">
           {{ opening.description }}
@@ -55,65 +63,113 @@
               name="candidates"
             ></hp-icon>
             <div class="candidate-list__stats__stat__number">
-              {{ opening.statistics.totalCandidates }}
+              {{ opening.statistics.candidates }}
             </div>
             Candidates
           </div>
         </div>
-        <div
-          v-if="!isCandidateListLoading"
-          class="candidate-list__candidate-list"
-        >
-          <div>
-            <div class="candidate-list__candidate-list__header">
-              <div>Candidates</div>
-              <div
-                class="candidate-list__candidate-list__dropdown-target"
-                @click="isFlyoutOpen = !isFlyoutOpen"
-                ref="dropdownTarget"
-                v-if="templateList && templateList.length > 1"
-              >
-                <div
-                  class="candidate-list__candidate-list__dropdown-target__view"
-                >
-                  View:
-                </div>
-                <div
-                  class="candidate-list__candidate-list__dropdown-target__tag"
-                >
-                  {{ templateList[selectedTemplateIndex]?.label }}
-                </div>
-                <hp-icon
-                  class="candidate-list__candidate-list__dropdown-target__icon"
-                  name="chevron-down"
-                ></hp-icon>
+        <div class="candidate-list__candidate-list">
+          <div class="candidate-list__candidate-list__header">
+            <div
+              class="candidate-list__candidate-list__dropdown-target"
+              @click="isCandidateFlyoutOpen = !isCandidateFlyoutOpen"
+              ref="candidateDropdownTarget"
+            >
+              <div class="candidate-list__candidate-list__dropdown-target__tag">
+                {{ candidateListFilter }} candidates
               </div>
-              <transition name="flyout-transition">
-                <div v-if="isFlyoutOpen" class="candidate-list__flyout">
-                  <ol class="candidate-list__flyout__items">
-                    <li
-                      class="candidate-list__flyout__li"
-                      @click="handleItemClick(index)"
-                      v-for="(template, index) in templateList"
-                    >
-                      <div
-                        class="candidate-list__flyout__items__divider"
-                        v-if="index === templateList.length - 1"
-                      ></div>
-                      <div class="candidate-list__flyout__items__item">
-                        {{ template.label }}
-                        <hp-radio name="template" :checked="template.value" />
-                      </div>
-                    </li>
-                  </ol>
-                </div>
-              </transition>
+              <hp-icon
+                class="candidate-list__candidate-list__dropdown-target__icon"
+                name="chevron-down"
+              ></hp-icon>
             </div>
+            <transition name="flyout-transition">
+              <div
+                v-if="isCandidateFlyoutOpen"
+                class="candidate-list__flyout candidate-list__flyout--left"
+              >
+                <ol class="candidate-list__flyout__options">
+                  <li
+                    v-for="(state, index) in stateOptions"
+                    class="candidate-list__flyout__options__option"
+                  >
+                    <button
+                      class="candidate-list__flyout__options__button"
+                      @click="handleCandidateFilterChange(state)"
+                      type="button"
+                    >
+                      {{ state.label }}
+                      <hp-radio
+                        name="template"
+                        tabindex="-1"
+                        :checked="state.value === candidateListFilter"
+                      />
+                    </button>
+                    <div
+                      class="candidate-list__flyout__items__divider"
+                      v-if="index === stateOptions.length - 2"
+                    ></div>
+                  </li>
+                </ol>
+              </div>
+            </transition>
+            <div
+              class="candidate-list__candidate-list__dropdown-target"
+              @click="isTemplateFlyoutOpen = !isTemplateFlyoutOpen"
+              ref="templateDropdownTarget"
+              v-if="templateList && templateList.length > 1"
+            >
+              <div
+                class="candidate-list__candidate-list__dropdown-target__view"
+              >
+                View:
+              </div>
+              <div class="candidate-list__candidate-list__dropdown-target__tag">
+                {{ templateLabel }}
+              </div>
+              <hp-icon
+                class="candidate-list__candidate-list__dropdown-target__icon"
+                name="chevron-down"
+              ></hp-icon>
+            </div>
+            <transition name="flyout-transition">
+              <div
+                v-if="isTemplateFlyoutOpen"
+                class="candidate-list__flyout candidate-list__flyout--right"
+              >
+                <ol class="candidate-list__flyout__options">
+                  <li
+                    v-for="(template, index) in templateList"
+                    class="candidate-list__flyout__options__option"
+                  >
+                    <button
+                      class="candidate-list__flyout__options__button"
+                      @click="handleTemplateFilterChange(template)"
+                      type="button"
+                    >
+                      {{ template.label }}
+                      <hp-radio
+                        name="template"
+                        tabindex="-1"
+                        :checked="template.value === filters.template"
+                      />
+                    </button>
+                    <div
+                      class="candidate-list__flyout__items__divider"
+                      v-if="index === templateList.length - 2"
+                    ></div>
+                  </li>
+                </ol>
+              </div>
+            </transition>
+          </div>
+          <div class="candidate-list__search">
             <hp-input
               variant="search"
-              class="candidate-list__search"
               v-model="search"
               icon="search"
+              name="search"
+              standalone
               placeholder="Search..."
             />
             <div class="candidate-list__add-candidate">
@@ -125,48 +181,52 @@
               ></hp-button>
             </div>
           </div>
-          <ol v-if="candidateList.length > 0">
-            <hp-candidate-card
-              v-for="candidate in candidateList"
-              :key="candidate.reference"
-              :candidate="candidate"
-            ></hp-candidate-card>
-          </ol>
-          <div class="candidate-list__empty-state" v-else>
-            <empty-state class="candidate-list__empty-state__image" />
-            <div class="candidate-list__empty-state__text--primary">
-              Hello? Is anybody there?
+          <div v-if="!isCandidateListLoading">
+            <ol v-if="candidates.length > 0">
+              <hp-candidate-card
+                v-for="candidate in candidates"
+                :key="candidate.reference"
+                :candidate="candidate"
+                :isDisabled="isInfiniteLoading"
+              ></hp-candidate-card>
+              <hp-spinner
+                class="candidate-list__spinner"
+                size="32"
+                v-if="isInfiniteLoading"
+              ></hp-spinner>
+            </ol>
+            <div class="candidate-list__empty-state" v-else>
+              <empty-state class="candidate-list__empty-state__image" />
+              <div class="candidate-list__empty-state__text--primary">
+                Hello? Is anybody there?
+              </div>
+              <div class="candidate-list__empty-state__text--secondary">
+                Looking a tad empty, try adding a candidate
+              </div>
+              <hp-button
+                @handleClick="isAddCandidateModalOpen = true"
+                primary
+                label="Add candidate"
+              ></hp-button>
             </div>
-            <div class="candidate-list__empty-state__text--secondary">
-              Looking a tad empty, try adding a candidate
-            </div>
-            <hp-button
-              @handleClick="isAddCandidateModalOpen = true"
-              primary
-              label="Add candidate"
-            ></hp-button>
           </div>
+          <hp-spinner
+            :size="24"
+            class="candidate-list__spinner"
+            v-else
+          ></hp-spinner>
         </div>
-        <hp-spinner
-          :size="24"
-          class="candidate-list__spinner"
-          v-else
-        ></hp-spinner>
       </div>
-      <hp-spinner
-        :size="24"
-        class="candidate-list__spinner"
-        v-else
-      ></hp-spinner>
     </div>
+    <hp-spinner :size="24" class="candidate-list__spinner" v-else></hp-spinner>
   </div>
 </template>
 
 <script setup>
 //Vendor
-import { ref, computed, watch } from "vue";
+import { ref, watch, toRefs, computed } from "vue";
 import { useRoute } from "vue-router";
-import { useDebounce, onClickOutside } from "@vueuse/core";
+import { onClickOutside, useScroll, useDebounce } from "@vueuse/core";
 
 // Views
 import CandidateModal from "./candidate-modal.vue";
@@ -193,40 +253,118 @@ const props = defineProps({
   },
 });
 
-const { opening, fetchOpening } = useOpenings();
+const {
+  fetchCandidates,
+  isCandidateListLoading,
+  hasMoreToLoad,
+  candidates,
+  fetchMoreCandidates,
+  isInfiniteLoading,
+  candidateListFilter,
+} = useCandidates();
 
-const { fetchCandidates, isCandidateListLoading, candidates, templateList } =
-  useCandidates();
+const search = ref("");
+const filters = ref({
+  search: useDebounce(search, 300),
+  template: "all",
+});
+const offset = ref(0);
+
+const { opening, fetchOpening } = useOpenings();
+const limit = 15;
+
+const getUrl = () => {
+  const limit = 15;
+  let url = `openings/${route.params.openingRef}/candidates`;
+  var params = new URLSearchParams([["limit", limit]]);
+  params.append("offset", offset.value);
+  if (filters.value.search !== "") {
+    params.append("search", filters.value.search);
+  }
+  if (filters.value.template !== "all") {
+    params.append("template", filters.value.template);
+  }
+  if (candidateListFilter.value !== "all") {
+    params.append("state", candidateListFilter.value);
+  }
+
+  return `${url}?${params.toString()}`;
+};
 
 const route = useRoute();
 const isAddCandidateModalOpen = ref(false);
-const isFlyoutOpen = ref(false);
-const dropdownTarget = ref(null);
+const isTemplateFlyoutOpen = ref(false);
+const isCandidateFlyoutOpen = ref(false);
+const candidateDropdownTarget = ref(null);
+const templateDropdownTarget = ref(null);
 
-const handleItemClick = (index) => {
-  templateList.value = templateList.value.map((template, i) => {
-    if (i === index) {
-      template.value = true;
-    } else {
-      template.value = false;
-    }
-    return template;
-  });
-  isFlyoutOpen.value = false;
+const stateOptions = [
+  {
+    label: "Active",
+    value: "active",
+  },
+  {
+    label: "Archived",
+    value: "archived",
+  },
+  {
+    label: "All",
+    value: "all",
+  },
+];
+
+const templateList = computed(() => {
+  return opening.value.templates
+    .map((template) => ({
+      label: template.name,
+      value: template.reference,
+    }))
+    .concat(
+      [],
+      [
+        {
+          label: "All interviews",
+          value: "all",
+        },
+      ]
+    );
+});
+
+const templateLabel = computed(() => {
+  return templateList.value.find(
+    (template) => template.value === filters.value.template
+  )?.label;
+});
+
+const handleCandidateFilterChange = (state) => {
+  isCandidateFlyoutOpen.value = false;
+  candidateListFilter.value = state.value;
 };
 
-onClickOutside(dropdownTarget, (event) => {
-  if (!isFlyoutOpen.value) {
+const handleTemplateFilterChange = (template) => {
+  isTemplateFlyoutOpen.value = false;
+  filters.value.template = template.value;
+};
+
+onClickOutside(templateDropdownTarget, (event) => {
+  if (!isTemplateFlyoutOpen.value) {
     return;
   }
   if (event.target.className.includes("candidate-list__flyout")) {
     return;
   }
-  isFlyoutOpen.value = false;
+  isTemplateFlyoutOpen.value = false;
 });
 
-const search = ref("");
-const debouncedSearch = useDebounce(search, 269);
+onClickOutside(candidateDropdownTarget, (event) => {
+  if (!isCandidateFlyoutOpen.value) {
+    return;
+  }
+  if (event.target.className.includes("candidate-list__flyout")) {
+    return;
+  }
+  isCandidateFlyoutOpen.value = false;
+});
 
 watch(
   () => route.params.openingRef,
@@ -234,48 +372,57 @@ watch(
     if (!route.params.openingRef) {
       return;
     }
-    fetchCandidates(route.params.openingRef);
+    offset.value = 0;
+    hasMoreToLoad.value = true;
+    const url = getUrl();
+    filters.value.template = "all";
+    fetchCandidates(url);
     fetchOpening(route.params.openingRef);
   },
   { immediate: true }
 );
 
-const selectedTemplateIndex = ref(
-  templateList.value?.findIndex((template) => template.value)
+const scrollContainer = ref(null);
+const { y, arrivedState } = useScroll(scrollContainer, {
+  offset: { bottom: 400 },
+});
+const { bottom } = toRefs(arrivedState);
+watch(
+  () => bottom.value,
+  () => {
+    if (!bottom.value) {
+      return;
+    }
+    if (isInfiniteLoading.value) {
+      return;
+    }
+    offset.value = offset.value + limit;
+    const url = getUrl();
+    fetchMoreCandidates(url);
+  }
 );
 
-// TODO: refactor
-const candidateList = computed(() => {
-  if (!templateList.value) {
-    return [];
-  }
-  // with debounced search
-  const withSearch = debouncedSearch.value
-    ? candidates.value.filter((candidate) => {
-        return candidate.name
-          .toLowerCase()
-          .includes(debouncedSearch.value.toLowerCase());
-      })
-    : candidates.value;
+watch(
+  () => filters,
+  () => {
+    offset.value = 0;
+    hasMoreToLoad.value = true;
+    const url = getUrl();
+    fetchCandidates(url);
+  },
+  { deep: true }
+);
 
-  // Finding the selected template's index
-  selectedTemplateIndex.value = templateList.value.findIndex(
-    (template) => template.value
-  );
-
-  // filtered by currently selected template
-  const filteredByTemplate =
-    selectedTemplateIndex.value === templateList.value.length - 1
-      ? withSearch
-      : withSearch.filter((candidate) => {
-          return (
-            candidate.opening.templates.find((i) => !i.interview.started)
-              ?.name === templateList.value[selectedTemplateIndex.value].label
-          );
-        });
-
-  return filteredByTemplate;
-});
+watch(
+  () => candidateListFilter,
+  () => {
+    offset.value = 0;
+    hasMoreToLoad.value = true;
+    const url = getUrl();
+    fetchCandidates(url);
+  },
+  { deep: true }
+);
 </script>
 
 <style lang="scss" scoped>
@@ -285,6 +432,11 @@ const candidateList = computed(() => {
     justify-content: space-between;
     margin-bottom: 16px;
     align-items: center;
+    &__spinner {
+      padding: 24px;
+      display: flex;
+      justify-content: center;
+    }
     &__avatar {
       height: 40px;
       width: 40px;
@@ -292,8 +444,8 @@ const candidateList = computed(() => {
     &__button-group {
       display: flex;
       align-items: center;
-      &__button {
-        margin-right: 6px;
+      > * {
+        margin-left: 8px;
       }
     }
   }
@@ -358,10 +510,15 @@ const candidateList = computed(() => {
     }
   }
 
-  &__candidate-list {
-    max-height: 500px;
+  &__scroll-container {
+    max-height: calc(100vh - 200px);
     overflow: scroll;
-    padding-top: 24px;
+    padding-left: 4px;
+    padding-right: 4px;
+  }
+
+  &__candidate-list {
+    margin-top: 24px;
 
     &__header {
       display: flex;
@@ -374,6 +531,9 @@ const candidateList = computed(() => {
       align-items: center;
       position: relative;
       cursor: pointer;
+      :first-letter {
+        text-transform: uppercase;
+      }
       &__view {
         margin-right: 4px;
         color: var(--color-text-secondary);
@@ -392,10 +552,15 @@ const candidateList = computed(() => {
     position: absolute;
     width: 256px;
     padding: 8px;
-    z-index: 1000;
-    right: 0;
+    z-index: $z-index-1000;
     top: 30px;
     transition: all 0.25s cubic-bezier(0.17, 0.67, 0.83, 0.67);
+    &--left {
+      left: 0;
+    }
+    &--right {
+      right: 0;
+    }
     &__items {
       display: flex;
       flex-direction: column;
@@ -407,14 +572,43 @@ const candidateList = computed(() => {
       }
       &__item {
         padding: 8px 12px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        border-radius: $border-radius-sm;
+      }
+    }
+    &__options {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      &__button {
         cursor: pointer;
+        padding: 8px;
+        border-radius: $border-radius-sm;
+        outline: 0;
+        background-color: var(--color-background);
+        color: var(--color-text);
+        border: 0;
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
         &:hover {
           background-color: var(--color-forground-floating);
         }
+        &:focus {
+          background-color: var(--color-forground-floating);
+          outline: none;
+        }
+        &--disabled {
+          opacity: 0.4;
+          cursor: not-allowed;
+        }
+      }
+      &__option {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        text-align: left;
+        color: var(--color-text-primary);
+        width: 100%;
+        flex-direction: column;
       }
     }
   }
@@ -423,6 +617,14 @@ const candidateList = computed(() => {
     display: flex;
     justify-content: flex-end;
     margin-bottom: 16px;
+  }
+  &__search {
+    position: sticky;
+    top: 0;
+    background: var(--color-panel);
+    z-index: $z-index-100;
+    margin-bottom: 16px;
+    border-bottom: 1px dashed var(--color-border);
   }
 }
 @media (min-width: $breakpoint-tablet) {
@@ -433,9 +635,9 @@ const candidateList = computed(() => {
     transform: translateX(0);
     right: 16px;
     width: 400px;
-    min-height: 600px;
-    z-index: 10;
-    padding: 24px;
+    min-height: calc(100vh - 120px);
+    z-index: $z-index-10;
+    padding: 20px;
     padding-bottom: 0px;
     background-color: var(--color-panel);
     border: 1px solid var(--color-border);

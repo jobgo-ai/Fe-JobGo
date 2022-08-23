@@ -8,14 +8,18 @@ const setInterview = (newInterview) => {
   const formattedInterview = {
     ...newInterview,
     ceremony: {
-      warmup: {
-        ...newInterview.ceremony.warmup,
-        duration: newInterview.ceremony.warmup.duration / 60,
-      },
-      cooldown: {
-        ...newInterview.ceremony.cooldown,
-        duration: newInterview.ceremony.cooldown.duration / 60,
-      },
+      warmup: newInterview.ceremony.warmup
+        ? {
+            ...newInterview.ceremony.warmup,
+            duration: newInterview.ceremony.warmup.duration / 60,
+          }
+        : null,
+      cooldown: newInterview.ceremony.cooldown
+        ? {
+            ...newInterview.ceremony.cooldown,
+            duration: newInterview.ceremony.cooldown.duration / 60,
+          }
+        : null,
     },
   };
   interview.value = formattedInterview;

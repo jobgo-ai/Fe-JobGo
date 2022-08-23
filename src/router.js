@@ -6,10 +6,15 @@ import NotFound from "@/views/public/not-found.vue";
 import Signin from "@/views/public/signin.vue";
 import Signup from "@/views/public/signup.vue";
 
+// Reports
+import Report from "@/views/public/reports/report.vue";
+import Evaluation from "@/views/public/reports/evaluation.vue";
+
 // Private
 import Layout from "@/views/dashboard/layout.vue";
 import ChangePassword from "@/views/public/change-password.vue";
 import Settings from "@/views/dashboard/settings/settings.vue";
+import Organization from "@/views/dashboard/settings/organization.vue";
 
 //Openings
 import Openings from "@/views/dashboard/openings/openings.vue";
@@ -20,7 +25,7 @@ import Opening from "@/views/dashboard/opening/opening.vue";
 import EditOpening from "@/views/dashboard/opening/edit-opening.vue";
 import AddInterview from "@/views/dashboard/opening/add-interview.vue";
 import EditInterview from "@/views/dashboard/opening/edit-interview.vue";
-import CompareCandidates from "@/views/dashboard/opening/compare-candidates.vue";
+import Compare from "@/views/dashboard/opening/compare.vue";
 
 const routes = [
   { path: "/", redirect: "/openings" },
@@ -55,11 +60,11 @@ const routes = [
           },
           {
             path: "compare",
-            name: "compare-candidates",
-            component: CompareCandidates,
+            name: "compare",
+            component: Compare,
           },
           {
-            path: "results/:resultsRef",
+            path: "results/:templateRef/:evaluationRef",
             name: "interview-results",
             component: InterviewResults,
           },
@@ -70,6 +75,11 @@ const routes = [
         name: "settings",
         component: Settings,
       },
+      {
+        path: "organization",
+        name: "organization",
+        component: Organization,
+      },
     ],
   },
   { path: "/:pathMatch(.*)*", name: "NotFound", component: NotFound },
@@ -77,6 +87,22 @@ const routes = [
     path: "/signin",
     name: "signin",
     component: Signin,
+    meta: {
+      public: true,
+    },
+  },
+  {
+    path: "/reports/:candidateKey",
+    name: "report",
+    component: Report,
+    meta: {
+      public: true,
+    },
+  },
+  {
+    path: "/reports/:candidateKey/evaluations/:evaluationRef",
+    name: "evaluation",
+    component: Evaluation,
     meta: {
       public: true,
     },

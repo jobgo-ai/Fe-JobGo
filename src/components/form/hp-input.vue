@@ -5,15 +5,17 @@
     </label>
     <div class="hp-input__input-container">
       <input
-        v-bind="$attrs"
         ref="inputRef"
         :disabled="isDisabled"
         :class="`hp-input__input hp-input__input--${variant}`"
         :name="name"
         :type="type"
+        :autocomplete="autocomplete"
         :placeholder="placeholder"
+        :autofocus="autofocus"
         :value="modelValue"
         v-on="validationListeners"
+        v-bind="$attrs"
       />
       <hp-icon
         v-if="icon"
@@ -79,6 +81,14 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  autocomplete: {
+    type: String,
+    default: "off",
+  },
+  autofocus: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const emits = defineEmits(["update:modelValue"]);
@@ -90,6 +100,7 @@ const {
 } = useField(props.name, "", {
   standalone: props.standalone,
   validateOnValueUpdate: false,
+  initialValue: props.modelValue,
 });
 
 const isPasswordVisible = ref(false);
@@ -118,7 +129,6 @@ const validationListeners = computed(() => {
   // lazy
   if (!errorMessage.value) {
     return {
-      blur: handleChange,
       change: handleChange,
       // disable `shouldValidate` to avoid validating on input
       input: (e) => {
@@ -131,7 +141,6 @@ const validationListeners = computed(() => {
     };
   } else {
     return {
-      blur: handleChange,
       change: handleChange,
       input: handleChange, // only switched this
     };
@@ -221,7 +230,6 @@ const containerClasses = computed(() => {
     transition: border-color 0.15s cubic-bezier(0.17, 0.67, 0.83, 0.67);
     color: var(--color-text-primary);
     &--search {
-      background-color: var(--color-underground);
       max-height: 32px;
       line-height: 32px;
     }

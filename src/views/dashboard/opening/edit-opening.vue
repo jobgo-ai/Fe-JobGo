@@ -7,16 +7,31 @@
     >
       <div>
         <div class="edit-openings__edit-container">
+          <router-link
+            class="edit-question__back"
+            :to="`/openings/${opening.reference}`"
+          >
+            <hp-icon name="arrow-left"></hp-icon>Back
+          </router-link>
           <h3 class="edit-openings__edit-container__title">Edit opening</h3>
           <p class="edit-openings__edit-container__subtitle">
             Main information for your openings
           </p>
-          <hp-input label="Name" name="name"></hp-input>
-          <hp-textarea label="Description" name="description"></hp-textarea>
+          <hp-input
+            @input="debouncedSubmit"
+            label="Name"
+            name="name"
+          ></hp-input>
+          <hp-textarea
+            @input="debouncedSubmit"
+            label="Description"
+            name="description"
+          ></hp-textarea>
           <hp-image-selector
             class="edit-openings__edit-container__cover-selector"
             label="Cover"
             name="artwork"
+            @input="debouncedSubmit"
           ></hp-image-selector>
           <div class="edit-openings__edit-container__archive">
             <hp-button
@@ -36,7 +51,6 @@
         </p>
         <hp-button
           :to="`/opening/${route.params.openingRef}/edit/add-interview`"
-          primary
           label="Add interview"
         ></hp-button>
       </div>
@@ -69,57 +83,10 @@
         </div>
       </div>
       <teleport to="#teleport-target-header">
-        <div
-          ref="overviewArea"
-          class="
-            edit-openings__teleport-button
-            edit-openings__teleport-button--overview
-          "
-        >
-          <hp-button
-            @handleClick="isOverviewFlyoutOpen = !isOverviewFlyoutOpen"
-            icon="file"
-          >
-          </hp-button>
-          <transition name="flyout-transition">
-            <div
-              v-if="isOverviewFlyoutOpen"
-              class="edit-interview__overview-button__flyout"
-            >
-              <div class="edit-interview__overview-button__flyout__header">
-                Overview
-              </div>
-              <div class="edit-interview__overview-button__flyout__header">
-                Levels
-                <ol class="edit-interview__overview-button__skills">
-                  <hp-badge-tag
-                    v-for="level in opening.statistics.jobLevels"
-                    :quantity="level.quantity"
-                    :label="level.value.name"
-                  ></hp-badge-tag>
-                </ol>
-              </div>
-              <div class="edit-interview__overview-button__flyout__header">
-                Top skills evaluated
-                <ol class="edit-interview__overview-button__skills">
-                  <hp-badge-tag
-                    v-for="skill in opening.statistics.skills"
-                    :quantity="skill.quantity"
-                    :label="skill.value.name"
-                  ></hp-badge-tag>
-                </ol>
-              </div>
-            </div>
-          </transition>
-        </div>
-        <hp-button
-          label="Save changes"
-          type="submit"
-          primary
+        <hp-save-indicator
+          :meta="meta"
           :isLoading="isSaving"
-          @handleClick="onSubmit"
-          :isDisabled="!meta.dirty || !meta.valid"
-        ></hp-button>
+        ></hp-save-indicator>
       </teleport>
     </form>
     <div class="edit-openings__spinner" v-else>
@@ -134,6 +101,7 @@ import { onMounted, ref, computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useForm } from "vee-validate";
 import draggable from "vuedraggable";
+import { useDebounceFn } from "@vueuse/core";
 import { onClickOutside } from "@vueuse/core";
 import * as yup from "yup";
 
@@ -141,8 +109,10 @@ import * as yup from "yup";
 import HpInterviewCard from "@/components/cards/hp-interview-card.vue";
 import HpInput from "@/components/form/hp-input.vue";
 import HpButton from "@/components/hp-button.vue";
+import HpIcon from "@/components/hp-icon.vue";
 import HpTextarea from "@/components/form/hp-textarea.vue";
 import HpSpinner from "@/components/hp-spinner.vue";
+import HpSaveIndicator from "@/components/hp-save-indicator.vue";
 import HpImageSelector from "@/components/form/hp-image-selector.vue";
 import MicCheck from "@/assets/abstracts/mic-check.svg";
 import HpBadgeTag from "@/components/hp-badge-tag.vue";
@@ -167,7 +137,6 @@ const { fetchOpenings } = useOpenings();
 const { fetchCandidates } = useCandidates();
 
 const { setBreadcrumbs } = useBreadcrumbs();
-const { setToast } = useToast();
 
 const schema = yup.object({
   name: yup
@@ -180,7 +149,7 @@ const schema = yup.object({
   templates: yup.array(),
 });
 
-const { handleSubmit, resetForm, meta, setFieldValue } = useForm({
+const { handleSubmit, resetForm, meta, setFieldValue, values } = useForm({
   validationSchema: schema,
   initialValues: {
     name: "",
@@ -210,17 +179,10 @@ onClickOutside(overviewArea, (event) => {
 
 const handleDragChange = () => {
   setFieldValue("templates", templates.value);
+  onSubmit();
 };
 
-const handleRemoveInterview = (templateReference) => {
-  const newTemplate = templates.value.filter(
-    (t) => t.reference !== templateReference
-  );
-  templates.value = newTemplate;
-  setFieldValue("templates", newTemplate);
-};
-
-const onSubmit = handleSubmit(async (values) => {
+const onSubmit = handleSubmit(async (submitValues) => {
   isSaving.value = true;
   const putOpening = usePut(`openings/${route.params.openingRef}`);
   await putOpening.put({
@@ -230,15 +192,14 @@ const onSubmit = handleSubmit(async (values) => {
     },
   });
   isSaving.value = false;
-  opening.value = putOpening.data.value.opening;
-  resetForm({ touched: false, values: opening.value });
-  setToast({
-    type: "positive",
-    title: "Well done!",
-    message: `${putOpening.data.value.opening.name} updated`,
+  opening.value.name = values.name;
+  resetForm({
+    touched: false,
+    dirty: false,
+    values: { ...values, templates: values.templates },
   });
   fetchOpenings();
-  fetchCandidates(putOpening.data.value.opening.reference, true);
+  fetchCandidates();
   setBreadcrumbs(
     [
       {
@@ -253,6 +214,19 @@ const onSubmit = handleSubmit(async (values) => {
     true
   );
 });
+
+const handleRemoveInterview = (templateReference) => {
+  const newTemplate = templates.value.filter(
+    (t) => t.reference !== templateReference
+  );
+  templates.value = newTemplate;
+  setFieldValue("templates", newTemplate);
+  onSubmit();
+};
+
+const debouncedSubmit = useDebounceFn(() => {
+  onSubmit();
+}, 500);
 
 onMounted(async () => {
   if (route.params.openingRef) {
@@ -308,11 +282,7 @@ const archiveOpening = async () => {
     margin-top: 24px;
   }
   &__edit-container {
-    background-color: var(--color-panel);
-    padding: 24px;
-    border-radius: $border-radius-lg;
-    display: flex;
-    flex-direction: column;
+    @include panel;
     &__title {
       @include text-h4;
       font-weight: 500;
@@ -386,6 +356,7 @@ const archiveOpening = async () => {
   }
   .edit-openings__edit-container__cover-selector {
     display: block;
+    position: relative;
   }
 }
 

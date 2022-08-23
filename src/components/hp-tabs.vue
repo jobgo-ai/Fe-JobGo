@@ -63,7 +63,7 @@ const styles = computed(() => {
 .hp-tabs {
   position: relative;
   display: inline-flex;
-  justify-content: space-between;
+  justify-content: space-evenly;
   background-color: var(--color-border);
   z-index: 2;
   padding: 4px;
@@ -87,7 +87,7 @@ const styles = computed(() => {
   &__background {
     border-radius: 8px;
     top: 4px;
-    z-index: -1;
+    z-index: $z-index-negative;
     height: 32px;
     position: absolute;
     background-color: var(--color-background);

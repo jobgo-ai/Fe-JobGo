@@ -1,8 +1,16 @@
 <template>
-  <li :class="containerClasses">
+  <component
+    :is="tag"
+    :isDisabled="isAddCard || isArchived"
+    :to="linkValue"
+    :class="containerClasses"
+  >
     <div class="hp-opening-card__add-new" v-if="isAddCard">
       <div>
-        <div class="hp-opening-card__add-new__icon-container">
+        <div
+          @click="$emit('handleAddNew')"
+          class="hp-opening-card__add-new__icon-container"
+        >
           <hp-icon :size="24" name="plus"></hp-icon>
         </div>
         <p class="hp-opening-card__content__name">New opening</p>
@@ -87,15 +95,20 @@
         </div>
       </div>
     </div>
-  </li>
+  </component>
 </template>
 
 <script setup>
+// Vendor
 import { computed, defineAsyncComponent } from "vue";
+import { useRoute } from "vue-router";
+
+// Components
 import HpButton from "@/components/hp-button.vue";
 import HpBadge from "@/components/hp-badge.vue";
 import HpAbstractAvatar from "@/components/hp-abstract-avatar.vue";
 import HpIcon from "@/components/hp-icon.vue";
+
 const props = defineProps({
   opening: {
     type: Object,
@@ -115,6 +128,10 @@ const props = defineProps({
   },
 });
 
+const tag = props.isAddCard || props.isArchived ? "div" : "router-link";
+
+const route = useRoute();
+
 const emits = defineEmits(["unarchiveOpening, handleAddNew"]);
 
 const splash = defineAsyncComponent(() =>
@@ -131,12 +148,19 @@ const containerClasses = computed(() => {
     "hp-opening-card--archived": props.isArchived,
   };
 });
+
+const linkValue = computed(() => {
+  if (props.opening.reference === route.params.openingRef) {
+    return `/openings`;
+  }
+  return `/openings/${props.opening.reference}`;
+});
 </script>
 
 <style lang="scss">
 .hp-opening-card {
-  height: 236px;
   width: 264px;
+  min-height: 236px;
   list-style: none;
   cursor: pointer;
   border-radius: $border-radius-lg;
@@ -157,6 +181,14 @@ const containerClasses = computed(() => {
   &:hover {
     box-shadow: inset 0px 0px 4px rgba(33, 44, 51, 0.01),
       inset 0px 0px 48px rgba(33, 44, 51, 0.03);
+  }
+  &--add-new {
+    &:hover {
+      box-shadow: none;
+    }
+  }
+  &:focus {
+    outline: 4px solid var(--color-focus);
   }
   &__splash {
     flex-shrink: 0;
@@ -183,6 +215,7 @@ const containerClasses = computed(() => {
     &__description {
       flex: 1;
       color: var(--color-text-secondary);
+      padding-bottom: 12px;
     }
     &__badges {
       display: flex;
@@ -213,11 +246,15 @@ const containerClasses = computed(() => {
       display: flex;
       justify-content: center;
       align-items: center;
+      cursor: pointer;
       height: 40px;
       width: 40px;
       border: 1px dashed var(--color-border);
       border-radius: $border-radius-lg;
       margin-bottom: 16px;
+      &:hover {
+        background: var(--color-panel);
+      }
     }
   }
 }

@@ -14,7 +14,10 @@
             label="Password"
             type="password"
           />
-          <router-link to="/forgot-password" class="signin__forgot-password"
+          <router-link
+            tabIndex="-1"
+            to="/forgot-password"
+            class="signin__forgot-password"
             >Forgot password</router-link
           >
         </div>
@@ -35,12 +38,14 @@
     <div class="forgot-password__tos">
       <a
         href="https://www.hireproof.io/terms-of-service"
+        target="_blank"
         class="forgot-password__policy"
       >
         Terms of service
       </a>
       <a
-        href="https://www.hireproof.io/terms-of-service"
+        href="https://www.hireproof.io/privacy-policy"
+        target="_blank"
         class="forgot-password__policy"
       >
         Privacy policy
@@ -118,6 +123,8 @@ const onSubmit = handleSubmit(async (values) => {
   &__logo {
     margin: auto;
     margin-bottom: 48px;
+    height: 48px;
+    width: 48px;
   }
   &__container {
     margin: auto;
@@ -138,7 +145,7 @@ const onSubmit = handleSubmit(async (values) => {
     width: 100%;
     left: 50%;
     transform: translateX(-50%) translateY(-50%);
-    z-index: -1;
+    z-index: $z-index-negative;
   }
   &__password-container {
     position: relative;
