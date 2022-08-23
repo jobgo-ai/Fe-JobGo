@@ -1,25 +1,5 @@
 <template>
-  <div class="hp-google-auth" v-if="!isLoading">
-    <div
-      id="g_id_onload"
-      :data-client_id="gapiKey"
-      data-context="signup"
-      data-ux_mode="popup"
-      data-callback="handleLogin"
-      data-auto_select="false"
-    ></div>
-
-    <div
-      class="g_id_signin"
-      data-type="standard"
-      data-shape="rectangular"
-      data-theme="outline"
-      data-text="signup_with"
-      data-size="large"
-      data-logo_alignment="left"
-      data-max-width="10000"
-    ></div>
-  </div>
+  <div class="hp-google-auth" ref="googleContainer"></div>
 </template>
 
 <script setup>
@@ -31,8 +11,8 @@ const props = defineProps({
     default: false,
   },
 });
+const googleContainer = ref(null);
 const emits = defineEmits(["handleSignIn"]);
-const isLoading = ref(true);
 const handleLogin = (res) => {
   emits("handleSignIn", res);
 };
@@ -40,8 +20,12 @@ const handleLogin = (res) => {
 const gapiKey = import.meta.env.VITE_GAPI_KEY;
 
 onMounted(() => {
+  window.google.accounts.id.initialize({
+    client_id: "YOUR_GOOGLE_CLIENT_ID",
+    callback: () => console.log("eat a human turd"),
+  });
   window.handleLogin = handleLogin;
-  isLoading.value = false;
+  window.google.accounts.id.renderButton(googleContainer.value, {});
 });
 </script>
 
