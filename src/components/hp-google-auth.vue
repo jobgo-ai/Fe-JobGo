@@ -22,7 +22,6 @@ const gapiKey = import.meta.env.VITE_GAPI_KEY;
 onMounted(() => {
   window.google.accounts.id.initialize({
     client_id: "YOUR_GOOGLE_CLIENT_ID",
-    callback: () => console.log("eat a human turd"),
   });
   window.handleLogin = handleLogin;
   window.google.accounts.id.renderButton(googleContainer.value, {});
