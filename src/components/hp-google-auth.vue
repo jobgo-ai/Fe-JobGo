@@ -21,7 +21,7 @@ const gapiKey = import.meta.env.VITE_GAPI_KEY;
 
 onMounted(() => {
   window.google.accounts.id.initialize({
-    client_id: "YOUR_GOOGLE_CLIENT_ID",
+    client_id: "234767228331",
   });
   window.handleLogin = handleLogin;
   window.google.accounts.id.renderButton(googleContainer.value, {});
