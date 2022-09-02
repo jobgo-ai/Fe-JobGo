@@ -14,7 +14,7 @@ const props = defineProps({
 const googleContainer = ref(null);
 const emits = defineEmits(["handleSignIn"]);
 const handleLogin = (res) => {
-  console.log("fuck");
+  console.log("gutentag niklas");
   console.log(res);
   emits("handleSignIn", res);
 };
@@ -23,8 +23,7 @@ const gapiKey = import.meta.env.VITE_GAPI_KEY;
 
 onMounted(() => {
   window.google.accounts.id.initialize({
-    client_id:
-      "234767228331-8kgljiso4om2j81renqs42ldqhhfc5on.apps.googleusercontent.com",
+    client_id: gapiKey,
     callback: handleLogin,
   });
   window.google.accounts.id.renderButton(googleContainer.value, {});
