@@ -14,6 +14,8 @@ const props = defineProps({
 const googleContainer = ref(null);
 const emits = defineEmits(["handleSignIn"]);
 const handleLogin = (res) => {
+  console.log("fuck");
+  console.log(res);
   emits("handleSignIn", res);
 };
 
@@ -23,8 +25,8 @@ onMounted(() => {
   window.google.accounts.id.initialize({
     client_id:
       "234767228331-8kgljiso4om2j81renqs42ldqhhfc5on.apps.googleusercontent.com",
+    callback: handleLogin,
   });
-  window.handleLogin = handleLogin;
   window.google.accounts.id.renderButton(googleContainer.value, {});
 });
 </script>
