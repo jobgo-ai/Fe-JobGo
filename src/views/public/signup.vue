@@ -12,7 +12,7 @@
             placeholder="Type your email"
             label="Email"
           />
-          <div class="signup__checkbox-container__text">
+          <div class="signup__checkbox-container__tos">
             By signing up, you agree to the
             <a
               class="signup__checkbox-container__link"
@@ -268,11 +268,19 @@ const onSubmit = handleSubmit(async (values) => {
     width: 100%;
     @include text-h5;
     margin-bottom: 24px;
+    &__tos {
+      color: var(--color-text-secondary);
+      font-weight: 400;
+      margin-top: -12px;
+      margin-bottom: 18px;
+      font-size: 12px;
+      padding: 0 2px;
+    }
     &__text {
       color: var(--color-text-secondary);
       font-weight: 400;
       margin-top: -12px;
-      margin-bottom: 12px;
+      margin-bottom: 18px;
     }
     &__link {
       font-weight: 500;

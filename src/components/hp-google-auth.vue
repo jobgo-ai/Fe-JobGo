@@ -5,7 +5,11 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from "vue";
+// Vendor
+import { onMounted, ref, watchEffect } from "vue";
+import { useWindowSize } from "@vueuse/core";
+
+// Composables
 import { usePost } from "@/composables/useHttp.js";
 
 const props = defineProps({
@@ -15,6 +19,7 @@ const props = defineProps({
   },
 });
 const googleContainer = ref(null);
+const container = ref(null);
 const emits = defineEmits(["handleSignIn"]);
 const handleLogin = async (res) => {
   const user = await usePost("sso").post({
@@ -30,12 +35,13 @@ const handleLogin = async (res) => {
 const gapiKey = import.meta.env.VITE_GAPI_KEY;
 
 onMounted(() => {
+  const width = container.value.getBoundingClientRect().width;
   window.google.accounts.id.initialize({
     client_id: gapiKey,
     callback: handleLogin,
   });
   window.google.accounts.id.renderButton(googleContainer.value, {
-    width: 400,
+    width: width,
   });
 });
 </script>
@@ -43,5 +49,8 @@ onMounted(() => {
 <style lang="scss">
 .hp-google-auth {
   max-width: 100%;
+  &__container {
+    width: 100%;
+  }
 }
 </style>
