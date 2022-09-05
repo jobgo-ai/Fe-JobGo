@@ -7,10 +7,11 @@
 <script setup>
 // Vendor
 import { onMounted, ref, watchEffect } from "vue";
-import { useWindowSize } from "@vueuse/core";
+import { useRouter } from "vue-router";
 
 // Composables
-import { usePost } from "@/composables/useHttp.js";
+import { usePost } from "@/composables/useHttp";
+import useAuth from "@/composables/useAuth";
 
 const props = defineProps({
   isSignIn: {
@@ -18,18 +19,25 @@ const props = defineProps({
     default: false,
   },
 });
+
+const router = useRouter();
+
 const googleContainer = ref(null);
 const container = ref(null);
 const emits = defineEmits(["handleSignIn"]);
 const handleLogin = async (res) => {
-  const user = await usePost("sso").post({
+  const { setUser, refreshToken } = useAuth();
+  const postUser = usePost("sso");
+  await postUser.post({
     sso: {
       provider: "google",
       token: res.credential,
     },
   });
 
-  emits("handleSignIn", res);
+  setUser(postUser.data.value);
+  const refresh = await refreshToken();
+  router.push("/");
 };
 
 const gapiKey = import.meta.env.VITE_GAPI_KEY;
@@ -39,6 +47,7 @@ onMounted(() => {
   window.google.accounts.id.initialize({
     client_id: gapiKey,
     callback: handleLogin,
+    context: "use",
   });
   window.google.accounts.id.renderButton(googleContainer.value, {
     width: width,
