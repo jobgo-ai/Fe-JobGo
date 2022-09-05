@@ -1,9 +1,12 @@
 <template>
-  <div class="hp-google-auth" ref="googleContainer"></div>
+  <div class="hp-google-auth__container" ref="container">
+    <div class="hp-google-auth" ref="googleContainer"></div>
+  </div>
 </template>
 
 <script setup>
 import { onMounted, ref } from "vue";
+import { usePost } from "@/composables/useHttp.js";
 
 const props = defineProps({
   isSignIn: {
@@ -13,9 +16,14 @@ const props = defineProps({
 });
 const googleContainer = ref(null);
 const emits = defineEmits(["handleSignIn"]);
-const handleLogin = (res) => {
-  console.log("gutentag niklas");
-  console.log(res);
+const handleLogin = async (res) => {
+  const user = await usePost("sso").post({
+    sso: {
+      provider: "google",
+      token: res.credential,
+    },
+  });
+
   emits("handleSignIn", res);
 };
 
@@ -26,7 +34,9 @@ onMounted(() => {
     client_id: gapiKey,
     callback: handleLogin,
   });
-  window.google.accounts.id.renderButton(googleContainer.value, {});
+  window.google.accounts.id.renderButton(googleContainer.value, {
+    width: 400,
+  });
 });
 </script>
 

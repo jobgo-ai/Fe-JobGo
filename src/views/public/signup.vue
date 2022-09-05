@@ -296,7 +296,7 @@ const onSubmit = handleSubmit(async (values) => {
   .signup {
     padding: 0;
     &__container {
-      width: 460px;
+      width: 450px;
     }
     &__logo {
       margin-top: 64px;
