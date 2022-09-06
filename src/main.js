@@ -2,6 +2,7 @@ import { createApp } from "vue";
 import App from "./App.vue";
 import router from "./router";
 import useAuth from "@/composables/useAuth";
+import { usePost } from "@/composables/useHttp";
 import useContextSave from "@/composables/useContextSave";
 
 const app = createApp(App);
@@ -34,9 +35,17 @@ router.beforeEach(async (to, from, next) => {
     await refreshToken();
   }
   if (to.query.user_token && !user.value) {
-    console.log("fuck");
-    console.log(to);
-    setUser({ token: to.query.user_token });
+    const postUser = usePost("sso");
+    await postUser.post({
+      sso: {
+        provider: "google",
+        token: to.query.user_token,
+      },
+    });
+
+    setUser(postUser.data.value);
+    const refresh = await refreshToken();
+    router.push("/");
     await refreshToken();
   }
 
