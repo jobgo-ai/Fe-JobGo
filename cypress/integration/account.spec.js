@@ -9,10 +9,8 @@ describe("signup", () => {
   });
 
   it("Can fill out all fields", () => {
-    cy.visit("/signup?email=iamtest@test.com");
-    cy.get(`[name='name']`).type("Test User");
-    cy.get(`[name='password']`).type("testingpassword123");
-    cy.get(`[name='passwordConfirmation']`).type("testingpassword123");
+    cy.visit("/signup");
+    cy.get(`[name='email']`).type("testemail@wow.com");
     cy.contains("Continue").should("be.disabled");
     cy.get(".hp-checkbox").click();
     cy.contains("Continue").should("not.be.disabled");

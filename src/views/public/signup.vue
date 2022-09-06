@@ -72,23 +72,11 @@ import Logo from "@/assets/logo.svg";
 import { usePost } from "@/composables/useHttp";
 
 const schema = yup.object().shape({
-  name: yup.string().required().label("Name"),
   email: yup
     .string()
     .email("Must be a valid email address")
     .required()
     .label("Email"),
-  password: yup.string().min(6).required().label("Password"),
-  passwordConfirmation: yup
-    .string()
-    .label("Confirm password")
-    .required()
-    .oneOf([yup.ref("password")], "Passwords do not match"),
-  terms: yup
-    .boolean()
-    .required()
-    .oneOf([true], "You must agree to the terms of service")
-    .label("Terms of Service"),
 });
 
 const router = useRouter();
@@ -97,14 +85,7 @@ const route = useRoute();
 const isLoading = ref(false);
 const error = ref(null);
 
-const {
-  handleSubmit,
-  isSubmitting,
-  setFieldError,
-  setFieldValue,
-  meta,
-  values,
-} = useForm({
+const { handleSubmit, setFieldValue, meta, values } = useForm({
   validationSchema: schema,
   initialValues: {
     name: "",
