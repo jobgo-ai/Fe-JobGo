@@ -18,6 +18,7 @@ if (token) {
 }
 
 export const refreshToken = async () => {
+  console.log("refresh", state.token);
   const { error, data, get } = useGet("self");
   await get();
 
