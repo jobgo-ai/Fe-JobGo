@@ -23,14 +23,22 @@ router.beforeEach(async (to, from, next) => {
   }
 
   if (to.meta.title) {
-    document.title = "Beta" + ` | ${to.meta.title}`;
+    document.title = to.meta.title;
   } else {
-    document.title = "Hireproof | Beta";
+    document.title = "Hireproof";
   }
   const { user, refreshToken, token } = useAuth();
 
+  console.log(to);
+
   // Token but no user
   if (token.value && !user.value) {
+    await refreshToken();
+  }
+  if (to.params.user_token && !user.value) {
+    console.log("fuck");
+    console.log(to);
+    setUser(to.params.user_token);
     await refreshToken();
   }
 

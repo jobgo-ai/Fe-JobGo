@@ -9,7 +9,6 @@ import { useRoute } from "vue-router";
 
 const route = useRoute();
 
-console.log(route);
 if (route.params.user_token) {
   console.log("fuccy wuccky");
 }
