@@ -5,6 +5,14 @@
 
 <script setup>
 import HpToast from "@/components/hp-toast.vue";
+import { useRoute } from "vue-router";
+
+const route = useRoute();
+
+console.log(route);
+if (route.params.user_token) {
+  console.log("fuccy wuccky");
+}
 </script>
 
 <style lang="scss">
