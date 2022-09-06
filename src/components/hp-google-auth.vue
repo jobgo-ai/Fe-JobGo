@@ -35,7 +35,7 @@ const handleLogin = async (res) => {
     },
   });
 
-  setUser(postUser.data.value);
+  setUser(postUser.data.value.self);
   const refresh = await refreshToken();
   router.push("/");
 };
