@@ -5,12 +5,17 @@ import useOpenings from "./useOpenings";
 const AUTH_KEY = "hireproof_token";
 export const AUTH_TOKEN = "token";
 
+import { useRoute } from "vue-router";
+
 export const state = reactive({
   user: null,
   error: null,
   token: null,
   organization: null,
 });
+
+const route = useRoute();
+console.log(route);
 
 const token = window.localStorage.getItem(AUTH_KEY);
 if (token) {
