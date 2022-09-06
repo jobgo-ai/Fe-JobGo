@@ -37,11 +37,11 @@ export const refreshToken = async () => {
 
 export default () => {
   const setUser = (payload, remember) => {
+    console.log("payload", payload);
     if (remember) {
       window.localStorage.setItem(AUTH_KEY, payload[AUTH_TOKEN]);
     }
     document.cookie = "backofficeUser=true; SameSite=None; Secure";
-    console.log(payload[AUTH_TOKEN]);
     state.token = payload[AUTH_TOKEN];
     state.error = undefined;
   };
