@@ -84,7 +84,7 @@ const routes = [
     ],
   },
   {
-    path: "/verify/:token",
+    path: "/verify",
     name: "Verify",
     component: Verify,
     meta: {

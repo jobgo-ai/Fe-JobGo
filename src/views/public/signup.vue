@@ -100,27 +100,24 @@ const postLogin = usePost("self/login");
 
 const onSubmit = handleSubmit(async (values) => {
   isLoading.value = true;
-  const { email, password, name } = values;
+  const { email } = values;
   const payload = {
     user: {
-      name,
       email,
-      password,
-    },
-    invitation: route.query.token,
-  };
-  await postUsers.post(payload);
-  const data = {
-    credentials: {
-      email,
-      password,
     },
   };
-  await postLogin.post(data);
-  if (postLogin.data.value) {
+  const res = await fetch(`${import.meta.env.VITE_API_URL}/users`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
+  });
+  const data = await res.json();
+  if (res) {
     error.value = false;
     const { setUser } = useAuth();
-    setUser(postLogin.data.value, true);
+    setUser(data.user, true);
     router.push("/");
   } else {
     error.value = "Something went wrong";

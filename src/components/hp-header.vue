@@ -27,15 +27,16 @@
             }`"
               size="sm"
               :user="user"
+              v-if="user.name"
             />
             <div class="hp-header__dropdown__deets" v-if="!hasHeaderSaveButton">
-              {{ user.name }}
+              {{ user.name ? user.name : user.email }}
             </div>
           </div>
         </div>
         <transition name="hp-header__dropdown-transition">
           <div v-if="isAccountMenuOpen" class="hp-header__dropdown">
-            <div class="hp-header__dropdown__info">
+            <div v-if="user.name" class="hp-header__dropdown__info">
               <hp-avatar
                 :user="user"
                 class="hp-header__dropdown__info__avatar"

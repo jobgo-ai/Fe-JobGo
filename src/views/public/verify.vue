@@ -5,7 +5,8 @@
       <div class="verify__image-container"></div>
       <h3 class="verify__title">Verify and change password</h3>
       <div class="verify__section verify__section">
-        <form @submit="onSubmit">
+        <form @submit="handleVerify">
+          <hp-input name="email" label="Email" :isDisabled="true" />
           <hp-input
             name="name"
             autocomplete="name"
@@ -66,14 +67,10 @@ const schema = yup.object().shape({
     .oneOf([yup.ref("password")], "Passwords do not match"),
 });
 
-const router = useRouter();
 const route = useRoute();
-
-const token = route.params.token;
-const email = route.query.email;
+const router = useRouter();
 
 const isLoading = ref(false);
-const error = ref(null);
 
 const { handleSubmit, setFieldValue, meta, values } = useForm({
   validationSchema: schema,
@@ -86,7 +83,17 @@ const { handleSubmit, setFieldValue, meta, values } = useForm({
 });
 
 const handleVerify = handleSubmit(async (values) => {
-  console.log(values);
+  isLoading.value = true;
+  const postVerify = usePost("self/verify");
+  await postVerify.post({
+    verification: {
+      name: values.name,
+      password: values.password,
+      token: route.query.token,
+    },
+  });
+  console.log(postVerify.data.value);
+  router.push("/");
 });
 </script>
 
