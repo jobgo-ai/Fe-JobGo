@@ -36,7 +36,7 @@ router.beforeEach(async (to, from, next) => {
   if (to.query.user_token && !user.value) {
     console.log("fuck");
     console.log(to);
-    setUser({ token: to.params.user_token });
+    setUser({ token: to.query.user_token });
     await refreshToken();
   }
 
