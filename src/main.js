@@ -43,8 +43,7 @@ router.beforeEach(async (to, from, next) => {
       },
     });
 
-    console.log(postUser.data.value);
-    setUser(postUser.data.value);
+    setUser(postUser.data.value.self, true);
     await refreshToken();
     router.push("/");
   }
