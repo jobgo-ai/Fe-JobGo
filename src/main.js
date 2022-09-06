@@ -27,9 +27,7 @@ router.beforeEach(async (to, from, next) => {
   } else {
     document.title = "Hireproof";
   }
-  const { user, refreshToken, token } = useAuth();
-
-  console.log(to);
+  const { user, refreshToken, token, setUser } = useAuth();
 
   // Token but no user
   if (token.value && !user.value) {
