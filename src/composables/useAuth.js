@@ -18,7 +18,6 @@ if (token) {
 }
 
 export const refreshToken = async () => {
-  console.log("refresh", state.token);
   const { error, data, get } = useGet("self");
   await get();
 
@@ -37,7 +36,6 @@ export const refreshToken = async () => {
 
 export default () => {
   const setUser = (payload, remember) => {
-    console.log("payload", payload);
     if (remember) {
       window.localStorage.setItem(AUTH_KEY, payload[AUTH_TOKEN]);
     }
