@@ -19,7 +19,7 @@ if (token) {
 
 export const refreshToken = async () => {
   const { error, data, get } = useGet("self");
-
+  console.log("from refreshtoken", state.token);
   await get();
 
   if (error.value) {
@@ -41,7 +41,6 @@ export default () => {
       window.localStorage.setItem(AUTH_KEY, payload[AUTH_TOKEN]);
     }
     document.cookie = "backofficeUser=true; SameSite=None; Secure";
-
     state.token = payload[AUTH_TOKEN];
     state.error = undefined;
   };
