@@ -43,10 +43,10 @@ router.beforeEach(async (to, from, next) => {
       },
     });
 
+    console.log(postUser.data.value);
     setUser(postUser.data.value);
-    const refresh = await refreshToken();
-    router.push("/");
     await refreshToken();
+    router.push("/");
   }
 
   // Going to private route, with no user

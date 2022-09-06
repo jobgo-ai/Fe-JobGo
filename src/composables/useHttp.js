@@ -21,7 +21,7 @@ export function useGet(endpoint) {
     data.value = null;
     error.value = null;
     try {
-      console.log("from useHttp", state.token);
+      console.log("from refreshtoken", state.token);
       const res = await fetch(`${API_URL}/${url}`, {
         method: "GET",
         headers: {
