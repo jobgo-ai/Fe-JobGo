@@ -200,12 +200,11 @@ const onSubmit = handleSubmit(async (values) => {
       text-transform: uppercase;
       color: var(--color-text-secondary);
       position: absolute;
-      background: white;
+      background: var(--color-background);
       padding: 0 4px;
       font-weight: 300;
       font-size: 12px;
       letter-spacing: 1.2px;
-      box-shadow: 0px 0px 24px 24px rgb(255 255 255 / 75%);
     }
   }
   &__subtitle {
