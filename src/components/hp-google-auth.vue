@@ -37,10 +37,8 @@ const handleLogin = async (res) => {
   };
 
   if (route.query?.token) {
-    console.log("fuck");
     payload = { ...payload, invitation: route.query.token };
   }
-  console.log(payload);
   await postUser.post(payload);
 
   setUser({ token: postUser.data.value.self.token });

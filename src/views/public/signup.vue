@@ -106,10 +106,10 @@ const onSubmit = handleSubmit(async (values) => {
       email,
     },
   };
-  if (router.query?.token) {
+  if (route.query?.token) {
     payload = {
       ...payload,
-      invitation: router.query.token,
+      invitation: route.query.token,
     };
   }
   const res = await fetch(`${import.meta.env.VITE_API_URL}/users`, {
