@@ -92,7 +92,8 @@ const handleVerify = handleSubmit(async (values) => {
       token: route.query.token,
     },
   });
-  console.log(postVerify.data.value);
+  const getSelf = useGet("self");
+  getSelf.get();
   router.push("/");
 });
 </script>

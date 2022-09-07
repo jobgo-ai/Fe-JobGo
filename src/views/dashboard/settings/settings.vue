@@ -16,7 +16,7 @@
         :onClick="handleNameChange"
         label="Save changes"
         :isDisabled="
-          values.name.length < 0 || values.name.length > 50 || !isNameDirty
+          values?.name.length < 0 || values?.name.length > 50 || !isNameDirty
         "
         primary
       ></hp-button>
