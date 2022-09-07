@@ -55,7 +55,7 @@ import useAuth from "@/composables/useAuth";
 import Logo from "@/assets/logo.svg";
 
 //Hooks
-import { usePost } from "@/composables/useHttp";
+import { usePost, useGet } from "@/composables/useHttp";
 
 const schema = yup.object().shape({
   name: yup.string().required().label("Name"),
