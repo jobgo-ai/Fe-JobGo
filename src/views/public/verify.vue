@@ -3,7 +3,7 @@
     <div class="verify__logo"><Logo /></div>
     <div class="verify__container">
       <div class="verify__image-container"></div>
-      <h3 class="verify__title">Verify and change password</h3>
+      <h3 class="verify__title">Verify and set password</h3>
       <div class="verify__section verify__section">
         <form @submit="handleVerify">
           <hp-input name="email" label="Email" :isDisabled="true" />
