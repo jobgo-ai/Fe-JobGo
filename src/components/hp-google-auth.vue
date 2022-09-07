@@ -7,7 +7,7 @@
 <script setup>
 // Vendor
 import { onMounted, ref, watchEffect } from "vue";
-import { useRouter } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
 
 // Composables
 import { usePost } from "@/composables/useHttp";
@@ -21,6 +21,7 @@ const props = defineProps({
 });
 
 const router = useRouter();
+const route = useRoute();
 
 const googleContainer = ref(null);
 const container = ref(null);
@@ -35,9 +36,11 @@ const handleLogin = async (res) => {
     },
   };
 
-  if (router.query?.token) {
-    payload = { ...payload, invitation: router.query.token };
+  if (route.query?.token) {
+    console.log("fuck");
+    payload = { ...payload, invitation: route.query.token };
   }
+  console.log(payload);
   await postUser.post(payload);
 
   setUser({ token: postUser.data.value.self.token });
