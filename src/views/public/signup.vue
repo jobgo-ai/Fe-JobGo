@@ -106,7 +106,7 @@ const onSubmit = handleSubmit(async (values) => {
       email,
     },
   };
-  if (router.query.token) {
+  if (router.query?.token) {
     payload = {
       ...payload,
       invitation: router.query.token,

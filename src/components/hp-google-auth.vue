@@ -35,7 +35,7 @@ const handleLogin = async (res) => {
     },
   };
 
-  if (router.query.token) {
+  if (router.query?.token) {
     payload = { ...payload, invitation: router.query.token };
   }
   await postUser.post(payload);
