@@ -85,7 +85,7 @@ const route = useRoute();
 const isLoading = ref(false);
 const error = ref(null);
 
-const { handleSubmit, setFieldValue, meta, values } = useForm({
+const { handleSubmit, setFieldError, meta, values } = useForm({
   validationSchema: schema,
   initialValues: {
     name: "",
@@ -113,16 +113,17 @@ const onSubmit = handleSubmit(async (values) => {
     },
     body: JSON.stringify(payload),
   });
-  const data = await res.json();
-  if (res) {
+  try {
+    const data = await res.json();
     error.value = false;
     const { setUser } = useAuth();
     setUser(data.user, true);
     router.push("/");
-  } else {
-    error.value = "Something went wrong";
+  } catch (error) {
+    setFieldError("email", "Something went wrong");
     isLoading.value = false;
   }
+  const data = await res.json();
 });
 </script>
 
