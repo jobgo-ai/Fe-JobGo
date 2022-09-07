@@ -35,7 +35,7 @@ export const refreshToken = async () => {
 };
 
 export default () => {
-  const setUser = (payload, remember) => {
+  const setUser = (payload, remember = true) => {
     if (remember) {
       window.localStorage.setItem(AUTH_KEY, payload[AUTH_TOKEN]);
     }
