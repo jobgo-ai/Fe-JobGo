@@ -6,7 +6,7 @@
 
 <script setup>
 // Vendor
-import { onMounted, ref, watchEffect } from "vue";
+import { onMounted, ref } from "vue";
 import { useRouter, useRoute } from "vue-router";
 
 // Composables
