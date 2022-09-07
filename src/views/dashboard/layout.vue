@@ -12,6 +12,21 @@
 <script setup>
 // Components
 import HpHeader from "@/components/hp-header.vue";
+import useAuth from "@/composables/useAuth";
+
+import useToast from "@/composables/useToast";
+
+const { setToast } = useToast();
+
+const { user } = useAuth();
+if (!user.value.user?.emailConfirmed) {
+  setToast({
+    type: "negative",
+    title:
+      "We've sent you an email with a link to verify your account.  Please verify",
+    duration: 10000,
+  });
+}
 </script>
 
 <style lang="scss" scoped>
