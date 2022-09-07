@@ -2,7 +2,7 @@
   <div class="settings">
     <h2 class="settings__title">Settings</h2>
     <p class="settings__subtitle">Manage your personal account settings</p>
-    <div class="settings__card" v-if="values.name">
+    <div class="settings__card" v-if="user?.name">
       <h4 class="settings__card__title">Personal information</h4>
       <p class="settings__card__subtitle">
         Change your personal information and keep it updated
@@ -34,7 +34,7 @@
         standalone
       />
     </div>
-    <div class="settings__card" v-if="values.name">
+    <div class="settings__card" v-if="user?.name">
       <h4 class="settings__card__title">Change password</h4>
       <p class="settings__card__subtitle">
         Enter current and new passwords to change password

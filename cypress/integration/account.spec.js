@@ -14,7 +14,7 @@ describe("signup", () => {
     cy.contains("Continue").should("not.be.disabled");
   });
 
-  it("Can change name", () => {
+  it.only("Can change name", () => {
     const name = "Test User" + Math.random();
     cy.login();
     cy.visit("/settings");
