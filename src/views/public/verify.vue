@@ -55,7 +55,9 @@ import useAuth from "@/composables/useAuth";
 import Logo from "@/assets/logo.svg";
 
 //Hooks
-import { usePost, useGet } from "@/composables/useHttp";
+import { usePost } from "@/composables/useHttp";
+
+const { refreshToken } = useAuth();
 
 const schema = yup.object().shape({
   name: yup.string().required().label("Name"),
@@ -92,8 +94,7 @@ const handleVerify = handleSubmit(async (values) => {
       token: route.query.token,
     },
   });
-  const getSelf = useGet("self");
-  getSelf.get();
+  refreshToken();
   router.push("/");
 });
 </script>
