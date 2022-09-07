@@ -28,12 +28,17 @@ const emits = defineEmits(["handleSignIn"]);
 const handleLogin = async (res) => {
   const { setUser, refreshToken } = useAuth();
   const postUser = usePost("sso");
-  await postUser.post({
+  let payload = {
     sso: {
       provider: "google",
       token: res.credential,
     },
-  });
+  };
+
+  if (router.query.token) {
+    payload = { ...payload, invitation: router.query.token };
+  }
+  await postUser.post(payload);
 
   setUser({ token: postUser.data.value.self.token });
   const refresh = await refreshToken();

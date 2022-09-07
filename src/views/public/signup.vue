@@ -101,11 +101,17 @@ const postLogin = usePost("self/login");
 const onSubmit = handleSubmit(async (values) => {
   isLoading.value = true;
   const { email } = values;
-  const payload = {
+  let payload = {
     user: {
       email,
     },
   };
+  if (router.query.token) {
+    payload = {
+      ...payload,
+      invitation: router.query.token,
+    };
+  }
   const res = await fetch(`${import.meta.env.VITE_API_URL}/users`, {
     method: "POST",
     headers: {
