@@ -37,10 +37,10 @@
         <hp-google-auth />
       </div>
     </div>
-    <!-- <router-link class="signin__signup" to="/signup"
+    <router-link class="signin__signup" to="/signup"
       >Don't have an account?
       <span class="signin__signup__link">Sign up</span></router-link
-    > -->
+    >
     <div class="forgot-password__tos">
       <a
         href="https://www.hireproof.io/terms-of-service"
