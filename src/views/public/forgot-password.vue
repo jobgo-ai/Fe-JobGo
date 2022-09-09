@@ -141,6 +141,9 @@ const handlePasswordReset = handleSubmit(async (values) => {
     margin-top: 80px;
   }
   &__policy {
+    &:first-child {
+      margin-left: 0;
+    }
     margin-left: 24px;
     @include text-h5;
   }
