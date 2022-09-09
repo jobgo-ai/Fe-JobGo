@@ -87,7 +87,7 @@ const { handleSubmit, setFieldValue, meta, values } = useForm({
 const handleVerify = handleSubmit(async (values) => {
   isLoading.value = true;
   const postVerify = usePost("self/verify");
-  let tokenType = route.query.verification
+  const tokenType = route.query.verification
     ? route.query.verification
     : route.query.invitation;
   await postVerify.post({
