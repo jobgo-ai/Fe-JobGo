@@ -129,7 +129,6 @@ const onSubmit = handleSubmit(async (values) => {
     setFieldError("email", "Something went wrong");
     isLoading.value = false;
   }
-  const data = await res.json();
 });
 </script>
 

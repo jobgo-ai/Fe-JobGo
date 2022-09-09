@@ -19,7 +19,7 @@ import useToast from "@/composables/useToast";
 const { setToast } = useToast();
 
 const { user } = useAuth();
-if (user.value.user && !user.value.user.emailConfirmed) {
+if (user.value.user && !user.value.user.verified) {
   setToast({
     type: "negative",
     title:

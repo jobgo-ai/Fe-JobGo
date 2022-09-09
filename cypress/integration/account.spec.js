@@ -8,13 +8,20 @@ describe("signup", () => {
     cy.get(`[name='email']`).should("have.value", "iamtest@test.com");
   });
 
+  it("Can signup with email", () => {
+    cy.visit("/signup");
+    cy.get(`[name='email']`).type("hello+integtation-test@hireproof.io");
+    cy.contains("Continue").should("not.be.disabled");
+    cy.contains("Continue").click();
+  });
+
   it("Can fill out all fields", () => {
     cy.visit("/signup");
     cy.get(`[name='email']`).type("testemail@wow.com");
     cy.contains("Continue").should("not.be.disabled");
   });
 
-  it.only("Can change name", () => {
+  it("Can change name", () => {
     const name = "Test User" + Math.random();
     cy.login();
     cy.visit("/settings");

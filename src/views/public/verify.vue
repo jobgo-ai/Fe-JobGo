@@ -57,11 +57,11 @@ import Logo from "@/assets/logo.svg";
 //Hooks
 import { usePost } from "@/composables/useHttp";
 
-const { refreshToken } = useAuth();
+const { refreshToken, setUser } = useAuth();
 
 const schema = yup.object().shape({
   name: yup.string().required().label("Name"),
-  password: yup.string().min(6).required().label("Password"),
+  password: yup.string().min(8).required().label("Password"),
   password2: yup
     .string()
     .label("Confirm password")
@@ -87,13 +87,19 @@ const { handleSubmit, setFieldValue, meta, values } = useForm({
 const handleVerify = handleSubmit(async (values) => {
   isLoading.value = true;
   const postVerify = usePost("self/verify");
+  let tokenType = route.query.verification
+    ? route.query.verification
+    : route.query.invitation;
   await postVerify.post({
     verification: {
-      name: values.name,
-      password: values.password,
-      token: route.query.token,
+      user: {
+        name: values.name,
+        password: values.password,
+      },
+      token: tokenType,
     },
   });
+  setUser({ sessionToken: postVerify.data.value.self.sessionToken });
   refreshToken();
   router.push("/");
 });

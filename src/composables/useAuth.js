@@ -3,7 +3,7 @@ import { useGet } from "./useHttp";
 import useOpenings from "./useOpenings";
 
 const AUTH_KEY = "hireproof_token";
-export const AUTH_TOKEN = "token";
+export const AUTH_TOKEN = "sessionToken";
 
 export const state = reactive({
   user: null,

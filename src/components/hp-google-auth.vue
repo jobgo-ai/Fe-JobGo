@@ -41,7 +41,7 @@ const handleLogin = async (res) => {
   }
   await postUser.post(payload);
 
-  setUser({ token: postUser.data.value.self.token });
+  setUser({ sessionToken: postUser.data.value.self.sessionToken });
   const refresh = await refreshToken();
   router.push("/");
 };
