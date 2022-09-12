@@ -14,7 +14,7 @@ describe("questions", () => {
     cy.contains("Search questions").click();
     cy.contains("TEST_QUESTION_DO_NOT_DELETE").should(
       "contain",
-      "TEST_QUESTION_DO_NOT_DELETE"
+      "THIS_IS_A_FAKE_QUESTION"
     );
   });
 
