@@ -167,13 +167,9 @@ const handlePasswordReset = handleSubmit(async (values) => {
       width: 588px;
     }
     &__tos {
-      position: absolute;
-      bottom: 30px;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      justify-content: space-around;
-      max-width: 100%;
+      max-width: 450px;
+      margin: auto;
+      margin-top: 120px;
     }
   }
 }
