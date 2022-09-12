@@ -178,7 +178,7 @@ const { user } = useAuth();
 
 const handleLogout = () => {
   logout();
-  router.push("/login");
+  router.push("/signin");
 };
 
 const dropdownClasses = computed(() => {

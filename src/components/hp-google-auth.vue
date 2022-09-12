@@ -49,15 +49,17 @@ const handleLogin = async (res) => {
 const gapiKey = import.meta.env.VITE_GAPI_KEY;
 
 onMounted(() => {
-  const width = container.value.getBoundingClientRect().width;
-  window.google.accounts.id.initialize({
-    client_id: gapiKey,
-    callback: handleLogin,
-    context: "use",
-  });
-  window.google.accounts.id.renderButton(googleContainer.value, {
-    width: width,
-  });
+  if (window.google.accounts) {
+    const width = container.value.getBoundingClientRect().width;
+    window.google.accounts.id.initialize({
+      client_id: gapiKey,
+      callback: handleLogin,
+      context: "use",
+    });
+    window.google.accounts.id.renderButton(googleContainer.value, {
+      width: width,
+    });
+  }
 });
 </script>
 

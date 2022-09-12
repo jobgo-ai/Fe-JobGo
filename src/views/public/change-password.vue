@@ -93,7 +93,7 @@ const handlePasswordReset = handleSubmit(async (values) => {
     },
   };
   await postChangePassword.post(payload);
-  router.push("/login");
+  router.push("/signin");
   setToast({
     type: "positive",
     title: "Well done!",
