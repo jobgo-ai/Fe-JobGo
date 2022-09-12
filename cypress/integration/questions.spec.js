@@ -14,7 +14,7 @@ describe("questions", () => {
     cy.contains("Search questions").click();
     cy.contains("TEST_QUESTION_DO_NOT_DELETE").should(
       "contain",
-      "THIS_IS_A_FAKE_QUESTION"
+      "TEST_QUESTION_DO_NOT_DELETE"
     );
   });
 
@@ -47,7 +47,7 @@ describe("questions", () => {
       .find("a")
       .contains("Edit interview")
       .click();
-    cy.get(".hp-options-dropdown__flyout").first().click();
+    cy.get(".hp-options-dropdown__flyout").eq(2).click();
     cy.contains("Edit question").click();
     cy.contains("Delete question template").click();
     cy.get(`[name='confirmation']`).type("DELETE");
