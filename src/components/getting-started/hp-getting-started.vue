@@ -189,6 +189,7 @@ const nextStep = computed(() => {
 <style lang="scss" scoped>
 .hp-getting-started {
   position: relative;
+  display: none;
   &__content {
     display: flex;
     margin-right: 12px;
@@ -262,6 +263,12 @@ const nextStep = computed(() => {
         margin-top: 12px;
       }
     }
+  }
+}
+
+@media (min-width: $breakpoint-tablet) {
+  .hp-getting-started {
+    display: block;
   }
 }
 </style>

@@ -427,6 +427,14 @@ watch(
 
 <style lang="scss" scoped>
 .candidate-list {
+  position: fixed;
+  top: 92px;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: var(--color-background);
+  z-index: 1000;
+  padding: 24px;
   &__header {
     display: flex;
     justify-content: space-between;
