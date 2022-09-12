@@ -15,14 +15,12 @@
           />
           <hp-input
             name="password"
-            autocomplete="new-password"
             type="password"
             placeholder="Type your password"
             label="Password"
           />
           <hp-input
             name="password2"
-            autocomplete="new-password"
             type="password"
             placeholder="Repeat your password"
             label="Repeat your password"

@@ -46,7 +46,6 @@
             type="password"
             name="currentPassword"
             label="Current password"
-            autocomplete="new-password"
           ></hp-input>
           <hp-input
             type="password"

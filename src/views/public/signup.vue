@@ -6,12 +6,7 @@
       <h3 class="signup__title">Sign up for Hireproof</h3>
       <div class="signup__section signup__section--border">
         <form @submit="onSubmit">
-          <hp-input
-            name="email"
-            autocomplete="email"
-            placeholder="Type your email"
-            label="Email"
-          />
+          <hp-input name="email" placeholder="Type your email" label="Email" />
           <div class="signup__checkbox-container__tos">
             By signing up, you agree to the
             <a
