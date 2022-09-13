@@ -386,7 +386,7 @@ const copyReportToClipBoard = () => {
     }
   }
   &__overview {
-    margin-top: 40px;
+    margin-top: 24px;
     display: grid;
     grid-gap: 24px;
     padding-bottom: 24px;
