@@ -12,6 +12,7 @@ import { useRouter, useRoute } from "vue-router";
 // Composables
 import { usePost } from "@/composables/useHttp";
 import useAuth from "@/composables/useAuth";
+import useGoogleAuth from "@/composables/useGoogleAuth";
 
 const props = defineProps({
   isSignIn: {
@@ -46,20 +47,23 @@ const handleLogin = async (res) => {
   router.push("/");
 };
 
-const gapiKey = import.meta.env.VITE_GAPI_KEY;
+const { isInitialized } = useGoogleAuth();
 
 onMounted(() => {
-  if (window.google.accounts) {
-    const width = container.value.getBoundingClientRect().width;
+  if (!isInitialized.value) {
+    console.log("render");
+    const gapiKey = import.meta.env.VITE_GAPI_KEY;
     window.google.accounts.id.initialize({
       client_id: gapiKey,
       callback: handleLogin,
       context: "use",
     });
-    window.google.accounts.id.renderButton(googleContainer.value, {
-      width: width,
-    });
+    isInitialized.value = true;
   }
+  const width = container.value.getBoundingClientRect().width;
+  window.google.accounts.id.renderButton(googleContainer.value, {
+    width: width,
+  });
 });
 </script>
 
