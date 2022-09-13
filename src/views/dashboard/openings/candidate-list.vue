@@ -14,7 +14,15 @@
   >
     <div v-if="opening.statistics">
       <div class="candidate-list__header">
-        <hp-abstract-avatar :abstractKey="opening.artwork" />
+        <div class="candidate-list__image-container">
+          <hp-abstract-avatar :abstractKey="opening.artwork" />
+          <router-link
+            class="candidate-list__image-container__link"
+            :to="`/openings`"
+          >
+            Back
+          </router-link>
+        </div>
         <div class="candidate-list__header__button-group">
           <hp-button
             :href="`/opening/${opening.reference}/edit`"
@@ -225,7 +233,7 @@
 <script setup>
 //Vendor
 import { ref, watch, toRefs, computed } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { onClickOutside, useScroll, useDebounce } from "@vueuse/core";
 
 // Views
@@ -272,6 +280,7 @@ const offset = ref(0);
 
 const { opening, fetchOpening } = useOpenings();
 const limit = 15;
+const router = useRouter();
 
 const getUrl = () => {
   const limit = 15;
@@ -428,13 +437,25 @@ watch(
 <style lang="scss" scoped>
 .candidate-list {
   position: fixed;
-  top: 92px;
+  top: 90px;
   bottom: 0;
   left: 0;
   right: 0;
   background-color: var(--color-background);
-  z-index: 1000;
+  z-index: 500;
   padding: 24px;
+  &--left {
+    display: none;
+  }
+  &__image-container {
+    display: flex;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    &__link {
+      text-decoration: underline;
+    }
+  }
   &__header {
     display: flex;
     justify-content: space-between;
@@ -650,9 +671,16 @@ watch(
     background-color: var(--color-panel);
     border: 1px solid var(--color-border);
     border-radius: $border-radius-lg;
+    top: initial;
+    bottom: initial;
+    left: initial;
+    &__image-container__link {
+      display: none;
+    }
     &--left {
       right: 100%;
       transform: translateX(100%);
+      display: block;
     }
   }
 }
