@@ -51,7 +51,6 @@ const { isInitialized } = useGoogleAuth();
 
 onMounted(() => {
   if (!isInitialized.value) {
-    console.log("render");
     const gapiKey = import.meta.env.VITE_GAPI_KEY;
     window.google.accounts.id.initialize({
       client_id: gapiKey,
