@@ -1,6 +1,7 @@
 <template>
   <div class="hp-button" :class="containerClasses">
     <component
+      v-bind="$attrs"
       :is="computedTag"
       :to="to"
       :href="href"
