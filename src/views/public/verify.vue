@@ -1,50 +1,41 @@
 <template>
-  <div class="signup">
-    <div class="signup__logo"><Logo /></div>
-    <div class="signup__container">
-      <div class="signup__image-container"></div>
-      <h3 class="signup__title">Sign up for Hireproof</h3>
-      <div class="signup__section signup__section--border">
-        <form @submit="onSubmit">
-          <hp-input name="email" placeholder="Type your email" label="Email" />
-          <div class="signup__checkbox-container__tos">
-            By signing up, you agree to the
-            <a
-              class="signup__checkbox-container__link"
-              target="_blank"
-              href="https://www.hireproof.io/terms-of-service"
-              >Terms of Service</a
-            >
-            and acknowledge our
-            <a
-              class="signup__checkbox-container__link"
-              target="_blank"
-              href="https://www.hireproof.io/privacy-policy"
-              >Privacy Policy</a
-            >
-          </div>
-          <div v-if="error" class="signup__error">{{ error }}</div>
+  <div class="verify">
+    <div class="verify__logo"><Logo /></div>
+    <div class="verify__container">
+      <div class="verify__image-container"></div>
+      <h3 class="verify__title">Verify and set password</h3>
+      <div class="verify__section verify__section">
+        <form @submit="handleVerify">
+          <hp-input name="email" label="Email" :isDisabled="true" />
+          <hp-input
+            name="name"
+            autocomplete="name"
+            placeholder="Type your name"
+            label="Name"
+          />
+          <hp-input
+            name="password"
+            type="password"
+            placeholder="Type your password"
+            label="Password"
+          />
+          <hp-input
+            name="password2"
+            type="password"
+            placeholder="Repeat your password"
+            label="Repeat your password"
+          />
           <hp-button
             :isLoading="isLoading"
             primary
-            :isDisabled="!meta.valid"
+            :isDisabled="!meta.dirty || !meta.valid"
             type="submit"
             label="Continue"
             fullWidth
           ></hp-button>
         </form>
-        <div class="signup__section__or">OR</div>
-      </div>
-      <div class="signup__section">
-        <hp-google-auth />
       </div>
     </div>
-    <router-link
-      class="signup__signin signup__checkbox-container__text"
-      to="/signin"
-      >Already have an account?
-      <span class="signup__checkbox-container__link">Sign In</span></router-link
-    >
   </div>
 </template>
 
@@ -56,9 +47,7 @@ import * as yup from "yup";
 import { useForm } from "vee-validate";
 
 //Components
-import HpGoogleAuth from "@/components/hp-google-auth.vue";
 import HpInput from "@/components/form/hp-input.vue";
-import HpCheckbox from "@/components/form/hp-checkbox.vue";
 import HpButton from "@/components/hp-button.vue";
 import useAuth from "@/composables/useAuth";
 import Logo from "@/assets/logo.svg";
@@ -66,21 +55,24 @@ import Logo from "@/assets/logo.svg";
 //Hooks
 import { usePost } from "@/composables/useHttp";
 
+const { refreshToken, setUser } = useAuth();
+
 const schema = yup.object().shape({
-  email: yup
+  name: yup.string().required().label("Name"),
+  password: yup.string().min(8).required().label("Password"),
+  password2: yup
     .string()
-    .email("Must be a valid email address")
+    .label("Confirm password")
     .required()
-    .label("Email"),
+    .oneOf([yup.ref("password")], "Passwords do not match"),
 });
 
-const router = useRouter();
 const route = useRoute();
+const router = useRouter();
 
 const isLoading = ref(false);
-const error = ref(null);
 
-const { handleSubmit, setFieldError, meta, values } = useForm({
+const { handleSubmit, setFieldValue, meta, values } = useForm({
   validationSchema: schema,
   initialValues: {
     name: "",
@@ -90,45 +82,29 @@ const { handleSubmit, setFieldError, meta, values } = useForm({
   },
 });
 
-const postUsers = usePost("users");
-const postLogin = usePost("self/login");
-
-const onSubmit = handleSubmit(async (values) => {
+const handleVerify = handleSubmit(async (values) => {
   isLoading.value = true;
-  const { email } = values;
-  let payload = {
-    user: {
-      email,
+  const postVerify = usePost("self/verify");
+  const tokenType = route.query.verification
+    ? route.query.verification
+    : route.query.invitation;
+  await postVerify.post({
+    verification: {
+      user: {
+        name: values.name,
+        password: values.password,
+      },
+      token: tokenType,
     },
-  };
-  if (route.query?.token) {
-    payload = {
-      ...payload,
-      invitation: route.query.token,
-    };
-  }
-  const res = await fetch(`${import.meta.env.VITE_API_URL}/users`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(payload),
   });
-  try {
-    const data = await res.json();
-    error.value = false;
-    const { setUser } = useAuth();
-    setUser(data.user, true);
-    router.push("/");
-  } catch (error) {
-    setFieldError("email", "Something went wrong");
-    isLoading.value = false;
-  }
+  setUser({ sessionToken: postVerify.data.value.self.sessionToken });
+  refreshToken();
+  router.push("/");
 });
 </script>
 
 <style lang="scss">
-.signup {
+.verify {
   display: flex;
   flex-direction: column;
   padding: 12px;
@@ -146,11 +122,12 @@ const onSubmit = handleSubmit(async (values) => {
       text-transform: uppercase;
       color: var(--color-text-secondary);
       position: absolute;
-      background: var(--color-background);
+      background: white;
       padding: 0 4px;
       font-weight: 300;
       font-size: 12px;
       letter-spacing: 1.2px;
+      box-shadow: 0px 0px 24px 24px rgb(255 255 255 / 75%);
     }
   }
   &__subtitle {
@@ -246,7 +223,7 @@ const onSubmit = handleSubmit(async (values) => {
 }
 
 @media (min-width: $breakpoint-tablet) {
-  .signup {
+  .verify {
     padding: 0;
     &__container {
       width: 450px;

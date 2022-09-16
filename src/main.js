@@ -2,6 +2,7 @@ import { createApp } from "vue";
 import App from "./App.vue";
 import router from "./router";
 import useAuth from "@/composables/useAuth";
+import { usePost } from "@/composables/useHttp";
 import useContextSave from "@/composables/useContextSave";
 
 const app = createApp(App);
@@ -23,15 +24,28 @@ router.beforeEach(async (to, from, next) => {
   }
 
   if (to.meta.title) {
-    document.title = "Beta" + ` | ${to.meta.title}`;
+    document.title = to.meta.title;
   } else {
-    document.title = "Hireproof | Beta";
+    document.title = "Hireproof";
   }
-  const { user, refreshToken, token } = useAuth();
+  const { user, refreshToken, token, setUser } = useAuth();
 
   // Token but no user
   if (token.value && !user.value) {
     await refreshToken();
+  }
+  if (to.query.user_token && !user.value) {
+    const postUser = usePost("sso");
+    await postUser.post({
+      sso: {
+        provider: "google",
+        token: to.query.user_token,
+      },
+    });
+
+    setUser(postUser.data.value.self, true);
+    await refreshToken();
+    router.push("/");
   }
 
   // Going to private route, with no user

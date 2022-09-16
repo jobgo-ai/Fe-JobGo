@@ -56,6 +56,11 @@
               @click="isEditCandidateModalOpen = true"
               icon="pencil"
             ></hp-button>
+            <div class="candidate-details__backlink">
+              <router-link :to="`/openings/${route.params.openingRef}`"
+                >Back</router-link
+              >
+            </div>
           </div>
         </div>
         <div class="candidate-details__interviews">
@@ -338,6 +343,9 @@ const copyReportToClipBoard = () => {
 
 <style lang="scss">
 .candidate-details {
+  &__backlink {
+    text-decoration: underline;
+  }
   &__spinner {
     margin-top: 64px;
     display: flex;
@@ -378,7 +386,7 @@ const copyReportToClipBoard = () => {
     }
   }
   &__overview {
-    margin-top: 40px;
+    margin-top: 24px;
     display: grid;
     grid-gap: 24px;
     padding-bottom: 24px;
@@ -556,6 +564,9 @@ const copyReportToClipBoard = () => {
   .candidate-details {
     &__overview {
       grid-template-columns: 264px auto;
+    }
+    &__backlink {
+      display: none;
     }
   }
 }

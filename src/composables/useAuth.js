@@ -3,7 +3,7 @@ import { useGet } from "./useHttp";
 import useOpenings from "./useOpenings";
 
 const AUTH_KEY = "hireproof_token";
-export const AUTH_TOKEN = "token";
+export const AUTH_TOKEN = "sessionToken";
 
 export const state = reactive({
   user: null,
@@ -19,7 +19,6 @@ if (token) {
 
 export const refreshToken = async () => {
   const { error, data, get } = useGet("self");
-
   await get();
 
   if (error.value) {
@@ -36,12 +35,11 @@ export const refreshToken = async () => {
 };
 
 export default () => {
-  const setUser = (payload, remember) => {
+  const setUser = (payload, remember = true) => {
     if (remember) {
       window.localStorage.setItem(AUTH_KEY, payload[AUTH_TOKEN]);
     }
     document.cookie = "backofficeUser=true; SameSite=None; Secure";
-
     state.token = payload[AUTH_TOKEN];
     state.error = undefined;
   };

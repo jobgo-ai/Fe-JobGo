@@ -8,13 +8,16 @@ describe("signup", () => {
     cy.get(`[name='email']`).should("have.value", "iamtest@test.com");
   });
 
+  it("Can signup with email", () => {
+    cy.visit("/signup");
+    cy.get(`[name='email']`).type("hello+integtation-test@hireproof.io");
+    cy.contains("Continue").should("not.be.disabled");
+    cy.contains("Continue").click();
+  });
+
   it("Can fill out all fields", () => {
-    cy.visit("/signup?email=iamtest@test.com");
-    cy.get(`[name='name']`).type("Test User");
-    cy.get(`[name='password']`).type("testingpassword123");
-    cy.get(`[name='passwordConfirmation']`).type("testingpassword123");
-    cy.contains("Continue").should("be.disabled");
-    cy.get(".hp-checkbox").click();
+    cy.visit("/signup");
+    cy.get(`[name='email']`).type("testemail@wow.com");
     cy.contains("Continue").should("not.be.disabled");
   });
 

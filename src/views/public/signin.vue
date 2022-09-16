@@ -2,34 +2,40 @@
   <div class="signin">
     <div class="signin__logo"><Logo /></div>
     <div class="signin__container">
-      <div class="signin__image-container"></div>
-      <p class="signin__subtitle">Welcome back!</p>
-      <h2 class="signin__title">Log into Hireproof</h2>
-      <form @submit="onSubmit">
-        <hp-input name="email" placeholder="Type your email" label="Email" />
-        <div class="signin__password-container">
-          <hp-input
-            name="password"
-            placeholder="Enter your password"
-            label="Password"
-            type="password"
-          />
-          <router-link
-            tabIndex="-1"
-            to="/forgot-password"
-            class="signin__forgot-password"
-            >Forgot password</router-link
-          >
-        </div>
-        <hp-button
-          :isLoading="postLogin.loading.value"
-          primary
-          fullWidth
-          :isDisabled="!meta.dirty || !meta.valid"
-          type="submit"
-          label="Continue"
-        ></hp-button>
-      </form>
+      <div class="signin__section">
+        <div class="signin__image-container"></div>
+        <p class="signin__subtitle">Welcome back!</p>
+        <h2 class="signin__title">Log into Hireproof</h2>
+        <form @submit="onSubmit">
+          <hp-input name="email" placeholder="Type your email" label="Email" />
+          <div class="signin__password-container">
+            <hp-input
+              name="password"
+              placeholder="Enter your password"
+              label="Password"
+              type="password"
+            />
+            <router-link
+              tabIndex="-1"
+              to="/forgot-password"
+              class="signin__forgot-password"
+              >Forgot password</router-link
+            >
+          </div>
+          <hp-button
+            :isLoading="postLogin.loading.value"
+            primary
+            fullWidth
+            :isDisabled="!meta.dirty || !meta.valid"
+            type="submit"
+            label="Continue"
+          ></hp-button>
+        </form>
+        <div class="signup__section__or">OR</div>
+      </div>
+      <div class="signup__section">
+        <hp-google-auth />
+      </div>
     </div>
     <router-link class="signin__signup" to="/signup"
       >Don't have an account?
@@ -64,6 +70,7 @@ import { useForm } from "vee-validate";
 //Components
 import HpInput from "@/components/form/hp-input.vue";
 import HpButton from "@/components/hp-button.vue";
+import HpGoogleAuth from "@/components/hp-google-auth.vue";
 import useAuth from "@/composables/useAuth";
 import Logo from "@/assets/logo.svg";
 
@@ -110,6 +117,11 @@ const onSubmit = handleSubmit(async (values) => {
   display: flex;
   flex-direction: column;
   padding: 24px;
+  &__section {
+    padding-bottom: 24px;
+    position: relative;
+    border-bottom: 1px solid var(--color-border);
+  }
   &__subtitle {
     @include text-h3;
     font-weight: 500;
@@ -176,7 +188,7 @@ const onSubmit = handleSubmit(async (values) => {
   .signin {
     padding: 0;
     &__container {
-      width: 460px;
+      width: 450px;
     }
     &__logo {
       margin-top: 64px;

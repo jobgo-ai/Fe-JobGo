@@ -3,6 +3,7 @@ import { createRouter, createWebHistory } from "vue-router";
 // Public
 import ForgotPassword from "@/views/public/forgot-password.vue";
 import NotFound from "@/views/public/not-found.vue";
+import Verify from "@/views/public/verify.vue";
 import Signin from "@/views/public/signin.vue";
 import Signup from "@/views/public/signup.vue";
 
@@ -87,6 +88,14 @@ const routes = [
         component: Billing,
       },
     ],
+  },
+  {
+    path: "/verify",
+    name: "Verify",
+    component: Verify,
+    meta: {
+      public: true,
+    },
   },
   { path: "/:pathMatch(.*)*", name: "NotFound", component: NotFound },
   {
