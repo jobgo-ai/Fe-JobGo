@@ -109,7 +109,7 @@ import HpToast from "@/components/hp-toast.vue";
   --purple--100: #505099;
   --purple--200: #505099;
   --purple--300: #505099;
-  --purple--400: #505099;
+  --purple--400: #6c6da5;
   --purple--500: #505099;
   --purple--600: #505099;
   --purple--700: #505099;

@@ -47,6 +47,26 @@
                 </div>
               </div>
             </div>
+            <div class="hp-header__dropdown__options">
+              <router-link
+                to="/billing"
+                tag="div"
+                class="
+                  hp-header__dropdown__options__option
+                  hp-header__dropdown__options__option--upgrade
+                "
+                @click="isAccountMenuOpen = false"
+              >
+                <hp-icon
+                  name="diamond"
+                  class="
+                    hp-header__dropdown__options__option__icon
+                    hp-header__dropdown__options__option__icon--upgrade
+                  "
+                />
+                Upgrade
+              </router-link>
+            </div>
             <div v-if="organization" class="hp-header__dropdown__options">
               <router-link
                 to="/organization"
@@ -308,9 +328,19 @@ const { hasHeaderSaveButton } = useBreadcrumbs();
         &__icon {
           margin-right: 8px;
           color: var(--color-text-secondary);
+          &--upgrade {
+            color: var(--color-accent-forground);
+          }
         }
         &--toggle {
           justify-content: space-between;
+        }
+        &--upgrade {
+          background-color: var(--purple--500);
+          color: var(--color-accent-forground);
+          &:hover {
+            background-color: var(--purple--400);
+          }
         }
       }
       &__dark-mode {

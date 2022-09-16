@@ -1,11 +1,5 @@
-<template>
-  <hp-stripe></hp-stripe>
-</template>
+<template></template>
 
-<script setup>
-import HpStripe from "@/components/hp-stripe.vue";
-
-console.log("wow");
-</script>
+<script setup></script>
 
 <style></style>
