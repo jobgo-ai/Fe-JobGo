@@ -1,12 +1,14 @@
 <template>
   <div class="billing">
+    <h1 class="billing__title">Upgrade</h1>
     <div class="billing__header">
       <p class="billing__header__plan">
-        Current plan:
         <hp-badge icon="diamond" type="positive" content="Free"></hp-badge>
-      </p>
-      <p class="billing__header__openings">
-        <span class="billing__header__number">7</span> / 2 Active openings
+        <hp-badge
+          icon="template"
+          type="positive"
+          content="7 / 2 Openings"
+        ></hp-badge>
       </p>
     </div>
     <hp-tabs
@@ -73,7 +75,11 @@
         <p class="billing__tier__description">
           Blah blah startup content here whats that ya chunks
         </p>
-        <div class="billing__tier__price">{{ `Lets talk` }}</div>
+        <div class="billing__tier__price--enterprise">
+          <p class="billing__tier__text">
+            Reach out, we are open to new enterprise opportunities
+          </p>
+        </div>
         <hp-button
           href="https://meetings-eu1.hubspot.com/neea"
           target="_blank"
@@ -114,6 +120,7 @@ import { ref } from "vue";
 import HpButton from "@/components/hp-button.vue";
 import HpBadge from "@/components/hp-badge.vue";
 import HpTabs from "@/components/hp-tabs.vue";
+import HpIcon from "@/components/hp-icon.vue";
 
 // Composables
 import useToast from "@/composables/useToast";
@@ -137,6 +144,10 @@ const dictionary = {
 <styles lang="scss">
 .billing {
   @include pageContainer;
+  &__title {
+    @include text-h1;
+    margin-bottom: 12px;
+  }
   &__header {
     display: flex;
     flex-direction: column;
@@ -180,8 +191,20 @@ const dictionary = {
     }
     &__price {
       font-weight: 600;
-      font-size: 42px;
+      font-size: 48px;
       margin-bottom: 12px;
+      &--enterprise {
+        display: flex;
+        min-height: 56px;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        margin-bottom: 12px;
+      }
+    }
+    &__text {
+      font-size: 14px;
+      font-weight: 400;
     }
     &__features {
       padding-top: 24px;
