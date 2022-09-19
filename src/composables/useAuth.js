@@ -1,4 +1,4 @@
-import { reactive, toRefs } from "vue";
+import { reactive, toRefs, ref } from "vue";
 import { useGet } from "./useHttp";
 import useOpenings from "./useOpenings";
 
@@ -11,6 +11,8 @@ export const state = reactive({
   token: null,
   organization: null,
 });
+
+export const userRole = ref(null);
 
 const token = window.localStorage.getItem(AUTH_KEY);
 if (token) {
@@ -31,6 +33,7 @@ export const refreshToken = async () => {
     });
     window.Intercom("update", { ...data.value.self });
     state.organization = data.value.self.organization;
+    userRole.value = data.value.self.organization?.role;
   }
 };
 
@@ -63,6 +66,7 @@ export default () => {
     setUserDetails,
     logout,
     refreshToken,
+    userRole,
     ...toRefs(state),
   };
 };

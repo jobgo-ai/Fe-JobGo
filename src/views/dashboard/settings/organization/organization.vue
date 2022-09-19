@@ -60,27 +60,14 @@
         <h4 class="settings__card__title">Member information</h4>
         <p class="settings__card__subtitle">Manage your members</p>
         <ol class="settings__card__memberlist">
-          <li class="settings__card__member" v-for="member in members">
-            <div class="settings__card__member__name">
-              {{ member.name }}
-              <span class="settings__card__member__email">{{
-                member.email
-              }}</span>
-            </div>
-            <div class="settings__card__member__actions">
-              <div class="settings__card__member__role">
-                {{ member.role }}
-              </div>
-              <hp-button
-                icon="trash"
-                v-if="canDeleteMember(member)"
-                danger
-                @handleClick="handleRemovalRequest(member)"
-              ></hp-button>
-            </div>
-          </li>
+          <OrganizationMember
+            v-for="member in members"
+            :deletePermission="hasOrganizationMemberDeletePermission(member)"
+            @handleRoleChange="handleRoleChange"
+            :member="member"
+          ></OrganizationMember>
         </ol>
-        <div v-if="isOwner">
+        <div v-if="hasInviteOrganizationMemberPermission()">
           <h4 class="settings__card__title">Invite new member</h4>
           <p class="settings__card__subtitle">
             They will receive an email at the entered address, they will be
@@ -112,18 +99,26 @@ import HpInput from "@/components/form/hp-input.vue";
 import HpButton from "@/components/hp-button.vue";
 import HpModal from "@/components/hp-modal.vue";
 import HpSpinner from "@/components/hp-spinner.vue";
+import OrganizationMember from "./organization-member.vue";
 
 // Composables
-import { usePost, useGet, useDelete } from "@/composables/useHttp";
+import { usePost, usePut, useGet, useDelete } from "@/composables/useHttp";
 import useAuth from "@/composables/useAuth";
+import usePermissions from "@/composables/usePermissions";
 import useToast from "@/composables/useToast";
 
+const {
+  hasInviteOrganizationMemberPermission,
+  hasOrganizationMemberDeletePermission,
+  ROLES,
+} = usePermissions();
 const { organization, user } = useAuth();
 const isAddMemberModalOpen = ref(false);
 const memberToRemove = ref(null);
 const isRemovingMember = ref(false);
 const isConfirmMemberRemovalOpen = ref(false);
 const isSendingInvite = ref(false);
+const isChangingRole = ref(false);
 const isLoading = ref(true);
 const members = ref([]);
 
@@ -131,10 +126,6 @@ const { setToast } = useToast();
 
 const schema = yup.object().shape({
   email: yup.string().email(),
-});
-
-const isOwner = computed(() => {
-  return user.value.organization?.role === "owner";
 });
 
 const fetchOrgs = async () => {
@@ -179,7 +170,7 @@ const handleRemovalRequest = (member) => {
 
 const onSubmit = handleSubmit(async (values) => {
   isSendingInvite.value = true;
-  const postInvitation = usePost("invitations");
+  const postInvitation = usePost("invitation");
   await postInvitation.post({
     invitation: {
       email: values.email,
@@ -195,15 +186,21 @@ const onSubmit = handleSubmit(async (values) => {
   isAddMemberModalOpen.value = false;
 });
 
-const canDeleteMember = (member) => {
-  const isAdmin = user.value.organization?.role === "admin";
-  if (isAdmin) {
-    return true;
+const handleRoleChange = async (payload) => {
+  if (payload.role === payload.member.role) {
+    return;
   }
-
-  const isOwner = user.value.organization?.role === "owner";
-  const notCurrentMember = user.value.reference !== member.reference;
-  return isOwner && notCurrentMember;
+  isChangingRole.value = true;
+  const formattedPayload = {
+    role: payload.role,
+  };
+  const updateMember = usePut(`users/${payload.member.reference}/role`);
+  await updateMember.put(formattedPayload);
+  fetchOrgs();
+  setToast({
+    type: "positive",
+    title: "Member permission changed",
+  });
 };
 </script>
 
@@ -231,35 +228,6 @@ const canDeleteMember = (member) => {
       display: flex;
       flex-direction: column;
       margin-bottom: 16px;
-    }
-    &__member {
-      padding: 12px;
-      border: 1px solid var(--color-border);
-      border-radius: $border-radius-sm;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 8px;
-      &__actions {
-        display: flex;
-        align-items: center;
-      }
-      &__name {
-        display: flex;
-        flex-direction: column;
-        @include text-h5;
-      }
-      &__email {
-        color: var(--color-text-secondary);
-        @include text-h6;
-      }
-      &__role {
-        margin-right: 12px;
-        display: flex;
-        align-items: center;
-        text-transform: capitalize;
-        color: var(--color-text-secondary);
-      }
     }
   }
 }
