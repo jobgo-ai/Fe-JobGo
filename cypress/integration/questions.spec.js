@@ -47,7 +47,7 @@ describe("questions", () => {
       .find("a")
       .contains("Edit interview")
       .click();
-    cy.get(".hp-options-dropdown__flyout").eq(2).click();
+    cy.get(".hp-options-dropdown__flyout").eq(1).click();
     cy.contains("Edit question").click();
     cy.contains("Delete question template").click();
     cy.get(`[name='confirmation']`).type("DELETE");
