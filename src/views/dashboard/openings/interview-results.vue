@@ -112,7 +112,7 @@
                 <div class="results__questions__container__time">
                   <hp-badge
                     icon="questions"
-                    :tooltip="`Quesiton #${index + 1}`"
+                    :tooltip="`Question #${index + 1}`"
                     :content="index + 1"
                   />
                 </div>
