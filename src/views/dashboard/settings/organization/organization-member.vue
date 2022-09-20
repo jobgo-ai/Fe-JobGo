@@ -105,11 +105,10 @@ const promotionList = (role) => {
   if (role === "founder" || userRole.value === "member") {
     return [];
   }
-  if (role === userRole.value) {
+  if (userRole.value !== "founder" && role === userRole.value) {
     return [];
   }
   const filteredRoles = Object.keys(ROLES)
-    .filter((r) => r !== "founder")
     .filter((r) => r !== role)
     .filter((r) => ROLES[r].hierarchy >= ROLES[userRole.value].hierarchy);
   return filteredRoles;
