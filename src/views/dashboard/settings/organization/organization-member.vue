@@ -96,6 +96,9 @@ const promotionList = (role) => {
   if (role === "founder" || userRole.value === "member") {
     return [];
   }
+  if (role === userRole.value) {
+    return [];
+  }
   const filteredRoles = Object.keys(ROLES)
     .filter((r) => r !== "founder")
     .filter((r) => r !== role)
