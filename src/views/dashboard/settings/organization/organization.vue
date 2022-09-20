@@ -29,29 +29,8 @@
         :isOpen="isAddMemberModalOpen"
         @close="isAddMemberModalOpen = false"
       >
-        <div class="settings__modal">
-          <h4 class="settings__card__title">Invite member</h4>
-          <p class="settings__card__subtitle">
-            This member will have access to your organizations interviews,
-            results, and templates
-          </p>
-          <form @submit="onSubmit">
-            <div class="">
-              <hp-input
-                placeholder="Enter candidate email..."
-                label="Email"
-                name="email"
-              ></hp-input>
-            </div>
-            <hp-button
-              primary
-              type="submit"
-              :isLoading="isSendingInvite"
-              :isDisabled="!meta.valid || isSendingInvite"
-              label="Send invite"
-            ></hp-button>
-          </form></div
-      ></hp-modal>
+        <invite-member-modal @memberInvited="onSubmit" />
+      </hp-modal>
       <h2 class="settings__title">
         {{ organization.name }}
       </h2>
@@ -65,21 +44,26 @@
             :deletePermission="hasOrganizationMemberDeletePermission(member)"
             @handleRoleChange="handleRoleChange"
             :member="member"
+            :key="member.reference"
+            @handleRemovalRequest="handleRemovalRequest"
           ></OrganizationMember>
         </ol>
-        <div v-if="hasInviteOrganizationMemberPermission()">
-          <h4 class="settings__card__title">Invite new member</h4>
-          <p class="settings__card__subtitle">
-            They will receive an email at the entered address, they will be
-            added to the organization
-          </p>
-          <hp-button
-            @handleClick="isAddMemberModalOpen = true"
-            label="Add member"
-            name="email"
-            primary
-          ></hp-button>
-        </div>
+      </div>
+      <div
+        v-if="hasInviteOrganizationMemberPermission()"
+        class="settings__card"
+      >
+        <h4 class="settings__card__title">Invite new member</h4>
+        <p class="settings__card__subtitle">
+          They will receive an email at the entered address, they will be added
+          to the organization
+        </p>
+        <hp-button
+          @handleClick="isAddMemberModalOpen = true"
+          label="Add member"
+          name="email"
+          primary
+        ></hp-button>
       </div>
     </div>
     <div v-if="isLoading" class="settings__spinner">
@@ -90,19 +74,17 @@
 
 <script setup>
 // Vendor
-import { ref, onMounted, computed } from "vue";
-import * as yup from "yup";
-import { useForm } from "vee-validate";
+import { ref, onMounted } from "vue";
 
 // Components
-import HpInput from "@/components/form/hp-input.vue";
 import HpButton from "@/components/hp-button.vue";
 import HpModal from "@/components/hp-modal.vue";
 import HpSpinner from "@/components/hp-spinner.vue";
 import OrganizationMember from "./organization-member.vue";
+import InviteMemberModal from "./invite-member-modal.vue";
 
 // Composables
-import { usePost, usePut, useGet, useDelete } from "@/composables/useHttp";
+import { usePut, useGet, useDelete } from "@/composables/useHttp";
 import useAuth from "@/composables/useAuth";
 import usePermissions from "@/composables/usePermissions";
 import useToast from "@/composables/useToast";
@@ -117,16 +99,11 @@ const isAddMemberModalOpen = ref(false);
 const memberToRemove = ref(null);
 const isRemovingMember = ref(false);
 const isConfirmMemberRemovalOpen = ref(false);
-const isSendingInvite = ref(false);
 const isChangingRole = ref(false);
 const isLoading = ref(true);
 const members = ref([]);
 
 const { setToast } = useToast();
-
-const schema = yup.object().shape({
-  email: yup.string().email(),
-});
 
 const fetchOrgs = async () => {
   const getOrganization = useGet(
@@ -139,13 +116,6 @@ const fetchOrgs = async () => {
 
 onMounted(() => {
   fetchOrgs();
-});
-
-const { handleSubmit, meta } = useForm({
-  validationSchema: schema,
-  initialValues: {
-    email: "",
-  },
 });
 
 const handleRemoveMember = async () => {
@@ -168,23 +138,14 @@ const handleRemovalRequest = (member) => {
   isConfirmMemberRemovalOpen.value = true;
 };
 
-const onSubmit = handleSubmit(async (values) => {
-  isSendingInvite.value = true;
-  const postInvitation = usePost("invitation");
-  await postInvitation.post({
-    invitation: {
-      email: values.email,
-    },
-  });
-
+const memberInvited = () => {
   setToast({
     type: "positive",
     title: "Invitation sent",
     message: `They will be able to accept this invitation from their email`,
   });
-  isSendingInvite.value = false;
   isAddMemberModalOpen.value = false;
-});
+};
 
 const handleRoleChange = async (payload) => {
   if (payload.role === payload.member.role) {
@@ -227,7 +188,6 @@ const handleRoleChange = async (payload) => {
     &__memberlist {
       display: flex;
       flex-direction: column;
-      margin-bottom: 16px;
     }
   }
 }

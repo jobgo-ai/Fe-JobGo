@@ -1,12 +1,15 @@
 <template>
   <li class="organization-member">
-    <div class="organization-member__name">
+    <div class="organization-member__name" v-if="member.name">
       {{ member.name }}
       <span class="organization-member__email">{{ member.email }}</span>
     </div>
+    <div class="organization-member__name" v-else>{{ member.email }}</div>
     <div class="organization-member__actions">
       <div
-        v-if="promotionList(member.role).length > 0"
+        v-if="
+          promotionList(member.role).length > 0 && user.email !== member.email
+        "
         class="organization-member__dropdown-target"
         @click="isRoleFlyoutOpen = !isRoleFlyoutOpen"
         ref="dropdownTarget"
@@ -38,14 +41,20 @@
           </div>
         </transition>
       </div>
-      <div class="organization-member__dropdown-target" v-else>
+      <div
+        class="
+          organization-member__dropdown-target
+          organization-member__dropdown-target--no-dropdown
+        "
+        v-else
+      >
         {{ member.role }}
       </div>
       <hp-button
         icon="trash"
         v-if="deletePermission"
         danger
-        @handleClick="handleRemovalRequest(member)"
+        @handleClick="emits('handleRemovalRequest', member)"
       ></hp-button>
     </div>
   </li>
@@ -64,7 +73,7 @@ import usePermissions from "@/composables/usePermissions";
 import useAuth from "@/composables/useAuth";
 import { onClickOutside } from "@vueuse/core";
 
-const { userRole } = useAuth();
+const { userRole, user } = useAuth();
 const { ROLES } = usePermissions();
 
 const props = defineProps({
@@ -78,14 +87,18 @@ const props = defineProps({
   },
 });
 
-const emits = defineEmits(["handleRoleChange"]);
+const emits = defineEmits(["handleRoleChange", "handleRemovalRequest"]);
 
 const dropdownTarget = ref(false);
 const isRoleFlyoutOpen = ref(false);
 
-const promotionList = (memberRole) => {
+const promotionList = (role) => {
+  if (role === "founder" || userRole.value === "member") {
+    return [];
+  }
   const filteredRoles = Object.keys(ROLES)
     .filter((r) => r !== "founder")
+    .filter((r) => r !== role)
     .filter((r) => ROLES[r].hierarchy >= ROLES[userRole.value].hierarchy);
   return filteredRoles;
 };
@@ -110,6 +123,7 @@ onClickOutside(dropdownTarget, (event) => {
   &__actions {
     display: flex;
     align-items: center;
+    gap: 12px;
   }
   &__name {
     display: flex;
@@ -132,9 +146,14 @@ onClickOutside(dropdownTarget, (event) => {
     position: relative;
     cursor: pointer;
     text-transform: capitalize;
+    padding-right: 6px;
     &__view {
       margin-right: 4px;
       color: var(--color-text-secondary);
+    }
+    &--no-dropdown {
+      opacity: 0.6;
+      cursor: default;
     }
   }
   &__flyout {

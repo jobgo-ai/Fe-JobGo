@@ -1,4 +1,4 @@
-import { state } from "./useAuth";
+import { state, userRole } from "./useAuth";
 
 const ROLES = {
   founder: {
@@ -28,16 +28,13 @@ export const hasOrganizationMemberDeletePermission = (entity) => {
     return false;
   }
 
-  if (entity.role === "owner" && state.user.organization.role === "founder") {
-    return true;
-  }
-
   if (entity.role === state.user.organization.role) {
     return false;
   }
 
   if (
-    ROLES[state.user.organization.role].hierarchy > ROLES[entity.role].hierarchy
+    ROLES[state.user.organization.role].hierarchy <=
+    ROLES[entity.role].hierarchy
   ) {
     return true;
   }
