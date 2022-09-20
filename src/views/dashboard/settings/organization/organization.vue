@@ -94,7 +94,7 @@ const {
   hasOrganizationMemberDeletePermission,
   ROLES,
 } = usePermissions();
-const { organization, user } = useAuth();
+const { organization, user, refreshToken } = useAuth();
 const isAddMemberModalOpen = ref(false);
 const memberToRemove = ref(null);
 const isRemovingMember = ref(false);
@@ -106,12 +106,14 @@ const members = ref([]);
 const { setToast } = useToast();
 
 const fetchOrgs = async () => {
+  isLoading.value = true;
   const getOrganization = useGet(
     `organizations/${organization.value.slug}/users`
   );
   await getOrganization.get();
   members.value = getOrganization.data.value.users;
   isLoading.value = false;
+  refreshToken();
 };
 
 onMounted(() => {
@@ -157,11 +159,11 @@ const handleRoleChange = async (payload) => {
   };
   const updateMember = usePut(`users/${payload.member.reference}/role`);
   await updateMember.put(formattedPayload);
-  fetchOrgs();
   setToast({
     type: "positive",
     title: "Member permission changed",
   });
+  fetchOrgs();
 };
 </script>
 
