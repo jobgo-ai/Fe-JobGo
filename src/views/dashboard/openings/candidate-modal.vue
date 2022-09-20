@@ -122,9 +122,6 @@ import Papa from "papaparse";
 //Components
 import HpInput from "@/components/form/hp-input.vue";
 import HpButton from "@/components/hp-button.vue";
-import HpIcon from "@/components/hp-icon.vue";
-import HpSpinner from "@/components/hp-spinner.vue";
-import HpDropdown from "@/components/form/hp-dropdown.vue";
 import HpTooltip from "@/components/hp-tooltip.vue";
 import HpDropzone from "@/components/hp-dropzone.vue";
 

@@ -15,8 +15,8 @@ import Evaluation from "@/views/public/reports/evaluation.vue";
 import Layout from "@/views/dashboard/layout.vue";
 import ChangePassword from "@/views/public/change-password.vue";
 import Settings from "@/views/dashboard/settings/settings.vue";
-import Billing from "@/views/dashboard/settings/billing.vue";
-import Organization from "@/views/dashboard/settings/organization.vue";
+import Billing from "@/views/dashboard/settings/organization/billing.vue";
+import Organization from "@/views/dashboard/settings/organization/organization.vue";
 
 //Openings
 import Openings from "@/views/dashboard/openings/openings.vue";

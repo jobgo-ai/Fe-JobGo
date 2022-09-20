@@ -1,5 +1,25 @@
 <template>
-  <div :class="`hp-badge hp-badge--${props.type} hp-badge--${props.size}`">
+  <div
+    v-if="tooltip"
+    :class="`hp-badge hp-badge--${props.type} hp-badge--${props.size}`"
+  >
+    <hp-tooltip position="top">
+      <div class="hp-badge__container">
+        <hp-icon
+          v-if="icon"
+          :size="14"
+          class="hp-badge__icon"
+          :name="icon"
+        ></hp-icon>
+      </div>
+      <template #content>{{ tooltip }}</template>
+    </hp-tooltip>
+    {{ props.content }}
+  </div>
+  <div
+    v-else
+    :class="`hp-badge hp-badge--${props.type} hp-badge--${props.size}`"
+  >
     <hp-icon
       v-if="icon"
       :size="14"
@@ -12,6 +32,7 @@
 
 <script setup>
 import HpIcon from "@/components/hp-icon.vue";
+import HpTooltip from "@/components/hp-tooltip.vue";
 const props = defineProps({
   icon: {
     type: String,
@@ -28,6 +49,10 @@ const props = defineProps({
   size: {
     type: String,
     default: "md",
+  },
+  tooltip: {
+    type: String,
+    default: null,
   },
 });
 </script>
@@ -47,6 +72,10 @@ const props = defineProps({
   line-height: 16px;
   border-radius: 6px;
   height: 20px;
+  &__container {
+    display: flex;
+    cursor: default;
+  }
   &__icon {
     margin-right: 6px;
   }

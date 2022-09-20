@@ -28,7 +28,11 @@
     </div>
     <div class="hp-interview-card__content" v-else>
       <div class="hp-interview-card__badge-container">
-        <hp-badge icon="layers" :content="index"></hp-badge>
+        <hp-badge
+          icon="layers"
+          :tooltip="`Interview #${index}`"
+          :content="index"
+        ></hp-badge>
         <hp-icon
           class="hp-interview-card__badge-container__handle"
           name="drag"

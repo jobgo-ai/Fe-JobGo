@@ -110,7 +110,11 @@
             <div class="results__questions__question">
               <div class="results__questions__container__header">
                 <div class="results__questions__container__time">
-                  <hp-badge icon="questions" :content="index + 1" />
+                  <hp-badge
+                    icon="questions"
+                    :tooltip="`Quesiton #${index + 1}`"
+                    :content="index + 1"
+                  />
                 </div>
                 <div
                   v-if="interaction.interaction?.answer"

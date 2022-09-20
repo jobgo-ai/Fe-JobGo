@@ -154,6 +154,7 @@
                 class="candidate-details__overview__skills-title__badge"
                 icon="skills"
                 :content="skillList ? skillList.length : 0"
+                tooltip="Skills"
               ></hp-badge>
             </div>
             <ol class="candidate-details__overview__skills">
