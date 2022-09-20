@@ -4,18 +4,24 @@ const ROLES = {
   founder: {
     hierarchy: 1,
     label: "Founder",
+    description: "Can appoint a new founder",
   },
   owner: {
     hierarchy: 2,
     label: "Owner",
+    description:
+      "Promote members & administrator to owners, has access to all openings, can edit organization and billing details",
   },
   administrator: {
     hierarchy: 3,
     label: "Admin",
+    description:
+      "Invite new users, can promote members to administrators, can create openings",
   },
   member: {
     hierarchy: 4,
     label: "Member",
+    description: "Only has access to explicitly permissioned openings",
   },
 };
 

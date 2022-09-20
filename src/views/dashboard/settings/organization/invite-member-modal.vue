@@ -50,7 +50,7 @@ const { handleSubmit, meta, values } = useForm({
 
 const onSubmit = handleSubmit(async (values) => {
   isSendingInvite.value = true;
-  const postInvitation = usePost("invitation");
+  const postInvitation = usePost("invitations");
   await postInvitation.post({
     invitation: {
       email: values.email,

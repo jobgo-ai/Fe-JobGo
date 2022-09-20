@@ -34,7 +34,16 @@
                   class="organization-member__flyout__options__button"
                   type="button"
                 >
-                  {{ role }}
+                  <div
+                    class="organization-member__flyout__options__option__title"
+                  >
+                    {{ role }}
+                  </div>
+                  <div
+                    class="organization-member__flyout__options__option__desc"
+                  >
+                    {{ ROLES[role].description }}
+                  </div>
                 </button>
               </li>
             </ol>
@@ -197,7 +206,8 @@ onClickOutside(dropdownTarget, (event) => {
         display: flex;
         justify-content: space-between;
         width: 100%;
-        text-transform: capitalize;
+        display: flex;
+        flex-direction: column;
         &:hover {
           background-color: var(--color-forground-floating);
         }
@@ -218,6 +228,17 @@ onClickOutside(dropdownTarget, (event) => {
         color: var(--color-text-primary);
         width: 100%;
         flex-direction: column;
+        &__title {
+          font-size: 14px;
+          font-weight: 500;
+          text-transform: capitalize;
+        }
+        &__desc {
+          font-size: 12px;
+          color: var(--color-text-secondary);
+          min-width: 230px;
+          text-align: left;
+        }
       }
     }
   }
