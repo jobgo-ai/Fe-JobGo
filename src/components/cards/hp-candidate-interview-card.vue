@@ -3,7 +3,11 @@
     <div
       class="candidate-details__interview-grid__item__header__badge-container"
     >
-      <hp-badge icon="layers" :content="index + 1"></hp-badge>
+      <hp-badge
+        icon="layers"
+        tooltip="Interviews"
+        :content="index + 1"
+      ></hp-badge>
       <hp-badge
         v-if="interview.statistics.candidateScore"
         :type="

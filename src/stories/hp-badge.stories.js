@@ -11,13 +11,14 @@ const Template = (args) => ({
   setup() {
     return { args };
   },
-  template: `<div style="display:flex">
+  template: `<div style="display:flex; margin-top:120px;">
     <hp-badge style="margin-right:8px;" content="4.0" v-bind="args"> </hp-badge>
     <hp-badge style="margin-right:8px;"  icon="layers" content="4" v-bind="args"> </hp-badge>
     <hp-badge style="margin-right:8px;" content="4.0"  type="positive" v-bind="args"> </hp-badge>
     <hp-badge style="margin-right:8px;"  icon="layers"  type="positive" content="4" v-bind="args"> </hp-badge>
     <hp-badge style="margin-right:8px;" content="4.0"  type="negative" v-bind="args"> </hp-badge>
     <hp-badge style="margin-right:8px;"  icon="layers"  type="negative" content="4" v-bind="args"> </hp-badge>
+    <hp-badge style="margin-right:8px;" content="Tooltip" tooltip="Interview" icon="layers"  type="negative" v-bind="args"> </hp-badge>
   </div>`,
 });
 
