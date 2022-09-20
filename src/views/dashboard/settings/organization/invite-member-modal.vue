@@ -14,7 +14,8 @@
       <hp-button
         primary
         type="submit"
-        :isDisabled="!meta.valid"
+        :isLoading="isSendingInvite"
+        :isDisabled="!meta.valid || isSendingInvite"
         label="Send invite"
       ></hp-button>
     </form>
@@ -57,5 +58,6 @@ const onSubmit = handleSubmit(async (values) => {
     },
   });
   emits("memberInvited");
+  isSendingInvite.value = false;
 });
 </script>

@@ -29,7 +29,7 @@
         :isOpen="isAddMemberModalOpen"
         @close="isAddMemberModalOpen = false"
       >
-        <invite-member-modal @memberInvited="onSubmit" />
+        <invite-member-modal @memberInvited="memberInvited" />
       </hp-modal>
       <h2 class="settings__title">
         {{ organization.name }}
