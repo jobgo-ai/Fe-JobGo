@@ -10,9 +10,9 @@ export const state = reactive({
   error: null,
   token: null,
   organization: null,
+  role: null,
+  plan: null,
 });
-
-export const userRole = ref(null);
 
 const token = window.localStorage.getItem(AUTH_KEY);
 if (token) {
@@ -33,7 +33,7 @@ export const refreshToken = async () => {
     });
     window.Intercom("update", { ...data.value.self });
     state.organization = data.value.self.organization;
-    userRole.value = data.value.self.organization?.role;
+    state.role = data.value.self.organization?.role;
   }
 };
 
@@ -66,7 +66,6 @@ export default () => {
     setUserDetails,
     logout,
     refreshToken,
-    userRole,
     ...toRefs(state),
   };
 };

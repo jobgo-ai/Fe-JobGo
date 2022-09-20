@@ -1,4 +1,4 @@
-import { state, userRole } from "./useAuth";
+import { state } from "./useAuth";
 
 const ROLES = {
   founder: {

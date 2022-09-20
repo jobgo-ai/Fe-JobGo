@@ -82,7 +82,7 @@ import usePermissions from "@/composables/usePermissions";
 import useAuth from "@/composables/useAuth";
 import { onClickOutside } from "@vueuse/core";
 
-const { userRole, user } = useAuth();
+const { role, user } = useAuth();
 const { ROLES } = usePermissions();
 
 const props = defineProps({
@@ -102,16 +102,16 @@ const dropdownTarget = ref(false);
 const isRoleFlyoutOpen = ref(false);
 
 const promotionList = (role) => {
-  if (role === "founder" || userRole.value === "member") {
+  if (role === "founder" || role === "member") {
     return [];
   }
-  if (role === userRole.value) {
+  if (role === role) {
     return [];
   }
   const filteredRoles = Object.keys(ROLES)
     .filter((r) => r !== "founder")
     .filter((r) => r !== role)
-    .filter((r) => ROLES[r].hierarchy >= ROLES[userRole.value].hierarchy);
+    .filter((r) => ROLES[r].hierarchy >= ROLES[role].hierarchy);
   return filteredRoles;
 };
 
