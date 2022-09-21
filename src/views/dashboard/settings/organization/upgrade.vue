@@ -28,7 +28,7 @@
         <div class="billing__tier__price">
           {{ `${dictionary[billingPeriod].startup.price}€` }}
         </div>
-        <hp-button fullWidth primary label="Switch to Startup"></hp-button>
+        <hp-button fullWidth primary label="Upgrade to Startup"></hp-button>
         <ul class="billing__tier__features">
           <li class="billing__tier__feature">Up to 5 active job openings</li>
           <li class="billing__tier__feature">Unlimited interviews</li>
@@ -50,7 +50,12 @@
         <div class="billing__tier__price">
           {{ `${dictionary[billingPeriod].growth.price}€` }}
         </div>
-        <hp-button fullWidth primary label="Switch to Growth"></hp-button>
+        <hp-button
+          fullWidth
+          primary
+          isDisabled
+          label="Growth coming soon"
+        ></hp-button>
         <ul class="billing__tier__features">
           <li class="billing__tier__feature">Up to 20 active job openings</li>
           <li class="billing__tier__feature">Unlimited interviews</li>
@@ -81,11 +86,10 @@
           </p>
         </div>
         <hp-button
-          href="https://meetings-eu1.hubspot.com/neea"
-          target="_blank"
           fullWidth
           primary
-          label="Setup a meeting"
+          label="Talk to us"
+          @handleClick="openIntercom"
         ></hp-button>
         <ul class="billing__tier__features">
           <li class="billing__tier__feature">Unlimited openings</li>
@@ -138,6 +142,13 @@ const dictionary = {
     startup: { price: 25 },
     growth: { price: 499 },
   },
+};
+
+const openIntercom = () => {
+  window.Intercom(
+    "showNewMessage",
+    "Hey Neea, I'm interested in Hireproof's enterprise plan!"
+  );
 };
 </script>
 

@@ -15,7 +15,7 @@ import Evaluation from "@/views/public/reports/evaluation.vue";
 import Layout from "@/views/dashboard/layout.vue";
 import ChangePassword from "@/views/public/change-password.vue";
 import Settings from "@/views/dashboard/settings/settings.vue";
-import Billing from "@/views/dashboard/settings/organization/billing.vue";
+import Upgrade from "@/views/dashboard/settings/organization/upgrade.vue";
 import Organization from "@/views/dashboard/settings/organization/organization.vue";
 
 //Openings
@@ -83,9 +83,9 @@ const routes = [
         component: Organization,
       },
       {
-        path: "billing",
-        name: "billing",
-        component: Billing,
+        path: "upgrade",
+        name: "upgrade",
+        component: Upgrade,
       },
     ],
   },

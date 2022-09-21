@@ -1,5 +1,5 @@
 <template>
-  <router-link class="hp-upgrade" to="/billing">
+  <router-link class="hp-upgrade" to="/upgrade">
     <hp-icon size="14" name="diamond"></hp-icon
     ><span class="hp-upgrade__text">Upgrade</span>
   </router-link>

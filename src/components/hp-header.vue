@@ -50,7 +50,7 @@
             </div>
             <div class="hp-header__dropdown__options">
               <router-link
-                to="/billing"
+                to="/upgrade"
                 tag="div"
                 class="
                   hp-header__dropdown__options__option
