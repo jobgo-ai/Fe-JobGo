@@ -1,9 +1,7 @@
 <template>
-  <router-link to="/billing">
-    <div class="hp-upgrade">
-      <hp-icon size="14" name="diamond"></hp-icon
-      ><span class="hp-upgrade__text">Upgrade</span>
-    </div>
+  <router-link class="hp-upgrade" to="/billing">
+    <hp-icon size="14" name="diamond"></hp-icon
+    ><span class="hp-upgrade__text">Upgrade</span>
   </router-link>
 </template>
 
@@ -21,6 +19,11 @@ import HpIcon from "@/components/hp-icon.vue";
   padding: 6px;
   font-size: 12px;
   font-weight: 600;
+  transition: background 0.15s ease-in-out;
+  height: 28px;
+  &:hover {
+    background-color: var(--yellow--400);
+  }
   &__text {
     margin-left: 2px;
   }

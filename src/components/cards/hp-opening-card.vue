@@ -29,18 +29,18 @@
       </div>
     </div>
     <div :class="`hp-opening-card__add-new`" v-if="isAddCard && hasMaxOpenings">
-      <div class="hp-opening-card__add-new__icon-container">
-        <hp-icon :size="24" name="plus"></hp-icon>
+      <div class="hp-opening-card__upgrade-container">
+        <div class="hp-opening-card__add-new__icon-container">
+          <hp-icon :size="24" name="plus"></hp-icon>
+        </div>
+        <hp-upgrade />
       </div>
       <p class="hp-opening-card__content__name">2/2 openings</p>
       <p class="hp-opening-card__content__description">
         You have reached the maximum amount of openings. Upgrade to open more.
         If you have any questions, contact us.
       </p>
-      <div class="hp-opening-card__upgrade-container">
-        <hp-button isDisabled label="Create new"></hp-button>
-        <hp-upgrade />
-      </div>
+      <hp-button isDisabled label="Create new"></hp-button>
     </div>
     <div class="hp-opening-card__archived" v-if="isArchived">
       <div class="hp-opening-card__archived-header">
@@ -216,8 +216,7 @@ const linkValue = computed(() => {
   }
   &__upgrade-container {
     display: flex;
-    align-items: center;
-    gap: 6px;
+    justify-content: space-between;
   }
   &__splash {
     flex-shrink: 0;
