@@ -5,7 +5,10 @@
     :to="linkValue"
     :class="containerClasses"
   >
-    <div class="hp-opening-card__add-new" v-if="isAddCard">
+    <div
+      :class="`hp-opening-card__add-new`"
+      v-if="isAddCard && !hasMaxOpenings"
+    >
       <div>
         <div
           @click="$emit('handleAddNew')"
@@ -23,6 +26,20 @@
           @handleClick="$emit('handleAddNew')"
           label="Create new"
         ></hp-button>
+      </div>
+    </div>
+    <div :class="`hp-opening-card__add-new`" v-if="isAddCard && hasMaxOpenings">
+      <div class="hp-opening-card__add-new__icon-container">
+        <hp-icon :size="24" name="plus"></hp-icon>
+      </div>
+      <p class="hp-opening-card__content__name">2/2 openings</p>
+      <p class="hp-opening-card__content__description">
+        You have reached the maximum amount of openings. Upgrade to open more.
+        If you have any questions, contact us.
+      </p>
+      <div class="hp-opening-card__upgrade-container">
+        <hp-button isDisabled label="Create new"></hp-button>
+        <hp-upgrade />
       </div>
     </div>
     <div class="hp-opening-card__archived" v-if="isArchived">
@@ -104,6 +121,11 @@ import HpButton from "@/components/hp-button.vue";
 import HpBadge from "@/components/hp-badge.vue";
 import HpAbstractAvatar from "@/components/hp-abstract-avatar.vue";
 import HpIcon from "@/components/hp-icon.vue";
+import HpUpgrade from "@/components/hp-upgrade.vue";
+
+// Composables
+import usePlans from "@/composables/usePlans";
+import useOpenings from "@/composables/useOpenings";
 
 const props = defineProps({
   opening: {
@@ -124,6 +146,9 @@ const props = defineProps({
   },
 });
 
+const { openings } = useOpenings();
+const { getPlanVariable } = usePlans();
+
 const tag = props.isAddCard || props.isArchived ? "div" : "router-link";
 
 const route = useRoute();
@@ -135,6 +160,9 @@ const splash = defineAsyncComponent(() =>
     /* @vite-ignore */ `../../assets/abstracts/covers/cover_${props.opening.artwork}.svg`
   )
 );
+const hasMaxOpenings = computed(() => {
+  return openings.value.length >= getPlanVariable("openings");
+});
 
 const containerClasses = computed(() => {
   return {
@@ -185,6 +213,11 @@ const linkValue = computed(() => {
   }
   &:focus {
     outline: 4px solid var(--color-focus);
+  }
+  &__upgrade-container {
+    display: flex;
+    align-items: center;
+    gap: 6px;
   }
   &__splash {
     flex-shrink: 0;

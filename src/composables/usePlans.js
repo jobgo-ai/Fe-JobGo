@@ -1,4 +1,6 @@
-import { plan } from "./useAuth";
+import useAuth from "./useAuth";
+
+const { plan } = useAuth();
 
 const PLAN_VARIABLES = {
   openings: {
@@ -17,7 +19,7 @@ const PLAN_FEATURES = {
 };
 
 const getPlanVariable = (feature) => {
-  return PLAN_VARIABLES[feature][plan];
+  return PLAN_VARIABLES[feature][plan.value];
 };
 
 export default () => {

@@ -337,10 +337,10 @@ const { hasHeaderSaveButton } = useBreadcrumbs();
           justify-content: space-between;
         }
         &--upgrade {
-          background-color: var(--purple--500);
+          background-color: var(--yellow--500);
           color: var(--color-accent-forground);
           &:hover {
-            background-color: var(--purple--400);
+            background-color: var(--yellow--400);
           }
         }
       }
