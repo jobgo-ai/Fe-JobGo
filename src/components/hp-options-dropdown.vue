@@ -29,7 +29,7 @@ onClickOutside(target, (event) => {
 });
 </script>
 
-<swaggers lang="scss">
+<style lang="scss">
 .hp-options-dropdown {
   &__flyout {
     position: relative;
@@ -49,4 +49,4 @@ onClickOutside(target, (event) => {
     }
   }
 }
-</swaggers>
+</style>
