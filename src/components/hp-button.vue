@@ -115,6 +115,9 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  variant: {
+    type: String,
+  },
 });
 
 const isDropdownOpen = ref(false);
@@ -164,6 +167,7 @@ const buttonClasses = computed(() => {
     "hp-button__button--primary": props.primary,
     "hp-button__button--button-icon": props.icon && !props.label,
     "hp-button__button--full-width": props.fullWidth,
+    [`hp-button__button--${props.variant}`]: props.variant,
   };
 });
 
@@ -234,7 +238,7 @@ const emit = defineEmits(["handleClick"]);
     white-space: nowrap;
     border: 1px solid var(--color-border);
     border-radius: $border-radius-sm;
-    transition: border-color 0.15s cubic-bezier(0.17, 0.67, 0.83, 0.67);
+    transition: all 0.15s cubic-bezier(0.17, 0.67, 0.83, 0.67);
     filter: drop-shadow(0px 4px 8px rgba(33, 44, 51, 0.02))
       drop-shadow(0px 0px 1px rgba(33, 44, 51, 0.02));
 
@@ -351,14 +355,27 @@ const emit = defineEmits(["handleClick"]);
         border: 1px dashed var(--color-text-tertiary);
       }
     }
+    &--plan {
+      color: var(--color-accent-forground);
+      background-color: var(--yellow--500);
+      border-color: var(--yellow--500);
+      > .hp-button__button__icon {
+        color: var(--color-accent-forground);
+      }
+      &:hover {
+        background-color: var(--yellow--400);
+        border-color: var(--yellow--400);
+      }
+    }
   }
   &--primary > .hp-button__button {
     color: var(--color-accent-forground);
-    background-color: var(--color-accent-background);
-    border-color: var(--color-accent-background);
+    background-color: var(--primary--500);
+    border-color: var(--primary--500);
     &:active:not([disabled]),
     &:hover:not([disabled]) {
-      background-color: var(--color-accent-background);
+      background-color: var(--primary--400);
+      border-color: var(--primary--400);
       box-shadow: 0px 4px 8px rgba(33, 44, 51, 0.02),
         0px 0px 1px rgba(33, 44, 51, 0.02);
     }

@@ -1,87 +1,95 @@
 <template>
-  <div class="billing">
-    <h1 class="billing__title">Upgrade</h1>
-    <div class="billing__header">
-      <p class="billing__header__plan">
-        <hp-badge icon="diamond" type="positive" content="Free"></hp-badge>
+  <div class="upgrade">
+    <h1 class="upgrade__title">Upgrade</h1>
+    <div class="upgrade__header">
+      <p class="upgrade__header__plan">
+        <hp-badge icon="diamond" type="positive" :content="plan"></hp-badge>
         <hp-badge
+          v-if="openings.length > 0"
           icon="template"
           type="positive"
-          content="7 / 2 Openings"
+          :content="`${openings.length} / 2 Openings`"
         ></hp-badge>
       </p>
     </div>
     <hp-tabs
-      class="billing__header__toggle"
+      class="upgrade__header__toggle"
       :options="[
         { value: 'yearly', label: 'Yearly' },
         { value: 'monthly', label: 'Monthly' },
       ]"
       v-model="billingPeriod"
     />
-    <ol class="billing__grid">
-      <li class="billing__tier">
-        <h2 class="billing__tier__title">Startup</h2>
-        <p class="billing__tier__description">
+    <ol class="upgrade__grid">
+      <li class="upgrade__tier upgrade__tier--startup">
+        <h2 class="upgrade__tier__title">Startup</h2>
+        <p class="upgrade__tier__description">
           Blah blah startup content here whats that ya chunks
         </p>
-        <div class="billing__tier__price">
+        <div class="upgrade__tier__price">
           {{ `${dictionary[billingPeriod].startup.price}€` }}
         </div>
-        <hp-button fullWidth primary label="Upgrade to Startup"></hp-button>
-        <ul class="billing__tier__features">
-          <li class="billing__tier__feature">Up to 5 active job openings</li>
-          <li class="billing__tier__feature">Unlimited interviews</li>
-          <li class="billing__tier__feature">Unlimited candidates</li>
-          <li class="billing__tier__feature">Unlimited interviewers</li>
-          <li class="billing__tier__feature">
+        <hp-button
+          fullWidth
+          variant="plan"
+          icon="diamond"
+          label="Upgrade to Startup"
+        ></hp-button>
+        <ul class="upgrade__tier__features">
+          <li class="upgrade__tier__feature">Up to 5 active job openings</li>
+          <li class="upgrade__tier__feature">Unlimited interviews</li>
+          <li class="upgrade__tier__feature">Unlimited candidates</li>
+          <li class="upgrade__tier__feature">Unlimited interviewers</li>
+          <li class="upgrade__tier__feature">
             Ready to use interview templates
           </li>
-          <li class="billing__tier__feature">In depth candidate comparison</li>
-          <li class="billing__tier__feature">Single sign on (SSO)</li>
-          <li class="billing__tier__feature">Help Center / Knowledge base</li>
+          <li class="upgrade__tier__feature">In depth candidate comparison</li>
+          <li class="upgrade__tier__feature">Single sign on (SSO)</li>
+          <li class="upgrade__tier__feature">Help Center / Knowledge base</li>
         </ul>
       </li>
-      <li class="billing__tier">
-        <h2 class="billing__tier__title">Growth</h2>
-        <p class="billing__tier__description">
+      <li class="upgrade__tier">
+        <h2 class="upgrade__tier__title">Growth</h2>
+        <p class="upgrade__tier__description">
           Blah blah startup content here whats that ya chunks
         </p>
-        <div class="billing__tier__price">
+        <div class="upgrade__tier__price">
           {{ `${dictionary[billingPeriod].growth.price}€` }}
         </div>
         <hp-button
           fullWidth
           primary
-          isDisabled
-          label="Growth coming soon"
+          label="Talk to us"
+          @handleClick="
+            openIntercom(`Hey Neea, I'm interested in Hireproof's growth plan!`)
+          "
         ></hp-button>
-        <ul class="billing__tier__features">
-          <li class="billing__tier__feature">Up to 20 active job openings</li>
-          <li class="billing__tier__feature">Unlimited interviews</li>
-          <li class="billing__tier__feature">Unlimited candidates</li>
-          <li class="billing__tier__feature">Unlimited interviewers</li>
-          <li class="billing__tier__feature">
+        <ul class="upgrade__tier__features">
+          <li class="upgrade__tier__feature">Up to 20 active job openings</li>
+          <li class="upgrade__tier__feature">Unlimited interviews</li>
+          <li class="upgrade__tier__feature">Unlimited candidates</li>
+          <li class="upgrade__tier__feature">Unlimited interviewers</li>
+          <li class="upgrade__tier__feature">
             Ready to use interview templates
           </li>
-          <li class="billing__tier__feature">In depth candidate comparison</li>
-          <li class="billing__tier__feature">Single sign on (SSO)</li>
-          <li class="billing__tier__feature">Help Center / Knowledge base</li>
-          <li class="billing__tier__feature">Panel interviewing</li>
-          <li class="billing__tier__feature">
+          <li class="upgrade__tier__feature">In depth candidate comparison</li>
+          <li class="upgrade__tier__feature">Single sign on (SSO)</li>
+          <li class="upgrade__tier__feature">Help Center / Knowledge base</li>
+          <li class="upgrade__tier__feature">Panel interviewing</li>
+          <li class="upgrade__tier__feature">
             Organization / Multi-user platform
           </li>
-          <li class="billing__tier__feature">Integrations</li>
-          <li class="billing__tier__feature">Customer support</li>
+          <li class="upgrade__tier__feature">Integrations</li>
+          <li class="upgrade__tier__feature">Customer support</li>
         </ul>
       </li>
-      <li class="billing__tier">
-        <h2 class="billing__tier__title">Enterprise</h2>
-        <p class="billing__tier__description">
+      <li class="upgrade__tier">
+        <h2 class="upgrade__tier__title">Enterprise</h2>
+        <p class="upgrade__tier__description">
           Blah blah startup content here whats that ya chunks
         </p>
-        <div class="billing__tier__price--enterprise">
-          <p class="billing__tier__text">
+        <div class="upgrade__tier__price--enterprise">
+          <p class="upgrade__tier__text">
             Reach out, we are open to new enterprise opportunities
           </p>
         </div>
@@ -89,25 +97,29 @@
           fullWidth
           primary
           label="Talk to us"
-          @handleClick="openIntercom"
+          @handleClick="
+            openIntercom(
+              `Hey Neea, I'm interested in Hireproof's enterprise plan!`
+            )
+          "
         ></hp-button>
-        <ul class="billing__tier__features">
-          <li class="billing__tier__feature">Unlimited openings</li>
-          <li class="billing__tier__feature">Unlimited interviews</li>
-          <li class="billing__tier__feature">Unlimited candidates</li>
-          <li class="billing__tier__feature">Unlimited interviewers</li>
-          <li class="billing__tier__feature">
+        <ul class="upgrade__tier__features">
+          <li class="upgrade__tier__feature">Unlimited openings</li>
+          <li class="upgrade__tier__feature">Unlimited interviews</li>
+          <li class="upgrade__tier__feature">Unlimited candidates</li>
+          <li class="upgrade__tier__feature">Unlimited interviewers</li>
+          <li class="upgrade__tier__feature">
             Ready to use interview templates
           </li>
-          <li class="billing__tier__feature">In depth candidate comparison</li>
-          <li class="billing__tier__feature">Single sign on (SSO)</li>
-          <li class="billing__tier__feature">Help Center / Knowledge base</li>
-          <li class="billing__tier__feature">Panel interviewing</li>
-          <li class="billing__tier__feature">
+          <li class="upgrade__tier__feature">In depth candidate comparison</li>
+          <li class="upgrade__tier__feature">Single sign on (SSO)</li>
+          <li class="upgrade__tier__feature">Help Center / Knowledge base</li>
+          <li class="upgrade__tier__feature">Panel interviewing</li>
+          <li class="upgrade__tier__feature">
             Organization / Multi-user platform
           </li>
-          <li class="billing__tier__feature">Integrations</li>
-          <li class="billing__tier__feature">
+          <li class="upgrade__tier__feature">Integrations</li>
+          <li class="upgrade__tier__feature">
             Dedicated Customer Support / CSM
           </li>
         </ul>
@@ -118,16 +130,19 @@
 
 <script setup>
 // Vendor
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 
 // Components
 import HpButton from "@/components/hp-button.vue";
 import HpBadge from "@/components/hp-badge.vue";
 import HpTabs from "@/components/hp-tabs.vue";
-import HpIcon from "@/components/hp-icon.vue";
 
 // Composables
-import useToast from "@/composables/useToast";
+import useOpenings from "@/composables/useOpenings";
+import useAuth from "@/composables/useAuth";
+
+const { openings, fetchOpenings } = useOpenings();
+const { plan } = useAuth();
 
 const billingPeriod = ref("yearly");
 
@@ -144,17 +159,20 @@ const dictionary = {
   },
 };
 
-const openIntercom = () => {
-  window.Intercom(
-    "showNewMessage",
-    "Hey Neea, I'm interested in Hireproof's enterprise plan!"
-  );
+const openIntercom = (message) => {
+  window.Intercom("showNewMessage", message);
 };
+
+onMounted(() => {
+  fetchOpenings();
+});
 </script>
 
 <styles lang="scss">
-.billing {
+.upgrade {
   @include pageContainer;
+  overflow: visible;
+  margin-bottom: 120px;
   &__title {
     @include text-h1;
     margin-bottom: 12px;
@@ -171,6 +189,7 @@ const openIntercom = () => {
     &__plan {
       display: flex;
       align-items: center;
+      text-transform: capitalize;
       gap: 6px;
       @include text-h2;
       margin-bottom: 12px;

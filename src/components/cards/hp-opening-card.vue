@@ -35,7 +35,9 @@
         </div>
         <hp-upgrade />
       </div>
-      <p class="hp-opening-card__content__name">2/2 openings</p>
+      <p class="hp-opening-card__content__name">
+        {{ openings.length }}/2 openings
+      </p>
       <p class="hp-opening-card__content__description">
         You have reached the maximum amount of openings. Upgrade to open more.
         If you have any questions, contact us.
