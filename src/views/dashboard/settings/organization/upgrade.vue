@@ -3,11 +3,15 @@
     <h1 class="upgrade__title">Upgrade</h1>
     <div class="upgrade__header">
       <p class="upgrade__header__plan">
-        <hp-badge icon="diamond" type="positive" :content="plan"></hp-badge>
+        <hp-badge icon="diamond" :content="plan"></hp-badge>
         <hp-badge
           v-if="openings.length > 0"
           icon="template"
-          type="positive"
+          :type="
+            openings.length > getPlanVariable('openings')
+              ? 'negative'
+              : 'positive'
+          "
           :content="`${openings.length} / 2 Openings`"
         ></hp-badge>
       </p>
@@ -140,9 +144,11 @@ import HpTabs from "@/components/hp-tabs.vue";
 // Composables
 import useOpenings from "@/composables/useOpenings";
 import useAuth from "@/composables/useAuth";
+import usePlans from "@/composables/usePlans";
 
 const { openings, fetchOpenings } = useOpenings();
 const { plan } = useAuth();
+const { getPlanVariable } = usePlans();
 
 const billingPeriod = ref("yearly");
 

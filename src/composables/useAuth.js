@@ -11,7 +11,7 @@ export const state = reactive({
   token: null,
   organization: null,
   role: null,
-  plan: "free",
+  plan: "startup",
 });
 
 const token = window.localStorage.getItem(AUTH_KEY);

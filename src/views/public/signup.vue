@@ -119,7 +119,11 @@ const onSubmit = handleSubmit(async (values) => {
     error.value = false;
     const { setUser } = useAuth();
     setUser(data.user, true);
-    router.push("/");
+    if (route.query.upgrade) {
+      router.push("/upgrade");
+    } else {
+      router.push("/");
+    }
   } catch (error) {
     setFieldError("email", "Something went wrong");
     isLoading.value = false;
