@@ -27,7 +27,7 @@
             label="Description"
             name="description"
           ></hp-textarea>
-          <hp-member-permission />
+          <hp-member-permission v-if="organization" />
           <hp-image-selector
             class="edit-openings__edit-container__cover-selector"
             label="Cover"
