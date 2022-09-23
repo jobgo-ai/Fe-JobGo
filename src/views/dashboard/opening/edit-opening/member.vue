@@ -4,48 +4,22 @@
       <div>{{ member.name }}</div>
       <div class="member__details__role">{{ member.role }}</div>
     </div>
-    <div
-      @click="isPermissionFlyoutOpen = !isPermissionFlyoutOpen"
-      class="member__dropdown-target"
-      ref="dropdownTarget"
-    >
-      <div class="member__dropdown-target">
-        Member
-        <hp-icon
-          class="organization-member__dropdown-target__icon"
-          name="chevron-down"
-        ></hp-icon>
-      </div>
-      <hp-icon
-        class="member__dropdown-target__icon"
-        name="chevron-down"
-      ></hp-icon>
-
-      <transition name="flyout-transition">
-        <div v-if="isPermissionFlyoutOpen" class="member__flyout">
-          <ol class="member__flyout__options">
-            <li
-              v-for="(role, index) in permissionList(member.role)"
-              class="member__flyout__options__option"
-              @click="emits('handleRoleChange', { member, role })"
-            >
-              <button class="member__flyout__options__button" type="button">
-                <div class="member__flyout__options__option__title">
-                  {{ role }}
-                </div>
-                <div class="member__flyout__options__option__desc"></div>
-              </button>
-            </li>
-          </ol>
-        </div>
-      </transition>
-    </div>
+    <hp-dropdown-list
+      :label="member.role"
+      :options="permissionList()"
+    ></hp-dropdown-list>
   </div>
 </template>
 
 <script setup>
 // Vendor
-import { onMounted, ref } from "vue";
+import { onMounted } from "vue";
+
+// Components
+import HpDropdownList from "@/components/hp-dropdown-list.vue";
+
+// Composables
+import useOrganization from "@/composables/useOrganization";
 
 const props = defineProps({
   member: {
@@ -53,14 +27,14 @@ const props = defineProps({
   },
 });
 
-const dropdownTarget = ref(null);
-const isPermissionFlyoutOpen = ref(false);
+const { COLLABORATORS } = useOrganization();
 
-const permissionList = (member) => {
-  return ["fuck", "fuck"];
+const permissionList = () => {
+  return Object.keys(COLLABORATORS).map((key) => ({
+    value: key,
+    description: COLLABORATORS[key].description,
+  }));
 };
-
-onMounted(async () => {});
 </script>
 
 <style lang="scss">

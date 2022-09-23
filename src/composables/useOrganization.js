@@ -7,9 +7,16 @@ const { organization } = useAuth();
 const members = ref([]);
 
 const COLLABORATORS = {
-  creator: {},
-  manager: {},
-  member: {},
+  creator: {
+    description: "Administrator of the opening",
+  },
+  manager: {
+    description:
+      "Can view opening, create  and edit interviews, create, view, and edit candidates",
+  },
+  member: {
+    description: "Can view opening, create interviews, and edit interviews",
+  },
 };
 
 export default () => {
@@ -23,5 +30,6 @@ export default () => {
   return {
     fetchMembers,
     members,
+    COLLABORATORS,
   };
 };
