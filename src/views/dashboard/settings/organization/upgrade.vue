@@ -53,9 +53,8 @@
         <hp-button
           v-else
           fullWidth
-          variant="plan"
-          icon="diamond"
-          label="Upgrade to Startup"
+          primary
+          label="Ask your Organization admin"
           :isDisabled="true"
         ></hp-button>
         <ul class="upgrade__tier__features">
