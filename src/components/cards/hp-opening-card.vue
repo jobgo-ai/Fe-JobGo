@@ -36,7 +36,7 @@
         <hp-upgrade />
       </div>
       <p class="hp-opening-card__content__name">
-        {{ openings.length }}/2 openings
+        {{ `${openings.length}/${getPlanVariable("openings")} openings` }}
       </p>
       <p class="hp-opening-card__content__description">
         You have reached the maximum amount of openings. Upgrade to open more.

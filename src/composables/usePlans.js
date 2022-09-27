@@ -11,8 +11,8 @@ const PLAN_VARIABLES = {
   },
   payment: {
     startup: {
-      monthly: import.meta.env.VITE_PAYMENT_STARTUP_MONTHLY,
-      yearly: import.meta.env.VITE_PAYMENT_STARTUP_YEARLY,
+      monthly: import.meta.env.VITE_PAYMENT_GROWTH_MONTHLY,
+      yearly: import.meta.env.VITE_PAYMENT_GROWTH_YEARLY,
     },
     growth: {
       monthly: import.meta.env.VITE_PAYMENT_GROWTH_MONTHLY,
@@ -21,8 +21,8 @@ const PLAN_VARIABLES = {
   },
 };
 
-const getPlanVariable = (feature) => {
-  return PLAN_VARIABLES[feature][plan.value];
+const getPlanVariable = (feature, currentPlan = plan.value) => {
+  return PLAN_VARIABLES[feature][currentPlan];
 };
 
 export default () => {

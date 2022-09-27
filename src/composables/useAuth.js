@@ -11,7 +11,7 @@ export const state = reactive({
   token: null,
   organization: null,
   role: null,
-  plan: "startup",
+  plan: "free",
 });
 
 const token = window.localStorage.getItem(AUTH_KEY);
@@ -34,17 +34,24 @@ export const refreshToken = async () => {
     window.Intercom("update", { ...data.value.self });
     state.organization = data.value.self.organization;
     state.role = data.value.self.organization?.role;
+
+    const getQuota = useGet("self/quota");
+    await getQuota.get();
+    state.plan = getQuota.data.value.quota.tier;
   }
 };
 
 export default () => {
-  const setUser = (payload, remember = true) => {
+  const setUser = async (payload, remember = true) => {
     if (remember) {
       window.localStorage.setItem(AUTH_KEY, payload[AUTH_TOKEN]);
     }
     document.cookie = "backofficeUser=true; SameSite=None; Secure";
     state.token = payload[AUTH_TOKEN];
     state.error = undefined;
+    const getQuota = useGet("self/quota");
+    await getQuota.get();
+    state.plan = getQuota.data.value.quota.tier;
   };
 
   const setUserDetails = (data) => {

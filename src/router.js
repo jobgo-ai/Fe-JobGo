@@ -16,6 +16,7 @@ import Layout from "@/views/dashboard/layout.vue";
 import ChangePassword from "@/views/public/change-password.vue";
 import Settings from "@/views/dashboard/settings/settings.vue";
 import Upgrade from "@/views/dashboard/settings/organization/upgrade.vue";
+import Upgraded from "@/views/dashboard/settings/organization/upgraded.vue";
 import Organization from "@/views/dashboard/settings/organization/organization.vue";
 
 //Openings
@@ -86,6 +87,11 @@ const routes = [
         path: "upgrade",
         name: "upgrade",
         component: Upgrade,
+      },
+      {
+        path: "upgraded",
+        name: "upgraded",
+        component: Upgraded,
       },
     ],
   },

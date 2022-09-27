@@ -12,7 +12,9 @@
               ? 'negative'
               : 'positive'
           "
-          :content="`${openings.length} / 2 Openings`"
+          :content="`${openings.length}/${getPlanVariable(
+            'openings'
+          )} openings`"
         ></hp-badge>
       </p>
     </div>
@@ -25,7 +27,10 @@
       v-model="billingPeriod"
     />
     <ol class="upgrade__grid">
-      <li class="upgrade__tier upgrade__tier--startup">
+      <li
+        v-if="plan !== 'startup'"
+        class="upgrade__tier upgrade__tier--startup"
+      >
         <h2 class="upgrade__tier__title">Startup</h2>
         <p class="upgrade__tier__description">
           Blah blah startup content here whats that ya chunks
@@ -33,7 +38,11 @@
         <div class="upgrade__tier__price">
           {{ `${dictionary[billingPeriod].startup.price}€` }}
         </div>
-        <a target="_blank" :href="getPlanVariable('payment')[billingPeriod]">
+        <a
+          v-if="isAllowedToPurchase"
+          target="_blank"
+          :href="getPlanVariable('payment', 'startup')[billingPeriod]"
+        >
           <hp-button
             fullWidth
             variant="plan"
@@ -41,6 +50,14 @@
             label="Upgrade to Startup"
           ></hp-button>
         </a>
+        <hp-button
+          v-else
+          fullWidth
+          variant="plan"
+          icon="diamond"
+          label="Upgrade to Startup"
+          :isDisabled="true"
+        ></hp-button>
         <ul class="upgrade__tier__features">
           <li class="upgrade__tier__feature">Up to 5 active job openings</li>
           <li class="upgrade__tier__feature">Unlimited interviews</li>
@@ -143,7 +160,7 @@
 
 <script setup>
 // Vendor
-import { onMounted, ref } from "vue";
+import { onMounted, ref, computed } from "vue";
 
 // Components
 import HpButton from "@/components/hp-button.vue";
@@ -156,7 +173,7 @@ import useAuth from "@/composables/useAuth";
 import usePlans from "@/composables/usePlans";
 
 const { openings, fetchOpenings } = useOpenings();
-const { plan } = useAuth();
+const { plan, organization } = useAuth();
 const { getPlanVariable } = usePlans();
 
 const billingPeriod = ref("yearly");
@@ -180,6 +197,21 @@ const openIntercom = (message) => {
 
 onMounted(() => {
   fetchOpenings();
+});
+
+const isAllowedToPurchase = computed(() => {
+  if (!organization.value?.role) {
+    return true;
+  }
+  if (
+    organization &&
+    (organization.value.role === "founder" ||
+      organization.value.role === "owner")
+  ) {
+    return true;
+  }
+
+  return false;
 });
 </script>
 
