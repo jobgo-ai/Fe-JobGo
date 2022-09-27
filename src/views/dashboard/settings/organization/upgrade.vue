@@ -33,12 +33,14 @@
         <div class="upgrade__tier__price">
           {{ `${dictionary[billingPeriod].startup.price}€` }}
         </div>
-        <hp-button
-          fullWidth
-          variant="plan"
-          icon="diamond"
-          label="Upgrade to Startup"
-        ></hp-button>
+        <a target="_blank" :href="getPlanVariable('payment')[billingPeriod]">
+          <hp-button
+            fullWidth
+            variant="plan"
+            icon="diamond"
+            label="Upgrade to Startup"
+          ></hp-button>
+        </a>
         <ul class="upgrade__tier__features">
           <li class="upgrade__tier__feature">Up to 5 active job openings</li>
           <li class="upgrade__tier__feature">Unlimited interviews</li>
@@ -129,6 +131,13 @@
         </ul>
       </li>
     </ol>
+    <div class="upgrade__manage">
+      <a
+        target="_blank"
+        href="https://billing.stripe.com/p/login/3cs3e39et5QC2Qw288"
+        >Manage your subscription here</a
+      >
+    </div>
   </div>
 </template>
 
@@ -179,6 +188,13 @@ onMounted(() => {
   @include pageContainer;
   overflow: visible;
   margin-bottom: 120px;
+  &__manage {
+    text-decoration: underline;
+    margin-top: 124px;
+    padding-bottom: 124px;
+    text-align: center;
+    margin: auto;
+  }
   &__title {
     @include text-h1;
     margin-bottom: 12px;
