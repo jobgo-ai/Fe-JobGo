@@ -33,7 +33,7 @@
       >
         <h2 class="upgrade__tier__title">Startup</h2>
         <p class="upgrade__tier__description">
-          Individual users, or companies with less than 2 openings
+          Hiring managers or early-stage startups
         </p>
         <div class="upgrade__tier__price">
           {{ `${dictionary[billingPeriod].startup.price}€` }}
@@ -72,7 +72,7 @@
       <li class="upgrade__tier">
         <h2 class="upgrade__tier__title">Growth</h2>
         <p class="upgrade__tier__description">
-          Scaleups, companies with between 5 and 50 openings
+          Scaleups with a growing hiring volume
         </p>
         <div class="upgrade__tier__price">
           {{ `${dictionary[billingPeriod].growth.price}€` }}
@@ -107,7 +107,7 @@
       <li class="upgrade__tier">
         <h2 class="upgrade__tier__title">Enterprise</h2>
         <p class="upgrade__tier__description">
-          Enterprise level companies with 50+ openings
+          Global companies with a high hiring volume
         </p>
         <div class="upgrade__tier__price--enterprise">
           <p class="upgrade__tier__text">
