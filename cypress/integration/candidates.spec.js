@@ -31,6 +31,6 @@ describe("candidates", () => {
     cy.contains("PERMANENT_OPENING").click();
     cy.contains("Testing person").click();
     cy.contains("Edit details").click();
-    cy.get(".candidate-modal__archive").click();
+    cy.get("button.candidate-modal__archive").click();
   });
 });

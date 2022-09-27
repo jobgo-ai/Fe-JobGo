@@ -5,7 +5,7 @@ describe("questions", () => {
 
   it("Can view questions", () => {
     cy.contains("PERMANENT_OPENING").click();
-    cy.get(".candidate-list__header__button-group__edit-button").click();
+    cy.get("a.candidate-list__header__button-group__edit-button").click();
     cy.contains("DONT_DELETE")
       .parents(".hp-interview-card")
       .find("a")
@@ -20,7 +20,7 @@ describe("questions", () => {
 
   it("Can add a new question", () => {
     cy.contains("PERMANENT_OPENING").click();
-    cy.get(".candidate-list__header__button-group__edit-button").click();
+    cy.get("a.candidate-list__header__button-group__edit-button").click();
     cy.contains("DONT_DELETE")
       .parents(".hp-interview-card")
       .find("a")
@@ -41,13 +41,13 @@ describe("questions", () => {
 
   it("Can delete a question", () => {
     cy.contains("PERMANENT_OPENING").click();
-    cy.get(".candidate-list__header__button-group__edit-button").click();
+    cy.get("a.candidate-list__header__button-group__edit-button").click();
     cy.contains("DONT_DELETE")
       .parents(".hp-interview-card")
       .find("a")
       .contains("Edit interview")
       .click();
-    cy.get(".hp-options-dropdown__flyout").eq(2).click();
+    cy.get(".hp-options-dropdown__flyout").eq(1).click();
     cy.contains("Edit question").click();
     cy.contains("Delete question template").click();
     cy.get(`[name='confirmation']`).type("DELETE");

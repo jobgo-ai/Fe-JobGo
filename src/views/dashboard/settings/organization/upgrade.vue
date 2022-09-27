@@ -33,14 +33,13 @@
       >
         <h2 class="upgrade__tier__title">Startup</h2>
         <p class="upgrade__tier__description">
-          Blah blah startup content here whats that ya chunks
+          Individual users, or companies with less than 2 openings
         </p>
         <div class="upgrade__tier__price">
           {{ `${dictionary[billingPeriod].startup.price}€` }}
         </div>
         <a
           v-if="isAllowedToPurchase"
-          target="_blank"
           :href="getPlanVariable('payment', 'startup')[billingPeriod]"
         >
           <hp-button
@@ -73,7 +72,7 @@
       <li class="upgrade__tier">
         <h2 class="upgrade__tier__title">Growth</h2>
         <p class="upgrade__tier__description">
-          Blah blah startup content here whats that ya chunks
+          Scaleups, companies with between 5 and 50 openings
         </p>
         <div class="upgrade__tier__price">
           {{ `${dictionary[billingPeriod].growth.price}€` }}
@@ -108,7 +107,7 @@
       <li class="upgrade__tier">
         <h2 class="upgrade__tier__title">Enterprise</h2>
         <p class="upgrade__tier__description">
-          Blah blah startup content here whats that ya chunks
+          Enterprise level companies with 50+ openings
         </p>
         <div class="upgrade__tier__price--enterprise">
           <p class="upgrade__tier__text">
