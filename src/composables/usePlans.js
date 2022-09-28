@@ -11,8 +11,8 @@ const PLAN_VARIABLES = {
   },
   payment: {
     startup: {
-      monthly: import.meta.env.VITE_PAYMENT_GROWTH_MONTHLY,
-      yearly: import.meta.env.VITE_PAYMENT_GROWTH_YEARLY,
+      monthly: import.meta.env.VITE_PAYMENT_STARTUP_MONTHLY,
+      yearly: import.meta.env.VITE_PAYMENT_STARTUP_YEARLY,
     },
     growth: {
       monthly: import.meta.env.VITE_PAYMENT_GROWTH_MONTHLY,
