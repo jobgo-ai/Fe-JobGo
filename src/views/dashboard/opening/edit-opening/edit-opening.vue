@@ -27,6 +27,7 @@
             label="Description"
             name="description"
           ></hp-textarea>
+          <hp-collaborator-permission v-if="organization" />
           <hp-image-selector
             class="edit-openings__edit-container__cover-selector"
             label="Cover"
@@ -115,15 +116,20 @@ import HpSpinner from "@/components/hp-spinner.vue";
 import HpSaveIndicator from "@/components/hp-save-indicator.vue";
 import HpImageSelector from "@/components/form/hp-image-selector.vue";
 import MicCheck from "@/assets/abstracts/mic-check.svg";
-import HpBadgeTag from "@/components/hp-badge-tag.vue";
+
+// Views
+import HpCollaboratorPermission from "./collaborator-permissions.vue";
 
 // Composables
-import useToast from "@/composables/useToast";
+import useAuth from "@/composables/useAuth";
 import { useBreadcrumbs } from "@/composables/useBreadcrumbs";
 import useContextSave from "@/composables/useContextSave";
 import { useGet, usePut } from "@/composables/useHttp";
 import useOpenings from "@/composables/useOpenings";
 import useCandidates from "@/composables/useCandidates";
+import useOrganization from "@/composables/useOrganization";
+
+const { organization } = useAuth();
 
 const route = useRoute();
 const router = useRouter();

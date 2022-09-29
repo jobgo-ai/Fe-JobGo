@@ -84,47 +84,37 @@ import OrganizationMember from "./organization-member.vue";
 import InviteMemberModal from "./invite-member-modal.vue";
 
 // Composables
-import { usePut, useGet, useDelete } from "@/composables/useHttp";
+import { usePut, useDelete } from "@/composables/useHttp";
 import useAuth from "@/composables/useAuth";
 import usePermissions from "@/composables/usePermissions";
 import useToast from "@/composables/useToast";
+import useOrganization from "@/composables/useOrganization";
 
 const {
   hasInviteOrganizationMemberPermission,
   hasOrganizationMemberDeletePermission,
-  ROLES,
 } = usePermissions();
-const { organization, user, refreshToken } = useAuth();
+const { organization, refreshToken } = useAuth();
+const { fetchMembers, members } = useOrganization();
+const { setToast } = useToast();
+
 const isAddMemberModalOpen = ref(false);
 const memberToRemove = ref(null);
 const isRemovingMember = ref(false);
 const isConfirmMemberRemovalOpen = ref(false);
 const isChangingRole = ref(false);
 const isLoading = ref(true);
-const members = ref([]);
 
-const { setToast } = useToast();
-
-const fetchOrgs = async () => {
-  isLoading.value = true;
-  const getOrganization = useGet(
-    `organizations/${organization.value.slug}/users`
-  );
-  await getOrganization.get();
-  members.value = getOrganization.data.value.users;
+onMounted(async () => {
+  await fetchMembers();
   isLoading.value = false;
-  refreshToken();
-};
-
-onMounted(() => {
-  fetchOrgs();
 });
 
 const handleRemoveMember = async () => {
   isRemovingMember.value = true;
   const deleteMember = useDelete(`users/${memberToRemove.value.reference}`);
   await deleteMember.remove();
-  await fetchOrgs();
+  await fetchMembers();
   isRemovingMember.value = false;
   isConfirmMemberRemovalOpen.value = false;
   setToast({
@@ -163,7 +153,8 @@ const handleRoleChange = async (payload) => {
     type: "positive",
     title: "Member permission changed",
   });
-  fetchOrgs();
+  await fetchMembers();
+  refreshToken();
 };
 </script>
 
