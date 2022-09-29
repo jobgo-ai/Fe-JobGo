@@ -1,18 +1,20 @@
 <template>
   <div
-    class="hp-dropdown-list__dropdown-target"
+    :class="`hp-dropdown-list__dropdown-target  ${
+      isDisabled && `hp-dropdown-list__disabled`
+    }`"
     ref="dropdownTarget"
     @click="isFlyoutOpen = !isFlyoutOpen"
   >
     <div
-      :class="
-        isDisabled || (options.length === 0 && `hp-dropdown-list__disabled`)
-      "
+      :class="`hp-dropdown-list__dropdown-target  ${
+        isDisabled && `hp-dropdown-list__disabled`
+      }`"
     >
       {{ label }}
     </div>
     <hp-icon
-      v-if="options.length !== 0"
+      v-if="!isDisabled && options.length !== 0"
       class="hp-dropdown-list__dropdown-target__icon"
       name="chevron-down"
     ></hp-icon>
@@ -93,6 +95,7 @@ onClickOutside(dropdownTarget, (event) => {
   &__disabled {
     opacity: 0.6;
     cursor: default;
+    pointer-events: none;
   }
   &__actions {
     display: flex;

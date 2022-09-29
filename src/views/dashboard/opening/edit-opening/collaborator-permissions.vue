@@ -3,12 +3,27 @@
     <hp-drawer @close="isModalOpen = false" :isOpen="isModalOpen">
       <div class="hp-member-permission__modal">
         <div class="hp-member-permission__modal__title">Manage permissions</div>
-        <ol class="hp-member-permission__modal__list">
+        <ol
+          :class="`hp-member-permission__modal__list
+            ${
+              unpermissionedMembersList.length > 0 &&
+              'hp-member-permission__modal__list--active'
+            }`"
+        >
           <collaborator
             v-for="collaborator in opening.collaborators"
             :collaborator="collaborator"
             @handleRoleChange="handleRoleChange"
             @handleRemovalRequest="handleRemoveMember"
+          >
+          </collaborator>
+        </ol>
+        <ol class="hp-member-permission__modal__list">
+          <collaborator
+            v-for="collaborator in unpermissionedMembersList"
+            :isNotOnOpening="true"
+            :collaborator="collaborator"
+            @handleAddMember="handleRoleChange"
           >
           </collaborator>
         </ol>
@@ -26,7 +41,7 @@
 
 <script setup>
 // Vendor
-import { onMounted, ref } from "vue";
+import { onMounted, ref, computed } from "vue";
 
 // Components
 import HpDrawer from "@/components/hp-drawer.vue";
@@ -38,7 +53,7 @@ import useOrganization from "@/composables/useOrganization";
 import useOpenings from "@/composables/useOpenings";
 import useToast from "@/composables/useToast";
 
-const { fetchMembers, COLLABORATORS } = useOrganization();
+const { members, fetchMembers, COLLABORATORS } = useOrganization();
 
 const { setToast } = useToast();
 
@@ -52,6 +67,13 @@ onMounted(async () => {
   isLoading.value = false;
 });
 
+const unpermissionedMembersList = computed(() => {
+  const filteredMembers = members.value.filter(
+    (m) => !opening.value.collaborators.find((c) => c.reference === m.reference)
+  );
+  return filteredMembers;
+});
+
 const handleRemoveMember = async (payload) => {
   const deleteMember = useDelete(
     `openings/${opening.value.reference}/collaborators/${payload.reference}`
@@ -60,27 +82,21 @@ const handleRemoveMember = async (payload) => {
   await fetchOpening(opening.value.reference);
   setToast({
     type: "positive",
-    title: "Member removed",
-    message: `The member will no longer have access to your organization`,
+    title: "User removed",
+    message: `The user will no longer have access to your opening`,
   });
 };
 
-const memberInvited = () => {
-  setToast({
-    type: "positive",
-    title: "Invitation sent",
-    message: `They will be able to accept this invitation from their email`,
-  });
-  isAddMemberModalOpen.value = false;
-};
-
-const handleRoleChange = async (payload) => {
+const handleRoleChange = async ({
+  role = "Interview editor",
+  collaborator,
+}) => {
   const updateMember = usePut(
-    `openings/${opening.value.reference}/collaborators/${payload.collaborator.reference}`
+    `openings/${opening.value.reference}/collaborators/${collaborator.reference}`
   );
 
   const newRole = Object.keys(COLLABORATORS).find((key) => {
-    return COLLABORATORS[key].label === payload.role;
+    return COLLABORATORS[key].label === role;
   });
 
   const formattedPayload = {
@@ -121,6 +137,10 @@ const handleRoleChange = async (payload) => {
       display: flex;
       flex-direction: column;
       margin-top: 12px;
+      &--active {
+        border-bottom: 1px solid var(--color-border);
+        margin-bottom: 12px;
+      }
     }
   }
 }

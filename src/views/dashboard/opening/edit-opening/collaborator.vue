@@ -1,25 +1,49 @@
 <template>
-  <div class="collaborator">
-    <div class="collaborator__details">
-      <div>{{ collaborator.name }}</div>
-      <div class="collaborator__details__role">
-        {{ COLLABORATORS[collaborator.role].label }}
+  <div>
+    <div class="collaborator" v-if="!isNotOnOpening">
+      <div class="collaborator__details">
+        <div>{{ collaborator.name }}</div>
+        <div class="collaborator__details__role">
+          {{ collaborator.email }}
+        </div>
+      </div>
+      <div class="collaborator__actions">
+        <hp-dropdown-list
+          :label="COLLABORATORS[collaborator.role].label"
+          :options="permissionList()"
+          :isDisabled="
+            !permissionList(collaborator.role).length > 0 ||
+            COLLABORATORS[currentUserRole].hierarchy >=
+              COLLABORATORS[collaborator.role].hierarchy
+          "
+          @handleChange="
+            (value) => emits('handleRoleChange', { collaborator, role: value })
+          "
+        ></hp-dropdown-list>
+        <hp-button
+          v-if="
+            COLLABORATORS[currentUserRole].hierarchy <
+            COLLABORATORS[collaborator.role].hierarchy
+          "
+          icon="trash"
+          danger
+          @handleClick="emits('handleRemovalRequest', collaborator)"
+        ></hp-button>
       </div>
     </div>
-    <div class="collaborator__actions">
-      <hp-dropdown-list
-        :label="COLLABORATORS[collaborator.role].label"
-        :options="permissionList()"
-        :isDisabled="permissionList(collaborator.role).length > 0"
-        @handleChange="
-          (value) => emits('handleRoleChange', { collaborator, role: value })
-        "
-      ></hp-dropdown-list>
-      <hp-button
-        icon="trash"
-        danger
-        @handleClick="emits('handleRemovalRequest', collaborator)"
-      ></hp-button>
+    <div v-else class="collaborator">
+      <div class="collaborator__details">
+        <div>{{ collaborator.name }}</div>
+        <div class="collaborator__details__role">
+          {{ collaborator.email }}
+        </div>
+      </div>
+      <div>
+        <hp-button
+          icon="plus"
+          @handleClick="emits('handleAddMember', { collaborator })"
+        ></hp-button>
+      </div>
     </div>
   </div>
 </template>
@@ -31,22 +55,52 @@ import HpDropdownList from "@/components/hp-dropdown-list.vue";
 
 // Composables
 import useOrganization from "@/composables/useOrganization";
+import useAuth from "@/composables/useAuth";
+import useOpenings from "@/composables/useOpenings";
 
 const props = defineProps({
   collaborator: {
     type: Object,
   },
+  isNotOnOpening: {
+    type: Boolean,
+  },
 });
 
-const emits = defineEmits(["handleRoleChange", "handleRemovalRequest"]);
+const { user } = useAuth();
+const { members } = useOrganization();
+const { opening } = useOpenings();
+
+const emits = defineEmits([
+  "handleRoleChange",
+  "handleRemovalRequest",
+  "handleAddMember",
+]);
 
 const { COLLABORATORS } = useOrganization();
 
+const currentUserRole = opening.value.collaborators.find(
+  (m) => m.email === user.value.email
+).role;
+
 const permissionList = () => {
-  return Object.keys(COLLABORATORS).map((key) => ({
-    value: COLLABORATORS[key].label,
-    description: COLLABORATORS[key].description,
-  }));
+  if (currentUserRole === "member") {
+    return [];
+  }
+
+  if (currentUserRole === "owner")
+    return Object.keys(COLLABORATORS)
+      .filter((k) => k !== "creator")
+      .map((key) => ({
+        value: COLLABORATORS[key].label,
+        description: COLLABORATORS[key].description,
+      }));
+
+  if (currentUserRole === "creator")
+    return Object.keys(COLLABORATORS).map((key) => ({
+      value: COLLABORATORS[key].label,
+      description: COLLABORATORS[key].description,
+    }));
 };
 </script>
 
