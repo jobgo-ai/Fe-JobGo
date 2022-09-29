@@ -10,9 +10,9 @@
       <div class="collaborator__actions">
         <hp-dropdown-list
           :label="COLLABORATORS[collaborator.role].label"
-          :options="permissionList()"
+          :options="permissionList"
           :isDisabled="
-            !permissionList(collaborator.role).length > 0 ||
+            !permissionList.length > 0 ||
             COLLABORATORS[currentUserRole].hierarchy >=
               COLLABORATORS[collaborator.role].hierarchy
           "
@@ -49,6 +49,9 @@
 </template>
 
 <script setup>
+// Vendor
+import { computed } from "vue";
+
 // Components
 import HpButton from "@/components/hp-button.vue";
 import HpDropdownList from "@/components/hp-dropdown-list.vue";
@@ -79,16 +82,17 @@ const emits = defineEmits([
 
 const { COLLABORATORS } = useOrganization();
 
-const currentUserRole = opening.value.collaborators.find(
-  (m) => m.email === user.value.email
-).role;
+const currentUserRole = computed(() => {
+  return opening.value.collaborators.find((m) => m.email === user.value.email)
+    .role;
+});
 
-const permissionList = () => {
-  if (currentUserRole === "member") {
+const permissionList = computed(() => {
+  if (currentUserRole.value === "member") {
     return [];
   }
 
-  if (currentUserRole === "owner")
+  if (currentUserRole.value === "owner")
     return Object.keys(COLLABORATORS)
       .filter((k) => k !== "creator")
       .map((key) => ({
@@ -96,12 +100,12 @@ const permissionList = () => {
         description: COLLABORATORS[key].description,
       }));
 
-  if (currentUserRole === "creator")
+  if (currentUserRole.value === "creator")
     return Object.keys(COLLABORATORS).map((key) => ({
       value: COLLABORATORS[key].label,
       description: COLLABORATORS[key].description,
     }));
-};
+});
 </script>
 
 <style lang="scss">
@@ -116,7 +120,6 @@ const permissionList = () => {
     display: flex;
     flex-direction: column;
     &__role {
-      text-transform: capitalize;
       margin-top: 4px;
       color: var(--color-text-secondary);
     }

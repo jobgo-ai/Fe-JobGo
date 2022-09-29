@@ -30,12 +30,15 @@
       </div>
     </hp-drawer>
     <p class="hp-member-permission__title">Manage permissions</p>
-    <p>
-      {{ opening.collaborators.length }} members have access.
-      <span class="hp-member-permission__link" @click="isModalOpen = true"
-        >Manage permissions</span
-      >
+    <p class="hp-member-permission__subtitle">
+      Current members with access:
+      {{ opening.collaborators.map((c) => c.email).join(", ") }}
     </p>
+    <hp-button
+      @handleClick="isModalOpen = true"
+      label="Manage permissions"
+      icon="locked"
+    ></hp-button>
   </div>
 </template>
 
@@ -45,6 +48,7 @@ import { onMounted, ref, computed } from "vue";
 
 // Components
 import HpDrawer from "@/components/hp-drawer.vue";
+import HpButton from "@/components/hp-button.vue";
 import Collaborator from "./collaborator.vue";
 
 // Composables
@@ -117,6 +121,11 @@ const handleRoleChange = async ({
 <style lang="scss">
 .hp-member-permission {
   margin-bottom: 24px;
+  &__subtitle {
+    margin-bottom: 12px;
+    @include text-h6;
+    padding: 0 2px;
+  }
   &__title {
     @include text-h5;
     margin: 0;
