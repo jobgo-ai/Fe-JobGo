@@ -27,7 +27,7 @@
             label="Description"
             name="description"
           ></hp-textarea>
-          <hp-member-permission v-if="organization" />
+          <hp-collaborator-permission v-if="organization" />
           <hp-image-selector
             class="edit-openings__edit-container__cover-selector"
             label="Cover"
@@ -118,7 +118,7 @@ import HpImageSelector from "@/components/form/hp-image-selector.vue";
 import MicCheck from "@/assets/abstracts/mic-check.svg";
 
 // Views
-import HpMemberPermission from "./member-permissions.vue";
+import HpCollaboratorPermission from "./collaborator-permissions.vue";
 
 // Composables
 import useAuth from "@/composables/useAuth";

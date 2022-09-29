@@ -72,6 +72,13 @@ const emits = defineEmits(["handleChange", "handleRemovalRequest"]);
 
 const dropdownTarget = ref(null);
 const isFlyoutOpen = ref(false);
+
+onClickOutside(dropdownTarget, (event) => {
+  if (!isFlyoutOpen.value) {
+    return;
+  }
+  isFlyoutOpen.value = false;
+});
 </script>
 
 <styles lang="scss">

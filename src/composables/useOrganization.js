@@ -8,13 +8,16 @@ const members = ref([]);
 
 const COLLABORATORS = {
   creator: {
+    label: "Creator",
     description: "Administrator of the opening",
   },
-  manager: {
+  owner: {
+    label: "Hiring manager",
     description:
       "Can view opening, create  and edit interviews, create, view, and edit candidates",
   },
   member: {
+    label: "Interview editor",
     description: "Can view opening, create interviews, and edit interviews",
   },
 };
