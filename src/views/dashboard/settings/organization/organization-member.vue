@@ -10,7 +10,7 @@
         :label="member.role"
         :options="promotionList(member.role)"
         :isDisabled="
-          promotionList(member.role).length > 0 && user.email !== member.email
+          promotionList(member.role).length === 0 || user.email === member.email
         "
         @handleChange="
           (value) => emits('handleRoleChange', { member, role: value })
@@ -52,17 +52,25 @@ const props = defineProps({
 const emits = defineEmits(["handleRoleChange", "handleRemovalRequest"]);
 
 const promotionList = (role) => {
-  if (role === "founder" || role === "member") {
+  if (role === "founder") {
     return [];
   }
+
+  if (role === "owner" && user.value.organization.role === "owner") {
+    return [];
+  }
+
   const filteredRoles = Object.keys(ROLES)
     .filter((r) => r !== role)
-    .filter((r) => ROLES[r].hierarchy >= ROLES[role].hierarchy);
+    .filter(
+      (r) => ROLES[r].hierarchy >= ROLES[user.value.organization.role].hierarchy
+    );
 
   const formattedRoles = filteredRoles.map((r) => ({
     value: r,
     description: ROLES[role].description,
   }));
+  console.log(formattedRoles);
   return formattedRoles;
 };
 </script>

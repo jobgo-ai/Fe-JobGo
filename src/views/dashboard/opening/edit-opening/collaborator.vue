@@ -83,8 +83,10 @@ const emits = defineEmits([
 const { COLLABORATORS } = useOrganization();
 
 const currentUserRole = computed(() => {
-  return opening.value.collaborators.find((m) => m.email === user.value.email)
-    .role;
+  const currentUser = opening.value.collaborators.find(
+    (m) => m.email === user.value.email
+  );
+  return currentUser?.role ? currentUser.role : null;
 });
 
 const permissionList = computed(() => {

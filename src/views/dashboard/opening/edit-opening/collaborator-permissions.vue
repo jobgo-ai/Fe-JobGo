@@ -31,6 +31,9 @@
     </hp-drawer>
     <p class="hp-member-permission__title">Manage permissions</p>
     <p class="hp-member-permission__subtitle">
+      All founders and owners of the organization
+    </p>
+    <p class="hp-member-permission__subtitle">
       Current members with access:
       {{ opening.collaborators.map((c) => c.email).join(", ") }}
     </p>
