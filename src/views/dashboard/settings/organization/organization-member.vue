@@ -63,14 +63,13 @@ const promotionList = (role) => {
   const filteredRoles = Object.keys(ROLES)
     .filter((r) => r !== role)
     .filter(
-      (r) => ROLES[r].hierarchy >= ROLES[user.value.organization.role].hierarchy
+      (r) => ROLES[r].hierarchy > ROLES[user.value.organization.role].hierarchy
     );
 
   const formattedRoles = filteredRoles.map((r) => ({
     value: r,
     description: ROLES[role].description,
   }));
-  console.log(formattedRoles);
   return formattedRoles;
 };
 </script>

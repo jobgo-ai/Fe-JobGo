@@ -11,20 +11,13 @@
         <hp-dropdown-list
           :label="COLLABORATORS[collaborator.role].label"
           :options="permissionList"
-          :isDisabled="
-            !permissionList.length > 0 ||
-            COLLABORATORS[currentUserRole].hierarchy >=
-              COLLABORATORS[collaborator.role].hierarchy
-          "
+          :isDisabled="!permissionList.length > 0 || !isHierarchyHigher"
           @handleChange="
             (value) => emits('handleRoleChange', { collaborator, role: value })
           "
         ></hp-dropdown-list>
         <hp-button
-          v-if="
-            COLLABORATORS[currentUserRole].hierarchy <
-            COLLABORATORS[collaborator.role].hierarchy
-          "
+          v-if="isHierarchyHigher"
           icon="trash"
           danger
           @handleClick="emits('handleRemovalRequest', collaborator)"
@@ -89,7 +82,21 @@ const currentUserRole = computed(() => {
   return currentUser?.role ? currentUser.role : null;
 });
 
+const isAdmin = computed(() => {
+  return (
+    user.value.organization.role === "owner" ||
+    user.value.organization.role === "founder"
+  );
+});
+
 const permissionList = computed(() => {
+  if (isAdmin.value) {
+    return Object.keys(COLLABORATORS).map((key) => ({
+      value: COLLABORATORS[key].label,
+      description: COLLABORATORS[key].description,
+    }));
+  }
+
   if (currentUserRole.value === "member") {
     return [];
   }
@@ -107,6 +114,17 @@ const permissionList = computed(() => {
       value: COLLABORATORS[key].label,
       description: COLLABORATORS[key].description,
     }));
+});
+
+const isHierarchyHigher = computed(() => {
+  if (isAdmin.value) {
+    return true;
+  }
+
+  return (
+    COLLABORATORS[currentUserRole.value].hierarchy >=
+    COLLABORATORS[props.collaborator.role].hierarchy
+  );
 });
 </script>
 
