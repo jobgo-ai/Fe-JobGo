@@ -53,6 +53,7 @@
         <hp-button
           :to="`/opening/${route.params.openingRef}/edit/add-interview`"
           label="Add interview"
+          primary
         ></hp-button>
       </div>
       <div class="edit-openings__interview-container" v-else>
