@@ -3,6 +3,10 @@
     <hp-drawer @close="isModalOpen = false" :isOpen="isModalOpen">
       <div class="hp-member-permission__modal">
         <div class="hp-member-permission__modal__title">Manage permissions</div>
+        <p class="hp-member-permission__description">
+          A list of currently permissioned members. Founders and owners are not
+          included here, as they have access to all openings.
+        </p>
         <ol
           :class="`hp-member-permission__modal__list
             ${
@@ -124,6 +128,12 @@ const handleRoleChange = async ({
 <style lang="scss">
 .hp-member-permission {
   margin-bottom: 24px;
+  &__description {
+    color: var(--color-text-secondary);
+    margin-top: 6px;
+    margin-bottom: 12px;
+    @include text-h5;
+  }
   &__subtitle {
     margin-bottom: 12px;
     @include text-h6;

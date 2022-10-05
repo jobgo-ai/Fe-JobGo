@@ -28,7 +28,7 @@ const COLLABORATORS = {
 export default () => {
   const fetchMembers = async () => {
     const getOrganization = useGet(
-      `organizations/${organization.value.slug}/users`
+      `organizations/${organization.value.slug}/users?roles=member,administrator`
     );
     await getOrganization.get();
     members.value = getOrganization.data.value.users;
