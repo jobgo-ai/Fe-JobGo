@@ -74,7 +74,7 @@ const isModalOpen = ref(false);
 const { opening, fetchOpening } = useOpenings();
 
 onMounted(async () => {
-  await fetchMembers();
+  await fetchMembers("?roles=member,administrator");
   isLoading.value = false;
 });
 
@@ -121,7 +121,7 @@ const handleRoleChange = async ({
     title: "Collaborator permission changed",
   });
   await fetchOpening(opening.value.reference);
-  await fetchMembers();
+  await fetchMembers("?roles=member,administrator");
 };
 </script>
 
