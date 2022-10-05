@@ -7,7 +7,7 @@
     </p>
     <form @submit="onSubmit">
       <hp-input
-        placeholder="Enter candidate email..."
+        placeholder="Enter new member email..."
         label="Email"
         name="email"
       ></hp-input>
