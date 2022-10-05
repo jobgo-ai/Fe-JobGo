@@ -7,10 +7,7 @@
     >
       <div>
         <div class="edit-openings__edit-container">
-          <router-link
-            class="edit-question__back"
-            :to="`/openings/${opening.reference}`"
-          >
+          <router-link class="edit-question__back" :to="`/openings`">
             <hp-icon name="arrow-left"></hp-icon>Back
           </router-link>
           <h3 class="edit-openings__edit-container__title">Edit opening</h3>
