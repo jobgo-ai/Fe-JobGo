@@ -78,6 +78,11 @@
       v-if="!isArchived && !isAddCard"
     >
       <div class="hp-opening-card__splash">
+        <hp-badge
+          class="hp-opening-card__content__role"
+          icon="shield"
+          :content="currentPermLevel"
+        ></hp-badge>
         <component
           :is="splash"
           role="img"
@@ -128,6 +133,7 @@ import HpUpgrade from "@/components/hp-upgrade.vue";
 // Composables
 import usePlans from "@/composables/usePlans";
 import useOpenings from "@/composables/useOpenings";
+import useOrganization from "@/composables/useOrganization";
 
 const props = defineProps({
   opening: {
@@ -147,6 +153,10 @@ const props = defineProps({
     default: false,
   },
 });
+
+const { COLLABORATORS } = useOrganization();
+
+const currentPermLevel = COLLABORATORS[props.opening?.permissions?.role]?.label;
 
 const { openings } = useOpenings();
 const { getPlanVariable } = usePlans();
@@ -176,6 +186,9 @@ const containerClasses = computed(() => {
 });
 
 const linkValue = computed(() => {
+  if (props.opening.permissions?.role === "member") {
+    return `/opening/${props.opening.reference}/edit`;
+  }
   if (props.opening.reference === route.params.openingRef) {
     return `/openings`;
   }
@@ -223,6 +236,7 @@ const linkValue = computed(() => {
   &__splash {
     flex-shrink: 0;
     min-height: 84px;
+    position: relative;
     &__image {
       border-top-left-radius: 12px;
       border-top-right-radius: 12px;
@@ -247,7 +261,14 @@ const linkValue = computed(() => {
       color: var(--color-text-secondary);
       padding-bottom: 12px;
     }
+    &__role {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      color: var(--color-accent-forground);
+    }
     &__badges {
+      text-transform: capitalize;
       display: flex;
       &__badge {
         margin-right: 6px;

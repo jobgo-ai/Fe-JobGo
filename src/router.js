@@ -25,7 +25,7 @@ import InterviewResults from "@/views/dashboard/openings/interview-results.vue";
 
 //Opening
 import Opening from "@/views/dashboard/opening/opening.vue";
-import EditOpening from "@/views/dashboard/opening/edit-opening.vue";
+import EditOpening from "@/views/dashboard/opening/edit-opening/edit-opening.vue";
 import AddInterview from "@/views/dashboard/opening/add-interview.vue";
 import EditInterview from "@/views/dashboard/opening/edit-interview.vue";
 import Compare from "@/views/dashboard/opening/compare.vue";
