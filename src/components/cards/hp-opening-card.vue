@@ -266,7 +266,7 @@ const linkValue = computed(() => {
       top: 6px;
       right: 6px;
       color: var(--color-accent-forground);
-      background-color: var(--color-accent-forground);
+      border-color: var(--color-accent-forground);
     }
     &__badges {
       text-transform: capitalize;
