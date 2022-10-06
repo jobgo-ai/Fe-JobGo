@@ -90,6 +90,8 @@ const { handleSubmit, setFieldError, meta, values } = useForm({
   },
 });
 
+console.log(window.linktrk);
+
 const postUsers = usePost("users");
 const postLogin = usePost("self/login");
 
@@ -107,6 +109,12 @@ const onSubmit = handleSubmit(async (values) => {
       invitation: route.query.token,
     };
   }
+  if (route.query?.ref) {
+    payload = {
+      ...payload,
+      referrer: route.query.ref,
+    };
+  }
   const res = await fetch(`${import.meta.env.VITE_API_URL}/users`, {
     method: "POST",
     headers: {
@@ -119,6 +127,8 @@ const onSubmit = handleSubmit(async (values) => {
     error.value = false;
     const { setUser } = useAuth();
     setUser(data.user, true);
+
+    window.lintrk("track", { conversion_id: 5220170 });
     if (route.query.upgrade) {
       router.push("/upgrade");
     } else {

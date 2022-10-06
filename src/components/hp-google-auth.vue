@@ -40,10 +40,17 @@ const handleLogin = async (res) => {
   if (route.query?.token) {
     payload = { ...payload, invitation: route.query.token };
   }
+  if (route.query?.ref) {
+    payload = {
+      ...payload,
+      referrer: route.query.ref,
+    };
+  }
   await postUser.post(payload);
 
+  window.lintrk("track", { conversion_id: 5220170 });
   setUser({ sessionToken: postUser.data.value.self.sessionToken });
-  const refresh = await refreshToken();
+  await refreshToken();
   router.push("/");
 };
 
