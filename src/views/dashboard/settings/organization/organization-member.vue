@@ -68,8 +68,10 @@ const promotionList = (role) => {
 
   const formattedRoles = filteredRoles.map((r) => ({
     value: r,
-    description: ROLES[role].description,
+    description: ROLES[r].description,
   }));
+
+  console.log(formattedRoles);
   return formattedRoles;
 };
 </script>
