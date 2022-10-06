@@ -60,11 +60,11 @@ import Collaborator from "./collaborator.vue";
 
 // Composables
 import { usePut, useDelete } from "@/composables/useHttp";
-import useOrganization from "@/composables/useOrganization";
+import usePermissions from "@/composables/usePermissions";
 import useOpenings from "@/composables/useOpenings";
 import useToast from "@/composables/useToast";
 
-const { members, fetchMembers, COLLABORATORS } = useOrganization();
+const { members, fetchMembers, COLLABORATORS } = usePermissions();
 
 const { setToast } = useToast();
 

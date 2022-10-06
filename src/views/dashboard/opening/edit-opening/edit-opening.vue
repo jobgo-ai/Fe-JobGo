@@ -125,7 +125,7 @@ import useContextSave from "@/composables/useContextSave";
 import { useGet, usePut } from "@/composables/useHttp";
 import useOpenings from "@/composables/useOpenings";
 import useCandidates from "@/composables/useCandidates";
-import useOrganization from "@/composables/useOrganization";
+import usePermissions from "@/composables/usePermissions";
 
 const { organization } = useAuth();
 

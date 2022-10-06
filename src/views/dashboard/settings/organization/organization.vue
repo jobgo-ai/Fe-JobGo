@@ -86,16 +86,17 @@ import InviteMemberModal from "./invite-member-modal.vue";
 // Composables
 import { usePut, useDelete } from "@/composables/useHttp";
 import useAuth from "@/composables/useAuth";
-import usePermissions from "@/composables/usePermissions";
 import useToast from "@/composables/useToast";
-import useOrganization from "@/composables/useOrganization";
+import usePermissions from "@/composables/usePermissions";
 
 const {
   hasInviteOrganizationMemberPermission,
   hasOrganizationMemberDeletePermission,
+  fetchMembers,
+  members,
 } = usePermissions();
+
 const { organization, refreshToken } = useAuth();
-const { fetchMembers, members } = useOrganization();
 const { setToast } = useToast();
 
 const isAddMemberModalOpen = ref(false);

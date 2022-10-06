@@ -133,7 +133,7 @@ import HpUpgrade from "@/components/hp-upgrade.vue";
 // Composables
 import usePlans from "@/composables/usePlans";
 import useOpenings from "@/composables/useOpenings";
-import useOrganization from "@/composables/useOrganization";
+import usePermissions from "@/composables/usePermissions";
 
 const props = defineProps({
   opening: {
@@ -154,7 +154,7 @@ const props = defineProps({
   },
 });
 
-const { COLLABORATORS } = useOrganization();
+const { COLLABORATORS } = usePermissions();
 
 const currentPermLevel = COLLABORATORS[props.opening?.permissions?.role]?.label;
 

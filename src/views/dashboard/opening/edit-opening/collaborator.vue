@@ -50,7 +50,7 @@ import HpButton from "@/components/hp-button.vue";
 import HpDropdownList from "@/components/hp-dropdown-list.vue";
 
 // Composables
-import useOrganization from "@/composables/useOrganization";
+import usePermissions from "@/composables/usePermissions";
 import useAuth from "@/composables/useAuth";
 import useOpenings from "@/composables/useOpenings";
 
@@ -64,7 +64,6 @@ const props = defineProps({
 });
 
 const { user } = useAuth();
-const { members } = useOrganization();
 const { opening } = useOpenings();
 
 const emits = defineEmits([
@@ -73,7 +72,7 @@ const emits = defineEmits([
   "handleAddMember",
 ]);
 
-const { COLLABORATORS } = useOrganization();
+const { COLLABORATORS } = usePermissions();
 
 const currentUserRole = computed(() => {
   const currentUser = opening.value.collaborators.find(
