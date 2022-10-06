@@ -79,6 +79,7 @@
     >
       <div class="hp-opening-card__splash">
         <hp-badge
+          v-if="organization"
           class="hp-opening-card__content__role"
           icon="shield"
           :content="currentPermLevel"
@@ -131,6 +132,7 @@ import HpIcon from "@/components/hp-icon.vue";
 import HpUpgrade from "@/components/hp-upgrade.vue";
 
 // Composables
+import useAuth from "@/composables/useAuth";
 import usePlans from "@/composables/usePlans";
 import useOpenings from "@/composables/useOpenings";
 import usePermissions from "@/composables/usePermissions";
@@ -154,7 +156,10 @@ const props = defineProps({
   },
 });
 
+const { organization } = useAuth();
 const { COLLABORATORS } = usePermissions();
+
+console.log(organization);
 
 const currentPermLevel = COLLABORATORS[props.opening?.permissions?.role]?.label;
 
