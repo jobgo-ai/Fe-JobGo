@@ -90,6 +90,9 @@ const isAdmin = computed(() => {
 });
 
 const permissionList = computed(() => {
+  if (props.collaborator.role === "creator") {
+    return [];
+  }
   if (isAdmin.value) {
     return Object.keys(COLLABORATORS).map((key) => ({
       value: COLLABORATORS[key].label,
@@ -117,6 +120,10 @@ const permissionList = computed(() => {
 });
 
 const isHierarchyHigher = computed(() => {
+  if (props.collaborator.role === "creator") {
+    return false;
+  }
+
   if (isAdmin.value) {
     return true;
   }
