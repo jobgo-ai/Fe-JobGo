@@ -71,7 +71,6 @@ const promotionList = (role) => {
     description: ROLES[r].description,
   }));
 
-  console.log(formattedRoles);
   return formattedRoles;
 };
 </script>

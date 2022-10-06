@@ -90,8 +90,6 @@ const { handleSubmit, setFieldError, meta, values } = useForm({
   },
 });
 
-console.log(window.linktrk);
-
 const postUsers = usePost("users");
 const postLogin = usePost("self/login");
 

@@ -159,8 +159,6 @@ const props = defineProps({
 const { organization } = useAuth();
 const { COLLABORATORS } = usePermissions();
 
-console.log(organization);
-
 const currentPermLevel = COLLABORATORS[props.opening?.permissions?.role]?.label;
 
 const { openings } = useOpenings();
