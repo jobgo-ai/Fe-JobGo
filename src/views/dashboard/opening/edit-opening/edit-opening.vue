@@ -24,14 +24,17 @@
             label="Description"
             name="description"
           ></hp-textarea>
-          <hp-collaborator-permission v-if="organization" />
+          <hp-collaborator-permission v-if="canEditMemberPermissions" />
           <hp-image-selector
             class="edit-openings__edit-container__cover-selector"
             label="Cover"
             name="artwork"
             @input="debouncedSubmit"
           ></hp-image-selector>
-          <div class="edit-openings__edit-container__archive">
+          <div
+            v-if="canArchiveOpening"
+            class="edit-openings__edit-container__archive"
+          >
             <hp-button
               icon="archive"
               label="Archive opening"
@@ -161,6 +164,20 @@ const { handleSubmit, resetForm, meta, setFieldValue, values } = useForm({
     artwork: 0,
     templates: [],
   },
+});
+
+const canEditMemberPermissions = computed(() => {
+  return organization.value && organization.value.role !== "member";
+});
+
+const canArchiveOpening = computed(() => {
+  if (!organization.value) {
+    return true;
+  }
+  if (organization && organization.value.role === "member") {
+    return false;
+  }
+  return true;
 });
 
 const dragOptions = computed(() => {

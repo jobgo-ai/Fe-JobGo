@@ -39,7 +39,7 @@
             class="opening-list__grid"
           >
             <hp-opening-card
-              v-if="state === 'active'"
+              v-if="state === 'active' && canCreateOpening"
               @handleAddNew="handleNewOpening"
               :isAddCard="true"
             >
@@ -69,7 +69,7 @@
 </template>
 
 <script setup>
-import { ref, watch } from "vue";
+import { ref, watch, computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { onMounted } from "vue";
 import { useWindowScroll } from "@vueuse/core";
@@ -97,7 +97,7 @@ const selectedOpening = ref({});
 const isCandidateDetailsOpen = ref(route.query.candidate);
 const isCandidateListOpen = ref(route.params.openingRef);
 const state = ref("active");
-const { user } = useAuth();
+const { user, organization } = useAuth();
 const { setToast } = useToast();
 
 const {
@@ -233,6 +233,16 @@ const handleUnarchiveOpening = async (opening) => {
   });
   router.push(`/openings/${opening.reference}`);
 };
+
+const canCreateOpening = computed(() => {
+  if (!organization.value) {
+    return true;
+  }
+  if (organization && organization.value.role === "member") {
+    return false;
+  }
+  return true;
+});
 </script>
 
 <style lang="scss" scoped>
