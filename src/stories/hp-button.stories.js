@@ -15,27 +15,27 @@ const Template = (args) => ({
     return { args, buttonIsLoading };
   },
   template: `<div>
-    <div style="display:flex; margin-bottom: 16px; margin-top:100px;">
-      <hp-button style="margin-right: 12px" v-bind="args"> </hp-button>
-      <hp-button style="margin-right: 12px" label="Link button" tooltip="im a tooltip"> </hp-button>
-      <hp-button style="margin-right: 12px" :to="{ name: 'home' }" label="Link button"> </hp-button>
-      <hp-button style="margin-right: 12px" @click="buttonIsLoading = !buttonIsLoading" label="Loading" :isLoading="buttonIsLoading" />
-      <hp-button style="margin-right: 12px" :isDisabled="true" label="Disabled" />
-      <hp-button style="margin-right: 12px" label="Dropdown" dropdownIcon="plus" :hasDropdown="true" />
-      <hp-button style="margin-right: 12px" label="Icon" icon="plus" />
-      <hp-button style="margin-right: 12px" icon="plus" />
-      <hp-button destructive label="Destructive" style="margin-right: 12px" v-bind="args"> </hp-button>
-      <hp-button destructive :isDisabled="true" label="Destructive" style="margin-right: 12px" v-bind="args"> </hp-button>
+    <div style="display:flex; margin-bottom: 16px; margin-top:100px; gap: 6px;">
+      <hp-button v-bind="args"> </hp-button>
+      <hp-button label="Link button" tooltip="im a tooltip"> </hp-button>
+      <hp-button :to="{ name: 'home' }" label="Link button"> </hp-button>
+      <hp-button @click="buttonIsLoading = !buttonIsLoading" label="Loading" :isLoading="buttonIsLoading" />
+      <hp-button :isDisabled="true" label="Disabled" />
+      <hp-button label="Dropdown" dropdownIcon="plus" :hasDropdown="true" />
+      <hp-button label="Icon" icon="plus" />
+      <hp-button icon="plus" />
+      <hp-button destructive label="Destructive" v-bind="args"> </hp-button>
+      <hp-button destructive :isDisabled="true" label="Destructive" v-bind="args"> </hp-button>
     </div>
-    <div style="display:flex">
-      <hp-button primary style="margin-right: 12px" v-bind="args"> </hp-button>
-      <hp-button style="margin-right: 12px" label="Link button" tooltip="im a tooltip"> </hp-button>
-      <hp-button primary style="margin-right: 12px" :to="{ name: 'home' }" label="Link button"> </hp-button>
-      <hp-button primary style="margin-right: 12px" @click="buttonIsLoading = !buttonIsLoading" label="Loading" :isLoading="buttonIsLoading" />
-      <hp-button primary style="margin-right: 12px" :isDisabled="true" label="Disabled" />
-      <hp-button primary style="margin-right: 12px" label="Dropdown" dropdownIcon="plus" :hasDropdown="true" />
-      <hp-button primary :iconRight="true" style="margin-right: 12px" label="Icon" icon="plus" />
-      <hp-button primary style="margin-right: 12px" icon="plus" />
+    <div style="display:flex; gap: 6px;">
+      <hp-button primary v-bind="args"> </hp-button>
+      <hp-button label="Link button" tooltip="im a tooltip"> </hp-button>
+      <hp-button primary :to="{ name: 'home' }" label="Link button"> </hp-button>
+      <hp-button primary @click="buttonIsLoading = !buttonIsLoading" label="Loading" :isLoading="buttonIsLoading" />
+      <hp-button primary :isDisabled="true" label="Disabled" />
+      <hp-button primary label="Dropdown" dropdownIcon="plus" :hasDropdown="true" />
+      <hp-button primary :iconRight="true" label="Icon" icon="plus" />
+      <hp-button primary icon="plus" />
     </div>
     <div style="display:flex; width: 240px; margin-top:24px;">
       <hp-button dropzone label="Add candidate" icon="plus" />
