@@ -28,8 +28,9 @@
     />
     <ol class="upgrade__grid">
       <li
-        v-if="plan !== 'startup'"
-        class="upgrade__tier upgrade__tier--startup"
+        :class="`upgrade__tier upgrade__tier--startup ${
+          plan === 'startup' && `upgrade__tier upgrade__tier--current`
+        }`"
       >
         <h2 class="upgrade__tier__title">Startup</h2>
         <p class="upgrade__tier__description">
@@ -40,7 +41,7 @@
         </div>
         <a
           v-if="isAllowedToPurchase"
-          :href="getPlanVariable('payment', 'startup')[billingPeriod]"
+          :href="getPaymentLink('startup', billingPeriod)"
         >
           <hp-button
             fullWidth
@@ -172,7 +173,7 @@ import usePlans from "@/composables/usePlans";
 
 const { openings, fetchOpenings } = useOpenings();
 const { plan, organization } = useAuth();
-const { getPlanVariable } = usePlans();
+const { getPlanVariable, getPaymentLink } = usePlans();
 
 const billingPeriod = ref("yearly");
 
@@ -262,7 +263,7 @@ const isAllowedToPurchase = computed(() => {
     margin-top: 24px;
     border-radius: $border-radius-md;
     border: $border;
-    padding: 12px;
+    padding: 24px;
     &__title {
       @include text-h1;
     }
@@ -300,6 +301,10 @@ const isAllowedToPurchase = computed(() => {
       margin-bottom: 12px;
       font-size: 14px;
       padding-bottom: 4px;
+    }
+    &--current {
+      opacity: 0.6;
+      pointer-events: none;
     }
   }
 }
