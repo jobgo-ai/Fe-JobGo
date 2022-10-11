@@ -36,6 +36,7 @@ const props = defineProps({
     padding: 4px;
     border-radius: $border-radius-sm;
     white-space: nowrap;
+    list-style: none;
     &__badge {
       display: inline-flex;
       align-items: center;

@@ -370,8 +370,8 @@ const emit = defineEmits(["handleClick"]);
   }
   &--primary > .hp-button__button {
     color: var(--color-accent-forground);
-    background-color: var(--primary--500);
-    border-color: var(--primary--500);
+    background-color: var(--color-accent-background);
+    border-color: var(--color-accent-background);
     &:active:not([disabled]),
     &:hover:not([disabled]) {
       background-color: var(--primary--400);
