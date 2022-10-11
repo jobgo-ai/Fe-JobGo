@@ -40,7 +40,7 @@ const props = defineProps({
   },
   content: {
     type: [String, Number],
-    default: "",
+    required: true,
   },
   type: {
     type: String,
