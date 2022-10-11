@@ -1,28 +1,25 @@
+import { useGet } from "./useHttp";
 import useAuth from "./useAuth";
+let PLANS = [];
 
 const { plan } = useAuth();
 
-const PLAN_VARIABLES = {
-  openings: {
-    free: 2,
-    startup: 5,
-    growth: 20,
-    enterprise: 10000,
-  },
-  payment: {
-    startup: {
-      monthly: import.meta.env.VITE_PAYMENT_STARTUP_MONTHLY,
-      yearly: import.meta.env.VITE_PAYMENT_STARTUP_YEARLY,
-    },
-    growth: {
-      monthly: import.meta.env.VITE_PAYMENT_GROWTH_MONTHLY,
-      yearly: import.meta.env.VITE_PAYMENT_GROWTH_YEARLY,
-    },
-  },
+const getPlans = async () => {
+  const getPlans = useGet("/self/plans");
+  await getPlans.get();
+  PLANS = getPlans.data.value.plans;
+  console.log(PLANS);
 };
 
-const getPlanVariable = (feature, currentPlan = plan.value) => {
-  return PLAN_VARIABLES[feature][currentPlan];
+getPlans();
+
+const getPlanVariable = (feature) => {
+  console.log(plan.value);
+  const currentTier = PLANS.find((p) => p.tier === plan.value);
+
+  console.log(currentTier);
+
+  return currentTier[feature];
 };
 
 export default () => {
