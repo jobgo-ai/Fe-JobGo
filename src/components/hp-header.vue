@@ -48,7 +48,7 @@
                 </div>
               </div>
             </div>
-            <div class="hp-header__dropdown__options">
+            <div v-if="canUpgradePlan" class="hp-header__dropdown__options">
               <router-link
                 to="/upgrade"
                 tag="div"
@@ -158,7 +158,7 @@ import { useGettingStarted } from "@/composables/useGettingStarted";
 // Svg
 import Logo from "@/assets/logo.svg";
 
-const { logout, organization } = useAuth();
+const { logout, organization, user } = useAuth();
 const router = useRouter();
 
 const { isDarkmode, handleDarkModeToggle } = useDarkMode();
@@ -189,12 +189,18 @@ const promptAreYouSure = (e) => {
   return dialogText;
 };
 
+const canUpgradePlan = computed(() => {
+  if (!user.value.organization) {
+    return true;
+  }
+
+  return user.value.organization.role !== "member";
+});
+
 onMounted(() => {
   window.addEventListener("beforeunload", promptAreYouSure);
 });
 onUnmounted(() => window.removeEventListener("beforeunload", promptAreYouSure));
-
-const { user } = useAuth();
 
 const handleLogout = () => {
   logout();

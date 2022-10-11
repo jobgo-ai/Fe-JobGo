@@ -19,7 +19,6 @@ const getPlans = async () => {
   const getPlans = useGet("/self/plans");
   await getPlans.get();
   PLANS = getPlans.data.value.plans;
-  console.log(PLANS);
 };
 
 getPlans();
