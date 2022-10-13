@@ -12,6 +12,7 @@ export const state = reactive({
   organization: null,
   role: null,
   plan: "free",
+  quota: {},
 });
 
 const token = window.localStorage.getItem(AUTH_KEY);
@@ -38,6 +39,7 @@ export const refreshToken = async () => {
     const getQuota = useGet("self/quota");
     await getQuota.get();
     state.plan = getQuota.data.value.quota.tier;
+    state.quota = getQuota.data.value.quota;
   }
 };
 
@@ -52,6 +54,7 @@ export default () => {
     const getQuota = useGet("self/quota");
     await getQuota.get();
     state.plan = getQuota.data.value.quota.tier;
+    state.quota = getQuota.data.value.quota;
   };
 
   const setUserDetails = (data) => {

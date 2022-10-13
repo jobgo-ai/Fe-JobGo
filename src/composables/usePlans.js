@@ -13,7 +13,7 @@ const PAYMENTS = {
   },
 };
 
-const { plan } = useAuth();
+const { plan, quota } = useAuth();
 
 const getPlans = async () => {
   const getPlans = useGet("/self/plans");
@@ -24,9 +24,7 @@ const getPlans = async () => {
 getPlans();
 
 const getPlanVariable = (feature) => {
-  const currentTier = PLANS.find((p) => p.tier === plan.value);
-
-  return currentTier[feature];
+  return quota.value[feature];
 };
 
 const getPaymentLink = (plan, billingperiod) => {
