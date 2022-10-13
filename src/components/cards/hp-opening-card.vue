@@ -47,7 +47,11 @@
     <div class="hp-opening-card__archived" v-if="isArchived">
       <div class="hp-opening-card__archived-header">
         <hp-abstract-avatar :abstractKey="opening.artwork" />
-        <hp-button label="Contact us"> </hp-button>
+        <hp-button
+          @handleClick="$emit('unarchiveOpening', opening)"
+          label="Restore"
+        >
+        </hp-button>
       </div>
       <div class="hp-opening-card__content">
         <h4 class="hp-opening-card__content__name">{{ opening.name }}</h4>
