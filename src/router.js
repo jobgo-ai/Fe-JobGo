@@ -6,6 +6,7 @@ import NotFound from "@/views/public/not-found.vue";
 import Verify from "@/views/public/verify.vue";
 import Signin from "@/views/public/signin.vue";
 import Signup from "@/views/public/signup.vue";
+import ConfirmEmail from "@/views/public/confirm-email.vue";
 
 // Reports
 import Report from "@/views/public/reports/report.vue";
@@ -103,6 +104,11 @@ const routes = [
       public: true,
     },
   },
+  {
+    path: "/confirm",
+    name: "Confirm",
+    component: ConfirmEmail,
+  },
   { path: "/:pathMatch(.*)*", name: "NotFound", component: NotFound },
   {
     path: "/signin",
@@ -124,6 +130,14 @@ const routes = [
     path: "/reports/:candidateKey/evaluations/:evaluationRef",
     name: "evaluation",
     component: Evaluation,
+    meta: {
+      public: true,
+    },
+  },
+  {
+    path: "/signup",
+    name: "signup",
+    component: Signup,
     meta: {
       public: true,
     },

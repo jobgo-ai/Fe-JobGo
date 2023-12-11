@@ -7,6 +7,18 @@
       <div class="signup__section signup__section--border">
         <form @submit="onSubmit">
           <hp-input name="email" placeholder="Type your email" label="Email" />
+          <hp-input
+            name="password"
+            placeholder="Type your password"
+            label="Password"
+            type="password"
+          />
+          <hp-input
+            name="confirmPassword"
+            placeholder="Type your Confirm password"
+            label="Confirm Password"
+            type="password"
+          />
           <div class="signup__checkbox-container__tos">
             By signing up, you agree to the
             <a
@@ -33,11 +45,11 @@
             fullWidth
           ></hp-button>
         </form>
-        <div class="signup__section__or">OR</div>
+        <!-- <div class="signup__section__or">OR</div> -->
       </div>
-      <div class="signup__section">
+      <!-- <div class="signup__section">
         <hp-google-auth />
-      </div>
+      </div> -->
     </div>
     <router-link
       class="signup__signin signup__checkbox-container__text"
@@ -61,10 +73,20 @@ import HpInput from "@/components/form/hp-input.vue";
 import HpCheckbox from "@/components/form/hp-checkbox.vue";
 import HpButton from "@/components/hp-button.vue";
 import useAuth from "@/composables/useAuth";
+import { useEncryption, useDecryption } from "@/composables/useEncryption";
 import Logo from "@/assets/logo.svg";
 
 //Hooks
 import { usePost } from "@/composables/useHttp";
+
+const passwordSchema = yup
+  .string()
+  .required("Password is required")
+  .min(8, "Password must be at least 8 characters long")
+  .matches(
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>])/,
+    "Password must have at least one uppercase letter, one lowercase letter, one number, and one special character"
+  );
 
 const schema = yup.object().shape({
   email: yup
@@ -72,6 +94,10 @@ const schema = yup.object().shape({
     .email("Must be a valid email address")
     .required()
     .label("Email"),
+  password: passwordSchema.label("Password"),
+  confirmPassword: yup
+    .string()
+    .oneOf([yup.ref("password")], "Passwords do not match"),
 });
 
 const router = useRouter();
@@ -82,12 +108,15 @@ const error = ref(null);
 
 const { handleSubmit, setFieldError, meta, values } = useForm({
   validationSchema: schema,
+  // validateOnMount:true,
   initialValues: {
     name: "",
     email: route.query.email,
     password: "",
+    confirmPassword: "",
     terms: false,
   },
+  
 });
 
 const postUsers = usePost("users");
@@ -95,12 +124,18 @@ const postLogin = usePost("self/login");
 
 const onSubmit = handleSubmit(async (values) => {
   isLoading.value = true;
-  const { email } = values;
+  const { email, password } = values;
+  let encryptPassword = useEncryption(password);
+  // let decryptionPassword=useDecryption(encryptPassword)
+  console.log("password", password);
+  console.log("decryptionPassword", decryptionPassword);
   let payload = {
     user: {
       email,
+      password: encryptPassword,
     },
   };
+  console.log(payload);
   if (route.query?.token) {
     payload = {
       ...payload,
@@ -132,6 +167,7 @@ const onSubmit = handleSubmit(async (values) => {
     } else {
       router.push("/");
     }
+    // router.push({ path: "/confirm", params: { email:email } });
   } catch (error) {
     setFieldError("email", "Something went wrong");
     isLoading.value = false;
@@ -148,7 +184,7 @@ const onSubmit = handleSubmit(async (values) => {
     margin: 24px 0px;
     position: relative;
     &--border {
-      border-bottom: 1px solid var(--color-border);
+      //border-bottom: 1px solid var(--color-border);
       padding-bottom: 24px;
     }
     &__or {
