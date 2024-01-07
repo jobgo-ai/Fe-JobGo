@@ -127,8 +127,8 @@ const onSubmit = handleSubmit(async (values) => {
   const { email, password } = values;
   let encryptPassword = useEncryption(password);
   // let decryptionPassword=useDecryption(encryptPassword)
-  console.log("password", password);
-  console.log("decryptionPassword", decryptionPassword);
+  // console.log("password", password);
+  // console.log("decryptionPassword", decryptionPassword);
   let payload = {
     user: {
       email,
@@ -136,19 +136,20 @@ const onSubmit = handleSubmit(async (values) => {
     },
   };
   console.log(payload);
-  if (route.query?.token) {
-    payload = {
-      ...payload,
-      invitation: route.query.token,
-    };
-  }
-  if (route.query?.ref) {
-    payload = {
-      ...payload,
-      referrer: route.query.ref,
-    };
-  }
-  const res = await fetch(`${import.meta.env.VITE_API_URL}/users`, {
+  // if (route.query?.token) {
+  //   payload = {
+  //     ...payload,
+  //     invitation: route.query.token,
+  //   };
+  // }
+  // if (route.query?.ref) {
+  //   payload = {
+  //     ...payload,
+  //     referrer: route.query.ref,
+  //   };
+  // }
+  const tempNgEndpoints='https://7e63-103-66-8-179.ngrok-free.app/users'
+  const res = await fetch(tempNgEndpoints, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -157,18 +158,20 @@ const onSubmit = handleSubmit(async (values) => {
   });
   try {
     const data = await res.json();
+    console.log(data);
     error.value = false;
     const { setUser } = useAuth();
     setUser(data.user, true);
 
-    window.lintrk("track", { conversion_id: 5220170 });
-    if (route.query.upgrade) {
-      router.push("/upgrade");
-    } else {
-      router.push("/");
-    }
-    // router.push({ path: "/confirm", params: { email:email } });
+    // window.lintrk("track", { conversion_id: 5220170 });
+    // if (route.query.upgrade) {
+    //   router.push("/upgrade");
+    // } else {
+    //   router.push("/");
+    // }
+    router.push({ path: "/confirm", params: { email:email } });
   } catch (error) {
+    console.log("error",error);
     setFieldError("email", "Something went wrong");
     isLoading.value = false;
   }

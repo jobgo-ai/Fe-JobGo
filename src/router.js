@@ -108,6 +108,9 @@ const routes = [
     path: "/confirm",
     name: "Confirm",
     component: ConfirmEmail,
+    meta: {
+      public: true,
+    },
   },
   { path: "/:pathMatch(.*)*", name: "NotFound", component: NotFound },
   {

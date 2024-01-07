@@ -7,7 +7,7 @@
       <div class="confirm__section confirm__section--border">
         <div class="confirm-email__logo"><Email /></div>
         <div class="confirm__subtitle">
-          We've just dispatched an email to <b>{{ router.params.email }}</b> to validate your
+          We've just dispatched an email to <!-- <b>{{ router?.params?.email }}</b> --> to validate your
           email address. Upon receiving the email, simply follow the enclosed
           link to finalize your registration process.
         </div>
