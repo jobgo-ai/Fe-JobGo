@@ -31,11 +31,11 @@
             label="Continue"
           ></hp-button>
         </form>
-        <div class="signup__section__or">OR</div>
+        <!-- <div class="signup__section__or">OR</div> -->
       </div>
-      <div class="signup__section">
+      <!-- <div class="signup__section">
         <hp-google-auth />
-      </div>
+      </div> -->
     </div>
     <router-link class="signin__signup" to="/signup"
       >Don't have an account?
@@ -69,13 +69,15 @@ import { useForm } from "vee-validate";
 //Components
 import HpInput from "@/components/form/hp-input.vue";
 import HpButton from "@/components/hp-button.vue";
-import HpGoogleAuth from "@/components/hp-google-auth.vue";
+// import HpGoogleAuth from "@/components/hp-google-auth.vue";
 import useAuth from "@/composables/useAuth";
 import Logo from "@/assets/logo.svg";
 
 //Hooks
 import { usePost } from "@/composables/useHttp";
 
+//composable
+import { useEncryption } from "@/composables/useEncryption";
 const schema = yup.object().shape({
   email: yup
     .string()
@@ -97,10 +99,13 @@ const router = useRouter();
 const postLogin = usePost("self/login");
 
 const onSubmit = handleSubmit(async (values) => {
+  const { email, password } = values;
   const data = {
-    credentials: { ...values },
+    credentials: { email,password:useEncryption(password)},
   };
+
   await postLogin.post(data);
+  console.log("postLogin.data.value",postLogin.data.value);
   if (postLogin.data.value) {
     const { setUser } = useAuth();
     setUser(postLogin.data.value, true);
