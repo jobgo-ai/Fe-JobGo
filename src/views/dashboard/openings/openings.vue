@@ -21,7 +21,16 @@
         name="openings-list-transition"
       >
         <div v-if="!isCandidateDetailsOpen" class="opening-list">
-          <h2 class="openings__title">Openings</h2>
+          <div class="opening">
+            <h2 class="openings__title">Openings</h2>
+            <router-link
+                to="/chatbot"
+              >
+           
+            <hp-button    class="hp-add-job-card__actions__button" label="Add New Job"></hp-button>
+            </router-link>
+
+          </div>
           <p class="openings__subtitle">
             Manage your openings or quickly create new ones
           </p>
@@ -90,6 +99,7 @@ import CandidateDetails from "@/views/dashboard/openings/candidate-details.vue";
 import HpTabs from "@/components/hp-tabs.vue";
 import HpOpeningCard from "@/components/cards/hp-opening-card.vue";
 import HpSpinner from "@/components/hp-spinner.vue";
+import HpButton from "@/components/hp-button.vue";
 
 const route = useRoute();
 const router = useRouter();
@@ -324,6 +334,12 @@ const canCreateOpening = computed(() => {
       display: flex;
       justify-content: center;
     }
+  }
+  .opening {
+    display: flex;
+  }
+  .opening .hp-add-job-card__actions__button{
+   margin-left: 1rem;
   }
 
   .openingslist--empty {
