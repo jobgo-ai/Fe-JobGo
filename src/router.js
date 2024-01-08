@@ -6,6 +6,7 @@ import NotFound from "@/views/public/not-found.vue";
 import Verify from "@/views/public/verify.vue";
 import Signin from "@/views/public/signin.vue";
 import Signup from "@/views/public/signup.vue";
+import ChatbotTest from "@/views/public/chatbot-test.vue";
 
 // Reports
 import Report from "@/views/public/reports/report.vue";
@@ -41,6 +42,7 @@ const routes = [
         name: "openings",
         component: Openings,
       },
+      
       {
         name: "opening",
         path: "opening/:openingRef",
@@ -108,6 +110,14 @@ const routes = [
     path: "/signin",
     name: "signin",
     component: Signin,
+    meta: {
+      public: true,
+    },
+  },
+  {
+    path: "/chatbot",
+    name: "chatbot",
+    component: ChatbotTest,
     meta: {
       public: true,
     },
