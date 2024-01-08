@@ -21,11 +21,13 @@ export function useGet(endpoint) {
     data.value = null;
     error.value = null;
     try {
-      const res = await fetch(`${API_URL}/${url}`, {
+      console.log(" state.token123", state.token);
+      const res =   await fetch(`${API_URL}/${url}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Bearer " + state.token,
+          "Authorization": "Bearer " + state.token,
+          "ngrok-skip-browser-warning": "69420"
         },
         signal: signal,
       });
@@ -133,18 +135,22 @@ export function usePost(endpoint) {
   const error = ref(null);
 
   const post = async (body) => {
-    loading.value = true;
+    loading.value = false;
     data.value = null;
     error.value = null;
     try {
-      const res = await fetch(`${API_URL}/${endpoint}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + state.token,
-        },
-        body: JSON.stringify(body),
-      });
+      const res = await fetch(`${API_URL}/${endpoint}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + state.token,
+            "Csrf-Token": "nocheck",
+          },
+          body: JSON.stringify(body),
+        }
+      );
+      console.log("res--", res);
       if (!res.ok) {
         error.value = await res.json();
       } else {

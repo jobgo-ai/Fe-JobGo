@@ -26,7 +26,7 @@ router.beforeEach(async (to, from, next) => {
   if (to.meta.title) {
     document.title = to.meta.title;
   } else {
-    document.title = "Hireproof";
+    document.title = "Jobgo";
   }
   const { user, refreshToken, token, setUser } = useAuth();
 

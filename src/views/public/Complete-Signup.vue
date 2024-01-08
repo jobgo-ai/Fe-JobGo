@@ -3,38 +3,26 @@
     <div class="signup__logo"><Logo /></div>
     <div class="signup__container">
       <div class="signup__image-container"></div>
-      <h3 class="signup__title">Sign up for Jobgo</h3>
+      <h3 class="signup__title">Complete Profile</h3>
       <div class="signup__section signup__section--border">
         <form @submit="onSubmit">
-          <hp-input name="email" placeholder="Type your email" label="Email" />
           <hp-input
-            name="password"
-            placeholder="Type your password"
-            label="Password"
-            type="password"
+            name="company_name"
+            placeholder="Type your Company Name"
+            label="Company Name"
+          />
+          {{ phone?.selectedCountry?.phoneCode }}
+          <hp-phone
+            ref="phone"
+            name="company_contact"
+            placeholder="Type your Company Contact"
+            label="Company Contact"
           />
           <hp-input
-            name="confirmPassword"
-            placeholder="Type your Confirm password"
-            label="Confirm Password"
-            type="password"
+            name="company_location"
+            placeholder="Type your Company Location"
+            label="Company Location"
           />
-          <div class="signup__checkbox-container__tos">
-            By signing up, you agree to the
-            <a
-              class="signup__checkbox-container__link"
-              target="_blank"
-              href="https://www.hireproof.io/terms-of-service"
-              >Terms of Service</a
-            >
-            and acknowledge our
-            <a
-              class="signup__checkbox-container__link"
-              target="_blank"
-              href="https://www.hireproof.io/privacy-policy"
-              >Privacy Policy</a
-            >
-          </div>
           <div v-if="error" class="signup__error">{{ error }}</div>
           <hp-button
             :isLoading="isLoading"
@@ -45,18 +33,8 @@
             fullWidth
           ></hp-button>
         </form>
-        <!-- <div class="signup__section__or">OR</div> -->
       </div>
-      <!-- <div class="signup__section">
-        <hp-google-auth />
-      </div> -->
     </div>
-    <router-link
-      class="signup__signin signup__checkbox-container__text"
-      to="/signin"
-      >Already have an account?
-      <span class="signup__checkbox-container__link">Sign In</span></router-link
-    >
   </div>
 </template>
 
@@ -68,36 +46,19 @@ import * as yup from "yup";
 import { useForm } from "vee-validate";
 
 //Components
-import HpGoogleAuth from "@/components/hp-google-auth.vue";
 import HpInput from "@/components/form/hp-input.vue";
-import HpCheckbox from "@/components/form/hp-checkbox.vue";
+import HpPhone from "@/components/form/hp-phone.vue";
 import HpButton from "@/components/hp-button.vue";
 import useAuth from "@/composables/useAuth";
-import { useEncryption, useDecryption } from "@/composables/useEncryption";
 import Logo from "@/assets/logo.svg";
 
 //Hooks
-import { usePost } from "@/composables/useHttp";
-
-const passwordSchema = yup
-  .string()
-  .required("Password is required")
-  .min(8, "Password must be at least 8 characters long")
-  .matches(
-    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>])/,
-    "Password must have at least one uppercase letter, one lowercase letter, one number, and one special character"
-  );
-
+// import { usePost } from "@/composables/useHttp";
+const phone = ref("");
 const schema = yup.object().shape({
-  email: yup
-    .string()
-    .email("Must be a valid email address")
-    .required()
-    .label("Email"),
-  password: passwordSchema.label("Password"),
-  confirmPassword: yup
-    .string()
-    .oneOf([yup.ref("password")], "Passwords do not match"),
+  company_name: yup.string().required().label("Company Name"),
+  company_contact: yup.number().required().label("Company Contact"),
+  company_location: yup.string().required().label("Company Location"),
 });
 
 const router = useRouter();
@@ -108,31 +69,24 @@ const error = ref(null);
 
 const { handleSubmit, setFieldError, meta, values } = useForm({
   validationSchema: schema,
-  // validateOnMount:true,
   initialValues: {
-    name: "",
-    email: route.query.email,
-    password: "",
-    confirmPassword: "",
-    terms: false,
+    company_name: null,
+    company_contact: null,
+    company_location: null,
   },
-  
 });
-
-const postUsers = usePost("users");
-const postLogin = usePost("self/login");
 
 const onSubmit = handleSubmit(async (values) => {
   isLoading.value = true;
-  const { email, password } = values;
-  let encryptPassword = useEncryption(password);
+  const { company_name, company_contact, company_location } = values;
   let payload = {
-    user: {
-      email,
-      password: encryptPassword,
-    },
+    userId: route.params?.userid,
+    company_name: company_name,
+    company_contact: `${phone.value.selectedCountry?.phoneCode}${company_contact}`,
+    company_location: company_location,
   };
-  console.log(payload);
+  console.log("payload", payload);
+  
   // if (route.query?.token) {
   //   payload = {
   //     ...payload,
@@ -145,8 +99,7 @@ const onSubmit = handleSubmit(async (values) => {
   //     referrer: route.query.ref,
   //   };
   // }
-
-  const res = await fetch(`${import.meta.env.VITE_API_URL}/users`, {
+  const res = await fetch(`${import.meta.env.VITE_API_URL}/company`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -154,16 +107,14 @@ const onSubmit = handleSubmit(async (values) => {
     body: JSON.stringify(payload),
   });
   try {
-    console.log(res.status);
-   
+    console.log(res);
     if(res.status==200){
-      router.push({ path: "/confirm", params: { email:email } });
+      router.push({ path: "/signin" });
     }
     const data = await res.json();
-    console.log(data);
     error.value = false;
-    // const { setUser } = useAuth();
-    // setUser(data.user, true);
+    const { setUser } = useAuth();
+    setUser(data.user, true);
 
     // window.lintrk("track", { conversion_id: 5220170 });
     // if (route.query.upgrade) {
@@ -171,12 +122,8 @@ const onSubmit = handleSubmit(async (values) => {
     // } else {
     //   router.push("/");
     // }
-    router.push({ path: "/confirm", params: { email:email } });
+    router.push("/signin");
   } catch (error) {
-    const error1={
-      error:error
-    }
-    console.log("error1",error1);
     setFieldError("email", "Something went wrong");
     isLoading.value = false;
   }
@@ -192,7 +139,7 @@ const onSubmit = handleSubmit(async (values) => {
     margin: 24px 0px;
     position: relative;
     &--border {
-      //border-bottom: 1px solid var(--color-border);
+      border-bottom: 1px solid var(--color-border);
       padding-bottom: 24px;
     }
     &__or {

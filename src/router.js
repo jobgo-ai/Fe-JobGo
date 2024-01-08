@@ -6,6 +6,8 @@ import NotFound from "@/views/public/not-found.vue";
 import Verify from "@/views/public/verify.vue";
 import Signin from "@/views/public/signin.vue";
 import Signup from "@/views/public/signup.vue";
+import ConfirmEmail from "@/views/public/confirm-email.vue";
+import CompleteSignup from "@/views/public/Complete-Signup.vue";
 import ChatbotTest from "@/views/public/chatbot-test.vue";
 
 // Reports
@@ -31,6 +33,8 @@ import AddInterview from "@/views/dashboard/opening/add-interview.vue";
 import EditInterview from "@/views/dashboard/opening/edit-interview.vue";
 import Compare from "@/views/dashboard/opening/compare.vue";
 
+// Project
+// import Compare from "@/views/dashboard/job/Job.vue";
 const routes = [
   { path: "/", redirect: "/openings" },
   {
@@ -105,6 +109,22 @@ const routes = [
       public: true,
     },
   },
+  {
+    path: "/confirm",
+    name: "Confirm",
+    component: ConfirmEmail,
+    meta: {
+      public: true,
+    },
+  },
+  {
+    path: "/complete-signup/:userid",
+    name: "complete-signup",
+    component: CompleteSignup,
+    meta: {
+      public: true,
+    },
+  },
   { path: "/:pathMatch(.*)*", name: "NotFound", component: NotFound },
   {
     path: "/signin",
@@ -134,6 +154,14 @@ const routes = [
     path: "/reports/:candidateKey/evaluations/:evaluationRef",
     name: "evaluation",
     component: Evaluation,
+    meta: {
+      public: true,
+    },
+  },
+  {
+    path: "/signup",
+    name: "signup",
+    component: Signup,
     meta: {
       public: true,
     },

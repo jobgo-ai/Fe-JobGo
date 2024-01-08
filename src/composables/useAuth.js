@@ -38,8 +38,8 @@ export const refreshToken = async () => {
 
     const getQuota = useGet("self/quota");
     await getQuota.get();
-    state.plan = getQuota.data.value.quota.tier;
-    state.quota = getQuota.data.value.quota;
+    state.plan ="Free"
+    state.quota = '15';
   }
 };
 

@@ -6,63 +6,62 @@
       </div>
     </transition>
     <div :class="`view`">
-      <transition class="candidate-details" name="candidate-details-transition" appear>
-        <candidate-details v-if="isCandidateDetailsOpen"
-          :isCandidateDetailsOpen="isCandidateDetailsOpen"></candidate-details>
+      <transition
+        class="candidate-details"
+        name="candidate-details-transition"
+        appear
+      >
+        <candidate-details
+          v-if="isCandidateDetailsOpen"
+          :isCandidateDetailsOpen="isCandidateDetailsOpen"
+        ></candidate-details>
       </transition>
-      <transition :class="`openingslist ${!isCandidateListOpen && 'openingslist--empty'}`"
-        name="openings-list-transition">
+      <transition
+        :class="`openingslist ${!isCandidateListOpen && 'openingslist--empty'}`"
+        name="openings-list-transition"
+      >
         <div v-if="!isCandidateDetailsOpen" class="opening-list">
-          <div class="opening">
-            <h2 class="openings__title">Openings</h2>
-            <!-- <router-link
-                to="/chatbot"
-              >
-           
-            <hp-button    class="hp-add-job-card__actions__button" label="Add New Job"></hp-button>
-            </router-link> -->
-
-          </div>
+          <h2 class="openings__title">Openings</h2>
           <p class="openings__subtitle">
             Manage your openings or quickly create new ones
           </p>
-          <hp-tabs class="openings__tabs" :options="[
-            { label: 'Active', value: 'active' },
-            // { label: 'Archived', value: 'archived' },
-          ]" v-model="state" />
-
-          <div class="`hp-opening-card__add-new`">
-            <div>
-              <div class="hp-opening-card__add-new__icon-container">
-                <router-link to="/chatbot">
-                  <hp-icon :size="24" name="plus"></hp-icon>
-                </router-link>
-              </div>
-              <p class="hp-opening-card__content__name">New opening</p>
-              <p class="hp-opening-card__content__description">
-                Easily define a new opening
-              </p>
-            </div>
-            <div>
-              <router-link to="/chatbot">
-                <hp-button label="Create new"></hp-button>
-              </router-link>
-            </div>
-          </div>
-
-          <!-- <ol v-if="!isOpeningsLoading" ref="scrollContainer" class="opening-list__grid">
-            <hp-opening-card v-if="state === 'active' && canCreateOpening" @handleAddNew="handleNewOpening"
-              :isAddCard="true">
+          <hp-tabs
+            class="openings__tabs"
+            :options="[
+              { label: 'Active', value: 'active' },
+              { label: 'Archived', value: 'archived' },
+            ]"
+            v-model="state"
+          />
+          <ol
+            v-if="!isOpeningsLoading"
+            ref="scrollContainer"
+            class="opening-list__grid"
+          >
+            <hp-opening-card
+              v-if="state === 'active' && canCreateOpening"
+              @handleAddNew="handleNewOpening"
+              :isAddCard="true"
+            >
             </hp-opening-card>
-            <hp-opening-card v-for="opening in openings" :isSelected="opening.reference === route.params.openingRef"
-              :key="opening.reference" :opening="opening" @unarchiveOpening="handleUnarchiveOpening"
-              :isArchived="state === 'archived'">
+            <hp-opening-card
+              v-for="opening in openings"
+              :isSelected="opening.reference === route.params.openingRef"
+              :key="opening.reference"
+              :opening="opening"
+              @unarchiveOpening="handleUnarchiveOpening"
+              :isArchived="state === 'archived'"
+            >
             </hp-opening-card>
             <div v-if="state === 'archived' && openings.length === 0">
               No archived openings
             </div>
           </ol>
-          <hp-spinner class="openingslist__spinner" :size="24" v-else></hp-spinner> -->
+          <hp-spinner
+            class="openingslist__spinner"
+            :size="24"
+            v-else
+          ></hp-spinner>
         </div>
       </transition>
     </div>
@@ -91,8 +90,6 @@ import CandidateDetails from "@/views/dashboard/openings/candidate-details.vue";
 import HpTabs from "@/components/hp-tabs.vue";
 import HpOpeningCard from "@/components/cards/hp-opening-card.vue";
 import HpSpinner from "@/components/hp-spinner.vue";
-import HpIcon from "@/components/hp-icon.vue";
-import HpButton from "@/components/hp-button.vue";
 
 const route = useRoute();
 const router = useRouter();
@@ -327,12 +324,6 @@ const canCreateOpening = computed(() => {
       display: flex;
       justify-content: center;
     }
-  }
-  .opening {
-    display: flex;
-  }
-  .opening .hp-add-job-card__actions__button{
-   margin-left: 1rem;
   }
 
   .openingslist--empty {
