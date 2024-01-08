@@ -99,7 +99,7 @@ const onSubmit = handleSubmit(async (values) => {
   //     referrer: route.query.ref,
   //   };
   // }
-  const res = await fetch(`${import.meta.env.VITE_API_URL}/users`, {
+  const res = await fetch(`${import.meta.env.VITE_API_URL}/company`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
