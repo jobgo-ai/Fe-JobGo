@@ -83,7 +83,7 @@
           primary
           label="Talk to us"
           @handleClick="
-            openIntercom(`Hey Neea, I'm interested in Hireproof's growth plan!`)
+            openIntercom(`Hey Neea, I'm interested in Jobgo growth plan!`)
           "
         ></hp-button>
         <ul class="upgrade__tier__features">
@@ -121,7 +121,7 @@
           label="Talk to us"
           @handleClick="
             openIntercom(
-              `Hey Neea, I'm interested in Hireproof's enterprise plan!`
+              `Hey Neea, I'm interested in Jobgo enterprise plan!`
             )
           "
         ></hp-button>

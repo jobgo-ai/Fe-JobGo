@@ -22,7 +22,7 @@
                 class="report__interviews__link"
                 target="_blank"
                 href="https://hireproof.io/"
-                >Hireproof</a
+                >Jobgo</a
               >.
             </p>
           </div>

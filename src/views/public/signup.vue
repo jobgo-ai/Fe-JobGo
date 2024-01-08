@@ -3,7 +3,7 @@
     <div class="signup__logo"><Logo /></div>
     <div class="signup__container">
       <div class="signup__image-container"></div>
-      <h3 class="signup__title">Sign up for Hireproof</h3>
+      <h3 class="signup__title">Sign up for Jobgo</h3>
       <div class="signup__section signup__section--border">
         <form @submit="onSubmit">
           <hp-input name="email" placeholder="Type your email" label="Email" />

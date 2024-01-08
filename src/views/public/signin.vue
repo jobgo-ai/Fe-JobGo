@@ -5,7 +5,7 @@
       <div class="signin__section">
         <div class="signin__image-container"></div>
         <p class="signin__subtitle">Welcome back!</p>
-        <h2 class="signin__title">Log into Hireproof</h2>
+        <h2 class="signin__title">Log into Jobgo</h2>
         <form @submit="onSubmit">
           <hp-input name="email" placeholder="Type your email" label="Email" />
           <div class="signin__password-container">
