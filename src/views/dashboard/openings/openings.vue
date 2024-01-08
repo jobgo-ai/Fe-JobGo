@@ -15,12 +15,12 @@
         <div v-if="!isCandidateDetailsOpen" class="opening-list">
           <div class="opening">
             <h2 class="openings__title">Openings</h2>
-            <router-link
+            <!-- <router-link
                 to="/chatbot"
               >
            
             <hp-button    class="hp-add-job-card__actions__button" label="Add New Job"></hp-button>
-            </router-link>
+            </router-link> -->
 
           </div>
           <p class="openings__subtitle">
@@ -34,7 +34,9 @@
           <div class="`hp-opening-card__add-new`">
             <div>
               <div class="hp-opening-card__add-new__icon-container">
-                <hp-icon :size="24" name="plus"></hp-icon>
+                <router-link to="/chatbot">
+                  <hp-icon :size="24" name="plus"></hp-icon>
+                </router-link>
               </div>
               <p class="hp-opening-card__content__name">New opening</p>
               <p class="hp-opening-card__content__description">
@@ -42,7 +44,9 @@
               </p>
             </div>
             <div>
-              <hp-button label="Create new"></hp-button>
+              <router-link to="/chatbot">
+                <hp-button label="Create new"></hp-button>
+              </router-link>
             </div>
           </div>
 
