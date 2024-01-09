@@ -254,7 +254,7 @@ const { hasHeaderSaveButton } = useBreadcrumbs();
     margin-right: 24px;
     display: flex;
     height: 34px;
-    width: 32px;
+    width: 53px !important;
   }
   &__right {
     display: flex;
