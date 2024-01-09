@@ -11,7 +11,7 @@
             placeholder="Type your Company Name"
             label="Company Name"
           />
-          {{ phone?.selectedCountry?.phoneCode }}
+          <!-- {{ phone?.selectedCountry?.phoneCode }} -->
           <hp-phone
             ref="phone"
             name="company_contact"
