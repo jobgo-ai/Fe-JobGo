@@ -1,16 +1,8 @@
 <template>
   <hp-modal :isOpen="isManualJDOpen" @close="isManualJDOpen = false">
-    <generic-modal
-      title="Enter Job Description"
-      subtitle="This will create and share a report for this candidate"
-    >
+    <generic-modal title="Enter Job Description" subtitle="This will create and share a report for this candidate">
       <form @submit="onSubmit">
-        <hp-textarea
-          label="Description"
-          v-model="textareaValue"
-          rows="8"
-          name="description"
-        ></hp-textarea>
+        <hp-textarea label="Description" v-model="textareaValue" rows="8" name="description"></hp-textarea>
       </form>
       <template #actions>
         <hp-button @click="onSubmit" icon="send" label="Visit report">
@@ -18,20 +10,10 @@
       </template>
     </generic-modal>
   </hp-modal>
-  <df-messenger
-    project-id="recruitment-profiling"
-    agent-id="17a4859e-a2f5-4abb-8444-6f0546455a42"
-    df-messenger-chat-background="#e89999"
-    df-messenger-chat-collapse-icon-size="100px"
-    language-code="en"
-  >
-    <df-messenger-chat-bubble
-      df-messenger-chat-collapse-icon-size="12px"
-      allow-fullscreen="always"
-      expanded="true"
-      chat-close-icon="false"
-      chat-title="Profiling-Tools"
-    >
+  <df-messenger project-id="recruitment-profiling" agent-id="17a4859e-a2f5-4abb-8444-6f0546455a42"
+    df-messenger-chat-background="#e89999" df-messenger-chat-collapse-icon-size="100px" language-code="en">
+    <df-messenger-chat-bubble df-messenger-chat-collapse-icon-size="12px" allow-fullscreen="always" expanded="true"
+      chat-close-icon="false" chat-title="Jobgo AI Profiling">
     </df-messenger-chat-bubble>
   </df-messenger>
 </template>
@@ -54,8 +36,8 @@ onMounted(() => {
     const dfMessenger = document.querySelector("df-messenger");
     // Messenger is now ready.
     dfMessenger.renderCustomText(
-        "Hello! I'm here to assist you in gathering information swiftly for the position you're looking to fill. How can I help you with the details of the job you have in mind? 😊"
-      );
+      "Hello! I'm here to assist you in gathering information swiftly for the position you're looking to fill. How can I help you with the details of the job you have in mind? 😊"
+    );
 
     // window.addEventListener("df-response-received", (event) => {
     //     console.log(" event.detail.messages", event.detail.messages);
@@ -101,7 +83,7 @@ const onSubmit = handleSubmit(async (values) => {
   //     );
   const queryParameters = {
     parameters: {
-      job_description:"assax",
+      job_description: "assax",
     },
   };
   await dfMessenger.setQueryParameters(queryParameters);
@@ -113,10 +95,15 @@ const onSubmit = handleSubmit(async (values) => {
 .minimize-action {
   display: none !important;
 }
+
 .remove {
   display: none !;
 }
 
-df-messenger {
+df-messenger {}
+
+
+.minimize-action .focus-outline-contrast {
+  display: none !important;
 }
 </style>
