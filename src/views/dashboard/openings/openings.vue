@@ -50,21 +50,22 @@
             </div>
           </div>
 
-          <!-- <ol v-if="!isOpeningsLoading" ref="scrollContainer" class="opening-list__grid">
+          <ol v-if="!isOpeningsLoading" ref="scrollContainer" class="opening-list__grid">
             <hp-opening-card v-if="state === 'active' && canCreateOpening" @handleAddNew="handleNewOpening"
               :isAddCard="true">
             </hp-opening-card>
-            <hp-opening-card v-for="opening in openings" :isSelected="opening.reference === route.params.openingRef"
+            <!-- <hp-opening-card v-for="opening in openings" :isSelected="opening.reference === route.params.openingRef"
               :key="opening.reference" :opening="opening" @unarchiveOpening="handleUnarchiveOpening"
               :isArchived="state === 'archived'">
-            </hp-opening-card>
-            <div v-if="state === 'archived' && openings.length === 0">
+            </hp-opening-card> -->
+            <!-- <div v-if="state === 'archived' && openings.length === 0">
               No archived openings
-            </div>
+            </div> -->
           </ol>
-          <hp-spinner class="openingslist__spinner" :size="24" v-else></hp-spinner> -->
+          <!-- <hp-spinner class="openingslist__spinner" :size="24" v-else></hp-spinner> -->
         </div>
       </transition>
+      <!-- {{ openingList }} -->
     </div>
   </div>
 </template>
@@ -82,6 +83,8 @@ import useOpenings from "@/composables/useOpenings";
 import { useGettingStarted } from "@/composables/useGettingStarted";
 import { useBreadcrumbs } from "@/composables/useBreadcrumbs";
 import useAuth from "@/composables/useAuth";
+import { state as tokenState } from "@/composables/useAuth";
+
 
 // Views
 import CandidateList from "@/views/dashboard/openings/candidate-list.vue";
@@ -97,6 +100,7 @@ import HpButton from "@/components/hp-button.vue";
 const route = useRoute();
 const router = useRouter();
 const selectedOpening = ref({});
+const openingList = ref([]);
 const isCandidateDetailsOpen = ref(route.query.candidate);
 const isCandidateListOpen = ref(route.params.openingRef);
 const state = ref("active");
@@ -111,9 +115,7 @@ const {
   createOpening,
 } = useOpenings();
 const { setBreadcrumbs } = useBreadcrumbs();
-
 const { fetchChecklist } = useGettingStarted();
-
 const scrollContainer = ref(null);
 const { y } = useWindowScroll();
 
@@ -147,7 +149,48 @@ onMounted(async () => {
   }
   // Checks to see if candidate detail page is open
   isCandidateDetailsOpen.value = route.query.candidate;
+
+  // await fetchProject();
 });
+
+const fetchProject = async () => {
+  console.log("fetchProject api call:- ");
+
+
+  // const { position_name, candidate_experience, location_type, candidate_education, job_description_type, job_description } = chatObject;
+  // const payload = {
+  //   "jobPosition": position_name,
+  //   "experience": candidate_experience,
+  //   "location": location_type,
+  //   "education": candidate_education,
+  //   "job_description_type": job_description_type,
+  //   "salary": "$100,000 - $120,000",
+  //   "fullDescription": job_description
+  // }
+
+  try {
+    const res = await fetch(`${import.meta.env.VITE_API_URL}/opening`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + tokenState.token,
+        "Csrf-Token": "nocheck",
+      },
+      // body: JSON.stringify(payload),
+    });
+
+
+    const responseData = await res.json();
+    console.log("Response Data:", responseData);
+    openingList.value = responseData;
+    // console.log("Resposnse sasas :- ", res, res?.data);
+  }
+  catch (error) {
+    console.log(error);
+  }
+}
+
+console.log("openingList :- ", openingList.value);
 
 // Watches for route changes to deal with candidate details page
 watch(
@@ -254,6 +297,7 @@ const canCreateOpening = computed(() => {
   width: 100%;
   flex-direction: column;
   padding: 24px;
+
   &__title {
     font-size: 24px;
     font-weight: 600;
@@ -261,11 +305,13 @@ const canCreateOpening = computed(() => {
     margin: 0;
     margin-bottom: 4px;
   }
+
   &__subtitle {
     color: var(--color-text-secondary);
     margin: 0;
     margin-bottom: 16px;
   }
+
   &__tabs {
     margin-bottom: 24px;
   }
@@ -281,6 +327,7 @@ const canCreateOpening = computed(() => {
     padding-bottom: 64px;
   }
 }
+
 @media (min-width: $breakpoint-tablet) {
   .candidate-list {
     position: sticky;
@@ -288,6 +335,7 @@ const canCreateOpening = computed(() => {
     z-index: $z-index-100;
     transition: all 0.25s linear;
   }
+
   .openings {
     display: flex;
     width: 100%;
@@ -301,6 +349,7 @@ const canCreateOpening = computed(() => {
     height: calc(100vh - 40px);
     z-index: 0;
   }
+
   .candidate-details {
     position: absolute;
     left: 440px;
@@ -323,16 +372,19 @@ const canCreateOpening = computed(() => {
     bottom: 0;
     transform: translateX(0);
     transition: all 0.25s linear;
+
     &__spinner {
       display: flex;
       justify-content: center;
     }
   }
+
   .opening {
     display: flex;
   }
-  .opening .hp-add-job-card__actions__button{
-   margin-left: 1rem;
+
+  .opening .hp-add-job-card__actions__button {
+    margin-left: 1rem;
   }
 
   .openingslist--empty {
@@ -343,6 +395,7 @@ const canCreateOpening = computed(() => {
     display: none;
   }
 }
+
 .candidate-list-transition-enter-active,
 .candidate-list-transition-leave-active {
   transform: translateX(0);
