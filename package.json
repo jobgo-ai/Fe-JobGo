@@ -2,7 +2,7 @@
   "name": "app",
   "version": "0.0.0",
   "scripts": {
-    "dev": "vite --mode localDev --port 9000",
+    "dev": "vite --mode localDev --port 3001",
     "vite": "vite",
     "cypress": "cypress open",
     "build": "vite build",
@@ -11,10 +11,13 @@
     "build-storybook": "build-storybook"
   },
   "dependencies": {
+    "@ckeditor/ckeditor5-build-classic": "^41.0.0",
+    "@ckeditor/ckeditor5-vue": "^5.1.0",
     "@vueuse/core": "^8.9.2",
     "cypress": "^9.5.1",
     "date-fns": "^2.28.0",
     "jsencrypt": "^3.3.2",
+    "marked": "^11.1.1",
     "papaparse": "^5.3.2",
     "vee-validate": "^4.5.7",
     "vue": "3.2.30",

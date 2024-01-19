@@ -35,6 +35,11 @@ import Compare from "@/views/dashboard/opening/compare.vue";
 
 // Project
 // import Compare from "@/views/dashboard/job/Job.vue";
+// Job
+
+import JobPresentation from "@/views/job/job-presentation.vue";
+// Prompt Engineering
+import PromptDesign from "@/views/job/prompt-design.vue";
 const routes = [
   { path: "/", redirect: "/openings" },
   {
@@ -46,7 +51,14 @@ const routes = [
         name: "openings",
         component: Openings,
       },
-      
+      {
+        path: "/job-presentation",
+        name: "JobPresentation",
+        component: JobPresentation,
+        meta: {
+          public: true,
+        },
+      },
       {
         name: "opening",
         path: "opening/:openingRef",
@@ -109,6 +121,15 @@ const routes = [
       public: true,
     },
   },
+  {
+    path: "/prompt-design",
+    name: "PromptDesign",
+    component: PromptDesign,
+    meta: {
+      public: true,
+    },
+  },
+ 
   {
     path: "/confirm",
     name: "Confirm",
