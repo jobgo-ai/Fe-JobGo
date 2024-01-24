@@ -49,14 +49,14 @@ const routes = [
         name: "openings",
         component: Openings,
       },
-      {
-        path: "/job-presentation/:id",
-        name: "JobPresentation",
-        component: JobPresentation,
-        meta: {
-          public: true,
-        },
-      },
+      // {
+      //   path: "/job-presentation/:id",
+      //   name: "JobPresentation",
+      //   component: JobPresentation,
+      //   meta: {
+      //     public: true,
+      //   },
+      // },
       {
         name: "opening",
         path: "opening/:openingRef",
