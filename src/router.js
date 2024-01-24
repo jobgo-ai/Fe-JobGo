@@ -33,9 +33,8 @@ import AddInterview from "@/views/dashboard/opening/add-interview.vue";
 import EditInterview from "@/views/dashboard/opening/edit-interview.vue";
 import Compare from "@/views/dashboard/opening/compare.vue";
 
-
 // openings
-// import JobPresentation from "@/views/job/job-presentation.vue";
+import JobPresentation from "@/views/job/job-presentation.vue";
 // Prompt Engineering
 import PromptDesign from "@/views/job/prompt-design.vue";
 const routes = [
@@ -49,14 +48,11 @@ const routes = [
         name: "openings",
         component: Openings,
       },
-      // {
-      //   path: "/job-presentation/:id",
-      //   name: "JobPresentation",
-      //   component: JobPresentation,
-      //   meta: {
-      //     public: true,
-      //   },
-      // },
+      {
+        path: "/job-presentation/:id",
+        name: "JobPresentation",
+        component: JobPresentation,
+      },
       {
         name: "opening",
         path: "opening/:openingRef",
@@ -127,7 +123,7 @@ const routes = [
       public: true,
     },
   },
- 
+
   {
     path: "/confirm",
     name: "Confirm",
