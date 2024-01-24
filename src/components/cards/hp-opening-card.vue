@@ -1,34 +1,31 @@
 <template>
   <component
-    :is="tag"
+  :is="tag"
     :isDisabled="isAddCard || isArchived"
-    :to="linkValue"
     :class="containerClasses"
+    :to="linkValue"
   >
-    <div
-      :class="`hp-opening-card__add-new`"
-      v-if="isAddCard && !hasMaxOpenings"
-    >
+    <div :class="`hp-opening-card__add-new`">
       <div>
-        <div
-          @click="$emit('handleAddNew')"
-          class="hp-opening-card__add-new__icon-container"
-        >
-          <hp-icon :size="24" name="plus"></hp-icon>
-        </div>
-        <p class="hp-opening-card__content__name">New opening</p>
+        <p class="hp-opening-card__content__name">{{ opening?.jobPosition }}</p>
         <p class="hp-opening-card__content__description">
-          Easily define a new opening
+          {{ opening?.experience }}
+        </p>
+        <p class="hp-opening-card__content__education">
+          {{ opening?.education }}
+        </p>
+        <p class="hp-opening-card__content__location">
+          {{ opening?.location }}
         </p>
       </div>
-      <div>
-        <hp-button
-          @handleClick="$emit('handleAddNew')"
-          label="Create new"
-        ></hp-button>
+      <div
+        @click.capture.stop="handleDeleteOpening(opening?.id)"
+        class="hp-opening-card__add-new__icon-container"
+      >
+        <hp-icon :size="24" name="delete" style="fill: gray"></hp-icon>
       </div>
     </div>
-    <div :class="`hp-opening-card__add-new`" v-if="isAddCard && hasMaxOpenings">
+    <!-- <div :class="`hp-opening-card__add-new`" v-if="isAddCard && hasMaxOpenings">
       <div class="hp-opening-card__upgrade-container">
         <div class="hp-opening-card__add-new__icon-container">
           <hp-icon :size="24" name="plus"></hp-icon>
@@ -119,7 +116,8 @@
           ></hp-badge>
         </div>
       </div>
-    </div>
+    </div> -->
+  
   </component>
 </template>
 
@@ -127,6 +125,7 @@
 // Vendor
 import { computed, defineAsyncComponent } from "vue";
 import { useRoute } from "vue-router";
+import { usePut, useDelete } from "@/composables/useHttp";
 
 // Components
 import HpButton from "@/components/hp-button.vue";
@@ -134,12 +133,14 @@ import HpBadge from "@/components/hp-badge.vue";
 import HpAbstractAvatar from "@/components/hp-abstract-avatar.vue";
 import HpIcon from "@/components/hp-icon.vue";
 import HpUpgrade from "@/components/hp-upgrade.vue";
+import useToast from "@/composables/useToast";
 
 // Composables
 import useAuth from "@/composables/useAuth";
 import usePlans from "@/composables/usePlans";
 import useOpenings from "@/composables/useOpenings";
 import usePermissions from "@/composables/usePermissions";
+const { setToast } = useToast();
 
 const props = defineProps({
   opening: {
@@ -172,7 +173,10 @@ const tag = props.isAddCard || props.isArchived ? "div" : "router-link";
 
 const route = useRoute();
 
-const emits = defineEmits(["unarchiveOpening, handleAddNew"]);
+const emits = defineEmits([
+  "unarchiveOpening",
+  "refreshOpenings",
+]);
 
 const splash = defineAsyncComponent(() =>
   import(
@@ -193,20 +197,35 @@ const containerClasses = computed(() => {
 });
 
 const linkValue = computed(() => {
-  if (props.opening.permissions?.role === "member") {
-    return `/opening/${props.opening.reference}/edit`;
-  }
-  if (props.opening.reference === route.params.openingRef) {
-    return `/openings`;
-  }
-  return `/openings/${props.opening.reference}`;
+  console.log("linkValue",`/job-presentation/${props.opening?.id}`);
+  // if (props.opening.permissions?.role === "member") {
+  //   return `/opening/${props.opening.reference}/edit`;
+  // }
+  // if (props.opening.reference === route.params.openingRef) {
+  //   return `/openings`;
+  // }
+  return `/job-presentation/${props.opening?.id}`;
 });
+const handleDeleteOpening = async (id) => {
+  console.log("id", id);
+  if (id) {
+    console.log("id", id);
+    const deleteOpening = useDelete(`opening/${id}`);
+    await deleteOpening.remove();
+    setToast({
+      type: "positive",
+      title: "Delete",
+      message: "That opining is finally gone",
+    });
+    emits("refreshOpenings");
+  }
+};
 </script>
 
 <style lang="scss">
 .hp-opening-card {
   width: 264px;
-  min-height: 236px;
+  min-height: 200px;
   list-style: none;
   cursor: pointer;
   border-radius: $border-radius-lg;
@@ -260,13 +279,28 @@ const linkValue = computed(() => {
     flex-direction: column;
     height: 100%;
     &__name {
-      font-weight: 500;
+      font-weight: 700;
+      font-size: 20px;
       margin-bottom: 4px;
     }
     &__description {
+      // font-weight: 800;
       flex: 1;
       color: var(--color-text-secondary);
-      padding-bottom: 12px;
+      margin: 8px 0;
+      font-size: 18px;
+    }
+    &__education {
+      // margin: 8px 0;
+      font-size: 18px;
+      flex: 1;
+      color: var(--color-text-secondary);
+    }
+    &__location {
+      margin: 8px 0;
+      font-size: 18px;
+      flex: 1;
+      color: var(--color-text-secondary);
     }
     &__role {
       position: absolute;
@@ -298,6 +332,7 @@ const linkValue = computed(() => {
     padding: 16px;
     flex: 1;
     display: flex;
+    position: relative;
     flex-direction: column;
     justify-content: space-between;
     height: 100%;
@@ -305,6 +340,8 @@ const linkValue = computed(() => {
       display: flex;
       justify-content: center;
       align-items: center;
+      position: absolute;
+      right: 10px;
       cursor: pointer;
       height: 40px;
       width: 40px;

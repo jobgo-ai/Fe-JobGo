@@ -1,17 +1,25 @@
 <template>
   <div class="openings">
-    <transition name="candidate-list-transition" mode="in-out" appear>
+    <!-- <transition name="candidate-list-transition" mode="in-out" appear>
       <div v-if="isCandidateListOpen" class="candidate-list">
         <candidate-list :isCandidateDetailsOpen="isCandidateDetailsOpen" />
       </div>
-    </transition>
+    </transition> -->
     <div :class="`view`">
-      <transition class="candidate-details" name="candidate-details-transition" appear>
-        <candidate-details v-if="isCandidateDetailsOpen"
-          :isCandidateDetailsOpen="isCandidateDetailsOpen"></candidate-details>
+      <transition
+        class="candidate-details"
+        name="candidate-details-transition"
+        appear
+      >
+        <candidate-details
+          v-if="isCandidateDetailsOpen"
+          :isCandidateDetailsOpen="isCandidateDetailsOpen"
+        ></candidate-details>
       </transition>
-      <transition :class="`openingslist ${!isCandidateListOpen && 'openingslist--empty'}`"
-        name="openings-list-transition">
+      <transition
+        :class="`openingslist ${!isCandidateListOpen && 'openingslist--empty'}`"
+        name="openings-list-transition"
+      >
         <div v-if="!isCandidateDetailsOpen" class="opening-list">
           <div class="opening">
             <h2 class="openings__title">Openings</h2>
@@ -21,19 +29,22 @@
            
             <hp-button    class="hp-add-job-card__actions__button" label="Add New Job"></hp-button>
             </router-link> -->
-
           </div>
           <p class="openings__subtitle">
             Manage your openings or quickly create new ones
           </p>
-          <hp-tabs class="openings__tabs" :options="[
-            { label: 'Active', value: 'active' },
-            // { label: 'Archived', value: 'archived' },
-          ]" v-model="state" />
+          <hp-tabs
+            class="openings__tabs"
+            :options="[
+              { label: 'Active', value: 'active' },
+              // { label: 'Archived', value: 'archived' },
+            ]"
+            v-model="state"
+          />
 
           <div class="`hp-opening-card__add-new`">
             <div>
-              <div class="hp-opening-card__add-new__icon-container">
+              <div class="hp-opening-card__add-new__icon-container1">
                 <router-link to="/chatbot">
                   <hp-icon :size="24" name="plus"></hp-icon>
                 </router-link>
@@ -43,21 +54,34 @@
                 Easily define a new opening
               </p>
             </div>
-            <div>
+            <!-- <div>
               <router-link to="/chatbot">
                 <hp-button label="Create new"></hp-button>
               </router-link>
-            </div>
+            </div> -->
           </div>
 
-          <ol v-if="!isOpeningsLoading" ref="scrollContainer" class="opening-list__grid">
-            <hp-opening-card v-if="state === 'active' && canCreateOpening" @handleAddNew="handleNewOpening"
-              :isAddCard="true">
-            </hp-opening-card>
-            <!-- <hp-opening-card v-for="opening in openings" :isSelected="opening.reference === route.params.openingRef"
-              :key="opening.reference" :opening="opening" @unarchiveOpening="handleUnarchiveOpening"
-              :isArchived="state === 'archived'">
+          <ol ref="scrollContainer" class="opening-list__grid">
+            <!--    <hp-opening-card
+              :opening="opening"
+              @unarchiveOpening="handleUnarchiveOpening"
+              @handleAddNew="handleNewOpening"
+              :isAddCard="true"
+            >
             </hp-opening-card> -->
+            <template
+              v-if="openingList.length"
+              v-for="opening in openingList"
+              :key="opening.id"
+            >
+              <hp-opening-card
+                v-if="opening"
+                :opening="opening"
+                @refreshOpenings="fetchProject()"
+                @handleNewOpening="handleNewOpening"
+                @unarchiveOpening="handleUnarchiveOpening"
+              ></hp-opening-card>
+            </template>
             <!-- <div v-if="state === 'archived' && openings.length === 0">
               No archived openings
             </div> -->
@@ -65,7 +89,6 @@
           <!-- <hp-spinner class="openingslist__spinner" :size="24" v-else></hp-spinner> -->
         </div>
       </transition>
-      <!-- {{ openingList }} -->
     </div>
   </div>
 </template>
@@ -77,14 +100,13 @@ import { onMounted } from "vue";
 import { useWindowScroll } from "@vueuse/core";
 
 // Composables
-import { usePut } from "@/composables/useHttp";
+import { usePut, useDelete } from "@/composables/useHttp";
 import useToast from "@/composables/useToast";
 import useOpenings from "@/composables/useOpenings";
 import { useGettingStarted } from "@/composables/useGettingStarted";
 import { useBreadcrumbs } from "@/composables/useBreadcrumbs";
 import useAuth from "@/composables/useAuth";
 import { state as tokenState } from "@/composables/useAuth";
-
 
 // Views
 import CandidateList from "@/views/dashboard/openings/candidate-list.vue";
@@ -150,12 +172,11 @@ onMounted(async () => {
   // Checks to see if candidate detail page is open
   isCandidateDetailsOpen.value = route.query.candidate;
 
-  // await fetchProject();
+  await fetchProject();
 });
 
 const fetchProject = async () => {
   console.log("fetchProject api call:- ");
-
 
   // const { position_name, candidate_experience, location_type, candidate_education, job_description_type, job_description } = chatObject;
   // const payload = {
@@ -179,16 +200,14 @@ const fetchProject = async () => {
       // body: JSON.stringify(payload),
     });
 
-
     const responseData = await res.json();
-    console.log("Response Data:", responseData);
     openingList.value = responseData;
+    console.log("Response Data:", responseData);
     // console.log("Resposnse sasas :- ", res, res?.data);
-  }
-  catch (error) {
+  } catch (error) {
     console.log(error);
   }
-}
+};
 
 console.log("openingList :- ", openingList.value);
 
@@ -252,11 +271,22 @@ watch(
   { immediate: true }
 );
 
-const handleNewOpening = async () => {
-  const newOpeningRef = await createOpening();
-  router.push(`/opening/${newOpeningRef}/edit`);
-  fetchChecklist();
-  fetchOpenings();
+const handleNewOpening = async (id) => {
+  if (id) {
+    console.log("id", id);
+    const deleteOpening = useDelete(`opining/${id}`);
+    await deleteOpening.remove();
+    setToast({
+      type: "positive",
+      title: "Delete",
+      message: "That nasty opining is finally gone",
+    });
+  }
+
+  // const newOpeningRef = await createOpening();
+  // router.push(`/opening/${newOpeningRef}/edit`);
+  // fetchChecklist();
+  // fetchOpenings();
 };
 
 watch(state, async () => {

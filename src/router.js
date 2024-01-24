@@ -52,7 +52,7 @@ const routes = [
         component: Openings,
       },
       {
-        path: "/job-presentation",
+        path: "/job-presentation/:id",
         name: "JobPresentation",
         component: JobPresentation,
         meta: {

@@ -5,6 +5,7 @@
     </label>
     <textarea
       :class="`hp-textarea__input`"
+      :autofocus="autofocus"
       :name="name"
       ref="inputRef"
       :placeholder="placeholder"
@@ -35,6 +36,10 @@ const props = defineProps({
   placeholder: {
     type: String,
     default: "",
+  },
+  autofocus: {
+    type: Boolean,
+    default:false,
   },
   isDisabled: {
     type: Boolean,

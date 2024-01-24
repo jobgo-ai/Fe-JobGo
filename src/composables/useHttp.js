@@ -21,13 +21,12 @@ export function useGet(endpoint) {
     data.value = null;
     error.value = null;
     try {
-      console.log(" state.token123", state.token);
-      const res =   await fetch(`${API_URL}/${url}`, {
+      const res = await fetch(`${API_URL}/${url}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": "Bearer " + state.token,
-          "ngrok-skip-browser-warning": "69420"
+          Authorization: "Bearer " + state.token,
+          "ngrok-skip-browser-warning": "69420",
         },
         signal: signal,
       });
@@ -106,6 +105,7 @@ export function usePut(endpoint) {
         headers: {
           "Content-Type": "application/json",
           Authorization: "Bearer " + state.token,
+          "Csrf-Token": "nocheck",
         },
         body: JSON.stringify(body),
       });
@@ -133,23 +133,20 @@ export function usePost(endpoint) {
   const data = ref(null);
   const loading = ref(false);
   const error = ref(null);
-
   const post = async (body) => {
     loading.value = false;
     data.value = null;
     error.value = null;
     try {
-      const res = await fetch(`${API_URL}/${endpoint}`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + state.token,
-            "Csrf-Token": "nocheck",
-          },
-          body: JSON.stringify(body),
-        }
-      );
+      const res = await fetch(`${API_URL}/${endpoint}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + state.token,
+          "Csrf-Token": "nocheck",
+        },
+        body: JSON.stringify(body),
+      });
       console.log("res--", res);
       if (!res.ok) {
         error.value = await res.json();
@@ -186,6 +183,7 @@ export function useDelete(endpoint) {
         headers: {
           "Content-Type": "application/json",
           Authorization: "Bearer " + state.token,
+          "Csrf-Token": "nocheck",
         },
         body: JSON.stringify(body),
       });

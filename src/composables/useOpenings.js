@@ -35,7 +35,7 @@ const fetchOpenings = async (isLoadMore = false, state = "active") => {
     isLoadingMoreLoading.value = true;
   }
 
-  const url = `openings?state=${state.toLowerCase()}&limit=${limit}&offset=${
+  const url = `opening?state=${state.toLowerCase()}&limit=${limit}&offset=${
     offset.value
   }`;
   await getOpenings.get(url);

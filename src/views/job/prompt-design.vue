@@ -7,11 +7,13 @@
         <!-- <p class="signin__subtitle">Welcome back!</p> -->
         <h2 class="signin__title">Play with Prompt</h2>
         <form @submit="onSubmit">
-          <hp-input
+          <hp-textArea
             name="prompt"
             placeholder="Enter your prompt"
             label="Prompt"
+            :autofocus="true"
             type="text"
+            rows="6"
           />
           <hp-button
             primary
@@ -31,21 +33,51 @@
 </template>
 
 <script setup>
+import { onMounted, ref } from "vue";
 import { useForm } from "vee-validate";
-import HpInput from "@/components/form/hp-input.vue";
+import HpTextArea from "@/components/form/hp-textarea.vue";
 import HpButton from "@/components/hp-button.vue";
-
-const { handleSubmit, isSubmitting, setFieldError, meta } = useForm({
+import { useGet, usePut } from "@/composables/useHttp";
+import useToast from "@/composables/useToast";
+import Logo from "@/assets/logo.svg";
+const { handleSubmit, isSubmitting, setFieldError, meta, resetForm } = useForm({
   initialValues: {
     prompt: "",
-
-  }
+  },
 });
-
+const { setToast } = useToast();
+const isLoading = ref(false);
+onMounted(() => {
+  getPrompt();
+});
+const getPrompt = async () => {
+  try {
+    const { error, data, get, loading } = useGet("prompt");
+    isLoading.value = loading;
+    await get();
+    const simpleObject = JSON.parse(JSON.stringify(data.value));
+    prompt.value = simpleObject[0].prompt;
+    resetForm({
+      values: {
+        prompt: prompt.value,
+      },
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
 const onSubmit = handleSubmit(async (values) => {
   const { prompt } = values;
-  console.log(prompt);
-})
+  const putPayload = { promptId: 1, prompt: prompt };
+  const putPrompt = usePut(`prompt`);
+  await putPrompt.put(putPayload);
+  getPrompt();
+  setToast({
+    type: "positive",
+    title: "Success!",
+    message: "Prompt is Update Successfully",
+  });
+});
 </script>
 
 <style lang="scss">

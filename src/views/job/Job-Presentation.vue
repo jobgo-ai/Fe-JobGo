@@ -2,56 +2,71 @@
   <div class="job-details">
     <div style="display: flex; justify-content: space-between; width: 100%">
       <div placeholder="title" contenteditable="true" class="job-details__name">
-        {{ sessionParameter.opening_name }}45
+        {{ sessionParameter?.jobPosition }}
       </div>
     </div>
-    <div
-      placeholder="experience"
-      id="editor"
-      contenteditable="true"
-      class="job-details__experience"
-      style=""
-      spellcheck="true"
-      data-content-editable-leaf="true"
-    >
-      3+ Year
+    <div style="display: flex">
+      <div
+        placeholder="experience"
+        id="editor"
+        contenteditable="true"
+        class="job-details__experience"
+        style=""
+        spellcheck="true"
+        data-content-editable-leaf="true"
+      >
+        {{ sessionParameter?.experience }}
+      </div>
+      <div
+        placeholder="experience"
+        id="editor"
+        contenteditable="true"
+        style=""
+        spellcheck="true"
+        class="job-details__location"
+        data-content-editable-leaf="true"
+      >
+        {{ sessionParameter?.location }}
+      </div>
     </div>
-    <div ref="dropdownTarget" >
-    <div
-      v-if="showJobDescription"
-      placeholder="job description"
-      v-html="editorData"
-      @click="changeVisibility"
-      class="job-details__description"
-    ></div>
-   <div     style="margin-top:2.4rem" v-else>
-    <CKEditor
-
-    :editor="ClassicEditor"
-    v-model="editorData"
-    :config="editorConfig"
-  ></CKEditor>
-   </div>
-  </div>
+    <div>
+      <div
+        v-if="showJobDescription"
+        placeholder="job description"
+        v-html="editorData"
+        @click="changeVisibility"
+        class="job-details__description"
+      ></div>
+      <div ref="dropdownTarget" style="margin-top: 2.4rem" v-else>
+        <CKEditor
+          :editor="ClassicEditor"
+          v-model="editorData"
+          @input="updateJobDescription"
+          :config="editorConfig"
+        ></CKEditor>
+      </div>
+    </div>
   </div>
 </template>
 <script setup>
-import { ref, onMounted,nextTick  } from "vue";
+import { ref, onMounted, nextTick } from "vue";
 // import markdownToeditorData from "markdown-to-editorData";
 import { marked } from "marked";
-import { onClickOutside } from "@vueuse/core";
+import { onClickOutside, useDebounceFn } from "@vueuse/core";
 import { component as CKEditor } from "@ckeditor/ckeditor5-vue";
+import { useRoute } from "vue-router";
+import { useGet, usePost } from "@/composables/useHttp";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 const editorData = ref("<h1>Content of the editor.</h1>");
-const showJobDescription=ref(true)
-const dropdownTarget=ref("")
-const changeVisibility=()=>{
-  showJobDescription.value=!showJobDescription.value
-}
-onClickOutside(dropdownTarget,async (event) => {
-  await nextTick(()=>{
-    changeVisibility()
-  })
+const showJobDescription = ref(true);
+const dropdownTarget = ref("");
+const changeVisibility = () => {
+  showJobDescription.value = !showJobDescription.value;
+};
+const route = useRoute();
+
+onClickOutside(dropdownTarget, async (event) => {
+  showJobDescription.value = true;
 });
 const editorConfig = ref({
   toolbar: ["heading", "bold", "italic", "numberedList"],
@@ -124,48 +139,88 @@ const markdown = ref(
     "\n" +
     "We are an equal opportunity employer and value diversity at our company. We do not discriminate on the basis of race, religion, color, national origin, gender, sexual orientation, age, marital status, veteran status, or disability status."
 );
-const sessionParameter = {
-  opening_name: " Full Stack Developer",
-  job_location: "Remote",
+const sessionParameter = ref(null);
+const getJobPresentation = async () => {
+  try {
+    const { error, data, get, loading } = useGet(`opening/${route.params.id}`);
+    await get();
+    console.log("datat.value", data.value);
+    const simpleObject = JSON.parse(JSON.stringify(data.value));
+    sessionParameter.value = simpleObject;
+    // editorData.value=sessionParameter.value.fullDescription
+    if (sessionParameter.value?.fullDescription) {
+      editorData.value = marked.parse(sessionParameter.value.fullDescription);
+    }
+    // prompt.value = simpleObject[0].prompt;
+    // resetForm({
+    //   values: {
+    //     prompt: prompt.value,
+    //   },
+    // });
+  } catch (error) {
+    console.log(error);
+  }
 };
-
+const updateJobDescription = async () => {
+  try {
+    const jobDetailsName = document.getElementsByClassName("job-details__name");
+    const jobDetailsExperience = document.getElementsByClassName(
+      "job-details__experience"
+    );
+    const location = document.getElementsByClassName("job-details__location");
+    console.log("jobDetailsName", jobDetailsName[0]?.innerText);
+    console.log("jobDetailsExperience", jobDetailsExperience[0]?.innerText);
+    console.log("location", jobDetailsExperience[0]?.innerText);
+    const putOpening = usePost(`opening`);
+    await putOpening.post({
+      id: Number(route?.params?.id),
+      jobPosition: jobDetailsName[0]?.innerText,
+      experience: jobDetailsExperience[0]?.innerText,
+      location: location[0]?.innerText,
+      salary: sessionParameter.value?.salary,
+      education: sessionParameter.value?.education,
+      fullDescription: editorData.value,
+    });
+    await getJobPresentation();
+    // await get();
+    // console.log("datat.value", data.value);
+    // const simpleObject = JSON.parse(JSON.stringify(data.value));
+    // sessionParameter.value = simpleObject;
+    // // editorData.value=sessionParameter.value.fullDescription
+    // editorData.value = marked.parse(sessionParameter.value.fullDescription);
+    // // prompt.value = simpleObject[0].prompt;
+    // // resetForm({
+    // //   values: {
+    // //     prompt: prompt.value,
+    // //   },
+    // // });
+  } catch (error) {
+    console.log(error);
+  }
+};
 onMounted(() => {
   // editorData.value = markdownToeditorData(markdown.value); // "Some quoted *code*"
   editorData.value = marked.parse(markdown.value);
-  console.log(editorData.value);
-  document.addEventListener("contextmenu", function (e) {
-    // Disable right-click
-    e.preventDefault();
-  });
 
-  document.addEventListener("copy", function (e) {
-    // Disable copy
-    e.preventDefault();
-  });
+  getJobPresentation();
 
-  document.addEventListener("cut", function (e) {
-    // Disable cut
-    e.preventDefault();
-  });
-
-  document.addEventListener("paste", function (e) {
-    // Disable paste
-    e.preventDefault();
-  });
-  // const jobDetailsName = document.getElementsByClassName("job-details__name");
-  // const jobDetailsExperience = document.getElementsByClassName(
-  //   "job-details__experience "
-  // );
   // const jobDetailsDescription = document.getElementsByClassName(
   //   "job-details__description"
   // );
-  // jobDetailsName.addEventListener(
-  //   "input",
-  //   function (event) {
-  //     console.log("input event fired", editor.innerText || editor.textContent);
-  //   },
-  //   false
-  // );
+  const jobDetailsName = document.getElementsByClassName("job-details__name");
+  const details__experience = document.getElementsByClassName(
+    "job-details__experience"
+  );
+  const details__location = document.getElementsByClassName(
+    "job-details__location"
+  );
+
+  const debouncedFn = useDebounceFn(() => {
+    updateJobDescription();
+  }, 1000);
+  jobDetailsName[0].addEventListener("input", debouncedFn);
+  details__experience[0].addEventListener("input", debouncedFn);
+  details__location[0].addEventListener("input", debouncedFn);
 });
 </script>
 <style lang="scss" scoped>
@@ -215,6 +270,16 @@ onMounted(() => {
     caret-color: rgb(55, 53, 47);
     font-weight: 500;
   }
+  &__location {
+    font-size: 20px;
+    cursor: pointer;
+    padding-left: 16px;
+    margin-top: 2rem;
+    white-space: pre-wrap;
+    word-break: break-word;
+    caret-color: rgb(55, 53, 47);
+    font-weight: 500;
+  }
   &__description {
     font-size: 1rem;
     margin-top: 2rem;
@@ -239,42 +304,41 @@ div p:focus {
 }
 
 .ck.ck-content h3.category {
-    font-family: 'Bebas Neue';
-    font-size: 20px;
-    font-weight: bold;
-    color: #d1d1d1;
-    letter-spacing: 10px;
-    margin: 0;
-    padding: 0;
+  font-family: "Bebas Neue";
+  font-size: 20px;
+  font-weight: bold;
+  color: #d1d1d1;
+  letter-spacing: 10px;
+  margin: 0;
+  padding: 0;
 }
 
 .ck.ck-content p.info-box {
-    padding: 1.2em 2em;
-    border: 1px solid #e91e63;
-    border-left: 10px solid #e91e63;
-    border-radius: 5px;
-    margin: 1.5em;
+  padding: 1.2em 2em;
+  border: 1px solid #e91e63;
+  border-left: 10px solid #e91e63;
+  border-radius: 5px;
+  margin: 1.5em;
 }
 .ck.ck-editor__main > .ck-editor__editable:not(.ck-focused) {
   padding: 1rem !important;
 }
 
 .ck.ck-content h3.category {
-    font-family: 'Bebas Neue';
-    font-size: 20px;
-    font-weight: bold;
-    color: #d1d1d1;
-    letter-spacing: 10px;
-    margin: 0;
-    padding: 0;
+  font-family: "Bebas Neue";
+  font-size: 20px;
+  font-weight: bold;
+  color: #d1d1d1;
+  letter-spacing: 10px;
+  margin: 0;
+  padding: 0;
 }
 
 .ck.ck-content p.info-box {
-    padding: 1.2em 2em;
-    border: 1px solid #e91e63;
-    border-left: 10px solid #e91e63;
-    border-radius: 5px;
-    margin: 1.5em;
+  padding: 1.2em 2em;
+  border: 1px solid #e91e63;
+  border-left: 10px solid #e91e63;
+  border-radius: 5px;
+  margin: 1.5em;
 }
-
 </style>
