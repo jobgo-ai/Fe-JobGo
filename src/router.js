@@ -33,10 +33,8 @@ import AddInterview from "@/views/dashboard/opening/add-interview.vue";
 import EditInterview from "@/views/dashboard/opening/edit-interview.vue";
 import Compare from "@/views/dashboard/opening/compare.vue";
 
-// Project
-// import Compare from "@/views/dashboard/job/Job.vue";
-// Job
 
+// openings
 import JobPresentation from "@/views/job/job-presentation.vue";
 // Prompt Engineering
 import PromptDesign from "@/views/job/prompt-design.vue";
