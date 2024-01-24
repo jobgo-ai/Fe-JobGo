@@ -35,7 +35,7 @@ import Compare from "@/views/dashboard/opening/compare.vue";
 
 
 // openings
-import JobPresentation from "@/views/job/job-presentation.vue";
+// import JobPresentation from "@/views/job/job-presentation.vue";
 // Prompt Engineering
 import PromptDesign from "@/views/job/prompt-design.vue";
 const routes = [
