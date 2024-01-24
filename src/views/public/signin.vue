@@ -15,12 +15,12 @@
               label="Password"
               type="password"
             />
-            <router-link
+            <!-- <router-link
               tabIndex="-1"
               to="/forgot-password"
               class="signin__forgot-password"
               >Forgot password</router-link
-            >
+            > -->
           </div>
           <hp-button
             :isLoading="postLogin.loading.value"

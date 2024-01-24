@@ -21,6 +21,7 @@ import Settings from "@/views/dashboard/settings/settings.vue";
 import Upgrade from "@/views/dashboard/settings/organization/upgrade.vue";
 import Upgraded from "@/views/dashboard/settings/organization/upgraded.vue";
 import Organization from "@/views/dashboard/settings/organization/organization.vue";
+import JobPresentation from "@/views/dashboard/job-presentation.vue";
 
 //Openings
 import Openings from "@/views/dashboard/openings/openings.vue";
@@ -34,7 +35,6 @@ import EditInterview from "@/views/dashboard/opening/edit-interview.vue";
 import Compare from "@/views/dashboard/opening/compare.vue";
 
 // openings
-import JobPresentation from "@/views/job/job-presentation.vue";
 // Prompt Engineering
 import PromptDesign from "@/views/job/prompt-design.vue";
 const routes = [
