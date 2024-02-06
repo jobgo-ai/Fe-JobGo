@@ -9,7 +9,8 @@ import Signup from "@/views/public/signup.vue";
 import ConfirmEmail from "@/views/public/confirm-email.vue";
 import CompleteSignup from "@/views/public/Complete-Signup.vue";
 import ChatbotTest from "@/views/public/chatbot-test.vue";
-
+import ChatbotTest1 from "@/views/public/chatbot.vue";
+import UploadFile from "@/views/assistant/upload-assistant-file.vue";
 // Reports
 import Report from "@/views/public/reports/report.vue";
 import Evaluation from "@/views/public/reports/evaluation.vue";
@@ -34,7 +35,6 @@ import AddInterview from "@/views/dashboard/opening/add-interview.vue";
 import EditInterview from "@/views/dashboard/opening/edit-interview.vue";
 import Compare from "@/views/dashboard/opening/compare.vue";
 
-// openings
 // Prompt Engineering
 import PromptDesign from "@/views/job/prompt-design.vue";
 const routes = [
@@ -53,6 +53,7 @@ const routes = [
         name: "JobPresentation",
         component: JobPresentation,
       },
+      
       {
         name: "opening",
         path: "opening/:openingRef",
@@ -116,6 +117,14 @@ const routes = [
     },
   },
   {
+    path: "/upload",
+    name: "UploadFile",
+    component: UploadFile,
+    meta: {
+      public: true,
+    },
+  },
+  {
     path: "/prompt-design",
     name: "PromptDesign",
     component: PromptDesign,
@@ -153,6 +162,14 @@ const routes = [
     path: "/chatbot",
     name: "chatbot",
     component: ChatbotTest,
+    meta: {
+      public: true,
+    },
+  },
+  {
+    path: "/chat",
+    name: "chatbot1",
+    component: ChatbotTest1,
     meta: {
       public: true,
     },
