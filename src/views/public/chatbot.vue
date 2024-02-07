@@ -9,6 +9,10 @@
       </div>
       <div>
         <hp-button
+          label="Create Json"
+          @handleClick="createJson()"
+        ></hp-button>
+        <hp-button
           label="END CHAT"
           @handleClick="createThread(),createAssistant()"
           :isLoading="isChatLoading"
@@ -102,6 +106,13 @@ const createParameterJSON = async () => {
   });
   console.log("generate-json",data);
 };
+
+
+const createJson = () => {
+console.log("Create JSON");
+createParameterJSON();
+}
+
 const createAssistant = async () => {
   const assistant = useGet(`create-assistant`);
   await assistant.get();
@@ -192,5 +203,9 @@ onMounted(async () => {
       padding: 1rem;
     }
   }
+}
+
+.chat__assistant-text, .chat__user-text { 
+  color: black;
 }
 </style>
