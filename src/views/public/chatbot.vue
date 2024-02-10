@@ -1,70 +1,97 @@
 <template>
-  <div class="chat">
-    <div class="chat__header">
-      <div style="display: flex; align-items: center">
-        <div class="chat__header-logo">
-          <Logo />
+  <div class="chat-boat-container">
+    <div class="chat-container" :style="{ boxShadow: '0 0 #0000, 0 0 #0000, 0 1px 2px 0 rgb(0 0 0 / 0.05)' }">
+
+      <!-- Heading -->
+      <div class="header-container">
+        <div>
+          <h2>Job Go AI Profiling Tools</h2>
+          <p>Powered by JoboGo.com</p>
         </div>
-        Job GO Profiling Tools
-      </div>
-      <div>
-        <hp-button
+        <div>
+          <button class="create-json" @click="createJson">Create Json</button>
+          <!-- <hp-button
           label="Create Json"
           @handleClick="createJson()"
-        ></hp-button>
-        <hp-button
-          label="END CHAT"
-          @handleClick="createThread(),createAssistant()"
-          :isLoading="isChatLoading"
-        ></hp-button>
+        ></hp-button> -->
+        </div>
       </div>
-    </div>
 
-    <div
-      class="chat__container"
-      style="overflow: scroll; height: 75vh; padding: 15px"
-    >
-      <div class="" v-for="(item, index) of conversationMsg" :key="index">
-        <div
-          style="margin-bottom: 10px"
-          v-if="item.role == 'assistant'"
-          class="chat__assistant"
-        >
-          <div class="chat__assistant-text">
-            {{ item.msg }}
+      <!-- Chat Container -->
+      <div class="chat-box-container" :style="{ minWidth: '100%' }" ref="chatBoxRef">
+
+        <div class="" v-for="(item, index) of conversationMsg" :key="index">
+
+          <div v-if="item.role === 'user'" class="user-chat-container">
+            <p class="message">
+              <span>You </span>
+            <p>{{ item.msg }}</p>
+            </p>
+            <span>
+              <div class="user-img">
+                <svg stroke="none" fill="black" stroke-width="0" viewBox="0 0 16 16" height="20" width="20"
+                  xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0Zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4Zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10Z">
+                  </path>
+                </svg>
+              </div>
+            </span>
+          </div>
+
+          <div v-else-if="item.role === 'assistant'" class="AI-chat-container">
+            <span>
+              <div class="ai-image">
+                <svg stroke="none" fill="black" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" height="20"
+                  width="20" xmlns="http://www.w3.org/2000/svg">
+                  <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z">
+                  </path>
+                </svg>
+              </div>
+            </span>
+            <p class="message">
+              <span>AI </span>
+            <p>{{ item.msg }}</p>
+            </p>
           </div>
         </div>
 
-        <div
-          style="margin-bottom: 10px"
-          v-else-if="item.role == 'user'"
-          class="chat__user"
-        >
-          <div class="chat__user-text">
-            {{ item.msg }}
-          </div>
+        <div class="AI-chat-container" v-if="isChatLoading">
+          <span>
+            <div class="ai-image">
+              <svg stroke="none" fill="black" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" height="20"
+                width="20" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z">
+                </path>
+              </svg>
+            </div>
+          </span>
+          <p class="message">
+            <span>AI </span>
+            <span class="loader"></span>
+          </p>
         </div>
       </div>
-      <div
-        style="margin-bottom: 10px"
-        v-if="isChatLoading"
-        class="chat__loading"
-      >
-        <div class="chat__loading-text">...</div>
+
+      <!-- Input box -->
+      <div class="inputbox-container">
+        <form class="form" @submit.prevent="sendMsg">
+          <input v-model="userMsg" placeholder="Type your message">
+          <button type="submit" class="sendbtn">Send</button>
+        </form>
       </div>
-    </div>
-    <div class="chat__input">
-      <input type="text" v-model="userMsg" v-on:keyup.enter="sendMsg" />
+
     </div>
   </div>
 </template>
 
 <script setup>
-//vendor
-import Logo from "@/assets/logo.svg";
 import { ref, onMounted } from "vue";
 import { usePost, useGet } from "@/composables/useHttp";
 import HpButton from "@/components/hp-button.vue";
+
 // state
 const conversationMsg = ref([
   {
@@ -74,14 +101,21 @@ const conversationMsg = ref([
 ]);
 const showEndChat = ref(false);
 const userMsg = ref(null);
+const chatBoxRef = ref(null);
 const isChatLoading = ref(false);
-// methods
+
+
 const sendMsg = async () => {
+
+  const chatBox = chatBoxRef.value;
   isChatLoading.value = true;
   conversationMsg.value.push({
     role: "user",
     msg: userMsg.value,
   });
+  if (chatBox) {
+    chatBox.scrollTop = chatBox.scrollHeight;
+  }
   const query = userMsg.value;
   userMsg.value = null;
   const { post, data, loading } = usePost("get-msg");
@@ -97,115 +131,344 @@ const sendMsg = async () => {
     showEndChat.value = true;
     createParameterJSON()
   }
+
+  if (chatBox) {
+    chatBox.scrollTop = chatBox.scrollHeight;
+  }
 };
 
 const createParameterJSON = async () => {
   const { post, data, loading } = usePost("generate-json");
   await post({
-    conversation:conversationMsg.value
+    conversation: conversationMsg.value
   });
-  console.log("generate-json",data);
+  console.log("generate-json", data);
 };
 
 
 const createJson = () => {
-console.log("Create JSON");
-createParameterJSON();
+  console.log("Create JSON");
+  createParameterJSON();
 }
 
 const createAssistant = async () => {
   const assistant = useGet(`create-assistant`);
   await assistant.get();
   conversationMsg.value = [
-  {
-    role: "assistant",
-    msg: "Hello! I'm here to assist you in gathering information swiftly for the position you're looking to fill. How can I help you with the details of the job you have in mind?😊",
-  },
+    {
+      role: "assistant",
+      msg: "Hello! I'm here to assist you in gathering information swiftly for the position you're looking to fill. How can I help you with the details of the job you have in mind?😊",
+    },
   ];
 };
 const createThread = async () => {
   const thread = useGet(`create-thread`);
   await thread.get();
 };
+
 onMounted(async () => {
   await createAssistant();
   await createThread();
 });
+
 </script>
 
-<style lang="scss" scoped>
-.chat {
+
+<style scoped>
+.create-json {
+  background: white;
+  padding: 6px;
+  border-radius: 20px;
+  font-size: 12px;
+  border: 1px solid #aeabab;
+  cursor: pointer;
+}
+
+.chat-boat-container {
   height: 100vh;
-  &__container {
-    background-color: rgba(151, 151, 150, 0.2);
+}
+
+.chatButton {
+  display: block;
+  display: inline-flex;
+  right: 1rem;
+  bottom: 1rem;
+  padding: 0;
+  margin: 0;
+  justify-content: center;
+  align-items: center;
+  border-radius: 9999px;
+  border-width: 1px;
+  border-color: #E5E7EB;
+  width: 4rem;
+  height: 4rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 500;
+  line-height: 1.25rem;
+  text-transform: none;
+  background-color: #000000;
+  background-image: none;
+  cursor: pointer;
+  color: white;
+}
+
+.chatButton:hover {
+  background-color: #374151;
+}
+
+
+/* chat-container start */
+
+.chat-container {
+  padding: 1.5rem;
+  /* border-radius: 0.5rem; */
+  border-width: 1px;
+  background-color: #ffffff;
+  bottom: calc(4rem+1.5rem);
+  border-color: #e5e7eb;
+  width: 100%;
+  height: 100%;
+}
+
+/* chat-container end */
+
+/* Header container start */
+.header-container {
+  display: flex;
+  padding-bottom: 1rem;
+  margin-top: 0.375rem;
+  justify-content: space-between;
+  /* flex-direction: column; */
+}
+
+.header-container h2 {
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  color: black;
+  margin-bottom: 10px;
+}
+
+.header-container p {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  line-height: .75rem;
+  color: #6b7280;
+}
+
+/* Header container end */
+
+/* chat-box-container Start */
+.chat-box-container {
+  padding-right: 1rem;
+  height: 78vh;
+  overflow: auto;
+  margin-bottom: 1rem;
+}
+
+.chat-box-container::-webkit-scrollbar {
+  width: 5px;
+}
+
+.chat-box-container::-webkit-scrollbar-thumb {
+  background-color: #a3a3a5;
+  border-radius: 8px;
+}
+
+.chat-box-container::-webkit-scrollbar-track {
+  background-color: #f3f4f6;
+  border-radius: 8px;
+}
+
+/* chat-box-container End */
+
+/* user-chat-container Start */
+
+.user-chat-container {
+  display: flex;
+  justify-content: right;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  flex: 1 1 0%;
+  gap: 0.75rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  color: #4B5563;
+}
+
+.user-chat-container span {
+  display: flex;
+  overflow: hidden;
+  position: relative;
+  shrink: 0;
+  border-radius: 9999px;
+  width: 2rem;
+  height: 2rem;
+  text-align: center;
+}
+
+.user-chat-container .user-img {
+  padding: 0.25rem;
+  border-radius: 9999px;
+  border-width: 1px;
+  background-color: #F3F4F6;
+}
+
+.user-chat-container .message {
+  line-height: 1.625;
+  display: flex;
+  flex-direction: column;
+  align-items: end;
+}
+
+.user-chat-container .message span {
+  display: block;
+  font-weight: 700;
+  color: #374151;
+}
+
+/* user-chat-container End */
+
+/* AI-chat-container Start */
+
+.AI-chat-container {
+  display: flex;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  flex: 1 1 0%;
+  gap: 0.75rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  color: #4B5563;
+
+}
+
+.AI-chat-container span {
+  display: flex;
+  /* overflow: hidden; */
+  position: relative;
+  shrink: 0;
+  border-radius: 9999px;
+  width: 2rem;
+  height: 2rem;
+  /* text-align: center; */
+}
+
+.AI-chat-container .ai-image {
+  padding: 0.25rem;
+  border-radius: 9999px;
+  border-width: 1px;
+  background-color: #F3F4F6;
+}
+
+.AI-chat-container .message {
+  line-height: 1.625;
+}
+
+.AI-chat-container .message span {
+  display: block;
+  font-weight: 700;
+  color: #374151;
+}
+
+/* AI-chat-container end */
+
+/* Input box container start */
+.inputbox-container {
+  display: flex;
+  padding-top: 0;
+  align-items: center;
+}
+
+.inputbox-container .form {
+  display: flex;
+  margin-left: 0.5rem;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.inputbox-container input {
+  display: flex;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+  border-radius: 16px;
+  border-width: 1px;
+  width: 100%;
+  height: 2.5rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  /* border-color: #e5e7eb; */
+  color: #030712;
+  margin-right: 15px;
+  border: 1px solid #b8b6b6;
+}
+
+
+.inputbox-container .sendbtn {
+  display: inline-flex;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  justify-content: center;
+  align-items: center;
+  border-radius: 20px;
+  height: 2.5rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 500;
+  background-color: #000000;
+  color: #f9fafb;
+}
+
+
+.inputbox-container .sendbtn:hover {
+  background: #111827E6;
+}
+
+.chat__assistant-text,
+.chat__user-text,
+.chat__loading-text {
+  color: black;
+}
+
+/* Input box container end */
+
+/* Loader css start*/
+.AI-chat-container .message span.loader {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  display: block;
+  margin: 0 !important;
+  position: relative;
+  color: #c6c3c3;
+  box-sizing: border-box;
+  animation: animloader 1s linear infinite alternate;
+  left: 20px;
+}
+
+@keyframes animloader {
+  0% {
+    box-shadow: -19px -3px, -7px 3px, 7px -3px;
   }
-  &__assistant {
-    display: inline-block;
-    &-text {
-      // border-radius: 5%;
-      // max-width: 78vw;
-      padding: 10px;
-      background-color: white;
-    }
+
+  33% {
+    box-shadow: -19px 3px, -7px -3px, 7px 3px;
   }
-  &__loading {
-    display: inline-flex;
-    padding: 10px;
-    background-color: white;
-    margin-top: 12px;
-    border-radius: 10px;
-    height: 30px;
-    align-items: center;
-    &-text {
-      font-synthesis-weight: bold;
-      font-size: 25px;
-      margin-bottom: 4px;
-    }
+
+  66% {
+    box-shadow: -19px -3px, -7px 3px, 7px -3px;
   }
-  &__user {
-    display: flex;
-    justify-content: end;
-    &-text {
-      max-width: 78vw;
-      border-radius: 5%;
-      display: block;
-      padding: 10px;
-      background-color: white;
-    }
-  }
-  &__header {
-    font-size: 2rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0.7rem;
-    color: rgba(0, 0, 0, 0.4);
-    background-color: white;
-    font-weight: 600;
-    top: 0;
-    &-logo {
-      display: flex;
-    }
-  }
-  &__input {
-    position: fixed;
-    padding: 1rem;
-    background-color: white;
-    display: flex;
-    justify-content: center;
-    bottom: 1px;
-    width: 100vw;
-    input[type="text"] {
-      width: 95vw;
-      outline: 1px solid gray;
-      border: none;
-      border-radius: 2rem;
-      padding: 1rem;
-    }
+
+  100% {
+    box-shadow: -19px 3px, -7px -3px, 7px 3px;
   }
 }
 
-.chat__assistant-text, .chat__user-text { 
-  color: black;
-}
-</style>
+/* Loader css end */</style>
