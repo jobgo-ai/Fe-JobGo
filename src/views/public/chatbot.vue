@@ -74,6 +74,8 @@ const conversationMsg = ref([
 ]);
 const showEndChat = ref(false);
 const userMsg = ref(null);
+
+const threadId = ref(null);
 const isChatLoading = ref(false);
 // methods
 const sendMsg = async () => {
@@ -87,6 +89,7 @@ const sendMsg = async () => {
   const { post, data, loading } = usePost("get-msg");
   await post({
     msg: query,
+    threadId:threadId.value,
   });
   isChatLoading.value = false;
   conversationMsg.value.push({
@@ -109,7 +112,6 @@ const createParameterJSON = async () => {
 
 
 const createJson = () => {
-console.log("Create JSON");
 createParameterJSON();
 }
 
@@ -126,10 +128,11 @@ const createAssistant = async () => {
 const createThread = async () => {
   const thread = useGet(`create-thread`);
   await thread.get();
+  threadId.value=thread.data.value.threadId.id
 };
 onMounted(async () => {
   await createAssistant();
-  // await createThread();
+  await createThread();
 });
 </script>
 
