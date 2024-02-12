@@ -74,11 +74,7 @@ const routes = [
             name: "edit-interview",
             component: EditInterview,
           },
-          {
-            path: "compare",
-            name: "compare",
-            component: Compare,
-          },
+         
           {
             path: "results/:templateRef/:evaluationRef",
             name: "interview-results",
@@ -90,6 +86,14 @@ const routes = [
         path: "settings",
         name: "settings",
         component: Settings,
+      },
+      {
+        path: "compare",
+        name: "compare",
+        component: Compare,
+        meta:{
+          public:true
+        }
       },
       {
         path: "organization",

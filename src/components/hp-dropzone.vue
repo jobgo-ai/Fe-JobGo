@@ -32,10 +32,12 @@
 <script setup>
 // Vendor
 import { ref } from "vue";
+import useToast from "@/composables/useToast";
 
 // Components
 import HpIcon from "@/components/hp-icon.vue";
 import HpSpinner from "@/components/hp-spinner.vue";
+const { setToast } = useToast();
 
 const props = defineProps({
   label: {
@@ -70,8 +72,21 @@ const handleClick = () => {
 };
 
 const handleChange = (e) => {
-  emits("change", e.target.files[0]);
-  file.value = e.target.files[0];
+  //validate file on accept
+  const file=e.target.files[0];
+  const fileNameParts = file.name.split(".");
+  const fileExtension = fileNameParts[fileNameParts.length - 1].toLowerCase();
+  // Validate file extension
+  if (fileExtension !== "pdf" && fileExtension !== "txt") {
+    setToast({
+    type: "negative",
+    title: "Please upload a PDF or Text file",
+  });
+    return;
+  }else{
+    emits("change", e.target.files[0]);
+    file.value = e.target.files[0];
+  }
 };
 </script>
 
