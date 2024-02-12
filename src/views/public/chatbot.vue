@@ -118,7 +118,7 @@ const createThread = async () => {
 };
 onMounted(async () => {
   await createAssistant();
-  await createThread();
+  // await createThread();
 });
 </script>
 

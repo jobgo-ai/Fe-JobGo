@@ -48,7 +48,12 @@
             v-for="(header, index) in headers"
             :key="index"
           >
-            <slot :name="header.value" :row="row">{{ row[header.value] }}</slot>
+            <slot :name="header.value" :row="row">
+              <span >
+                {{ row[header.value] }}
+              </span>
+          
+            </slot>
           </td>
         </tr>
         <tr v-else>
@@ -165,6 +170,7 @@ watch(
     }
   }
 );
+const emit = defineEmits(["deleteRow"]);
 </script>
 
 <style lang="scss">
@@ -175,6 +181,8 @@ watch(
     text-align: center;
     border-spacing: 0;
     &__head {
+      position: sticky;
+      top: 0;
       display: table-header-group;
       &__col {
         font-weight: 500;
@@ -274,6 +282,11 @@ watch(
         &:last-child {
           padding: 16px 24px;
           border-right: 1px solid var(--color-border);
+        }
+        &__action {
+          display: flex;
+          justify-content: center;
+          align-items: center;
         }
       }
     }
