@@ -34,6 +34,7 @@ import EditOpening from "@/views/dashboard/opening/edit-opening/edit-opening.vue
 import AddInterview from "@/views/dashboard/opening/add-interview.vue";
 import EditInterview from "@/views/dashboard/opening/edit-interview.vue";
 import Compare from "@/views/dashboard/opening/compare.vue";
+import conversationSummary from "@/views/job/conversation-summary.vue";
 
 // Prompt Engineering
 import PromptDesign from "@/views/job/prompt-design.vue";
@@ -95,6 +96,7 @@ const routes = [
           public:true
         }
       },
+   
       {
         path: "organization",
         name: "organization",
@@ -119,6 +121,14 @@ const routes = [
     meta: {
       public: true,
     },
+  },
+  {
+    path: "/conversation-summary",
+    name: "conversationSummary",
+    component: conversationSummary,
+    meta:{
+      public:true
+    }
   },
   {
     path: "/upload",

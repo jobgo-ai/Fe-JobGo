@@ -15,8 +15,8 @@
           <hp-textArea name="prompt" placeholder="Enter your prompt" label="Prompt" :autofocus="true" type="text"
             rows="20"/>
 
-          <hp-button primary fullWidth :isDisabled="!meta.dirty || !meta.valid" type="submit"
-            label="Continue"></hp-button>
+          <hp-button primary fullWidth :isDisabled="isLoading" type="submit"
+            :label="(isLoading) ? 'Loading...' : 'Save'"></hp-button>
         </form>
         <!-- <div class="signup__section__or">OR</div> -->
       </div>
@@ -35,6 +35,10 @@ import HpButton from "@/components/hp-button.vue";
 import { useGet, usePut, usePost } from "@/composables/useHttp";
 import useToast from "@/composables/useToast";
 import Logo from "@/assets/logo.svg";
+import { useRouter, useRoute } from "vue-router";
+
+const router = useRouter();
+
 const { handleSubmit, isSubmitting, setFieldError, meta, resetForm } = useForm({
   initialValues: {
     prompt: "",
@@ -47,6 +51,7 @@ onMounted(() => {
 });
 const getPrompt = async () => {
 
+  isLoading.value = true;
   console.log("Get prompt :- ", localStorage.getItem("prompt-design"));
   // const newPrompt = localStorage.getItem("prompt-design");
 
@@ -59,10 +64,7 @@ const getPrompt = async () => {
 
   const getPromptAPI = useGet(`getPrompt`);
   await getPromptAPI.get();
-
   const newPrompt = getPromptAPI?.data?.value?.instruction
-
-  // console.log("getPromptAPI :- ", newPrompt);
 
   prompt.value = newPrompt;
   resetForm({
@@ -71,22 +73,10 @@ const getPrompt = async () => {
     },
   });
 
-  // try {
-  //   const { error, data, get, loading } = useGet("prompt");
-  //   isLoading.value = loading;
-  //   await get();
-  //   const simpleObject = JSON.parse(JSON.stringify(data.value));
-  //   prompt.value = simpleObject[0].prompt;
-  //   resetForm({
-  //     values: {
-  //       prompt: prompt.value,
-  //     },
-  //   });
-  // } catch (error) {
-  //   console.log(error);
-  // }
+  isLoading.value = false;
 };
 const onSubmit = handleSubmit(async (values) => {
+  isLoading.value = true;
   const { prompt } = values;
 
   console.log("Prompt :- ", prompt);
@@ -105,6 +95,11 @@ const onSubmit = handleSubmit(async (values) => {
     title: "Success!",
     message: "Prompt is Update Successfully",
   });
+
+  router.push({ path: "/chat"});
+
+
+  isLoading.value = false;
 });
 </script>
 
