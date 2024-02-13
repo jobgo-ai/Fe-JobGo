@@ -9,7 +9,7 @@
           <p>Powered by JoboGo.com</p>
         </div>
         <div>
-          <button class="create-json" @click="createJson">Create Json</button>
+          <button class="create-json" @click="createJson">End Chat</button>
           <!-- <hp-button
           label="Create Json"
           @handleClick="createJson()"

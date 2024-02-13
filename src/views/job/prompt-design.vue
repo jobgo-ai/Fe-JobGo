@@ -1,27 +1,22 @@
 <template>
   <div class="signin">
-    <div class="signin__logo"><Logo /></div>
-    <div class="signin__container">
+    <div class="signin__logo">
+      <Logo />
+    </div>
+    <div class="signin__container signin__container_prompt">
       <div class="signin__section">
         <div class="signin__image-container"></div>
         <!-- <p class="signin__subtitle">Welcome back!</p> -->
         <h2 class="signin__title">Play with Prompt</h2>
         <form @submit="onSubmit">
-          <hp-textArea
-            name="prompt"
-            placeholder="Enter your prompt"
-            label="Prompt"
-            :autofocus="true"
-            type="text"
-            rows="6"
-          />
-          <hp-button
-            primary
-            fullWidth
-            :isDisabled="!meta.dirty || !meta.valid"
-            type="submit"
-            label="Continue"
-          ></hp-button>
+          <!-- <hp-textArea name="prompt" placeholder="Enter your prompt" label="Prompt" :autofocus="true" type="text"
+            rows="15" col="50" /> -->
+
+          <hp-textArea name="prompt" placeholder="Enter your prompt" label="Prompt" :autofocus="true" type="text"
+            rows="20"/>
+
+          <hp-button primary fullWidth :isDisabled="!meta.dirty || !meta.valid" type="submit"
+            label="Continue"></hp-button>
         </form>
         <!-- <div class="signup__section__or">OR</div> -->
       </div>
@@ -37,7 +32,7 @@ import { onMounted, ref } from "vue";
 import { useForm } from "vee-validate";
 import HpTextArea from "@/components/form/hp-textarea.vue";
 import HpButton from "@/components/hp-button.vue";
-import { useGet, usePut } from "@/composables/useHttp";
+import { useGet, usePut, usePost } from "@/composables/useHttp";
 import useToast from "@/composables/useToast";
 import Logo from "@/assets/logo.svg";
 const { handleSubmit, isSubmitting, setFieldError, meta, resetForm } = useForm({
@@ -51,27 +46,60 @@ onMounted(() => {
   getPrompt();
 });
 const getPrompt = async () => {
-  try {
-    const { error, data, get, loading } = useGet("prompt");
-    isLoading.value = loading;
-    await get();
-    const simpleObject = JSON.parse(JSON.stringify(data.value));
-    prompt.value = simpleObject[0].prompt;
-    resetForm({
-      values: {
-        prompt: prompt.value,
-      },
-    });
-  } catch (error) {
-    console.log(error);
-  }
+
+  console.log("Get prompt :- ", localStorage.getItem("prompt-design"));
+  // const newPrompt = localStorage.getItem("prompt-design");
+
+  // prompt.value = newPrompt;
+  // resetForm({
+  //   values: {
+  //     prompt: prompt.value,
+  //   },
+  // });
+
+  const getPromptAPI = useGet(`getPrompt`);
+  await getPromptAPI.get();
+
+  const newPrompt = getPromptAPI?.data?.value?.instruction
+
+  // console.log("getPromptAPI :- ", newPrompt);
+
+  prompt.value = newPrompt;
+  resetForm({
+    values: {
+      prompt: prompt.value,
+    },
+  });
+
+  // try {
+  //   const { error, data, get, loading } = useGet("prompt");
+  //   isLoading.value = loading;
+  //   await get();
+  //   const simpleObject = JSON.parse(JSON.stringify(data.value));
+  //   prompt.value = simpleObject[0].prompt;
+  //   resetForm({
+  //     values: {
+  //       prompt: prompt.value,
+  //     },
+  //   });
+  // } catch (error) {
+  //   console.log(error);
+  // }
 };
 const onSubmit = handleSubmit(async (values) => {
   const { prompt } = values;
-  const putPayload = { promptId: 1, prompt: prompt };
-  const putPrompt = usePut(`prompt`);
-  await putPrompt.put(putPayload);
+
+  console.log("Prompt :- ", prompt);
+  const { post, data, loading } = usePost("updatePrompt");
+  await post({
+    prompt: prompt
+  });
+
+  localStorage.setItem("prompt-design", data?.value);
+  console.log("updatePrompt", data);
+
   getPrompt();
+
   setToast({
     type: "positive",
     title: "Success!",
@@ -85,26 +113,31 @@ const onSubmit = handleSubmit(async (values) => {
   display: flex;
   flex-direction: column;
   padding: 24px;
+
   &__section {
     padding-bottom: 24px;
     position: relative;
   }
+
   &__subtitle {
     @include text-h3;
     font-weight: 500;
     color: var(--color-text-secondary);
   }
+
   &__title {
     @include text-h3;
     font-weight: 500;
     margin-bottom: 24px;
   }
+
   &__logo {
     margin: auto;
     margin-bottom: 48px;
     height: 48px;
     width: 48px;
   }
+
   &__container {
     margin: auto;
     padding: 24px;
@@ -115,6 +148,7 @@ const onSubmit = handleSubmit(async (values) => {
     position: relative;
     box-shadow: $box-shadow;
   }
+
   &__image-container {
     display: flex;
     background-image: url("../../assets/abstracts/decorations/illustration.svg");
@@ -126,6 +160,7 @@ const onSubmit = handleSubmit(async (values) => {
     transform: translateX(-50%) translateY(-50%);
     z-index: $z-index-negative;
   }
+
   &__password-container {
     position: relative;
   }
@@ -134,16 +169,23 @@ const onSubmit = handleSubmit(async (values) => {
 @media (min-width: $breakpoint-tablet) {
   .signin {
     padding: 0;
+
     &__container {
       width: 450px;
     }
+
     &__logo {
       margin-top: 64px;
     }
+
     &__image-container {
       height: 446px;
       width: 588px;
     }
   }
+}
+
+.signin__container_prompt {
+  width: 80% !important;
 }
 </style>
