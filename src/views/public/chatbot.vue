@@ -223,7 +223,10 @@ const createThread = async () => {
 
 onMounted(async () => {
   await createAssistant();
-  await createThread();
+  
+  setTimeout(async() => {
+    await createThread();
+  }, 1000);
 });
 
 </script>
