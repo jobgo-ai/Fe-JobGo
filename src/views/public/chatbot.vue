@@ -1,24 +1,21 @@
 <template>
-  <div class="chat-boat-container">
-    <div class="chat-container" :style="{ boxShadow: '0 0 #0000, 0 0 #0000, 0 1px 2px 0 rgb(0 0 0 / 0.05)' }">
+  <div  class="chat-boat-container">
+    <div class="chat-container" >
 
       <!-- Heading -->
       <div class="header-container">
         <div>
           <h2>Job Go AI Profiling Tools</h2>
-          <p>Powered by JoboGo.com</p>
+          <p>Powered by JoboGo.com{{ isChatLoading }}</p>
         </div>
         <div>
-          <button class="create-json" @click="createJson">Create Json</button>
-          <!-- <hp-button
-          label="Create Json"
-          @handleClick="createJson()"
-        ></hp-button> -->
+          <button  class="create-json" @click="createJson">End Chat</button>
+      
         </div>
       </div>
 
       <!-- Chat Container -->
-      <div class="chat-box-container" :style="{ minWidth: '100%' }" ref="chatBoxRef">
+      <div class="chat-box-container"  ref="chatBoxRef">
 
         <div class="" v-for="(item, index) of conversationMsg" :key="index">
 
@@ -78,21 +75,34 @@
       <!-- Input box -->
       <div class="inputbox-container">
         <form class="form" @submit.prevent="sendMsg">
-          <input v-model="userMsg" placeholder="Type your message">
-          <button type="submit" class="sendbtn">Send</button>
+          <input :disabled="isChatLoading" v-model="userMsg" placeholder="Type your message">
+          <button :disabled="isChatLoading" type="submit" class="sendbtn">Send</button>
         </form>
       </div>
 
     </div>
   </div>
+<!-- <div class="spinner__div" v-else >
+  <hp-spinner
+        class="hp-button__button__spinner"
+        :size="25"
+        :mode="primary ? 'light' : 'dark'"
+      ></hp-spinner>
+</div> -->
 </template>
 
 <script setup>
 import { ref, onMounted } from "vue";
 import { usePost, useGet } from "@/composables/useHttp";
 import HpButton from "@/components/hp-button.vue";
-
+import useAssistant from "@/composables/useAssistant";
+import { useRouter, useRoute } from "vue-router";
+import HpSpinner from "@/components/hp-spinner.vue";
+//hooks
+const router = useRouter();
 // state
+const { conversationSummary } = useAssistant();
+
 const conversationMsg = ref([
   {
     role: "assistant",
@@ -108,7 +118,9 @@ const isChatLoading = ref(false);
 
 
 const sendMsg = async () => {
-
+if(!userMsg.value){
+  return
+}
   const chatBox = chatBoxRef.value;
   isChatLoading.value = true;
   conversationMsg.value.push({
@@ -130,10 +142,10 @@ const sendMsg = async () => {
     role: "assistant",
     msg: data.value,
   });
-  if (data.value.includes("The Chat is end")) {
-    showEndChat.value = true;
-    createParameterJSON()
-  }
+  // if (data.value.includes("The Chat is end")) {
+  //   showEndChat.value = true;
+  //   createParameterJSON()
+  // }
 
   if (chatBox) {
     chatBox.scrollTop = chatBox.scrollHeight;
@@ -148,13 +160,25 @@ const createParameterJSON = async () => {
   console.log("generate-json", data);
 };
 
+const createConversationSummary = async () => {
+  const { post, data, loading } = usePost("create-summary");
+  await post({
+    conversation: conversationMsg.value
+  });
+  conversationSummary.value=data.value
+  router.push("/conversation-summary");
 
-const createJson = () => {
-  console.log("Create JSON");
-  createParameterJSON();
+};
+
+const createJson = async () => {
+  isChatLoading.value=true
+await createParameterJSON();
+await createConversationSummary()
+isChatLoading.value=false
 }
 
 const createAssistant = async () => {
+  isChatLoading.value=true
   const assistant = useGet(`create-assistant`);
   await assistant.get();
   conversationMsg.value = [
@@ -163,11 +187,15 @@ const createAssistant = async () => {
       msg: "Hello! I'm here to assist you in gathering information swiftly for the position you're looking to fill. How can I help you with the details of the job you have in mind?😊",
     },
   ];
+  isChatLoading.value=false
+
 };
 const createThread = async () => {
+  isChatLoading.value=true
   const thread = useGet(`create-thread`);
   await thread.get();
   threadId.value=thread.data.value.threadId.id
+  isChatLoading.value=false
 };
 
 onMounted(async () => {
@@ -411,7 +439,11 @@ onMounted(async () => {
   margin-right: 15px;
   border: 1px solid #b8b6b6;
 }
-
+.spinner__div{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
 .inputbox-container .sendbtn {
   display: inline-flex;
