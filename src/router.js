@@ -139,7 +139,7 @@ const routes = [
     },
   },
   {
-    path: "/prompt-design",
+    path: "/prompt",
     name: "PromptDesign",
     component: PromptDesign,
     meta: {

@@ -1,21 +1,26 @@
 <template>
-  <div  class="chat-boat-container">
-    <div class="chat-container" >
+  <div class="chat-boat-container">
+    <div class="chat-container">
 
       <!-- Heading -->
       <div class="header-container">
         <div>
           <h2>Job Go AI Profiling Tools</h2>
-          <p>Powered by JoboGo.com{{ isChatLoading }}</p>
+          <p>Powered by JoboGo.com</p>
         </div>
         <div>
-          <button  class="create-json" @click="createJson">End Chat</button>
-      
+          <!-- <button class="create-json" @click="createJson">Edit prompt</button> -->
+
+          <router-link class="create-json" to="/prompt">
+            <span>Edit prompt</span>
+          </router-link>
+
+          <button class="create-json" @click="createJson">{{ isEndChat ? 'Loading...' : 'End Chat' }}</button>
         </div>
       </div>
 
       <!-- Chat Container -->
-      <div class="chat-box-container"  ref="chatBoxRef">
+      <div class="chat-box-container" ref="chatBoxRef">
 
         <div class="" v-for="(item, index) of conversationMsg" :key="index">
 
@@ -75,14 +80,22 @@
       <!-- Input box -->
       <div class="inputbox-container">
         <form class="form" @submit.prevent="sendMsg">
-          <input :disabled="isChatLoading" v-model="userMsg" placeholder="Type your message">
-          <button :disabled="isChatLoading" type="submit" class="sendbtn">Send</button>
+          <input :disabled="isChatLoading || isChatThreadLoading" v-model="userMsg"
+            :placeholder="(isChatLoading || isChatThreadLoading) ? 'Loading...' : 'Type your message'">
+          <button :disabled="isChatLoading || isChatThreadLoading" type="submit" class="sendbtn">{{ (isChatLoading ||
+            isChatThreadLoading) ? 'Loading...' : 'Send' }}</button>
+
+          <!-- <hp-button
+          label="END CHAT"
+          :isLoading="isChatLoading || isChatThreadLoading"
+        ></hp-button> -->
+
         </form>
       </div>
 
     </div>
   </div>
-<!-- <div class="spinner__div" v-else >
+  <!-- <div class="spinner__div" v-else >
   <hp-spinner
         class="hp-button__button__spinner"
         :size="25"
@@ -98,6 +111,10 @@ import HpButton from "@/components/hp-button.vue";
 import useAssistant from "@/composables/useAssistant";
 import { useRouter, useRoute } from "vue-router";
 import HpSpinner from "@/components/hp-spinner.vue";
+import useToast from "@/composables/useToast";
+
+const { setToast } = useToast();
+
 //hooks
 const router = useRouter();
 // state
@@ -115,12 +132,14 @@ const chatBoxRef = ref(null);
 
 const threadId = ref(null);
 const isChatLoading = ref(false);
+const isChatThreadLoading = ref(false);
+const isEndChat = ref(false);
 
 
 const sendMsg = async () => {
-if(!userMsg.value){
-  return
-}
+  if (!userMsg.value) {
+    return
+  }
   const chatBox = chatBoxRef.value;
   isChatLoading.value = true;
   conversationMsg.value.push({
@@ -135,7 +154,7 @@ if(!userMsg.value){
   const { post, data, loading } = usePost("get-msg");
   await post({
     msg: query,
-    threadId:threadId.value,
+    threadId: threadId.value,
   });
   isChatLoading.value = false;
   conversationMsg.value.push({
@@ -165,20 +184,24 @@ const createConversationSummary = async () => {
   await post({
     conversation: conversationMsg.value
   });
-  conversationSummary.value=data.value
+  conversationSummary.value = data.value
+  setToast({
+    type: "positive",
+    title: "Success!",
+    message: "Email send Successfully",
+  });
   router.push("/conversation-summary");
-
 };
 
 const createJson = async () => {
-  isChatLoading.value=true
-await createParameterJSON();
-await createConversationSummary()
-isChatLoading.value=false
+  isEndChat.value = true
+  await createParameterJSON();
+  await createConversationSummary()
+  isEndChat.value = false
 }
 
 const createAssistant = async () => {
-  isChatLoading.value=true
+  isChatThreadLoading.value = true
   const assistant = useGet(`create-assistant`);
   await assistant.get();
   conversationMsg.value = [
@@ -187,20 +210,23 @@ const createAssistant = async () => {
       msg: "Hello! I'm here to assist you in gathering information swiftly for the position you're looking to fill. How can I help you with the details of the job you have in mind?😊",
     },
   ];
-  isChatLoading.value=false
+  isChatThreadLoading.value = false
 
 };
 const createThread = async () => {
-  isChatLoading.value=true
+  isChatThreadLoading.value = true
   const thread = useGet(`create-thread`);
   await thread.get();
-  threadId.value=thread.data.value.threadId.id
-  isChatLoading.value=false
+  threadId.value = thread.data.value.threadId.id
+  isChatThreadLoading.value = false
 };
 
 onMounted(async () => {
   await createAssistant();
-  await createThread();
+  
+  setTimeout(async() => {
+    await createThread();
+  }, 1000);
 });
 
 </script>
@@ -214,6 +240,8 @@ onMounted(async () => {
   font-size: 12px;
   border: 1px solid #aeabab;
   cursor: pointer;
+  margin-right: 10px;
+  color: black;
 }
 
 .chat-boat-container {
@@ -439,7 +467,8 @@ onMounted(async () => {
   margin-right: 15px;
   border: 1px solid #b8b6b6;
 }
-.spinner__div{
+
+.spinner__div {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -507,4 +536,5 @@ onMounted(async () => {
   }
 }
 
-/* Loader css end */</style>
+/* Loader css end */
+</style>
