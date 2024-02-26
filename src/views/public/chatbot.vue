@@ -1,5 +1,6 @@
 <template>
   <div class="chat-boat-container">
+    <div class="logo-container"><Chat /></div>
     <div class="chat-container">
 
       <!-- Heading -->
@@ -95,6 +96,8 @@
 
     </div>
   </div>
+
+
   <!-- <div class="spinner__div" v-else >
   <hp-spinner
         class="hp-button__button__spinner"
@@ -112,6 +115,8 @@ import useAssistant from "@/composables/useAssistant";
 import { useRouter, useRoute } from "vue-router";
 import HpSpinner from "@/components/hp-spinner.vue";
 import useToast from "@/composables/useToast";
+import Logo from "@/assets/logo.svg";
+import Chat from "@/assets/chat.svg";
 
 const { setToast } = useToast();
 
@@ -223,8 +228,8 @@ const createThread = async () => {
 
 onMounted(async () => {
   await createAssistant();
-  
-  setTimeout(async() => {
+
+  setTimeout(async () => {
     await createThread();
   }, 1000);
 });
@@ -246,6 +251,7 @@ onMounted(async () => {
 
 .chat-boat-container {
   height: 100vh;
+  display: flex;
 }
 
 .chatButton {
@@ -280,6 +286,13 @@ onMounted(async () => {
 
 /* chat-container start */
 
+.logo-container {
+  width: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .chat-container {
   padding: 1.5rem;
   /* border-radius: 0.5rem; */
@@ -287,8 +300,18 @@ onMounted(async () => {
   background-color: #ffffff;
   bottom: calc(4rem+1.5rem);
   border-color: #e5e7eb;
-  width: 100%;
+  width: 50%;
   height: 100%;
+}
+
+@media (max-width: 768px) {
+  .logo-container {
+    display: none;
+  }
+
+  .chat-container {
+    width: 100%
+  }
 }
 
 /* chat-container end */
