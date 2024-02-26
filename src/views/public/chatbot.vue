@@ -96,8 +96,6 @@
 
     </div>
   </div>
-
-
   <!-- <div class="spinner__div" v-else >
   <hp-spinner
         class="hp-button__button__spinner"
@@ -115,7 +113,6 @@ import useAssistant from "@/composables/useAssistant";
 import { useRouter, useRoute } from "vue-router";
 import HpSpinner from "@/components/hp-spinner.vue";
 import useToast from "@/composables/useToast";
-import Logo from "@/assets/logo.svg";
 import Chat from "@/assets/chat.svg";
 
 const { setToast } = useToast();
@@ -228,8 +225,8 @@ const createThread = async () => {
 
 onMounted(async () => {
   await createAssistant();
-
-  setTimeout(async () => {
+  
+  setTimeout(async() => {
     await createThread();
   }, 1000);
 });
