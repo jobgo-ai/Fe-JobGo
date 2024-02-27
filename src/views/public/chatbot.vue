@@ -1,12 +1,14 @@
 <template>
   <div class="chat-boat-container">
-    <div class="chat-welcome">
+    <!-- <div class="chat-welcome">
       <div style="display: flex;justify-content:center;align-items: center;flex-direction:column">
 <h1 style="font-weight: 800;">Jobgo Profiling Tools</h1>
 
 <Logo  style="margin-top: 1rem;"/>
       </div>
-    </div>
+    </div> -->
+    <div class="logo-container"><Chat /></div>
+
     <div class="chat-container">
 
       <!-- Heading -->
@@ -121,6 +123,8 @@ import HpSpinner from "@/components/hp-spinner.vue";
 import useToast from "@/composables/useToast";
 import io from 'socket.io-client';
 import Logo from "@/assets/logo.svg";
+import Chat from "@/assets/chat.svg";
+
 
 const { setToast } = useToast();
 
@@ -404,14 +408,13 @@ align-items: center;
 }
 
 .chat-container {
-  width: 65%;
-  /* padding: 1.5rem; */
+  padding: 1.5rem;
   /* border-radius: 0.5rem; */
   border-width: 1px;
   background-color: #ffffff;
   bottom: calc(4rem+1.5rem);
   border-color: #e5e7eb;
-  /* width: 50%; */
+  width: 50%;
   height: 100%;
 }
 
@@ -572,11 +575,9 @@ align-items: center;
 
 /* Input box container start */
 .inputbox-container {
-    padding-top: 0;
-    /* background-color: red; */
-    width: 70%;
-    position: fixed;
-    bottom: 20px;
+  display: flex;
+  padding-top: 0;
+  align-items: center;
 }
 
 .inputbox-container .form {
