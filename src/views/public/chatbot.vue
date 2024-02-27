@@ -396,6 +396,13 @@ align-items: center;
 
 /* chat-container start */
 
+.logo-container {
+  width: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .chat-container {
   width: 70%;
   /* padding: 1.5rem; */
@@ -404,8 +411,18 @@ align-items: center;
   background-color: #ffffff;
   bottom: calc(4rem+1.5rem);
   border-color: #e5e7eb;
-  width: 100%;
+  width: 50%;
   height: 100%;
+}
+
+@media (max-width: 768px) {
+  .logo-container {
+    display: none;
+  }
+
+  .chat-container {
+    width: 100%
+  }
 }
 
 /* chat-container end */
