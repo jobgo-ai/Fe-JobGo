@@ -31,7 +31,7 @@
 
         <div class="" v-for="(item, index) of  conversationMsg" :key="index">
 <!-- <span style="color: black;">{{ item.role }}</span> -->
-          <div v-if="item.role === 'User'" class="user-chat-container">
+          <div v-if="item.role === 'user'" class="user-chat-container">
             <p class="message">
               <span>You </span>
             <p>{{ item.msg }}</p>
@@ -48,7 +48,7 @@
             </span>
           </div>
 
-          <div v-else-if="item.role === 'Assistant' || item.role === 'Staff'" class="AI-chat-container">
+          <div v-else-if="item.role === 'assistant' || item.role === 'staff'" class="AI-chat-container">
             <span>
               <div class="ai-image">
                 <svg stroke="none" fill="black" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" height="20"
@@ -132,7 +132,7 @@ const { conversationSummary } = useAssistant();
 
 const conversationMsg = ref([
   {
-    role: "assistant",
+    role: "Assistant",
     msg: "Hello! I'm here to assist you in gathering information swiftly for the position you're looking to fill. How can I help you with the details of the job you have in mind?😊",
   },
 ]);
@@ -230,7 +230,7 @@ const createAssistant = async () => {
   await assistant.get();
   conversationMsg.value = [
     {
-      role: "Assistant",
+      role: "assistant",
     msg: "Hello! I'm here to assist you in gathering information swiftly for the position you're looking to fill. How can I help you with the details of the job you have in mind?😊",
     },
   ];
@@ -259,10 +259,12 @@ const generateRandomAlphaNumeric=()=> {
   return result;
 }
 const getMessageList=async(threadId)=>{
+  console.log("threadId",threadId)
   isChatThreadLoading.value = true
   const thread = useGet(`get-messages?threadId=${threadId}`);
   await thread.get();
   // conversationMsg.value=thread.data.value.messages
+  console.log("thread.data.value.messages",thread.data.value.messages)
  const messagesList= thread.data.value.messages && thread.data.value.messages.map((message)=>{
     return {
       role:message.role,
@@ -271,7 +273,8 @@ const getMessageList=async(threadId)=>{
     
   })
  conversationMsg.value=messagesList.reverse()
- messagesList.unshift( { role: "Assistant",
+ console.log("conversationMsg",conversationMsg.value);
+ messagesList.unshift( { role: "assistant",
     msg: "Hello! I'm here to assist you in gathering information swiftly for the position you're looking to fill. How can I help you with the details of the job you have in mind?😊"})
   isChatThreadLoading.value = false
 }
@@ -300,7 +303,7 @@ setTimeout(async () => {
   socket.on("get-ai-message", (data) => {
     console.log("get-ai-message",data);
      conversationMsg.value.push({
-      role:"Assistant",
+      role:"assistant",
        msg: data
      });
      isChatLoading.value=false
@@ -308,14 +311,14 @@ setTimeout(async () => {
  socket.on("receive-message", (data) => {
   console.log("receive-message",data);
      conversationMsg.value.push({
-      role:"User",
+      role:"user",
        msg: data
      });
    });
  socket.on("receive-member-message", (data) => {
   console.log("receive-message",data);
      conversationMsg.value.push({
-      role:"Staff",
+      role:"staff",
        msg: data
      });
    });
@@ -553,7 +556,7 @@ align-items: center;
 /* Input box container start */
 .inputbox-container {
     padding-top: 0;
-    background-color: red;
+    /* background-color: red; */
     width: 70%;
     position: fixed;
     bottom: 20px;
