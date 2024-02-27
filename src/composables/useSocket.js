@@ -4,7 +4,7 @@ import io from 'socket.io-client';
 
 export default function useSocket(url) {
   let socket = null
-  const socketId=ref(null)
+  const socketId = ref(null)
   const conversations1 = ref([{
     role: "assistant",
     msg: "Hello! I'm here to assist you in gathering information swiftly for the position you're looking to fill. How can I help you with the details of the job you have in mind?😊",
@@ -12,11 +12,11 @@ export default function useSocket(url) {
 
   // Connect to the WebSocket server when component is mounted
   onMounted(() => {
-    socket = io("http://localhost:3000");
+    socket = io(import.meta.env.VITE_API_URL, { transports: ["websocket"] });
     console.log("socket on mounted", socket);
 
     socket.on("connect", () => {
-      socketId.value=socket.id
+      socketId.value = socket.id
       console.log("socket is connected with id", socket.id);
     });
     socket.on("receive-message", (data) => {
