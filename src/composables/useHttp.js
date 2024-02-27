@@ -134,6 +134,7 @@ export function usePost(endpoint) {
   const loading = ref(false);
   const error = ref(null);
   const post = async (body) => {
+    console.log("body",body);
     loading.value = false;
     data.value = null;
     error.value = null;

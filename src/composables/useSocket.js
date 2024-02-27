@@ -3,19 +3,28 @@ import { ref, onMounted, onUnmounted } from 'vue';
 import io from 'socket.io-client';
 
 export default function useSocket(url) {
-  const socket = ref(null);
-  const message=ref(null)
+  let socket = null
+  const socketId=ref(null)
+  const conversations1 = ref([{
+    role: "assistant",
+    msg: "Hello! I'm here to assist you in gathering information swiftly for the position you're looking to fill. How can I help you with the details of the job you have in mind?😊",
+  }])
 
   // Connect to the WebSocket server when component is mounted
   onMounted(() => {
-    socket.value = io("http://localhost:3000");
+    socket = io("http://localhost:3000");
+    console.log("socket on mounted", socket);
 
     socket.on("connect", () => {
-      console.log("connected", socket.id);
+      socketId.value=socket.id
+      console.log("socket is connected with id", socket.id);
     });
     socket.on("receive-message", (data) => {
-      console.log(data);
-      // setMessages((messages) => [...messages, data]);
+      conversations1.value.push({
+        role: "user",
+        msg: data,
+      });
+
     });
   });
 
@@ -28,23 +37,26 @@ export default function useSocket(url) {
 
   // Function to send a message to the server
   const sendMessage = (message) => {
+    const obj = { room: "room-1", message }
     console.log("send message", message);
-    if (socket.value) {
-      socket.value.emit('message', message);
+    if (socket) {
+      socket.emit('message', obj);
     }
   };
 
   // Function to close the WebSocket connection
   const closeConnection = () => {
-    if (socket.value) {
-      socket.value.close();
+    if (socket) {
+      socket.close();
     }
   };
 
   // Return the socket object, sendMessage and closeConnection functions
   return {
     socket,
+    socketId,
     sendMessage,
-    closeConnection
+    conversations1
+    // closeConnection
   };
 }

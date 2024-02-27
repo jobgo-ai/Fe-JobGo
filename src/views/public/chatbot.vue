@@ -1,11 +1,18 @@
 <template>
   <div class="chat-boat-container">
+    <div class="chat-welcome">
+      <div style="display: flex;justify-content:center;align-items: center;flex-direction:column">
+<h1 style="font-weight: 800;">Jobgo Profiling Tools</h1>
+
+<Logo  style="margin-top: 1rem;"/>
+      </div>
+    </div>
     <div class="chat-container">
 
       <!-- Heading -->
       <div class="header-container">
         <div>
-          <h2>Job Go AI Profiling Tools</h2>
+          <h2>Job Go AI Profiling Tools </h2>
           <p>Powered by JoboGo.com</p>
         </div>
         <div>
@@ -20,11 +27,11 @@
       </div>
 
       <!-- Chat Container -->
-      <div class="chat-box-container" ref="chatBoxRef">
+      <div  class="chat-box-container" ref="chatBoxRef">
 
-        <div class="" v-for="(item, index) of conversationMsg" :key="index">
-
-          <div v-if="item.role === 'user'" class="user-chat-container">
+        <div class="" v-for="(item, index) of  conversationMsg" :key="index">
+<!-- <span style="color: black;">{{ item.role }}</span> -->
+          <div v-if="item.role === 'User'" class="user-chat-container">
             <p class="message">
               <span>You </span>
             <p>{{ item.msg }}</p>
@@ -41,7 +48,7 @@
             </span>
           </div>
 
-          <div v-else-if="item.role === 'assistant'" class="AI-chat-container">
+          <div v-else-if="item.role === 'Assistant' || item.role === 'Staff'" class="AI-chat-container">
             <span>
               <div class="ai-image">
                 <svg stroke="none" fill="black" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" height="20"
@@ -53,7 +60,7 @@
               </div>
             </span>
             <p class="message">
-              <span>AI </span>
+              <span>{{item.role}} </span>
             <p>{{ item.msg }}</p>
             </p>
           </div>
@@ -112,11 +119,14 @@ import useAssistant from "@/composables/useAssistant";
 import { useRouter, useRoute } from "vue-router";
 import HpSpinner from "@/components/hp-spinner.vue";
 import useToast from "@/composables/useToast";
+import io from 'socket.io-client';
+import Logo from "@/assets/logo.svg";
 
 const { setToast } = useToast();
 
 //hooks
 const router = useRouter();
+const route = useRoute();
 // state
 const { conversationSummary } = useAssistant();
 
@@ -126,46 +136,60 @@ const conversationMsg = ref([
     msg: "Hello! I'm here to assist you in gathering information swiftly for the position you're looking to fill. How can I help you with the details of the job you have in mind?😊",
   },
 ]);
+
 const showEndChat = ref(false);
 const userMsg = ref(null);
 const chatBoxRef = ref(null);
+const roomId=ref(null)
 
 const threadId = ref(null);
 const isChatLoading = ref(false);
 const isChatThreadLoading = ref(false);
 const isEndChat = ref(false);
+const userIsEmployee= ref(false);
+let socket = null
 
+// methods
 
 const sendMsg = async () => {
+  
   if (!userMsg.value) {
     return
   }
+  console.log("userIsEmployee",userIsEmployee)
+  if(userIsEmployee.value)
+  {
+    socket.emit('member-message', {message: userMsg.value,role:"member"});
+    userMsg.value=null
+    return
+  }
+  const obj = { message: userMsg.value,roomId:roomId.value,role:"user"}
+  socket.emit('message', obj);
   const chatBox = chatBoxRef.value;
   isChatLoading.value = true;
-  conversationMsg.value.push({
-    role: "user",
-    msg: userMsg.value,
-  });
+  // conversationMsg.value.push({
+  //   role: "user",
+  //   msg: userMsg.value,
+  // });
+
   if (chatBox) {
     chatBox.scrollTop = chatBox.scrollHeight;
   }
   const query = userMsg.value;
   userMsg.value = null;
-  const { post, data, loading } = usePost("get-msg");
-  await post({
-    msg: query,
+  // socket.emit('message', obj);
+     socket.emit('post-ai-response', {   msg: query,
     threadId: threadId.value,
-  });
-  isChatLoading.value = false;
-  conversationMsg.value.push({
-    role: "assistant",
-    msg: data.value,
-  });
-  // if (data.value.includes("The Chat is end")) {
+    roomId:roomId.value,
+    role:"user"})
+//  conversationMsg.value.push({
+//     role: "assistant",
+//     msg: data.value,
+//   });
+// if (data.value.includes("The Chat is end")) {
   //   showEndChat.value = true;
   //   createParameterJSON()
-  // }
-
+  // }  
   if (chatBox) {
     chatBox.scrollTop = chatBox.scrollHeight;
   }
@@ -206,8 +230,8 @@ const createAssistant = async () => {
   await assistant.get();
   conversationMsg.value = [
     {
-      role: "assistant",
-      msg: "Hello! I'm here to assist you in gathering information swiftly for the position you're looking to fill. How can I help you with the details of the job you have in mind?😊",
+      role: "Assistant",
+    msg: "Hello! I'm here to assist you in gathering information swiftly for the position you're looking to fill. How can I help you with the details of the job you have in mind?😊",
     },
   ];
   isChatThreadLoading.value = false
@@ -218,21 +242,101 @@ const createThread = async () => {
   const thread = useGet(`create-thread`);
   await thread.get();
   threadId.value = thread.data.value.threadId.id
+  socket.emit("create-room",{roomId:roomId.value,threadId:threadId.value}) 
   isChatThreadLoading.value = false
 };
 
+const deleteThread = async () => {
+  const deleteFiles = useDelete(`delete-thread/${threadId}`);
+  await deleteFiles.remove();
+};
+const generateRandomAlphaNumeric=()=> {
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  let result = '';
+  for (let i = 0; i < 6; i++) {
+    result += characters.charAt(Math.floor(Math.random() * characters.length));
+  }
+  return result;
+}
+const getMessageList=async(threadId)=>{
+  isChatThreadLoading.value = true
+  const thread = useGet(`get-messages?threadId=${threadId}`);
+  await thread.get();
+  // conversationMsg.value=thread.data.value.messages
+ const messagesList= thread.data.value.messages && thread.data.value.messages.map((message)=>{
+    return {
+      role:message.role,
+      msg:message.content[0].text.value,
+    }
+    
+  })
+ conversationMsg.value=messagesList.reverse()
+ messagesList.unshift( { role: "Assistant",
+    msg: "Hello! I'm here to assist you in gathering information swiftly for the position you're looking to fill. How can I help you with the details of the job you have in mind?😊"})
+  isChatThreadLoading.value = false
+}
 onMounted(async () => {
+ 
+  socket = io("http://localhost:3000");
+  socket.on("connect",async () => {
+ if(route.query?.room && route.query?.thread)
+ {
+  userIsEmployee.value=true
+  roomId.value=route.query?.room
+  threadId.value=route.query?.thread
+  console.log("roomId",roomId);
+  console.log("threadId",threadId);
+await  getMessageList(threadId.value)
+ }
+ else{
+  roomId.value=generateRandomAlphaNumeric()
   await createAssistant();
-  
-  setTimeout(async() => {
-    await createThread();
-  }, 1000);
+setTimeout(async () => {
+  await createThread();
+}, 1000)
+ 
+ }
+  });
+  socket.on("get-ai-message", (data) => {
+    console.log("get-ai-message",data);
+     conversationMsg.value.push({
+      role:"Assistant",
+       msg: data
+     });
+     isChatLoading.value=false
+   });
+ socket.on("receive-message", (data) => {
+  console.log("receive-message",data);
+     conversationMsg.value.push({
+      role:"User",
+       msg: data
+     });
+   });
+ socket.on("receive-member-message", (data) => {
+  console.log("receive-message",data);
+     conversationMsg.value.push({
+      role:"Staff",
+       msg: data
+     });
+   });
 });
+
+const extractRole=(originalString)=> {
+  let parts = originalString.split('role:');
+let role = parts[1];
+return role
+}
+const  extractMessage=(originalString)=> {
+  let parts = originalString.split('role:');
+let msg = parts[0].substring('msg:'.length);
+msg = msg.substring(0, msg.length - 1);
+return msg
+}
 
 </script>
 
 
-<style scoped>
+<style scoped >
 .create-json {
   background: white;
   padding: 6px;
@@ -246,6 +350,15 @@ onMounted(async () => {
 
 .chat-boat-container {
   height: 100vh;
+  display: flex;
+}
+.chat-welcome{
+  background: rgb(243, 239, 239 );
+  width: 35%;
+color: black;
+display: flex;
+justify-content: center;
+align-items: center;
 }
 
 .chatButton {
@@ -281,7 +394,8 @@ onMounted(async () => {
 /* chat-container start */
 
 .chat-container {
-  padding: 1.5rem;
+  width: 70%;
+  /* padding: 1.5rem; */
   /* border-radius: 0.5rem; */
   border-width: 1px;
   background-color: #ffffff;
@@ -295,6 +409,7 @@ onMounted(async () => {
 
 /* Header container start */
 .header-container {
+  padding: 10px 1rem 0 1rem;
   display: flex;
   padding-bottom: 1rem;
   margin-top: 0.375rem;
@@ -322,7 +437,7 @@ onMounted(async () => {
 
 /* chat-box-container Start */
 .chat-box-container {
-  padding-right: 1rem;
+  padding: 0 1rem;
   height: 78vh;
   overflow: auto;
   margin-bottom: 1rem;
@@ -437,9 +552,11 @@ onMounted(async () => {
 
 /* Input box container start */
 .inputbox-container {
-  display: flex;
-  padding-top: 0;
-  align-items: center;
+    padding-top: 0;
+    background-color: red;
+    width: 70%;
+    position: fixed;
+    bottom: 20px;
 }
 
 .inputbox-container .form {
