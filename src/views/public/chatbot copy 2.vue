@@ -404,14 +404,14 @@ align-items: center;
 }
 
 .chat-container {
-  width: 65%;
+  width: 70%;
   /* padding: 1.5rem; */
   /* border-radius: 0.5rem; */
   border-width: 1px;
   background-color: #ffffff;
   bottom: calc(4rem+1.5rem);
   border-color: #e5e7eb;
-  /* width: 50%; */
+  width: 50%;
   height: 100%;
 }
 
