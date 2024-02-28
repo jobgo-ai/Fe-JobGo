@@ -7,7 +7,9 @@
 <Logo  style="margin-top: 1rem;"/>
       </div>
     </div> -->
-    <div class="logo-container"><Chat /></div>
+    <div class="logo-container">
+      <Chat />
+    </div>
 
     <div class="chat-container">
 
@@ -29,13 +31,15 @@
       </div>
 
       <!-- Chat Container -->
-      <div  class="chat-box-container" ref="chatBoxRef">
+      <div class="chat-box-container" ref="chatBoxRef">
 
         <div class="" v-for="(item, index) of  conversationMsg" :key="index">
-<!-- <span style="color: black;">{{ item.role }}</span> -->
-          <div v-if="item.role === 'user'" class="user-chat-container">
+          <!-- <span style="color: black;">{{ item.role }}</span> -->
+
+          <!-- <div v-if="item.role === 'user'" class="user-chat-container"> -->
+          <div v-if="item.role == userName" class="user-chat-container">
             <p class="message">
-              <span>You </span>
+              <span>{{ item?.role?.charAt(0).toUpperCase() + item.role.slice(1) }} </span>
             <p>{{ item.msg }}</p>
             </p>
             <span>
@@ -50,7 +54,11 @@
             </span>
           </div>
 
-          <div v-else-if="item.role === 'assistant' || item.role === 'staff'" class="AI-chat-container">
+          <!-- <div v-else-if="item.role !== 'user' || item.role === 'assistant' || item.role === 'staff'"
+            class="AI-chat-container"> -->
+
+
+          <div v-else-if="item.role != userName" class="AI-chat-container">
             <span>
               <div class="ai-image">
                 <svg stroke="none" fill="black" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" height="20"
@@ -62,7 +70,7 @@
               </div>
             </span>
             <p class="message">
-              <span>{{item.role}} </span>
+              <span>{{ item?.role?.charAt(0).toUpperCase() + item.role.slice(1) }} </span>
             <p>{{ item.msg }}</p>
             </p>
           </div>
@@ -144,30 +152,30 @@ const conversationMsg = ref([
 const showEndChat = ref(false);
 const userMsg = ref(null);
 const chatBoxRef = ref(null);
-const roomId=ref(null)
+const roomId = ref(null)
 
 const threadId = ref(null);
+const userName = ref(null);
 const isChatLoading = ref(false);
 const isChatThreadLoading = ref(false);
 const isEndChat = ref(false);
-const userIsEmployee= ref(false);
+const userIsEmployee = ref(false);
 let socket = null
 
 // methods
 
 const sendMsg = async () => {
-  
+
   if (!userMsg.value) {
     return
   }
-  console.log("userIsEmployee",userIsEmployee)
-  if(userIsEmployee.value)
-  {
-    socket.emit('member-message', {message: userMsg.value,role:"member"});
-    userMsg.value=null
-    return
-  }
-  const obj = { message: userMsg.value,roomId:roomId.value,role:"user"}
+  console.log("userIsEmployee", userIsEmployee?.value)
+  // if (userIsEmployee.value) {
+  //   socket.emit('member-message', { message: userMsg.value, role: userName?.value });
+  //   userMsg.value = null
+  //   return
+  // }
+  const obj = { message: userMsg.value, roomId: roomId.value, role: userName?.value }
   socket.emit('message', obj);
   const chatBox = chatBoxRef.value;
   isChatLoading.value = true;
@@ -182,15 +190,17 @@ const sendMsg = async () => {
   const query = userMsg.value;
   userMsg.value = null;
   // socket.emit('message', obj);
-     socket.emit('post-ai-response', {   msg: query,
+  socket.emit('post-ai-response', {
+    msg: query,
     threadId: threadId.value,
-    roomId:roomId.value,
-    role:"user"})
-//  conversationMsg.value.push({
-//     role: "assistant",
-//     msg: data.value,
-//   });
-// if (data.value.includes("The Chat is end")) {
+    roomId: roomId.value,
+    role: "user"
+  })
+  //  conversationMsg.value.push({
+  //     role: "assistant",
+  //     msg: data.value,
+  //   });
+  // if (data.value.includes("The Chat is end")) {
   //   showEndChat.value = true;
   //   createParameterJSON()
   // }  
@@ -235,7 +245,7 @@ const createAssistant = async () => {
   conversationMsg.value = [
     {
       role: "assistant",
-    msg: "Hello! I'm here to assist you in gathering information swiftly for the position you're looking to fill. How can I help you with the details of the job you have in mind?😊",
+      msg: "Hello! I'm here to assist you in gathering information swiftly for the position you're looking to fill. How can I help you with the details of the job you have in mind?😊",
     },
   ];
   isChatThreadLoading.value = false
@@ -246,7 +256,7 @@ const createThread = async () => {
   const thread = useGet(`create-thread`);
   await thread.get();
   threadId.value = thread.data.value.threadId.id
-  socket.emit("create-room",{roomId:roomId.value,threadId:threadId.value}) 
+  socket.emit("create-room", { roomId: roomId.value, threadId: threadId.value })
   isChatThreadLoading.value = false
 };
 
@@ -254,7 +264,7 @@ const deleteThread = async () => {
   const deleteFiles = useDelete(`delete-thread/${threadId}`);
   await deleteFiles.remove();
 };
-const generateRandomAlphaNumeric=()=> {
+const generateRandomAlphaNumeric = () => {
   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
   let result = '';
   for (let i = 0; i < 6; i++) {
@@ -262,82 +272,91 @@ const generateRandomAlphaNumeric=()=> {
   }
   return result;
 }
-const getMessageList=async(threadId)=>{
-  console.log("threadId",threadId)
+const getMessageList = async (threadId) => {
+  console.log("threadId", threadId)
   isChatThreadLoading.value = true
   const thread = useGet(`get-messages?threadId=${threadId}`);
   await thread.get();
   // conversationMsg.value=thread.data.value.messages
-  console.log("thread.data.value.messages",thread.data.value.messages)
- const messagesList= thread.data.value.messages && thread.data.value.messages.map((message)=>{
+  console.log("thread.data.value.messages", thread.data.value.messages)
+  const messagesList = thread.data.value.messages && thread.data.value.messages.map((message) => {
     return {
-      role:message.role,
-      msg:message.content[0].text.value,
+      role: message.role,
+      msg: message.content[0].text.value,
     }
-    
+
   })
- conversationMsg.value=messagesList.reverse()
- console.log("conversationMsg",conversationMsg.value);
- messagesList.unshift( { role: "assistant",
-    msg: "Hello! I'm here to assist you in gathering information swiftly for the position you're looking to fill. How can I help you with the details of the job you have in mind?😊"})
+  conversationMsg.value = messagesList.reverse()
+  console.log("conversationMsg", conversationMsg.value);
+  messagesList.unshift({
+    role: "assistant",
+    msg: "Hello! I'm here to assist you in gathering information swiftly for the position you're looking to fill. How can I help you with the details of the job you have in mind?😊"
+  })
   isChatThreadLoading.value = false
 }
 onMounted(async () => {
- 
+
   socket = io(import.meta.env.VITE_API_URL);
-  socket.on("connect",async () => {
- if(route.query?.room && route.query?.thread)
- {
-  userIsEmployee.value=true
-  roomId.value=route.query?.room
-  threadId.value=route.query?.thread
-  console.log("roomId",roomId);
-  console.log("threadId",threadId);
-await  getMessageList(threadId.value)
- }
- else{
-  roomId.value=generateRandomAlphaNumeric()
-  await createAssistant();
-setTimeout(async () => {
-  await createThread();
-}, 1000)
- 
- }
+  socket.on("connect", async () => {
+
+    userName.value = route.query?.user
+    console.log("route.query?.user", route.query?.user);
+    console.log("userName", userName);
+
+    if (route.query?.room && route.query?.thread) {
+      userIsEmployee.value = true
+      roomId.value = route.query?.room
+      threadId.value = route.query?.thread
+      // userName.value = route.query?.user
+      console.log("roomId", roomId);
+      console.log("threadId", threadId);
+      console.log("route.query?.user", route.query?.user);
+      // console.log("userName", userName);
+      await getMessageList(threadId.value)
+    }
+    else {
+      roomId.value = generateRandomAlphaNumeric()
+      await createAssistant();
+      setTimeout(async () => {
+        await createThread();
+      }, 1000)
+
+    }
   });
   socket.on("get-ai-message", (data) => {
-    console.log("get-ai-message",data);
-     conversationMsg.value.push({
-      role:"assistant",
-       msg: data
-     });
-     isChatLoading.value=false
-   });
- socket.on("receive-message", (data) => {
-  console.log("receive-message",data);
-     conversationMsg.value.push({
-      role:"user",
-       msg: data
-     });
-   });
- socket.on("receive-member-message", (data) => {
-  console.log("receive-message",data);
-     conversationMsg.value.push({
-      role:"staff",
-       msg: data
-     });
-   });
+    console.log("get-ai-message", data);
+    conversationMsg.value.push({
+      role: "assistant",
+      msg: data
+    });
+    isChatLoading.value = false
+  });
+  socket.on("receive-message", ({ message, role }) => {
+    console.log("receive-message", { message, role });
+    conversationMsg.value.push({
+      role: role,
+      msg: message
+    });
+  });
+  socket.on("receive-member-message", ({ message, role }) => {
+    console.log("receive-message", { message, role });
+    conversationMsg.value.push({
+      role: role,
+      msg: message
+    });
+  });
 });
 
-const extractRole=(originalString)=> {
+const extractRole = (originalString) => {
   let parts = originalString.split('role:');
-let role = parts[1];
-return role
+  let role = parts[1];
+  return role
 }
-const  extractMessage=(originalString)=> {
+const extractMessage = (originalString) => {
   let parts = originalString.split('role:');
-let msg = parts[0].substring('msg:'.length);
-msg = msg.substring(0, msg.length - 1);
-return msg
+  let msg = parts[0].substring('msg:'.length);
+  msg = msg.substring(0, msg.length - 1);
+  return msg
 }
 
 </script>
@@ -359,13 +378,14 @@ return msg
   height: 100vh;
   display: flex;
 }
-.chat-welcome{
-  background: rgb(243, 239, 239 );
+
+.chat-welcome {
+  background: rgb(243, 239, 239);
   width: 35%;
-color: black;
-display: flex;
-justify-content: center;
-align-items: center;
+  color: black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .chatButton {
@@ -525,6 +545,19 @@ align-items: center;
   display: block;
   font-weight: 700;
   color: #374151;
+}
+
+
+.user-chat-container .message span {
+  display: flex;
+  overflow: hidden;
+  position: relative;
+  shrink: 0;
+  border-radius: 0 !important;
+  width: 2rem;
+  height: 2rem;
+  text-align: right;
+  width: 100%;
 }
 
 /* user-chat-container End */
