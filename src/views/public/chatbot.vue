@@ -7,6 +7,7 @@
 <Logo  style="margin-top: 1rem;"/>
       </div>
     </div> -->
+
     <div class="logo-container">
       <Chat />
     </div>
@@ -32,6 +33,8 @@
 
       <!-- Chat Container -->
       <div class="chat-box-container" ref="chatBoxRef">
+
+        <!-- {{ conversationMsg }} -->
 
         <div class="" v-for="(item, index) of  conversationMsg" :key="index">
           <!-- <span style="color: black;">{{ item.role }}</span> -->
@@ -59,19 +62,33 @@
 
 
           <div v-else-if="item.role != userName" class="AI-chat-container">
-            <span>
+            <span v-if="item.role == 'assistant' || item.role == 'Assistant'">
               <div class="ai-image">
-                <svg stroke="none" fill="black" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" height="20"
+                <img src="../../assets/sm-logo.png" width="20" height="20" />
+                <!-- <svg stroke="none" fill="black" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" height="20"
                   width="20" xmlns="http://www.w3.org/2000/svg">
                   <path stroke-linecap="round" stroke-linejoin="round"
                     d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z">
+                  </path>
+                </svg> -->
+              </div>
+            </span>
+            <span v-else-if="item.role != 'assistant'">
+              <div class="user-img">
+                <svg stroke="none" fill="black" stroke-width="0" viewBox="0 0 16 16" height="20" width="20"
+                  xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0Zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4Zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10Z">
                   </path>
                 </svg>
               </div>
             </span>
             <p class="message">
-              <span>{{ item?.role?.charAt(0).toUpperCase() + item.role.slice(1) }} </span>
+              <span v-if="item.role == 'assistant' || item.role == 'Assistant'">Jobgo AI Copilot </span>
+              <span v-else-if="item.role != 'assistant'">{{ item?.role?.charAt(0).toUpperCase() + item.role.slice(1) }}
+              </span>
             <p>{{ item.msg }}</p>
+            <!-- copilot -->
             </p>
           </div>
         </div>
@@ -79,16 +96,18 @@
         <div class="AI-chat-container" v-if="isChatLoading">
           <span>
             <div class="ai-image">
-              <svg stroke="none" fill="black" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" height="20"
+              <!-- <svg stroke="none" fill="black" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" height="20"
                 width="20" xmlns="http://www.w3.org/2000/svg">
                 <path stroke-linecap="round" stroke-linejoin="round"
                   d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z">
                 </path>
-              </svg>
+              </svg> -->
+              <img src="../../assets/sm-logo.png" width="20" height="20" />
+
             </div>
           </span>
           <p class="message">
-            <span>AI </span>
+            <span>Jobgo AI Copilot </span>
             <span class="loader"></span>
           </p>
         </div>
@@ -194,7 +213,8 @@ const sendMsg = async () => {
     msg: query,
     threadId: threadId.value,
     roomId: roomId.value,
-    role: "user"
+    role: "user",
+    userName: userName?.value
   })
   //  conversationMsg.value.push({
   //     role: "assistant",
@@ -207,6 +227,8 @@ const sendMsg = async () => {
   if (chatBox) {
     chatBox.scrollTop = chatBox.scrollHeight;
   }
+
+  resetScroll();
 };
 
 const createParameterJSON = async () => {
@@ -216,6 +238,13 @@ const createParameterJSON = async () => {
   });
   console.log("generate-json", data);
 };
+
+function resetScroll() {
+  setTimeout(() => {
+    chatBoxRef.value.scrollTop = chatBoxRef.value.scrollHeight
+  }, 300)
+
+}
 
 const createConversationSummary = async () => {
   const { post, data, loading } = usePost("create-summary");
@@ -280,8 +309,11 @@ const getMessageList = async (threadId) => {
   // conversationMsg.value=thread.data.value.messages
   console.log("thread.data.value.messages", thread.data.value.messages)
   const messagesList = thread.data.value.messages && thread.data.value.messages.map((message) => {
+    console.log("message :- ", message)
+    console.log("message :- ", message?.userName)
+
     return {
-      role: message.role,
+      role: message?.metadata?.userName || message?.role,
       msg: message.content[0].text.value,
     }
 
@@ -330,6 +362,7 @@ onMounted(async () => {
       msg: data
     });
     isChatLoading.value = false
+    resetScroll();
   });
   socket.on("receive-message", ({ message, role }) => {
     console.log("receive-message", { message, role });
@@ -337,6 +370,7 @@ onMounted(async () => {
       role: role,
       msg: message
     });
+    resetScroll();
   });
   socket.on("receive-member-message", ({ message, role }) => {
     console.log("receive-message", { message, role });
@@ -344,6 +378,7 @@ onMounted(async () => {
       role: role,
       msg: message
     });
+    resetScroll();
   });
 });
 
@@ -527,7 +562,7 @@ const extractMessage = (originalString) => {
   text-align: center;
 }
 
-.user-chat-container .user-img {
+.user-img {
   padding: 0.25rem;
   border-radius: 9999px;
   border-width: 1px;
@@ -558,6 +593,7 @@ const extractMessage = (originalString) => {
   height: 2rem;
   text-align: right;
   width: 100%;
+  justify-content: right
 }
 
 /* user-chat-container End */
@@ -602,6 +638,7 @@ const extractMessage = (originalString) => {
   display: block;
   font-weight: 700;
   color: #374151;
+  width: 100%;
 }
 
 /* AI-chat-container end */
