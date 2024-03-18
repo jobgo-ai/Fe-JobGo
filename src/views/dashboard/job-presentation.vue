@@ -144,7 +144,6 @@ const getJobPresentation = async () => {
   try {
     const { error, data, get, loading } = useGet(`opening/${route.params.id}`);
     await get();
-    console.log("datat.value", data.value);
     const simpleObject = JSON.parse(JSON.stringify(data.value));
     sessionParameter.value = simpleObject;
     // editorData.value=sessionParameter.value.fullDescription

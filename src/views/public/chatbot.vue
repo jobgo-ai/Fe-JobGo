@@ -34,8 +34,6 @@
       <!-- Chat Container -->
       <div class="chat-box-container" ref="chatBoxRef">
 
-        <!-- {{ conversationMsg }} -->
-
         <div class="" v-for="(item, index) of  conversationMsg" :key="index">
           <!-- <span style="color: black;">{{ item.role }}</span> -->
 
@@ -57,20 +55,11 @@
             </span>
           </div>
 
-          <!-- <div v-else-if="item.role !== 'user' || item.role === 'assistant' || item.role === 'staff'"
-            class="AI-chat-container"> -->
-
-
-          <div v-else-if="item.role != userName" class="AI-chat-container">
-            <span v-if="item.role == 'assistant' || item.role == 'Assistant'">
+<div v-else-if="item.role != userName" class="AI-chat-container">
+              <span v-if="item.role == 'assistant' || item.role == 'Assistant' || item.role == 'assistent'">
               <div class="ai-image">
-                <img src="../../assets/sm-logo.png" width="20" height="20" />
-                <!-- <svg stroke="none" fill="black" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" height="20"
-                  width="20" xmlns="http://www.w3.org/2000/svg">
-                  <path stroke-linecap="round" stroke-linejoin="round"
-                    d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z">
-                  </path>
-                </svg> -->
+                <img alt="logo" src="../../assets/sm-logo.png" width="20" height="20" />
+             
               </div>
             </span>
             <span v-else-if="item.role != 'assistant'">
@@ -85,8 +74,14 @@
             </span>
             <p class="message">
               <span v-if="item.role == 'assistant' || item.role == 'Assistant'">Jobgo AI Copilot </span>
-              <span v-else-if="item.role != 'assistant'">{{ item?.role?.charAt(0).toUpperCase() + item.role.slice(1) }}
+              <span v-else-if="item.role == 'assistent'">
+                
+                Jobgo AI Copilot 
               </span>
+              <span v-else-if="item.role!= 'assistent' || item.role== 'hiring-manager'">
+                Hiring-manager
+              </span>
+              
             <p>{{ item.msg }}</p>
             <!-- copilot -->
             </p>
@@ -102,7 +97,7 @@
                   d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z">
                 </path>
               </svg> -->
-              <img src="../../assets/sm-logo.png" width="20" height="20" />
+              <img alt="logo" src="../../assets/sm-logo.png" width="20" height="20" />
 
             </div>
           </span>
@@ -163,7 +158,7 @@ const { conversationSummary } = useAssistant();
 
 const conversationMsg = ref([
   {
-    role: "Assistant",
+    role: "assistant",
     msg: "Hello! I'm here to assist you in gathering information swiftly for the position you're looking to fill. How can I help you with the details of the job you have in mind?😊",
   },
 ]);
@@ -180,15 +175,23 @@ const isChatThreadLoading = ref(false);
 const isEndChat = ref(false);
 const userIsEmployee = ref(false);
 let socket = null
+let webSocket = null
 
+const thirdPerson=ref(false)
 // methods
 
 const sendMsg = async () => {
+  isChatLoading.value = true;
+  webSocket.send(JSON.stringify(
+    {event: "send-message", role: "hiring-manager", userName: "Uvesh" , msg: userMsg.value, room: roomId.value, threadId: threadId.value}));
 
+    webSocket.send(JSON.stringify(
+    {event: "send-ai-message", role: "hiring-manager", userName: "Uvesh" , msg: userMsg.value, room: roomId.value, threadId: threadId.value}));
+    userMsg.value=null
+  return
   if (!userMsg.value) {
     return
   }
-  console.log("userIsEmployee", userIsEmployee?.value)
   // if (userIsEmployee.value) {
   //   socket.emit('member-message', { message: userMsg.value, role: userName?.value });
   //   userMsg.value = null
@@ -196,6 +199,13 @@ const sendMsg = async () => {
   // }
   const obj = { message: userMsg.value, roomId: roomId.value, role: userName?.value }
   socket.emit('message', obj);
+  exampleSocket.onmessage = function (event) {
+    console.log('Received message:', event.data);
+    // Handle incoming messages here
+    handleMessage(event.data);
+  };
+
+
   const chatBox = chatBoxRef.value;
   isChatLoading.value = true;
   // conversationMsg.value.push({
@@ -228,7 +238,7 @@ const sendMsg = async () => {
     chatBox.scrollTop = chatBox.scrollHeight;
   }
 
-  resetScroll();
+  scrollChatBottom();
 };
 
 const createParameterJSON = async () => {
@@ -239,7 +249,7 @@ const createParameterJSON = async () => {
   console.log("generate-json", data);
 };
 
-function resetScroll() {
+function scrollChatBottom() {
   setTimeout(() => {
     chatBoxRef.value.scrollTop = chatBoxRef.value.scrollHeight
   }, 300)
@@ -327,59 +337,110 @@ const getMessageList = async (threadId) => {
   isChatThreadLoading.value = false
 }
 onMounted(async () => {
+  const thirdPerson=route.query?.room && route.query?.thread && route.query?.user
+  // room=uvesh_room&thread=thread_Jns5e0XBDwXgzbTrjOMhM8GM&user=md_uvesh
+  webSocket = new WebSocket('ws://bc65-2409-40e3-1046-af61-2962-1164-1ecb-9906.ngrok-free.app/ws');
 
-  socket = io(import.meta.env.VITE_API_URL);
-  socket.on("connect", async () => {
+  if (webSocket) {
+    webSocket.onopen = function (event) {
+        console.log("webSocket",webSocket)
+        
+        if(!thirdPerson)
+        {
+       
+      webSocket.send(JSON.stringify(
+        { event: "register", role: "hiring manager", userName: "uvesh" }));
+        }else{
+          webSocket.send(JSON.stringify(
+        { event: "add-member", room: route.query?.room,thread:route.query?.thread,userName:route.query?.user  }));
+        }
+    };
 
-    userName.value = route.query?.user
-    console.log("route.query?.user", route.query?.user);
-    console.log("userName", userName);
+    webSocket.onmessage = function (event) {
+      const data = JSON.parse(event.data);
+      if(route.query?.room && route.query?.thread && route.query?.user){
+        roomId.value=route.query?.room 
+        threadId.value= route.query?.thread
+      }else{
+        if (data.event === 'register') {
+        console.log("register", data);
+        roomId.value=data.roomId
+        threadId.value=data.threadId
+      }
+      }
+      
+        if(data.event === 'get-message') {
+         conversationMsg.value.push({
+        role: data.role,
+        msg: data.msg
+      });
+      scrollChatBottom();
+       }
+       else if(data.event === 'ai-response') {
+        isChatLoading.value = false;
+         conversationMsg.value.push({
+        role: data.role,
+        msg: data.msg
+      });
+      scrollChatBottom();
+       }
+   
+    };
+  
+    // socket = io("http://localhost:3000");
+    // socket.on("connect", async () => {
+    //  console.log("connection is established")
 
-    if (route.query?.room && route.query?.thread) {
-      userIsEmployee.value = true
-      roomId.value = route.query?.room
-      threadId.value = route.query?.thread
-      // userName.value = route.query?.user
-      console.log("roomId", roomId);
-      console.log("threadId", threadId);
-      console.log("route.query?.user", route.query?.user);
-      // console.log("userName", userName);
-      await getMessageList(threadId.value)
-    }
-    else {
-      roomId.value = generateRandomAlphaNumeric()
-      await createAssistant();
-      setTimeout(async () => {
-        await createThread();
-      }, 1000)
+    //   userName.value = route.query?.user
+    //   console.log("route.query?.user", route.query?.user);
+    //   console.log("userName", userName);
 
-    }
-  });
-  socket.on("get-ai-message", (data) => {
-    console.log("get-ai-message", data);
-    conversationMsg.value.push({
-      role: "assistant",
-      msg: data
-    });
-    isChatLoading.value = false
-    resetScroll();
-  });
-  socket.on("receive-message", ({ message, role }) => {
-    console.log("receive-message", { message, role });
-    conversationMsg.value.push({
-      role: role,
-      msg: message
-    });
-    resetScroll();
-  });
-  socket.on("receive-member-message", ({ message, role }) => {
-    console.log("receive-message", { message, role });
-    conversationMsg.value.push({
-      role: role,
-      msg: message
-    });
-    resetScroll();
-  });
+    //   if (route.query?.room && route.query?.thread) {
+    //     userIsEmployee.value = true
+    //     roomId.value = route.query?.room
+    //     threadId.value = route.query?.thread
+    //     // userName.value = route.query?.user
+    //     console.log("roomId", roomId);
+    //     console.log("threadId", threadId);
+    //     console.log("route.query?.user", route.query?.user);
+    //     // console.log("userName", userName);
+    //     await getMessageList(threadId.value)
+    //   }
+    //   else {
+    //     roomId.value = generateRandomAlphaNumeric()
+    //     await createAssistant();
+    //     setTimeout(async () => {
+    //       await createThread();
+    //     }, 1000)
+
+    //   }
+    // });
+    // webSocket.on("get-ai-message", (data) => {
+    //   console.log("get-ai-message", data);
+    //   conversationMsg.value.push({
+    //     role: "assistant",
+    //     msg: data
+    //   });
+    //   isChatLoading.value = false
+    //   scrollChatBottom();
+    // });
+    // ws.on("receive-message", ({ message, role }) => {
+    //   console.log("receive-message", { message, role });
+    //   conversationMsg.value.push({
+    //     role: role,
+    //     msg: message
+    //   });
+    //   scrollChatBottom();
+    // });
+  }
+  // socket.on("receive-member-message", ({ message, role }) => {
+  //   console.log("receive-message", { message, role });
+  //   conversationMsg.value.push({
+  //     role: role,
+  //     msg: message
+  //   });
+  //   scrollChatBottom();
+  // });
 });
 
 const extractRole = (originalString) => {
@@ -397,7 +458,7 @@ const extractMessage = (originalString) => {
 </script>
 
 
-<style scoped >
+<style scoped>
 .create-json {
   background: white;
   padding: 6px;
