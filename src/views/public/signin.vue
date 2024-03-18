@@ -1,6 +1,8 @@
 <template>
   <div class="signin">
-    <div class="signin__logo"><Logo /></div>
+    <div class="signin__logo">
+      <Logo />
+    </div>
     <div class="signin__container">
       <div class="signin__section">
         <div class="signin__image-container"></div>
@@ -9,12 +11,7 @@
         <form @submit="onSubmit">
           <hp-input name="email" placeholder="Type your email" label="Email" />
           <div class="signin__password-container">
-            <hp-input
-              name="password"
-              placeholder="Enter your password"
-              label="Password"
-              type="password"
-            />
+            <hp-input name="password" placeholder="Enter your password" label="Password" type="password" />
             <!-- <router-link
               tabIndex="-1"
               to="/forgot-password"
@@ -22,14 +19,8 @@
               >Forgot password</router-link
             > -->
           </div>
-          <hp-button
-            :isLoading="postLogin.loading.value"
-            primary
-            fullWidth
-            :isDisabled="!meta.dirty || !meta.valid"
-            type="submit"
-            label="Continue"
-          ></hp-button>
+          <hp-button :isLoading="postLogin.loading.value" primary fullWidth :isDisabled="!meta.dirty || !meta.valid"
+            type="submit" label="Continue"></hp-button>
         </form>
         <!-- <div class="signup__section__or">OR</div> -->
       </div>
@@ -37,23 +28,13 @@
         <hp-google-auth />
       </div> -->
     </div>
-    <router-link class="signin__signup" to="/signup"
-      >Don't have an account?
-      <span class="signin__signup__link">Sign up</span></router-link
-    >
+    <router-link class="signin__signup" to="/signup">Don't have an account?
+      <span class="signin__signup__link">Sign up</span></router-link>
     <div class="forgot-password__tos">
-      <a
-        href="https://www.hireproof.io/terms-of-service"
-        target="_blank"
-        class="forgot-password__policy"
-      >
+      <a href="https://www.hireproof.io/terms-of-service" target="_blank" class="forgot-password__policy">
         Terms of service
       </a>
-      <a
-        href="https://www.hireproof.io/privacy-policy"
-        target="_blank"
-        class="forgot-password__policy"
-      >
+      <a href="https://www.hireproof.io/privacy-policy" target="_blank" class="forgot-password__policy">
         Privacy policy
       </a>
     </div>
@@ -101,11 +82,11 @@ const postLogin = usePost("self/login");
 const onSubmit = handleSubmit(async (values) => {
   const { email, password } = values;
   const data = {
-    credentials: { email,password:useEncryption(password)},
+    credentials: { email, password: useEncryption(password) },
   };
 
   await postLogin.post(data);
-  console.log("postLogin.data.value",postLogin.data.value);
+  console.log("postLogin.data.value", postLogin.data.value);
   if (postLogin.data.value) {
     const { setUser } = useAuth();
     setUser(postLogin.data.value, true);
@@ -121,27 +102,32 @@ const onSubmit = handleSubmit(async (values) => {
   display: flex;
   flex-direction: column;
   padding: 24px;
+
   &__section {
     padding-bottom: 24px;
     position: relative;
     border-bottom: 1px solid var(--color-border);
   }
+
   &__subtitle {
     @include text-h3;
     font-weight: 500;
     color: var(--color-text-secondary);
   }
+
   &__title {
     @include text-h3;
     font-weight: 500;
     margin-bottom: 24px;
   }
+
   &__logo {
     margin: auto;
     margin-bottom: 48px;
     height: 48px;
     width: 48px;
   }
+
   &__container {
     margin: auto;
     padding: 24px;
@@ -152,6 +138,7 @@ const onSubmit = handleSubmit(async (values) => {
     position: relative;
     box-shadow: $box-shadow;
   }
+
   &__image-container {
     display: flex;
     background-image: url("../../assets/abstracts/decorations/illustration.svg");
@@ -163,24 +150,29 @@ const onSubmit = handleSubmit(async (values) => {
     transform: translateX(-50%) translateY(-50%);
     z-index: $z-index-negative;
   }
+
   &__password-container {
     position: relative;
   }
+
   &__forgot-password {
     position: absolute;
     right: 0;
     top: 0;
     @include text-h5;
   }
+
   &__error {
     color: var(--color-error);
     margin-bottom: 16px;
   }
+
   &__signup {
     color: var(--color-text-secondary);
     font-weight: 400;
     margin: auto;
     margin-top: 24px;
+
     &__link {
       font-weight: 500;
       color: var(--color-text-primary);
@@ -191,12 +183,15 @@ const onSubmit = handleSubmit(async (values) => {
 @media (min-width: $breakpoint-tablet) {
   .signin {
     padding: 0;
+
     &__container {
       width: 450px;
     }
+
     &__logo {
       margin-top: 64px;
     }
+
     &__image-container {
       height: 446px;
       width: 588px;

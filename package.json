@@ -13,7 +13,10 @@
   "dependencies": {
     "@ckeditor/ckeditor5-build-classic": "^41.0.0",
     "@ckeditor/ckeditor5-vue": "^5.1.0",
+    "@google-apps/meet": "^0.1.0",
+    "@google-cloud/local-auth": "^3.0.1",
     "@vueuse/core": "^8.9.2",
+    "axios": "^1.6.7",
     "cypress": "^9.5.1",
     "date-fns": "^2.28.0",
     "jsencrypt": "^3.3.2",
