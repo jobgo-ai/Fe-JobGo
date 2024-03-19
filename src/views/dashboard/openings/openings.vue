@@ -45,7 +45,7 @@
           <div class="`hp-opening-card__add-new`">
             <div>
               <div class="hp-opening-card__add-new__icon-container1">
-                <router-link to="/chatbot">
+                <router-link to="/chat">
                   <hp-icon :size="24" name="plus"></hp-icon>
                 </router-link>
               </div>

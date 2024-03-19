@@ -271,9 +271,10 @@ const createConversationSummary = async () => {
 };
 
 const createJson = async () => {
+  console.log("conversationMsg.value",conversationMsg.value)
   isEndChat.value = true
   await createParameterJSON();
-  await createConversationSummary()
+  // await createConversationSummary()
   isEndChat.value = false
 }
 
@@ -338,8 +339,7 @@ const getMessageList = async (threadId) => {
 }
 onMounted(async () => {
   const thirdPerson=route.query?.room && route.query?.thread && route.query?.user
-  // room=uvesh_room&thread=thread_Jns5e0XBDwXgzbTrjOMhM8GM&user=md_uvesh
-  webSocket = new WebSocket('ws://bc65-2409-40e3-1046-af61-2962-1164-1ecb-9906.ngrok-free.app/ws');
+   webSocket = new WebSocket('ws://8fcd-2409-40e3-4037-9e8c-791e-bb46-68d8-e7d1.ngrok-free.app/ws');
 
   if (webSocket) {
     webSocket.onopen = function (event) {
