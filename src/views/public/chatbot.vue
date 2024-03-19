@@ -146,6 +146,7 @@ import useToast from "@/composables/useToast";
 import io from 'socket.io-client';
 import Logo from "@/assets/logo.svg";
 import Chat from "@/assets/chat.svg";
+import { state } from "../../composables/useAuth";
 
 
 const { setToast } = useToast();
@@ -242,11 +243,19 @@ const sendMsg = async () => {
 };
 
 const createParameterJSON = async () => {
-  const { post, data, loading } = usePost("generate-json");
-  await post({
-    conversation: conversationMsg.value
-  });
-  console.log("generate-json", data);
+console.log("conversationMsg.value",conversationMsg.value)
+console.log("conversationMsg.value",JSON.stringify(conversationMsg.value))
+const res = await fetch(`https://8fcd-2409-40e3-4037-9e8c-791e-bb46-68d8-e7d1.ngrok-free.app/self/profile`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + state.token,
+          "Csrf-Token": "nocheck",
+        },
+        body: JSON.stringify({conversation:JSON.stringify(conversationMsg.value)}),
+      });
+      const {jobId}=await res.json()
+      router.push(`/presentation?jobId=${jobId}`);
 };
 
 function scrollChatBottom() {
@@ -271,7 +280,6 @@ const createConversationSummary = async () => {
 };
 
 const createJson = async () => {
-  console.log("conversationMsg.value",conversationMsg.value)
   isEndChat.value = true
   await createParameterJSON();
   // await createConversationSummary()
@@ -339,7 +347,9 @@ const getMessageList = async (threadId) => {
 }
 onMounted(async () => {
   const thirdPerson=route.query?.room && route.query?.thread && route.query?.user
-   webSocket = new WebSocket('ws://8fcd-2409-40e3-4037-9e8c-791e-bb46-68d8-e7d1.ngrok-free.app/ws');
+  // room=uvesh_room&thread=thread_Jns5e0XBDwXgzbTrjOMhM8GM&user=md_uvesh
+  // https://8fcd-2409-40e3-4037-9e8c-791e-bb46-68d8-e7d1.ngrok-free.app
+  webSocket = new WebSocket('ws://8fcd-2409-40e3-4037-9e8c-791e-bb46-68d8-e7d1.ngrok-free.app/ws');
 
   if (webSocket) {
     webSocket.onopen = function (event) {

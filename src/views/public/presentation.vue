@@ -16,7 +16,7 @@
           <div class="description">
             We are looking for a Lead UI Designer to join our team. The location
             can be set either in our
-            {{ data.description }}
+            {{ dataVal.description }}
           </div>
         </div>
         <div class="sections">
@@ -26,7 +26,7 @@
             <div class="big"></div>
           </div>
           <div class="description">
-       {{data.responsibilities}}
+            {{ dataVal.responsibilities }}
             <!-- <div>Build next-generation web applications with a focus on the client side.</div> -->
           </div>
         </div>
@@ -37,8 +37,8 @@
             <div class="big"></div>
           </div>
           <div class="description">
-       {{data.qualification}}
-        
+            {{ dataVal.qualification }}
+
             <div>Good visual design skills</div>
           </div>
         </div>
@@ -49,7 +49,7 @@
             <div class="big"></div>
           </div>
           <div class="description">
-            {{ data.how_to_apply }}
+            {{ dataVal.how_to_apply }}
           </div>
         </div>
       </div>
@@ -73,42 +73,42 @@
               <div class="icon"><img src="../../assets/calander.png" /></div>
               <div class="label">Date Posted:</div>
             </div>
-            <div class="value">10 days ago</div>
+            <div class="value">Today</div>
           </div>
           <div class="section">
             <div class="flex">
               <div class="icon"><img src="../../assets/location.png" /></div>
               <div class="label">Location:</div>
             </div>
-            <div class="value">Korkeavourenkatu 2f, 00140, Helsinki</div>
+            <div class="value">  {{ dataVal.location}}</div>
           </div>
           <div class="section">
             <div class="flex">
               <div class="icon"><img src="../../assets/company.png" /></div>
-              <div class="label">Company Industry:</div>
+              <div class="label">Education:</div>
             </div>
-            <div class="value">Finance</div>
+            <div class="value">  {{ dataVal.education }}</div>
           </div>
           <div class="section">
             <div class="flex">
               <div class="icon"><img src="../../assets/position.png" /></div>
               <div class="label">Position:</div>
             </div>
-            <div class="value">Lead UX/UI Designer</div>
+            <div class="value">    {{ dataVal.position }}</div>
           </div>
           <div class="section">
             <div class="flex">
               <div class="icon"><img src="../../assets/salary.png" /></div>
               <div class="label">Salary:</div>
             </div>
-            <div class="value">4500 €</div>
+            <div class="value">  {{ dataVal.salary }}</div>
           </div>
           <div class="section">
             <div class="flex">
               <div class="icon"><img src="../../assets/calander.png" /></div>
-              <div class="label">Exprience:</div>
+              <div class="label">Experience:</div>
             </div>
-            <div class="value">2+ Years Exprience</div>
+            <div class="value">  {{ dataVal.experience }}</div>
           </div>
           <div class="apply-now">Apply Now</div>
         </div>
@@ -117,8 +117,23 @@
   </div>
 </template>
 <script setup>
-import { ref } from "vue";
-const data = ref({
+import { ref,onMounted } from "vue";
+import {  useRoute } from "vue-router";
+import { useGet } from "@/composables/useHttp";
+const route = useRoute();
+onMounted(async()=>{
+  const id=route.query?.jobId
+  const { data, get } = useGet(`self/profile/${id}`);
+  await get();
+  dataVal.value.description=data.value?.fullDescription
+  dataVal.value.qualification=data.value?.qualification
+  dataVal.value.experience=data.value?.experience
+  dataVal.value.salary=data.value?.salary
+  dataVal.value.position=data.value?.jobPosition
+  dataVal.value.location=data.value?.location
+  dataVal.value.education=data.value?.education
+})
+const dataVal = ref({
   description: ` We are looking for a Lead UI Designer to join our team. The location can be set either in our
                         Tampere or
                         Helsinki office. Purpose of the role Main role is to create user interfaces based on the (UX)
@@ -151,7 +166,7 @@ const data = ref({
                         Validation of user experience (UX) wireframes Make sure that 3 Step IT’s web services have
                         uniform
                         feeling / look-a-like Main accountabilities & tasks To design user interfaces`,
-
+education:"Bachelor's degree in Computer Science",
                         qualification:`    We are looking for a Lead UI Designer to join our team. The location
             can be set either in our Tampere or Helsinki office. Purpose of the
             role Main role is to create user interfaces based on the (UX)
@@ -227,7 +242,8 @@ const data = ref({
             how_to_apply:`Praesent sapien massa, convallis a pellentesque nec, egestas non
             nisi. Curabitur aliquet quam id dui posuere blandit. Curabitur
             aliquet quam id dui posuere blandit. Curabitur non nulla sit amet
-            nisl tempus convallis quis ac lectus navid.nosrati@jobgo.com.`
+            nisl tempus convallis quis ac lectus navid.nosrati@jobgo.com.`,
+            experience:'2+ Years Exprience',salary:'4500 €',position:"Lead UX/UI Designer",location:"Korkeavourenkatu 2f, 00140, Helsinki"
 });
 </script>
 <style>
