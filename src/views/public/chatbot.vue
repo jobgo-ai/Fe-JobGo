@@ -55,8 +55,8 @@
             </span>
           </div>
 
-<div v-else-if="item.role != userName" class="AI-chat-container">
-              <span v-if="item.role == 'assistant' || item.role == 'Assistant' || item.role == 'assistent'">
+          <div v-else-if="item.role != userName" class="AI-chat-container">
+            <span v-if="item.role == 'assistant' || item.role == 'Assistant' || item.role == 'assistent'">
               <div class="ai-image">
                 <img alt="logo" src="../../assets/sm-logo.png" width="20" height="20" />
              
@@ -75,10 +75,9 @@
             <p class="message">
               <span v-if="item.role == 'assistant' || item.role == 'Assistant'">Jobgo AI Copilot </span>
               <span v-else-if="item.role == 'assistent'">
-                
-                Jobgo AI Copilot 
+                Jobgo AI Copilot
               </span>
-              <span v-else-if="item.role!= 'assistent' || item.role== 'hiring-manager'">
+              <span v-else-if="item.role != 'assistent' || item.role == 'hiring-manager'">
                 Hiring-manager
               </span>
               
@@ -150,6 +149,8 @@ import { state } from "../../composables/useAuth";
 
 
 const { setToast } = useToast();
+const API_URL = import.meta.env.VITE_API_URL;
+
 
 //hooks
 const router = useRouter();
@@ -178,17 +179,17 @@ const userIsEmployee = ref(false);
 let socket = null
 let webSocket = null
 
-const thirdPerson=ref(false)
+const thirdPerson = ref(false)
 // methods
 
 const sendMsg = async () => {
   isChatLoading.value = true;
   webSocket.send(JSON.stringify(
-    {event: "send-message", role: "hiring-manager", userName: "Uvesh" , msg: userMsg.value, room: roomId.value, threadId: threadId.value}));
+    { event: "send-message", role: "hiring-manager", userName: "Uvesh", msg: userMsg.value, room: roomId.value, threadId: threadId.value }));
 
-    webSocket.send(JSON.stringify(
-    {event: "send-ai-message", role: "hiring-manager", userName: "Uvesh" , msg: userMsg.value, room: roomId.value, threadId: threadId.value}));
-    userMsg.value=null
+  webSocket.send(JSON.stringify(
+    { event: "send-ai-message", role: "hiring-manager", userName: "Uvesh", msg: userMsg.value, room: roomId.value, threadId: threadId.value }));
+  userMsg.value = null
   return
   if (!userMsg.value) {
     return
@@ -243,19 +244,19 @@ const sendMsg = async () => {
 };
 
 const createParameterJSON = async () => {
-console.log("conversationMsg.value",conversationMsg.value)
-console.log("conversationMsg.value",JSON.stringify(conversationMsg.value))
-const res = await fetch(`https://8fcd-2409-40e3-4037-9e8c-791e-bb46-68d8-e7d1.ngrok-free.app/self/profile`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + state.token,
-          "Csrf-Token": "nocheck",
-        },
-        body: JSON.stringify({conversation:JSON.stringify(conversationMsg.value)}),
-      });
-      const {jobId}=await res.json()
-      router.push(`/presentation?jobId=${jobId}`);
+  console.log("conversationMsg.value", conversationMsg.value)
+  console.log("conversationMsg.value", JSON.stringify(conversationMsg.value))
+  const res = await fetch(`${API_URL}/self/profile`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + state.token,
+      "Csrf-Token": "nocheck",
+    },
+    body: JSON.stringify({ conversation: JSON.stringify(conversationMsg.value) }),
+  });
+  const { jobId } = await res.json()
+  router.push(`/presentation?jobId=${jobId}`);
 };
 
 function scrollChatBottom() {
@@ -346,57 +347,56 @@ const getMessageList = async (threadId) => {
   isChatThreadLoading.value = false
 }
 onMounted(async () => {
-  const thirdPerson=route.query?.room && route.query?.thread && route.query?.user
+  const thirdPerson = route.query?.room && route.query?.thread && route.query?.user
   // room=uvesh_room&thread=thread_Jns5e0XBDwXgzbTrjOMhM8GM&user=md_uvesh
   // https://8fcd-2409-40e3-4037-9e8c-791e-bb46-68d8-e7d1.ngrok-free.app
-  webSocket = new WebSocket('ws://8fcd-2409-40e3-4037-9e8c-791e-bb46-68d8-e7d1.ngrok-free.app/ws');
+  webSocket = new WebSocket('wss://default-01b3294db69542e3441d745393b0556cc2eae8ee-ecuwbojisa-uc.a.run.app/ws');
 
   if (webSocket) {
     webSocket.onopen = function (event) {
-        console.log("webSocket",webSocket)
-        
-        if(!thirdPerson)
-        {
-       
-      webSocket.send(JSON.stringify(
-        { event: "register", role: "hiring manager", userName: "uvesh" }));
-        }else{
-          webSocket.send(JSON.stringify(
-        { event: "add-member", room: route.query?.room,thread:route.query?.thread,userName:route.query?.user  }));
-        }
+      console.log("webSocket", webSocket)
+
+      if (!thirdPerson) {
+
+        webSocket.send(JSON.stringify(
+          { event: "register", role: "hiring manager", userName: "uvesh" }));
+      } else {
+        webSocket.send(JSON.stringify(
+          { event: "add-member", room: route.query?.room, thread: route.query?.thread, userName: route.query?.user }));
+      }
     };
 
     webSocket.onmessage = function (event) {
       const data = JSON.parse(event.data);
-      if(route.query?.room && route.query?.thread && route.query?.user){
-        roomId.value=route.query?.room 
-        threadId.value= route.query?.thread
-      }else{
+      if (route.query?.room && route.query?.thread && route.query?.user) {
+        roomId.value = route.query?.room
+        threadId.value = route.query?.thread
+      } else {
         if (data.event === 'register') {
-        console.log("register", data);
-        roomId.value=data.roomId
-        threadId.value=data.threadId
+          console.log("register", data);
+          roomId.value = data.roomId
+          threadId.value = data.threadId
+        }
       }
+
+      if (data.event === 'get-message') {
+        conversationMsg.value.push({
+          role: data.role,
+          msg: data.msg
+        });
+        scrollChatBottom();
       }
-      
-        if(data.event === 'get-message') {
-         conversationMsg.value.push({
-        role: data.role,
-        msg: data.msg
-      });
-      scrollChatBottom();
-       }
-       else if(data.event === 'ai-response') {
+      else if (data.event === 'ai-response') {
         isChatLoading.value = false;
-         conversationMsg.value.push({
-        role: data.role,
-        msg: data.msg
-      });
-      scrollChatBottom();
-       }
-   
+        conversationMsg.value.push({
+          role: data.role,
+          msg: data.msg
+        });
+        scrollChatBottom();
+      }
+
     };
-  
+
     // socket = io("http://localhost:3000");
     // socket.on("connect", async () => {
     //  console.log("connection is established")
