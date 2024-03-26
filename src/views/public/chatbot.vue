@@ -348,9 +348,7 @@ const getMessageList = async (threadId) => {
 }
 onMounted(async () => {
   const thirdPerson = route.query?.room && route.query?.thread && route.query?.user
-  // room=uvesh_room&thread=thread_Jns5e0XBDwXgzbTrjOMhM8GM&user=md_uvesh
-  // https://8fcd-2409-40e3-4037-9e8c-791e-bb46-68d8-e7d1.ngrok-free.app
-  webSocket = new WebSocket('wss://default-01b3294db69542e3441d745393b0556cc2eae8ee-ecuwbojisa-uc.a.run.app/ws');
+  webSocket = new WebSocket('wss://default-3268d389072cc1b83af55172bdd2f9eb3ae98008-ecuwbojisa-uc.a.run.app/ws');
 
   if (webSocket) {
     webSocket.onopen = function (event) {

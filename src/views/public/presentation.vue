@@ -13,10 +13,9 @@
             <div class="small"></div>
             <div class="big"></div>
           </div>
-          <div class="description">
-            We are looking for a Lead UI Designer to join our team. The location
-            can be set either in our
+          <div id="description" ref="description"  class="description" spellcheck="false" contenteditable="true" @blur="editContent">
             {{ dataVal.description }}
+         
           </div>
         </div>
         <div class="sections">
@@ -25,7 +24,7 @@
             <div class="small"></div>
             <div class="big"></div>
           </div>
-          <div class="description">
+          <div class="description"  ref="responsibilities"   id="responsibilities" spellcheck="false" contenteditable="true"  @blur="editContent">
             {{ dataVal.responsibilities }}
             <!-- <div>Build next-generation web applications with a focus on the client side.</div> -->
           </div>
@@ -36,7 +35,7 @@
             <div class="small"></div>
             <div class="big"></div>
           </div>
-          <div class="description">
+          <div class="description"  ref="qualification"   id="qualification" spellcheck="false" contenteditable="true"  @blur="editContent">
             {{ dataVal.qualification }}
 
             <div>Good visual design skills</div>
@@ -48,7 +47,7 @@
             <div class="small"></div>
             <div class="big"></div>
           </div>
-          <div class="description">
+          <div class="description" spellcheck="false" >
             {{ dataVal.how_to_apply }}
           </div>
         </div>
@@ -61,7 +60,7 @@
           <div>
             <img class="company_logo" src="../../assets/company_logo.jpeg" />
           </div>
-          <div class="company">Wooly Ltd</div>
+          <div class="company" spellcheck="false" contenteditable="true">Wooly Ltd</div>
           <div class="share">
             <div class="share-button"><img src="../../assets/share.png" /></div>
             <div class="type">Full-Time</div>
@@ -80,35 +79,43 @@
               <div class="icon"><img src="../../assets/location.png" /></div>
               <div class="label">Location:</div>
             </div>
-            <div class="value">  {{ dataVal.location}}</div>
+            <div id="location"  ref="location"   class="value" spellcheck="false" contenteditable="true"  @blur="editContent">
+              {{ dataVal.location }}
+            </div>
           </div>
           <div class="section">
             <div class="flex">
               <div class="icon"><img src="../../assets/company.png" /></div>
               <div class="label">Education:</div>
             </div>
-            <div class="value">  {{ dataVal.education }}</div>
+            <div id="education" ref="education"  class="value" spellcheck="false" contenteditable="true"  @blur="editContent">
+              {{ dataVal.education }}
+            </div>
           </div>
           <div class="section">
             <div class="flex">
               <div class="icon"><img src="../../assets/position.png" /></div>
               <div class="label">Position:</div>
             </div>
-            <div class="value">    {{ dataVal.position }}</div>
+            <div  id="position" ref="position"  class="value" spellcheck="false" contenteditable="true"  @blur="editContent">
+              {{ dataVal.position }}
+            </div>
           </div>
           <div class="section">
             <div class="flex">
               <div class="icon"><img src="../../assets/salary.png" /></div>
               <div class="label">Salary:</div>
             </div>
-            <div class="value">  {{ dataVal.salary }}</div>
+            <div id="salary" ref="salary" class="value" spellcheck="false" contenteditable="true"  @blur="editContent">{{ dataVal.salary }}</div>
           </div>
           <div class="section">
             <div class="flex">
               <div class="icon"><img src="../../assets/calander.png" /></div>
               <div class="label">Experience:</div>
             </div>
-            <div class="value">  {{ dataVal.experience }}</div>
+            <div id="experience" ref="experience" class="value" spellcheck="false" contenteditable="true"  @blur="editContent">
+              {{ dataVal.experience }}
+            </div>
           </div>
           <div class="apply-now">Apply Now</div>
         </div>
@@ -117,22 +124,59 @@
   </div>
 </template>
 <script setup>
-import { ref,onMounted } from "vue";
-import {  useRoute } from "vue-router";
-import { useGet } from "@/composables/useHttp";
+//vendor
+import { ref, onMounted } from "vue";
+import { useRoute } from "vue-router";
+import { useGet,usePut } from "@/composables/useHttp";
+
+// state
 const route = useRoute();
-onMounted(async()=>{
-  const id=route.query?.jobId
-  const { data, get } = useGet(`self/profile/${id}`);
-  await get();
-  dataVal.value.description=data.value?.fullDescription
-  dataVal.value.qualification=data.value?.qualification
-  dataVal.value.experience=data.value?.experience
-  dataVal.value.salary=data.value?.salary
-  dataVal.value.position=data.value?.jobPosition
-  dataVal.value.location=data.value?.location
-  dataVal.value.education=data.value?.education
+
+const description=ref(null)
+const responsibilities=ref(null)
+const qualification=ref(null)
+const location=ref(null)
+const education=ref(null)
+const position=ref(null)
+const salary=ref(null)
+const experience=ref(null)
+onMounted(async () => {
+await getJobProfile()
+});
+const getJobProfile=(async()=>{
+  const id = route.query?.jobId;
+  if (id) {
+    const { data, get } = useGet(`self/profile/${id}`);
+    await get();
+    dataVal.value.description = data.value?.fullDescription;
+    dataVal.value.qualification = data.value?.qualification;
+    dataVal.value.experience = data.value?.experience;
+    dataVal.value.salary = data.value?.salary;
+    dataVal.value.position = data.value?.jobPosition;
+    dataVal.value.location = data.value?.location;
+    dataVal.value.education = data.value?.education;
+  }
 })
+const editContent =async (event) => {
+  const description1 =description.value.textContent;
+  const responsibilities1 =responsibilities.value.textContent;
+  const location1 =location.value.textContent;
+  const position1 =position.value.textContent;
+  const salary1 =salary.value.textContent;
+  const education1 =education.value.textContent;
+  const experience1 =experience.value.textContent;
+  const putOpening = usePut(`self/profile`);
+  await putOpening.put({
+    id: route.query?.jobId,
+    jobPosition:position1,
+    experience: experience1,
+    location:location1,
+    salary: salary1,
+    education:education1,
+    fullDescription: description1
+  });
+  await getJobProfile()
+};
 const dataVal = ref({
   description: ` We are looking for a Lead UI Designer to join our team. The location can be set either in our
                         Tampere or
@@ -166,8 +210,8 @@ const dataVal = ref({
                         Validation of user experience (UX) wireframes Make sure that 3 Step IT’s web services have
                         uniform
                         feeling / look-a-like Main accountabilities & tasks To design user interfaces`,
-education:"Bachelor's degree in Computer Science",
-                        qualification:`    We are looking for a Lead UI Designer to join our team. The location
+  education: "Bachelor's degree in Computer Science",
+  qualification: `    We are looking for a Lead UI Designer to join our team. The location
             can be set either in our Tampere or Helsinki office. Purpose of the
             role Main role is to create user interfaces based on the (UX)
             wireframes Validation of user experience (UX) wireframes Make sure
@@ -239,11 +283,14 @@ education:"Bachelor's degree in Computer Science",
             Validation of user experience (UX) wireframes Make sure that 3 Step
             IT’s web services have uniform feeling / look-a-like Main
             accountabilities & tasks To design user interfaces`,
-            how_to_apply:`Praesent sapien massa, convallis a pellentesque nec, egestas non
+  how_to_apply: `Praesent sapien massa, convallis a pellentesque nec, egestas non
             nisi. Curabitur aliquet quam id dui posuere blandit. Curabitur
             aliquet quam id dui posuere blandit. Curabitur non nulla sit amet
             nisl tempus convallis quis ac lectus navid.nosrati@jobgo.com.`,
-            experience:'2+ Years Exprience',salary:'4500 €',position:"Lead UX/UI Designer",location:"Korkeavourenkatu 2f, 00140, Helsinki"
+  experience: "2+ Years Exprience",
+  salary: "4500 €",
+  position: "Lead UX/UI Designer",
+  location: "Korkeavourenkatu 2f, 00140, Helsinki",
 });
 </script>
 <style>
@@ -437,5 +484,8 @@ education:"Bachelor's degree in Computer Science",
 
 .flex {
   display: flex;
+}
+[contenteditable] {
+  outline: 0px solid transparent;
 }
 </style>
