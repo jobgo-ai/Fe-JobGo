@@ -341,7 +341,11 @@ const getMessageList = async (threadId) => {
   isChatThreadLoading.value = false
 }
 onMounted(async () => {
-  webSocket = new WebSocket(import.meta.env.VITE_SOCKET_URL);
+  const thirdPerson = route.query?.room && route.query?.thread && route.query?.user
+  // room=uvesh_room&thread=thread_Jns5e0XBDwXgzbTrjOMhM8GM&user=md_uvesh
+  // https://8fcd-2409-40e3-4037-9e8c-791e-bb46-68d8-e7d1.ngrok-free.app
+  webSocket = new WebSocket('wss://default-508814465e2feae4897e6d3ee4bc724ce87d462b-ecuwbojisa-uc.a.run.app/ws');
+
   if (webSocket) {
     webSocket.onopen = function (event) {
 
