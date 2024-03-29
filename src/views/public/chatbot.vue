@@ -341,9 +341,7 @@ const getMessageList = async (threadId) => {
   isChatThreadLoading.value = false
 }
 onMounted(async () => {
-
-  webSocket = new WebSocket('wss://9af7-2409-40e3-45-c84c-e4d3-76d4-6606-8821.ngrok-free.app/ws');
-console.log("user.value",user.value.name);
+  webSocket = new WebSocket(import.meta.env.VITE_SOCKET_URL);
   if (webSocket) {
     webSocket.onopen = function (event) {
 
