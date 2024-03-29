@@ -82,6 +82,7 @@
               </span>
               
             <p>{{ item.msg }}</p>
+            <p>{{ item }}</p>
             <!-- copilot -->
             </p>
           </div>
@@ -146,7 +147,8 @@ import io from 'socket.io-client';
 import Logo from "@/assets/logo.svg";
 import Chat from "@/assets/chat.svg";
 import { state } from "../../composables/useAuth";
-
+import useAuth from "@/composables/useAuth";
+const { logout, organization, user } = useAuth();
 
 const { setToast } = useToast();
 const API_URL = import.meta.env.VITE_API_URL;
@@ -190,57 +192,49 @@ const sendMsg = async () => {
   webSocket.send(JSON.stringify(
     { event: "send-ai-message", role: "hiring-manager", userName: "Uvesh", msg: userMsg.value, room: roomId.value, threadId: threadId.value }));
   userMsg.value = null
-  return
-  if (!userMsg.value) {
-    return
-  }
-  // if (userIsEmployee.value) {
-  //   socket.emit('member-message', { message: userMsg.value, role: userName?.value });
-  //   userMsg.value = null
-  //   return
-  // }
-  const obj = { message: userMsg.value, roomId: roomId.value, role: userName?.value }
-  socket.emit('message', obj);
-  exampleSocket.onmessage = function (event) {
-    console.log('Received message:', event.data);
-    // Handle incoming messages here
-    handleMessage(event.data);
-  };
 
-
-  const chatBox = chatBoxRef.value;
-  isChatLoading.value = true;
-  // conversationMsg.value.push({
-  //   role: "user",
-  //   msg: userMsg.value,
-  // });
-
-  if (chatBox) {
-    chatBox.scrollTop = chatBox.scrollHeight;
-  }
-  const query = userMsg.value;
-  userMsg.value = null;
+  // const obj = { message: userMsg.value, roomId: roomId.value, role: userName?.value }
   // socket.emit('message', obj);
-  socket.emit('post-ai-response', {
-    msg: query,
-    threadId: threadId.value,
-    roomId: roomId.value,
-    role: "user",
-    userName: userName?.value
-  })
-  //  conversationMsg.value.push({
-  //     role: "assistant",
-  //     msg: data.value,
-  //   });
-  // if (data.value.includes("The Chat is end")) {
-  //   showEndChat.value = true;
-  //   createParameterJSON()
-  // }  
-  if (chatBox) {
-    chatBox.scrollTop = chatBox.scrollHeight;
-  }
+  // exampleSocket.onmessage = function (event) {
+  //   console.log('Received message:', event.data);
+  //   // Handle incoming messages here
+  //   handleMessage(event.data);
+  // };
 
-  scrollChatBottom();
+
+  // const chatBox = chatBoxRef.value;
+  // isChatLoading.value = true;
+  // // conversationMsg.value.push({
+  // //   role: "user",
+  // //   msg: userMsg.value,
+  // // });
+
+  // if (chatBox) {
+  //   chatBox.scrollTop = chatBox.scrollHeight;
+  // }
+  // const query = userMsg.value;
+  // userMsg.value = null;
+  // // socket.emit('message', obj);
+  // socket.emit('post-ai-response', {
+  //   msg: query,
+  //   threadId: threadId.value,
+  //   roomId: roomId.value,
+  //   role: "user",
+  //   userName: userName?.value
+  // })
+  // //  conversationMsg.value.push({
+  // //     role: "assistant",
+  // //     msg: data.value,
+  // //   });
+  // // if (data.value.includes("The Chat is end")) {
+  // //   showEndChat.value = true;
+  // //   createParameterJSON()
+  // // }  
+  // if (chatBox) {
+  //   chatBox.scrollTop = chatBox.scrollHeight;
+  // }
+
+  // scrollChatBottom();
 };
 
 const createParameterJSON = async () => {
@@ -347,25 +341,26 @@ const getMessageList = async (threadId) => {
   isChatThreadLoading.value = false
 }
 onMounted(async () => {
-  const thirdPerson = route.query?.room && route.query?.thread && route.query?.user
-  webSocket = new WebSocket('wss://default-3268d389072cc1b83af55172bdd2f9eb3ae98008-ecuwbojisa-uc.a.run.app/ws');
 
+  webSocket = new WebSocket('wss://9af7-2409-40e3-45-c84c-e4d3-76d4-6606-8821.ngrok-free.app/ws');
+console.log("user.value",user.value.name);
   if (webSocket) {
     webSocket.onopen = function (event) {
-      console.log("webSocket", webSocket)
 
-      if (!thirdPerson) {
+
+      if (!(route.query?.room && route.query?.thread && route.query?.user)) {
 
         webSocket.send(JSON.stringify(
-          { event: "register", role: "hiring manager", userName: "uvesh" }));
+          { event: "register", role: "hiring manager", userName: user.value.name}));
       } else {
         webSocket.send(JSON.stringify(
-          { event: "add-member", room: route.query?.room, thread: route.query?.thread, userName: route.query?.user }));
+          { event: "add-member", room: route.query?.room, thread: route.query?.thread, userName:  route.query?.user}));
       }
     };
 
     webSocket.onmessage = function (event) {
       const data = JSON.parse(event.data);
+      console.log("data 123",data);
       if (route.query?.room && route.query?.thread && route.query?.user) {
         roomId.value = route.query?.room
         threadId.value = route.query?.thread
@@ -391,6 +386,17 @@ onMounted(async () => {
           msg: data.msg
         });
         scrollChatBottom();
+      }
+
+    
+      else if (data.event === 'complete-chat') {
+        isChatLoading.value = false;
+        // conversationMsg.value.push({
+        //   role: data.role,
+        //   msg: data.msg
+        // });
+        // scrollChatBottom();
+        console.log("all message form chat complete ",data);
       }
 
     };
