@@ -343,7 +343,7 @@ onMounted(async () => {
   const thirdPerson = route.query?.room && route.query?.thread && route.query?.user
   // room=uvesh_room&thread=thread_Jns5e0XBDwXgzbTrjOMhM8GM&user=md_uvesh
   // https://8fcd-2409-40e3-4037-9e8c-791e-bb46-68d8-e7d1.ngrok-free.app
-  webSocket = new WebSocket('wss://69d9-2409-40e3-1044-42d1-9833-8a4d-f63f-2329.ngrok-free.app/ws');
+  webSocket = new WebSocket('wss://default-ae182e7a960e4f3dbcb408a9f9e1d375808d5cec-ecuwbojisa-uc.a.run.app/ws');
 
   if (webSocket) {
     webSocket.onopen = function (event) {
