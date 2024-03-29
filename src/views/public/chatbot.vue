@@ -340,11 +340,7 @@ const getMessageList = async (threadId) => {
   isChatThreadLoading.value = false
 }
 onMounted(async () => {
-  const thirdPerson = route.query?.room && route.query?.thread && route.query?.user
-  // room=uvesh_room&thread=thread_Jns5e0XBDwXgzbTrjOMhM8GM&user=md_uvesh
-  // https://8fcd-2409-40e3-4037-9e8c-791e-bb46-68d8-e7d1.ngrok-free.app
-  webSocket = new WebSocket('wss://69d9-2409-40e3-1044-42d1-9833-8a4d-f63f-2329.ngrok-free.app/ws');
-
+  webSocket = new WebSocket(import.meta.env.VITE_SOCKET_URL);
   if (webSocket) {
     webSocket.onopen = function (event) {
 
@@ -361,13 +357,11 @@ onMounted(async () => {
 
     webSocket.onmessage = function (event) {
       const data = JSON.parse(event.data);
-      console.log("data 123",data);
       if (route.query?.room && route.query?.thread && route.query?.user) {
         roomId.value = route.query?.room
         threadId.value = route.query?.thread
       } else {
         if (data.event === 'register') {
-          console.log("register", data);
           roomId.value = data.roomId
           threadId.value = data.threadId
         }
@@ -392,8 +386,9 @@ onMounted(async () => {
         // console.log("complete chat",JSON.parse(data.msg))
         const msg1=JSON.parse(data.msg)
         console.log("complete chat",msg1.data);
-        for (let index = 0; index < msg1.data.length; index++) {
-          const element = msg1.data[index];
+        const data1=msg1.data.reverse()
+        for (let index = 0; index <data1.length; index++) {
+          const element =data1[index];
           conversationMsg.value.push({
       role: element.role,
       msg: element.content[0].text.value,
