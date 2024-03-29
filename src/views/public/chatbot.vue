@@ -388,17 +388,31 @@ onMounted(async () => {
         });
         scrollChatBottom();
       }
+      else if (data.event === 'complete-chat') {
+        // console.log("complete chat",JSON.parse(data.msg))
+        const msg1=JSON.parse(data.msg)
+        console.log("complete chat",msg1.data);
+        for (let index = 0; index < msg1.data.length; index++) {
+          const element = msg1.data[index];
+          conversationMsg.value.push({
+      role: element.role,
+      msg: element.content[0].text.value,
+    }
+          )
+        }
+        scrollChatBottom();
+      }
 
     
-      else if (data.event === 'complete-chat') {
-        isChatLoading.value = false;
-        // conversationMsg.value.push({
-        //   role: data.role,
-        //   msg: data.msg
-        // });
-        // scrollChatBottom();
-        console.log("all message form chat complete ",data);
-      }
+      // else if (data.event === 'complete-chat') {
+      //   isChatLoading.value = false;
+      //   // conversationMsg.value.push({
+      //   //   role: data.role,
+      //   //   msg: data.msg
+      //   // });
+      //   // scrollChatBottom();
+      //   console.log("all message form chat complete ",data.msg);
+      // }
 
     };
 
