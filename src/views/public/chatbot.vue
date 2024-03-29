@@ -82,7 +82,6 @@
               </span>
               
             <p>{{ item.msg }}</p>
-            <p>{{ item }}</p>
             <!-- copilot -->
             </p>
           </div>
@@ -344,7 +343,7 @@ onMounted(async () => {
   const thirdPerson = route.query?.room && route.query?.thread && route.query?.user
   // room=uvesh_room&thread=thread_Jns5e0XBDwXgzbTrjOMhM8GM&user=md_uvesh
   // https://8fcd-2409-40e3-4037-9e8c-791e-bb46-68d8-e7d1.ngrok-free.app
-  webSocket = new WebSocket('wss://default-508814465e2feae4897e6d3ee4bc724ce87d462b-ecuwbojisa-uc.a.run.app/ws');
+  webSocket = new WebSocket('wss://69d9-2409-40e3-1044-42d1-9833-8a4d-f63f-2329.ngrok-free.app/ws');
 
   if (webSocket) {
     webSocket.onopen = function (event) {
@@ -353,10 +352,10 @@ onMounted(async () => {
       if (!(route.query?.room && route.query?.thread && route.query?.user)) {
 
         webSocket.send(JSON.stringify(
-          { event: "register", role: "hiring manager", userName: user.value.name}));
+          { event: "register", role: "hiring manager", userName: "uvesh"}));
       } else {
         webSocket.send(JSON.stringify(
-          { event: "add-member", room: route.query?.room, thread: route.query?.thread, userName:  route.query?.user}));
+          { event: "add-member", room: route.query?.room, thread: route.query?.thread, userName: "uvesh"}));
       }
     };
 
