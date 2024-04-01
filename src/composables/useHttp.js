@@ -148,7 +148,6 @@ export function usePost(endpoint) {
         },
         body: JSON.stringify(body),
       });
-      console.log("res123", res)
       if (!res.ok) {
         error.value = await res.json();
       } else {

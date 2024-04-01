@@ -36,10 +36,10 @@ export const refreshToken = async () => {
     state.organization = data.value.self.organization;
     state.role = data.value.self.organization?.role;
 
-    const getQuota = useGet("self/quota");
-    await getQuota.get();
-    state.plan ="Free"
-    state.quota = '15';
+    // const getQuota = useGet("self/quota");
+    // await getQuota.get();
+    // state.plan ="Free"
+    // state.quota = '15';
   }
 };
 

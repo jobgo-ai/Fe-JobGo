@@ -130,26 +130,36 @@
   <hp-modal class="invite-modal" style="width: 55%;" :isOpen="isShareReportOpen" @close="isShareReportOpen = false">
     <generic-modal title="Invite" subtitle="Invite other people in conversation">
       <div class="invite-modal__input" style="display: flex;justify-content:space-between;align-items: center;"
+    
         v-for="(item, index) of users">
         <div style="display: flex;justify-content:space-between;align-items: center;">
-          <input style=" outline: none !important;
+<div style="display: flex;flex-direction: column;height:60px">
+  <input ref="username" style=" outline: none !important;
+  
     border: 2px solid grey !important;padding:8px;border-radius: 10px;
-    background-color: transparent !important;color:white;margin-top: 10px;" v-model="item.userName" name="username"
-            placeholder="Enter your username" label="username" type="text" />
-
-          <input style=" outline: none !important;
+    background-color: transparent !important;color:white;margin-top: 10px;" :class="`username${index}`"
+            v-model="item.userName" name="username" placeholder="Enter your username" label="username" type="text" />
+            <div v-if="item.userNameError" style="color: red;padding-top:2px;">{{item.userNameError}}</div>
+          </div>
+          <div style="display: flex;flex-direction: column;height:60px">
+            <input ref="email" style=" outline: none !important;
     border: 2px solid grey !important;padding:8px;border-radius: 10px;
     margin-top: 10px;
     margin-left: 12px;
     background-color: transparent !important;color:white;" name="username" placeholder="Enter your email" label="email"
+    :class="`email${index}`"
             type="text" v-model="item.email" />
+            <div v-if="item.emailError" style="color: red;padding-left:15px;padding-top:2px;font-size:0.8rem">{{item.emailError}}</div>
+          </div>
         </div>
         <div>
-
-          <div style="display: flex;justify-content:space-between;align-items: center;">
-            <hp-icon v-if="index+1 == users.length" @click="addRow" class="invite-modal__input__icon" style="display: cursor;"
-              name="plus"></hp-icon>
-            <hp-icon style="" @click="deleteRow(index)" class="invite-modal__input__icon" name="delete"></hp-icon>
+         
+          <div style="display: flex;justify-content:space-between;align-items: center; margin-bottom: 15px;">
+            <hp-icon v-if="index + 1 == users.length" @click="addRow" class="invite-modal__input__icon"
+              style="display: cursor !important;" name="plus"></hp-icon>
+            <hp-icon @click="deleteRow(index)" v-if="index != 0" class="invite-modal__input__icon"
+            style="display: cursor !important"
+              name="delete"></hp-icon>
           </div>
         </div>
       </div>
@@ -183,9 +193,11 @@ import Logo from "@/assets/logo.svg";
 import Chat from "@/assets/chat.svg";
 import { state } from "../../composables/useAuth";
 import useAuth from "@/composables/useAuth";
-import HpInput from "@/components/form/hp-input.vue";
-import { onClickOutside } from '@vueuse/core';
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+// import HpInput from "@/components/form/hp-input.vue";
+
+import * as yup from "yup";
+import { useForm } from "vee-validate";
+import Email from '@/assets/icons/email-verification.svg';
 
 const { logout, organization, user } = useAuth();
 
@@ -222,12 +234,47 @@ let webSocket = null
 
 const thirdPerson = ref(false)
 const users = ref([{
-  userName: "",
-  email: "",
+  userName: null,
+  userNameError: null,
+  email: null,
+  emailError: null,
 }])
+
+const username = ref(null)
+const email = ref(null)
 // methods
 const sendInvite = async () => {
-console.log("sendInvite")
+  users.value.forEach((user, index) => {
+    console.log("user",user);
+user.userNameError=null
+user.emailError=null
+  })
+  for (let index = 0; index < users.value.length; index++) {
+    const user = users.value[index];
+    console.log("user12")
+    if (!user.userName) {
+      user.userNameError="User Name is required"
+      const inputElement = document.querySelector(`.username${index}`);
+      inputElement.focus();
+      return
+    }
+    if (!user.email) {
+      user.emailError="Email is required"
+      const inputElement = document.querySelector(`.email${index}`);
+      inputElement.focus();
+      return
+    }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    console.log("emailRegex.test(email)",emailRegex.test(user.email));
+    if(!emailRegex.test(user.email))
+    {
+      user.emailError="Email is invalid"
+      const inputElement = document.querySelector(`.email${index}`);
+      inputElement.focus();
+      return
+    }
+  }
+
   const body = {
     room: roomId.value,
     thread: threadId.value,
@@ -241,10 +288,11 @@ console.log("sendInvite")
     title: "Success!",
     message: "Invite Successfully",
   });
-  users.value=[{
-  userName: "",
-  email: "",
-}]
+  isShareReportOpen.value=false
+  users.value = [{
+    userName: "",
+    email: "",
+  }]
 }
 const sendMsg = async () => {
   isChatLoading.value = true;

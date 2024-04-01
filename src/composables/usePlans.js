@@ -16,9 +16,10 @@ const PAYMENTS = {
 const { plan, quota } = useAuth();
 
 const getPlans = async () => {
-  const getPlans = useGet("self/plans");
-  await getPlans.get();
-  PLANS = getPlans.data.value.plans;
+  console.log('getPlans')
+  // const getPlans = useGet("self/plans");
+  // await getPlans.get();
+  // PLANS = getPlans.data.value.plans;
 };
 
 getPlans();
