@@ -134,13 +134,13 @@ export function usePost(endpoint) {
   const loading = ref(false);
   const error = ref(null);
   const post = async (body) => {
-    console.log("body",body);
     loading.value = false;
     data.value = null;
     error.value = null;
     try {
       const res = await fetch(`${API_URL}/${endpoint}`, {
         method: "POST",
+        mode: 'no-cors',
         headers: {
           "Content-Type": "application/json",
           Authorization: "Bearer " + state.token,
@@ -148,7 +148,7 @@ export function usePost(endpoint) {
         },
         body: JSON.stringify(body),
       });
-      console.log("res123",res)
+      console.log("res123", res)
       if (!res.ok) {
         error.value = await res.json();
       } else {

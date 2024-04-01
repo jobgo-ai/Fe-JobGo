@@ -7,7 +7,7 @@
       <input
         ref="inputRef"
         :disabled="isDisabled"
-        :class="`hp-input__input hp-input__input--${variant}`"
+        :class="[`hp-input__input hp-input__input--${variant}`, {'hp-input__margin-bottom': marginBottom}]"
         :name="name"
         :type="type"
         :autocomplete="autocomplete"
@@ -89,6 +89,10 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  marginBottom:{
+    type:Boolean,
+    default:false
+  }
 });
 
 const emits = defineEmits(["update:modelValue"]);
@@ -165,7 +169,9 @@ const containerClasses = computed(() => {
   font-size: 14px;
   line-height: 20px;
   width: 100%;
-  margin-bottom: 24px;
+  &__margin-bottom{
+    margin-bottom: 24px;
+  }
   &--search {
     margin-bottom: 0;
   }

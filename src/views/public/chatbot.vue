@@ -27,6 +27,7 @@
             <span>Edit prompt</span>
           </router-link>
 
+          <button class="create-json" @click="inviteMember">Invite</button>
           <button class="create-json" @click="createJson">{{ isEndChat ? 'Loading...' : 'End Chat' }}</button>
         </div>
       </div>
@@ -59,7 +60,7 @@
             <span v-if="item.role == 'assistant' || item.role == 'Assistant' || item.role == 'assistent'">
               <div class="ai-image">
                 <img alt="logo" src="../../assets/sm-logo.png" width="20" height="20" />
-             
+
               </div>
             </span>
             <span v-else-if="item.role != 'assistant'">
@@ -80,7 +81,7 @@
               <span v-else-if="item.role != 'assistent' || item.role == 'hiring-manager'">
                 Hiring-manager
               </span>
-              
+
             <p>{{ item.msg }}</p>
             <!-- copilot -->
             </p>
@@ -114,12 +115,6 @@
             :placeholder="(isChatLoading || isChatThreadLoading) ? 'Loading...' : 'Type your message'">
           <button :disabled="isChatLoading || isChatThreadLoading" type="submit" class="sendbtn">{{ (isChatLoading ||
             isChatThreadLoading) ? 'Loading...' : 'Send' }}</button>
-
-          <!-- <hp-button
-          label="END CHAT"
-          :isLoading="isChatLoading || isChatThreadLoading"
-        ></hp-button> -->
-
         </form>
       </div>
 
@@ -132,12 +127,53 @@
         :mode="primary ? 'light' : 'dark'"
       ></hp-spinner>
 </div> -->
+  <hp-modal class="invite-modal" style="width: 55%;" :isOpen="isShareReportOpen" @close="isShareReportOpen = false">
+    <generic-modal title="Invite" subtitle="Invite other people in conversation">
+      <div class="invite-modal__input" style="display: flex;justify-content:space-between;align-items: center;"
+        v-for="(item, index) of users">
+        <div style="display: flex;justify-content:space-between;align-items: center;">
+          <input style=" outline: none !important;
+    border: 2px solid grey !important;padding:8px;border-radius: 10px;
+    background-color: transparent !important;color:white;margin-top: 10px;" v-model="item.userName" name="username"
+            placeholder="Enter your username" label="username" type="text" />
+
+          <input style=" outline: none !important;
+    border: 2px solid grey !important;padding:8px;border-radius: 10px;
+    margin-top: 10px;
+    margin-left: 12px;
+    background-color: transparent !important;color:white;" name="username" placeholder="Enter your email" label="email"
+            type="text" v-model="item.email" />
+        </div>
+        <div>
+
+          <div style="display: flex;justify-content:space-between;align-items: center;">
+            <hp-icon v-if="index+1 == users.length" @click="addRow" class="invite-modal__input__icon" style="display: cursor;"
+              name="plus"></hp-icon>
+            <hp-icon style="" @click="deleteRow(index)" class="invite-modal__input__icon" name="delete"></hp-icon>
+          </div>
+        </div>
+      </div>
+      <template #actions>
+        <hp-button label="Send Invite" @handleClick="sendInvite">
+        </hp-button>
+        <!-- <hp-button
+            :to="`/reports/${candidate.key}`"
+            label="Visit report"
+            icon="share"
+          >
+          </hp-button> -->
+      </template>
+    </generic-modal>
+  </hp-modal>
 </template>
 
 <script setup>
+import GenericModal from "@/components/modals/generic-modal.vue";
+import HpModal from "@/components/hp-modal.vue";
 import { ref, onMounted } from "vue";
 import { usePost, useGet } from "@/composables/useHttp";
 import HpButton from "@/components/hp-button.vue";
+import HpIcon from "@/components/hp-icon.vue";
 import useAssistant from "@/composables/useAssistant";
 import { useRouter, useRoute } from "vue-router";
 import HpSpinner from "@/components/hp-spinner.vue";
@@ -147,6 +183,10 @@ import Logo from "@/assets/logo.svg";
 import Chat from "@/assets/chat.svg";
 import { state } from "../../composables/useAuth";
 import useAuth from "@/composables/useAuth";
+import HpInput from "@/components/form/hp-input.vue";
+import { onClickOutside } from '@vueuse/core';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+
 const { logout, organization, user } = useAuth();
 
 const { setToast } = useToast();
@@ -181,8 +221,31 @@ let socket = null
 let webSocket = null
 
 const thirdPerson = ref(false)
+const users = ref([{
+  userName: "",
+  email: "",
+}])
 // methods
+const sendInvite = async () => {
+console.log("sendInvite")
+  const body = {
+    room: roomId.value,
+    thread: threadId.value,
+    users: users.value
+  }
+  const sendInvite = usePost("chat/invite");
+  await sendInvite.post(body);
 
+  setToast({
+    type: "positive",
+    title: "Success!",
+    message: "Invite Successfully",
+  });
+  users.value=[{
+  userName: "",
+  email: "",
+}]
+}
 const sendMsg = async () => {
   isChatLoading.value = true;
   webSocket.send(JSON.stringify(
@@ -293,6 +356,17 @@ const createAssistant = async () => {
   isChatThreadLoading.value = false
 
 };
+const addRow = (() => {
+  users.value.push({
+    userName: "",
+    email: "",
+  })
+})
+const deleteRow = ((index) => {
+  console.log("index", index)
+
+  users.value.splice(index, 1)
+})
 const createThread = async () => {
   isChatThreadLoading.value = true
   const thread = useGet(`create-thread`);
@@ -351,7 +425,7 @@ onMounted(async () => {
           { event: "register", role: "hiring manager", userName: "uvesh"}));
       } else {
         webSocket.send(JSON.stringify(
-          { event: "add-member", room: route.query?.room, thread: route.query?.thread, userName: "uvesh"}));
+          { event: "add-member", room: route.query?.room, thread: route.query?.thread, userName: "uvesh" }));
       }
     };
 
@@ -384,21 +458,21 @@ onMounted(async () => {
       }
       else if (data.event === 'complete-chat') {
         // console.log("complete chat",JSON.parse(data.msg))
-        const msg1=JSON.parse(data.msg)
-        console.log("complete chat",msg1.data);
-        const data1=msg1.data.reverse()
-        for (let index = 0; index <data1.length; index++) {
-          const element =data1[index];
+        const msg1 = JSON.parse(data.msg)
+        console.log("complete chat", msg1.data);
+        const data1 = msg1.data.reverse()
+        for (let index = 0; index < data1.length; index++) {
+          const element = data1[index];
           conversationMsg.value.push({
-      role: element.role,
-      msg: element.content[0].text.value,
-    }
+            role: element.role,
+            msg: element.content[0].text.value,
+          }
           )
         }
         scrollChatBottom();
       }
 
-    
+
       // else if (data.event === 'complete-chat') {
       //   isChatLoading.value = false;
       //   // conversationMsg.value.push({
@@ -466,7 +540,20 @@ onMounted(async () => {
   //   scrollChatBottom();
   // });
 });
-
+const isShareReportOpen = ref(false)
+const inviteMember = (() => {
+  isShareReportOpen.value = true
+  //   {
+  //   "room": "sdsddfsds",
+  //   "thread": "threadid121212",
+  //   "users": [
+  //     {
+  //       "userName": "sdfsdfsd",
+  //       "email": "email"
+  //     }
+  //   ]
+  // }
+})
 const extractRole = (originalString) => {
   let parts = originalString.split('role:');
   let role = parts[1];
@@ -826,6 +913,23 @@ const extractMessage = (originalString) => {
 
   100% {
     box-shadow: -19px 3px, -7px -3px, 7px 3px;
+  }
+}
+
+
+.invite-modal {
+  &__input {
+    &__icon {
+      margin-left: 10px;
+      color: #000;
+      cursor: pointer;
+    }
+  }
+
+  input {}
+
+  input:focus {
+    outline: none
   }
 }
 
