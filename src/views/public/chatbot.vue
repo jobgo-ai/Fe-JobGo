@@ -276,7 +276,7 @@ user.emailError=null
   }
   const userNamesAndEmails =users.value.map(user => {
     console.log(user)
-  return { username: user.userName, email: user.email };
+  return { userName: user.userName, email: user.email };
 });
 
 
