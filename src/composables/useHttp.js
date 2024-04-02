@@ -140,7 +140,6 @@ export function usePost(endpoint) {
     try {
       const res = await fetch(`${API_URL}/${endpoint}`, {
         method: "POST",
-        mode: 'no-cors',
         headers: {
           "Content-Type": "application/json",
           Authorization: "Bearer " + state.token,

@@ -1,5 +1,9 @@
 <template>
-  <div :class="containerClasses">
+  <div 
+  
+  :class="[containerClasses, {'hp-input__margin-bottom': marginBottom}]"
+  
+  >
     <label v-if="label" class="hp-input__label" :htmlFor="name"
       >{{ label }}
     </label>
@@ -7,7 +11,7 @@
       <input
         ref="inputRef"
         :disabled="isDisabled"
-        :class="[`hp-input__input hp-input__input--${variant}`, {'hp-input__margin-bottom': marginBottom}]"
+        :class="[`hp-input__input hp-input__input--${variant}`,]"
         :name="name"
         :type="type"
         :autocomplete="autocomplete"
@@ -91,7 +95,7 @@ const props = defineProps({
   },
   marginBottom:{
     type:Boolean,
-    default:false
+    default:true
   }
 });
 

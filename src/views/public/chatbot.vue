@@ -274,11 +274,16 @@ user.emailError=null
       return
     }
   }
+  const userNamesAndEmails =users.value.map(user => {
+    console.log(user)
+  return { username: user.userName, email: user.email };
+});
+
 
   const body = {
     room: roomId.value,
     thread: threadId.value,
-    users: users.value
+    users:userNamesAndEmails
   }
   const sendInvite = usePost("chat/invite");
   await sendInvite.post(body);
