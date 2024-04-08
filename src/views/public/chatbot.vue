@@ -82,7 +82,10 @@
                 Hiring-manager
               </span>
 
-            <p>{{ item.msg }}</p>
+            <!-- <p>{{ item.msg }}</p> -->
+            <div class="job-description">
+              <vue-markdown :source="item.msg" />
+            </div>
             <!-- copilot -->
             </p>
           </div>
@@ -194,6 +197,7 @@ import Chat from "@/assets/chat.svg";
 import { state } from "../../composables/useAuth";
 import useAuth from "@/composables/useAuth";
 // import HpInput from "@/components/form/hp-input.vue";
+import VueMarkdown from 'vue-markdown-render';
 
 import * as yup from "yup";
 import { useForm } from "vee-validate";
@@ -987,4 +991,64 @@ const extractMessage = (originalString) => {
 }
 
 /* Loader css end */
+
+
+.job-description {
+  color: black;
+}
+
+.job-description h1 {
+  display: block;
+  font-size: 2em;
+  margin-top: 0.67em;
+  margin-bottom: 0.67em;
+  margin-left: 0;
+  margin-right: 0;
+  font-weight: bold;
+}
+
+.job-description h2 {
+  display: block;
+  font-size: 1.5em;
+  margin-top: 0.83em;
+  margin-bottom: 0.83em;
+  margin-left: 0;
+  margin-right: 0;
+  font-weight: bold;
+}
+
+.job-description ul {
+  display: block;
+  list-style-type: disc;
+  margin-top: 1em;
+  margin-bottom: 1em;
+  margin-left: 0;
+  margin-right: 0;
+  padding-left: 40px;
+  /* Adjusted for the bullet point */
+}
+
+.job-description ol {
+  display: block;
+  list-style-type: decimal;
+  margin-top: 1em;
+  margin-bottom: 1em;
+  margin-left: 0;
+  margin-right: 0;
+  padding-left: 40px;
+  /* Adjusted for the number */
+}
+
+.job-description li {
+  display: list-item;
+  text-align: -webkit-match-parent;
+}
+
+.job-description p {
+  display: block;
+  margin-top: 1em;
+  margin-bottom: 1em;
+  margin-left: 0;
+  margin-right: 0;
+}
 </style>
