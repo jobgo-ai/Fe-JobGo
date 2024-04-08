@@ -524,7 +524,7 @@ onMounted(async () => {
         }
         scrollChatBottom();
       }
-
+ 
 
       // else if (data.event === 'complete-chat') {
       //   isChatLoading.value = false;
