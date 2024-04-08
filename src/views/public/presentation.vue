@@ -293,7 +293,7 @@ const dataVal = ref({
   location: "Korkeavourenkatu 2f, 00140, Helsinki",
 });
 </script>
-<style>
+<style scoped>
 .presentation {
   background-color: #dde3e8;
   display: flex;
