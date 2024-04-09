@@ -82,9 +82,9 @@
                 Hiring-manager
               </span>
 
-            <!-- <p>{{ item.msg }}</p> -->
+            <p>{{ item.msg }}</p>
             <div class="job-description">
-              <vue-markdown :source="item.msg" />
+              <!-- <vue-markdown :source="item.msg" /> -->
             </div>
             <!-- copilot -->
             </p>
@@ -197,7 +197,7 @@ import Chat from "@/assets/chat.svg";
 import { state } from "../../composables/useAuth";
 import useAuth from "@/composables/useAuth";
 // import HpInput from "@/components/form/hp-input.vue";
-import VueMarkdown from 'vue-markdown-render';
+// import VueMarkdown from 'vue-markdown-render';
 
 import * as yup from "yup";
 import { useForm } from "vee-validate";
@@ -488,6 +488,7 @@ onMounted(async () => {
 
     webSocket.onmessage = function (event) {
       const data = JSON.parse(event.data);
+      console.log("data",data)
       if (route.query?.room && route.query?.thread && route.query?.user) {
         roomId.value = route.query?.room
         threadId.value = route.query?.thread

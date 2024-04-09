@@ -204,8 +204,8 @@
                 </div>
                 <div>
                   <div class="job__container__details__title">Position </div>
-                  <div :class="[contentEditable.jobOverview ? 'border-2' : '']"
-                    class="job__container__details__subtitle position" :contentEditable="contentEditable.jobOverview" style="
+                  <div
+                    class="border-4 job__container__details__subtitle position" style="
 ">{{ dataVal.position }}</div>
                 </div>
               </div>
@@ -673,6 +673,16 @@ const approveContent = () => {
     border: 1px solid transparent;
     // border: 0px solid #0000003B
   }
+}
+.border-4 {
+  
+  font-family: Inter;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  letter-spacing: -0.006em;
+  text-align: left;
+  padding: 1rem;
 }
 
 .border-2 {
