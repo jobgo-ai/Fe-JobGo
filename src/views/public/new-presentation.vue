@@ -547,7 +547,7 @@ const getJobProfile = (async () => {
 })
 const editContent = async (section) => {
   const   {responsibiltes,skill_qualifcation,what_we_offer,preScreeingQuestion}=editContent1()
-  const putOpening = usePut(`self/profile`);
+  const putOpening = usePut(`update/profile`);
   await putOpening.put({
     id: route.query?.jobId,
     jobPosition:document.querySelector(".position").textContent,
