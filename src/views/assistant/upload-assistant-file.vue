@@ -32,7 +32,7 @@ const summary = ref('');
 const resultText = ref('');
 const isLoading = ref(false);
 const prompt = ref('Summarize the discussion within the transcript and output the data in Markdown format.');
-const apiKey = import.meta.env.File_Upload;
+const apiKey = import.meta.env.VITE_File
 
 const uploadFile = async (file) => {
   if (!file) {
@@ -43,7 +43,7 @@ const uploadFile = async (file) => {
   formData.append("pdfFile", file);
 
   try {
-    const response = await axios.post("http://localhost:5020/fileUpload", formData);
+    const response = await axios.post(`${import.meta.env.VITE_Upload_URL}/fileUpload`, formData);
     resultText.value = response.data.trim();
   } catch (error) {
     console.error('Error uploading file:', error);
