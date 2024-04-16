@@ -41,9 +41,8 @@
             ]"
             v-model="state"
           />
-
           <div class="`hp-opening-card__add-new`">
-            <div>
+            <!-- <div>
               <div class="hp-opening-card__add-new__icon-container1">
                 <router-link to="/chat">
                   <hp-icon :size="24" name="plus"></hp-icon>
@@ -53,7 +52,7 @@
               <p class="hp-opening-card__content__description">
                 Easily define a new opening
               </p>
-            </div>
+            </div> -->
             <!-- <div>
               <router-link to="/chatbot">
                 <hp-button label="Create new"></hp-button>
@@ -62,31 +61,29 @@
           </div>
 
           <ol ref="scrollContainer" class="opening-list__grid">
-            <!--    <hp-opening-card
-              :opening="opening"
-              @unarchiveOpening="handleUnarchiveOpening"
-              @handleAddNew="handleNewOpening"
+               <hp-opening-card
+        
               :isAddCard="true"
             >
-            </hp-opening-card> -->
+            </hp-opening-card>
             <template
-              v-if="openingList.length"
-              v-for="opening in openingList"
+              v-if="openings.length"
+              v-for="opening in openings"
               :key="opening.id"
             >
               <hp-opening-card
-                v-if="opening"
+                v-if="openings"
                 :opening="opening"
                 @refreshOpenings="fetchProject()"
                 @handleNewOpening="handleNewOpening"
                 @unarchiveOpening="handleUnarchiveOpening"
               ></hp-opening-card>
             </template>
-            <!-- <div v-if="state === 'archived' && openings.length === 0">
+            <!-- <h2 v-if="openings.length != 0">
               No archived openings
-            </div> -->
+            </h2> -->
           </ol>
-          <!-- <hp-spinner class="openingslist__spinner" :size="24" v-else></hp-spinner> -->
+          <!-- <hp-spinner class="openingslist__spinner" :size="24" ></hp-spinner> -->
         </div>
       </transition>
     </div>
@@ -100,7 +97,7 @@ import { onMounted } from "vue";
 import { useWindowScroll } from "@vueuse/core";
 
 // Composables
-import { usePut, useDelete } from "@/composables/useHttp";
+import { usePut, useDelete ,useGet} from "@/composables/useHttp";
 import useToast from "@/composables/useToast";
 import useOpenings from "@/composables/useOpenings";
 import { useGettingStarted } from "@/composables/useGettingStarted";
@@ -140,28 +137,29 @@ const { setBreadcrumbs } = useBreadcrumbs();
 const { fetchChecklist } = useGettingStarted();
 const scrollContainer = ref(null);
 const { y } = useWindowScroll();
+``
+// watch(
+//   () => y.value,
+//   () => {
+//     let documentHeight = document.body.scrollHeight;
+//     let currentScroll = window.scrollY + window.innerHeight;
 
-watch(
-  () => y.value,
-  () => {
-    let documentHeight = document.body.scrollHeight;
-    let currentScroll = window.scrollY + window.innerHeight;
+//     if (documentHeight <= currentScroll + 60) {
+//       if (isOpeningsLoading.value) {
+//         return;
+//       }
 
-    if (documentHeight <= currentScroll + 60) {
-      if (isOpeningsLoading.value) {
-        return;
-      }
+//       if (route.query.candidate) {
+//         return;
+//       }
 
-      if (route.query.candidate) {
-        return;
-      }
-
-      fetchOpenings(true, state.value);
-    }
-  }
-);
+//       fetchOpenings(true, state.value);
+//     }
+//   }
+// );
 
 onMounted(async () => {
+await  fetchOpenings()
   // Checks for openingRef in route params
   if (route.params.openingRef) {
     // Sets selected opening to openingRef in route params
@@ -232,44 +230,44 @@ watch(
 );
 
 // Watch and change selected opening
-watch(
-  () => route.params.openingRef,
-  async () => {
-    if (route.params.openingRef) {
-      if (openings.value.length === 0 || state.value === "archived") {
-        state.value = "active";
-        await fetchOpenings();
-      }
-      isCandidateListOpen.value = true;
-      selectedOpening.value = openings.value.find(
-        (opening) => opening.reference === route.params.openingRef
-      );
-      if (!isCandidateDetailsOpen.value && selectedOpening.value?.name) {
-        setBreadcrumbs([
-          {
-            label: "Openings",
-            to: "/openings",
-          },
-          {
-            label: selectedOpening.value.name,
-            to: `/openings/${selectedOpening.value.reference}`,
-          },
-        ]);
-      }
-    } else if (!route.params.openingRef) {
-      isCandidateListOpen.value = false;
-      setBreadcrumbs([]);
-      if (openings.value.length > 0) {
-        return;
-      } else {
-        if (user.value) {
-          await fetchOpenings();
-        }
-      }
-    }
-  },
-  { immediate: true }
-);
+// watch(
+//   () => route.params.openingRef,
+//   async () => {
+//     if (route.params.openingRef) {
+//       if (openings.value.length === 0 || state.value === "archived") {
+//         state.value = "active";
+//         await fetchOpenings();
+//       }
+//       isCandidateListOpen.value = true;
+//       selectedOpening.value = openings.value.find(
+//         (opening) => opening.reference === route.params.openingRef
+//       );
+//       if (!isCandidateDetailsOpen.value && selectedOpening.value?.name) {
+//         setBreadcrumbs([
+//           {
+//             label: "Openings",
+//             to: "/openings",
+//           },
+//           {
+//             label: selectedOpening.value.name,
+//             to: `/openings/${selectedOpening.value.reference}`,
+//           },
+//         ]);
+//       }
+//     } else if (!route.params.openingRef) {
+//       isCandidateListOpen.value = false;
+//       setBreadcrumbs([]);
+//       if (openings.value.length > 0) {
+//         return;
+//       } else {
+//         if (user.value) {
+//           await fetchOpenings();
+//         }
+//       }
+//     }
+//   },
+//   { immediate: true }
+// );
 
 const handleNewOpening = async (id) => {
   if (id) {

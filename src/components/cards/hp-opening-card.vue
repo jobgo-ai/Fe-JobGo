@@ -1,12 +1,19 @@
 <template>
-  <component
+  <div
   :is="tag"
     :isDisabled="isAddCard || isArchived"
     :class="containerClasses"
     :to="linkValue"
   >
-    <div :class="`hp-opening-card__add-new`">
-      <div>
+    <div :class="`hp-opening-card__add-new`" v-if="!isAddCard ">
+
+       <!-- <div
+        @click.capture.stop="handleDeleteOpening(opening?.id)"
+        class="hp-opening-card__add-new__icon-container"
+      >
+      <hp-icon class="delete__icon" style="width: 45px;display: flex;justify-content: end ;fill: gray" :size="24" name="delete" ></hp-icon>
+      </div> -->
+      <div style="margin-top: 0.4rem;">
         <p class="hp-opening-card__content__name">{{ opening?.jobPosition }}</p>
         <p class="hp-opening-card__content__description">
           {{ opening?.experience }}
@@ -18,114 +25,23 @@
           {{ opening?.location }}
         </p>
       </div>
-      <div
-        @click.capture.stop="handleDeleteOpening(opening?.id)"
-        class="hp-opening-card__add-new__icon-container"
-      >
-        <hp-icon :size="24" name="delete" style="fill: gray"></hp-icon>
-      </div>
     </div>
-    <!-- <div :class="`hp-opening-card__add-new`" v-if="isAddCard && hasMaxOpenings">
-      <div class="hp-opening-card__upgrade-container">
-        <div class="hp-opening-card__add-new__icon-container">
-          <hp-icon :size="24" name="plus"></hp-icon>
-        </div>
-        <hp-upgrade />
-      </div>
-      <p class="hp-opening-card__content__name">
-        {{ `${openings.length}/${getPlanVariable("openings")} openings` }}
-      </p>
-      <p class="hp-opening-card__content__description">
-        You have reached the maximum amount of openings. Upgrade to open more.
-        If you have any questions, contact us.
-      </p>
-      <hp-button isDisabled label="Create new"></hp-button>
-    </div>
-    <div class="hp-opening-card__archived" v-if="isArchived">
-      <div class="hp-opening-card__archived-header">
-        <hp-abstract-avatar :abstractKey="opening.artwork" />
-        <hp-button
-          @handleClick="$emit('unarchiveOpening', opening)"
-          label="Restore"
-        >
-        </hp-button>
-      </div>
-      <div class="hp-opening-card__content">
-        <h4 class="hp-opening-card__content__name">{{ opening.name }}</h4>
-        <div class="hp-opening-card__content__description">
-          {{ opening.description }}
-        </div>
-        <div class="hp-opening-card__content__badges">
-          <hp-badge
-            icon="layers"
-            class="hp-opening-card__content__badges__badge"
-            :content="opening.statistics.templates"
-          ></hp-badge>
-          <hp-badge
-            icon="skills"
-            class="hp-opening-card__content__badges__badge"
-            :content="opening.statistics.skills.length"
-          ></hp-badge>
-          <hp-badge
-            icon="candidates"
-            class="hp-opening-card__content__badges__badge"
-            :content="opening.statistics.candidates"
-          ></hp-badge>
-        </div>
-      </div>
-    </div>
-    <div
-      class="hp-opening-card__content-container"
-      v-if="!isArchived && !isAddCard"
-    >
-      <div class="hp-opening-card__splash">
-        <hp-badge
-          v-if="organization"
-          class="hp-opening-card__content__role"
-          icon="shield"
-          :content="currentPermLevel"
-        ></hp-badge>
-        <component
-          :is="splash"
-          role="img"
-          :alt="splash"
-          :key="opening.reference"
-          class="hp-opening-card__splash__image"
-        />
-      </div>
-      <div class="hp-opening-card__content">
-        <h4 class="hp-opening-card__content__name">{{ opening.name }}</h4>
-        <div class="hp-opening-card__content__description">
-          {{ opening.description }}
-        </div>
-        <div class="hp-opening-card__content__badges">
-          <hp-badge
-            icon="layers"
-            class="hp-opening-card__content__badges__badge"
-            :content="opening.statistics.templates"
-          ></hp-badge>
-          <hp-badge
-            icon="skills"
-            class="hp-opening-card__content__badges__badge"
-            :content="opening.statistics.skills.length"
-          ></hp-badge>
-          <hp-badge
-            icon="candidates"
-            class="hp-opening-card__content__badges__badge"
-            :content="opening.statistics.candidates"
-          ></hp-badge>
-        </div>
-      </div>
-    </div> -->
-  
-  </component>
+    <div :class="`hp-opening-card__add-new` " style="display: flex;align-items: center;align-items: center;flex-direction: column;justify-content:center" v-else-if="isAddCard ">
+     <div>
+      <router-link to="/chat">
+                  <hp-icon :size="48" name="plus"></hp-icon>
+                </router-link>
+     </div>
+                <h3>Click to Create New opening</h3>
+</div>
+  </div>
 </template>
 
 <script setup>
 // Vendor
 import { computed, defineAsyncComponent } from "vue";
 import { useRoute } from "vue-router";
-import { usePut, useDelete } from "@/composables/useHttp";
+import { useDelete } from "@/composables/useHttp";
 
 // Components
 import HpButton from "@/components/hp-button.vue";
@@ -197,6 +113,7 @@ const containerClasses = computed(() => {
 });
 
 const linkValue = computed(() => {
+ 
   console.log("linkValue",`/job-presentation/${props.opening?.id}`);
   // if (props.opening.permissions?.role === "member") {
   //   return `/opening/${props.opening.reference}/edit`;
@@ -204,12 +121,10 @@ const linkValue = computed(() => {
   // if (props.opening.reference === route.params.openingRef) {
   //   return `/openings`;
   // }
-  return `/job-presentation/${props.opening?.id}`;
+  return `/presentation?jobId=${props.opening?.id}`;
 });
 const handleDeleteOpening = async (id) => {
-  console.log("id", id);
   if (id) {
-    console.log("id", id);
     const deleteOpening = useDelete(`opening/${id}`);
     await deleteOpening.remove();
     setToast({
@@ -222,13 +137,14 @@ const handleDeleteOpening = async (id) => {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .hp-opening-card {
   width: 264px;
   min-height: 200px;
   list-style: none;
   cursor: pointer;
-  border-radius: $border-radius-lg;
+  // border-radius: $border-radius-lg;
+
   border: 1px solid var(--color-border);
   &--add-new {
     cursor: default;
@@ -333,8 +249,15 @@ const handleDeleteOpening = async (id) => {
     flex: 1;
     display: flex;
     position: relative;
-    flex-direction: column;
-    justify-content: space-between;
+    // flex-direction: column;
+    box-shadow: rgba(123, 121, 121, 0.35) 0px 5px 15px;
+  // border: 2px solid grey;
+  
+  // border-radius: 10px;
+  // box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  // box-shadow: 1px 1px 1px #bebebe,
+  //            -1px -1px 3px #ffffff;
+    // justify-content: space-between;
     height: 100%;
     &__icon-container {
       display: flex;
@@ -345,9 +268,11 @@ const handleDeleteOpening = async (id) => {
       cursor: pointer;
       height: 40px;
       width: 40px;
-      border: 1px dashed var(--color-border);
-      border-radius: $border-radius-lg;
+      // border-radius: $border-radius-lg;
       margin-bottom: 16px;
+      &delete__icon{
+
+      }
       &:hover {
         background: var(--color-panel);
       }
