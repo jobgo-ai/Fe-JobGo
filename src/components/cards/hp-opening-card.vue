@@ -1,5 +1,5 @@
 <template>
-  <div
+  <component
   :is="tag"
     :isDisabled="isAddCard || isArchived"
     :class="containerClasses"
@@ -34,7 +34,7 @@
      </div>
                 <h3>Click to Create New opening</h3>
 </div>
-  </div>
+  </component>
 </template>
 
 <script setup>
