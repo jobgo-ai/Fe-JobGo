@@ -17,13 +17,13 @@
     <div class="presentation">
       <div class="presentation_column">
         <div class="presentation_container">
-          <div class="presentation_container_title">SUPERCELL</div>
+          <!-- <div class="presentation_container_title" v-if="companyInfo">    {{companyInfo.name}}</div> -->
           <div class="presentation_container_title_company">
             {{ dataVal.position }}
           </div>
         </div>
 
-        <!-- <div class="company-description">
+        <div v-if="false" class="company-description">
           <div class="company-description_container">
             <h4>who we are?</h4>
             <div class="flex-center pointer" @click="editContent('company-description')">
@@ -36,39 +36,11 @@
           </div>
           <div class="blue-line"></div>
           <div :class="{ 'border-2': contentEditable.companyDescription }"
+          v-if="companyInfo"
             :contentEditable="contentEditable.companyDescription" class="grey-text">
-            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Labore
-            earum corrupti veritatis eaque ullam aliquid vero est fugit maxime
-            quis. Ratione dolores, consequuntur inventore tempora maiores itaque
-            numquam eum fuga aliquid molestiae quia sint, debitis quas
-            consequatur pariatur commodi expedita nemo officiis quibusdam
-            placeat. Architecto eligendi dolores laborum tenetur laboriosam
-            accusantium ipsum, hic odio commodi tempora blanditiis, quia soluta
-            unde amet iure qui mollitia nemo nisi deleniti temporibus ipsam.
-            Nesciunt, impedit laboriosam voluptates quod repellendus sequi dicta
-            cumque similique atque obcaecati! Quas architecto ullam labore
-            possimus amet repellat fuga eligendi reprehenderit, temporibus
-            perferendis vel id odit neque facilis vitae aliquam, reiciendis
-            dolores impedit, repellendus magni delectus corporis eaque eos!
-            Minima dolorem nostrum ad veniam deserunt laborum culpa accusamus,
-            tenetur earum! Necessitatibus velit inventore quo earum quas
-            repellat maxime eius adipisci molestias impedit possimus cum magni
-            vel unde qui laboriosam amet iure dolorem, debitis provident quasi
-            sapiente! Dicta cumque quae id nostrum impedit, iusto atque tenetur
-            laudantium labore dolorem omnis cum ipsum culpa ea recusandae
-            reprehenderit, exercitationem quod, laborum amet? Laudantium soluta,
-            aliquid debitis hic harum dolorem omnis, sed atque repudiandae
-            reprehenderit, necessitatibus pariatur accusantium repellendus ullam
-            excepturi! Blanditiis illo deserunt rem sed unde distinctio quod
-            numquam voluptatum, incidunt inventore maiores quae ipsum a rerum
-            excepturi assumenda vero optio sequi, pariatur, delectus dolorem?
-            Perferendis, repudiandae asperiores? Nam iusto sapiente voluptatem.
-            Sunt ad commodi tenetur, sequi itaque assumenda nesciunt maxime
-            cupiditate similique vitae ea quisquam asperiores eligendi nostrum
-            eius nam perspiciatis praesentium voluptatum consequatur laboriosam
-            ullam, facilis velit! Cum odio sint ipsa?
+          {{companyInfo.longDescription}}
           </div>
-        </div> -->
+        </div> 
         <div class="company-description">
           <div class="company-description_container">
             <h4>Take your career into top gear</h4>
@@ -193,8 +165,8 @@
         </div>
         <div class="job__container">
           <img class="job_company_logo"
-            src="https://asset.brandfetch.io/idk2l-po7q/idMcXneL6D.svg?updated=1668075277199" alt="" />
-
+          v-if="false && companyInfo"
+            :src="companyInfo.logos[0].formats[0].src" alt="" />
           <div class="job__container__details">
             <div>
               <div style="display: flex;margin:1.2rem 0">
@@ -309,6 +281,7 @@ const contentEditable = ref({
   pre_screening_question: false,
   jobOverview: false,
 });
+const companyInfo=ref(null)
 const showReviewNote = ref(true)
 const jobOveriew = ref([{
   title: "Position",
@@ -471,9 +444,30 @@ const route = useRoute();
 //hooks
 onMounted(async () => {
   await getJobProfile()
+  await getCompanyInfo()
+
 });
 //methods
 
+const getCompanyInfo = async () => {
+  try {
+
+    const response = await fetch(`https://api.brandfetch.io/v2/brands/dowjones.com`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + '2pDrAAJLOmYKWfnkhbzsBnW4f0wBZyK307ruOFiNb4Y=',
+      },
+
+    });
+    const data = await response.json(); // or response.text() for non-JSON responses
+  // Work with the JSON data
+  companyInfo.value=data
+  console.log(data);
+  } catch (error) {
+    console.log("error", error)
+  }
+}
 const editContent1 = () => {
 
   let responsibiltes = []
