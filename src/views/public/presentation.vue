@@ -13,9 +13,10 @@
             <div class="small"></div>
             <div class="big"></div>
           </div>
-          <div id="description" ref="description"  class="description" spellcheck="false" contenteditable="true" @blur="editContent">
+          <div id="description" ref="description" class="description" spellcheck="false" contenteditable="true"
+            @blur="editContent">
             {{ dataVal.description }}
-         
+
           </div>
         </div>
         <div class="sections">
@@ -24,7 +25,8 @@
             <div class="small"></div>
             <div class="big"></div>
           </div>
-          <div class="description"  ref="responsibilities"   id="responsibilities" spellcheck="false" contenteditable="true"  @blur="editContent">
+          <div class="description" ref="responsibilities" id="responsibilities" spellcheck="false"
+            contenteditable="true" @blur="editContent">
             {{ dataVal.responsibilities }}
             <!-- <div>Build next-generation web applications with a focus on the client side.</div> -->
           </div>
@@ -35,7 +37,8 @@
             <div class="small"></div>
             <div class="big"></div>
           </div>
-          <div class="description"  ref="qualification"   id="qualification" spellcheck="false" contenteditable="true"  @blur="editContent">
+          <div class="description" ref="qualification" id="qualification" spellcheck="false" contenteditable="true"
+            @blur="editContent">
             {{ dataVal.qualification }}
 
             <div>Good visual design skills</div>
@@ -47,7 +50,7 @@
             <div class="small"></div>
             <div class="big"></div>
           </div>
-          <div class="description" spellcheck="false" >
+          <div class="description" spellcheck="false">
             {{ dataVal.how_to_apply }}
           </div>
         </div>
@@ -58,11 +61,11 @@
       <div class="summary_container">
         <div class="logo">
           <div>
-            <img class="company_logo" src="../../assets/company_logo.jpeg" />
+            <img alt="company-logo" class="company_logo" src="../../assets/company_logo.jpeg" />
           </div>
           <div class="company" spellcheck="false" contenteditable="true">Wooly Ltd</div>
           <div class="share">
-            <div class="share-button"><img src="../../assets/share.png" /></div>
+            <div  class="share-button"><img alt="company-logo"  src="../../assets/share.png" /></div>
             <div class="type">Full-Time</div>
           </div>
         </div>
@@ -79,7 +82,8 @@
               <div class="icon"><img src="../../assets/location.png" /></div>
               <div class="label">Location:</div>
             </div>
-            <div id="location"  ref="location"   class="value" spellcheck="false" contenteditable="true"  @blur="editContent">
+            <div id="location" ref="location" class="value" spellcheck="false" contenteditable="true"
+              @blur="editContent">
               {{ dataVal.location }}
             </div>
           </div>
@@ -88,7 +92,8 @@
               <div class="icon"><img src="../../assets/company.png" /></div>
               <div class="label">Education:</div>
             </div>
-            <div id="education" ref="education"  class="value" spellcheck="false" contenteditable="true"  @blur="editContent">
+            <div id="education" ref="education" class="value" spellcheck="false" contenteditable="true"
+              @blur="editContent">
               {{ dataVal.education }}
             </div>
           </div>
@@ -97,7 +102,8 @@
               <div class="icon"><img src="../../assets/position.png" /></div>
               <div class="label">Position:</div>
             </div>
-            <div  id="position" ref="position"  class="value" spellcheck="false" contenteditable="true"  @blur="editContent">
+            <div id="position" ref="position" class="value" spellcheck="false" contenteditable="true"
+              @blur="editContent">
               {{ dataVal.position }}
             </div>
           </div>
@@ -106,14 +112,16 @@
               <div class="icon"><img src="../../assets/salary.png" /></div>
               <div class="label">Salary:</div>
             </div>
-            <div id="salary" ref="salary" class="value" spellcheck="false" contenteditable="true"  @blur="editContent">{{ dataVal.salary }}</div>
+            <div id="salary" ref="salary" class="value" spellcheck="false" contenteditable="true" @blur="editContent">{{
+              dataVal.salary }}</div>
           </div>
           <div class="section">
             <div class="flex">
               <div class="icon"><img src="../../assets/calander.png" /></div>
               <div class="label">Experience:</div>
             </div>
-            <div id="experience" ref="experience" class="value" spellcheck="false" contenteditable="true"  @blur="editContent">
+            <div id="experience" ref="experience" class="value" spellcheck="false" contenteditable="true"
+              @blur="editContent">
               {{ dataVal.experience }}
             </div>
           </div>
@@ -127,23 +135,23 @@
 //vendor
 import { ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
-import { useGet,usePut } from "@/composables/useHttp";
+import { useGet, usePut } from "@/composables/useHttp";
 
 // state
 const route = useRoute();
 
-const description=ref(null)
-const responsibilities=ref(null)
-const qualification=ref(null)
-const location=ref(null)
-const education=ref(null)
-const position=ref(null)
-const salary=ref(null)
-const experience=ref(null)
+const description = ref(null)
+const responsibilities = ref(null)
+const qualification = ref(null)
+const location = ref(null)
+const education = ref(null)
+const position = ref(null)
+const salary = ref(null)
+const experience = ref(null)
 onMounted(async () => {
-await getJobProfile()
+  await getJobProfile()
 });
-const getJobProfile=(async()=>{
+const getJobProfile = (async () => {
   const id = route.query?.jobId;
   if (id) {
     const { data, get } = useGet(`self/profile/${id}`);
@@ -157,22 +165,22 @@ const getJobProfile=(async()=>{
     dataVal.value.education = data.value?.education;
   }
 })
-const editContent =async (event) => {
-  const description1 =description.value.textContent;
-  const responsibilities1 =responsibilities.value.textContent;
-  const location1 =location.value.textContent;
-  const position1 =position.value.textContent;
-  const salary1 =salary.value.textContent;
-  const education1 =education.value.textContent;
-  const experience1 =experience.value.textContent;
+const editContent = async (event) => {
+  const description1 = description.value.textContent;
+  const responsibilities1 = responsibilities.value.textContent;
+  const location1 = location.value.textContent;
+  const position1 = position.value.textContent;
+  const salary1 = salary.value.textContent;
+  const education1 = education.value.textContent;
+  const experience1 = experience.value.textContent;
   const putOpening = usePut(`self/profile`);
   await putOpening.put({
     id: route.query?.jobId,
-    jobPosition:position1,
+    jobPosition: position1,
     experience: experience1,
-    location:location1,
+    location: location1,
     salary: salary1,
-    education:education1,
+    education: education1,
     fullDescription: description1
   });
   await getJobProfile()
@@ -292,6 +300,7 @@ const dataVal = ref({
   position: "Lead UX/UI Designer",
   location: "Korkeavourenkatu 2f, 00140, Helsinki",
 });
+
 </script>
 <style scoped>
 .presentation {
@@ -485,6 +494,7 @@ const dataVal = ref({
 .flex {
   display: flex;
 }
+
 [contenteditable] {
   outline: 0px solid transparent;
 }

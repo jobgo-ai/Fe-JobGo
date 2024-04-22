@@ -116,8 +116,8 @@ const containerClasses = computed(() => {
 });
 
 const linkValue = computed(() => {
- 
-  console.log("linkValue",`/job-presentation/${props.opening?.id}`);
+
+  console.log("linkValue", `/job-presentation/${props.opening?.id}`);
   // if (props.opening.permissions?.role === "member") {
   //   return `/opening/${props.opening.reference}/edit`;
   // }

@@ -24,6 +24,7 @@ import Settings from "@/views/dashboard/settings/settings.vue";
 import Upgrade from "@/views/dashboard/settings/organization/upgrade.vue";
 import Upgraded from "@/views/dashboard/settings/organization/upgraded.vue";
 import Organization from "@/views/dashboard/settings/organization/organization.vue";
+import CompanyPresentation from "@/views/dashboard/settings/organization/company-presentation.vue";
 import JobPresentation from "@/views/dashboard/job-presentation.vue";
 
 //Openings
@@ -56,7 +57,11 @@ const routes = [
         name: "JobPresentation",
         component: JobPresentation,
       },
-      
+      {
+        path: "/company-presentation",
+        name: "CompanyPresentation",
+        component: CompanyPresentation,
+      },
       {
         name: "opening",
         path: "opening/:openingRef",
