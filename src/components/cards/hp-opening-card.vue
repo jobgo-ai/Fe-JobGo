@@ -1,20 +1,21 @@
 <template>
-  <component
-  :is="tag"
-    :isDisabled="isAddCard || isArchived"
-    :class="containerClasses"
-    :to="linkValue"
-  >
-    <div :class="`hp-opening-card__add-new`" v-if="!isAddCard ">
+  <component :is="tag" :isDisabled="isAddCard || isArchived" :class="containerClasses" :to="linkValue">
+    <div :class="`hp-opening-card__add-new`" v-if="!isAddCard">
 
-       <!-- <div
+      <!-- <div
         @click.capture.stop="handleDeleteOpening(opening?.id)"
         class="hp-opening-card__add-new__icon-container"
       >
       <hp-icon class="delete__icon" style="width: 45px;display: flex;justify-content: end ;fill: gray" :size="24" name="delete" ></hp-icon>
       </div> -->
       <div style="margin-top: 0.4rem;">
-        <p class="hp-opening-card__content__name">{{ opening?.jobPosition }}</p>
+        <p class="hp-opening-card__content__name project_title">{{ opening?.jobPosition }}
+          <span>
+            <router-link :to="`/openings/upload?projectId=${opening?.id}`">
+              <hp-icon :size="24" name="upload"></hp-icon>
+            </router-link>
+          </span>
+        </p>
         <p class="hp-opening-card__content__description">
           {{ opening?.experience }}
         </p>
@@ -26,14 +27,16 @@
         </p>
       </div>
     </div>
-    <div :class="`hp-opening-card__add-new` " style="display: flex;align-items: center;align-items: center;flex-direction: column;justify-content:center" v-else-if="isAddCard ">
-     <div>
-      <router-link to="/chat">
-                  <hp-icon :size="48" name="plus"></hp-icon>
-                </router-link>
-     </div>
-                <h3>Click to Create New opening</h3>
-</div>
+    <div :class="`hp-opening-card__add-new`"
+      style="display: flex;align-items: center;align-items: center;flex-direction: column;justify-content:center"
+      v-else-if="isAddCard">
+      <div>
+        <router-link to="/chat">
+          <hp-icon :size="48" name="plus"></hp-icon>
+        </router-link>
+      </div>
+      <h3>Click to Create New opening</h3>
+    </div>
   </component>
 </template>
 
@@ -146,59 +149,73 @@ const handleDeleteOpening = async (id) => {
   // border-radius: $border-radius-lg;
 
   border: 1px solid var(--color-border);
+
   &--add-new {
     cursor: default;
   }
+
   &--archived {
     cursor: default;
+
     .hp-opening-card__content {
       opacity: 0.5;
       pointer-events: none;
     }
   }
+
   &--selected {
     background-color: var(--color-panel);
   }
+
   &:hover {
     box-shadow: inset 0px 0px 4px rgba(33, 44, 51, 0.01),
       inset 0px 0px 48px rgba(33, 44, 51, 0.03);
   }
+
   &--add-new {
     &:hover {
       box-shadow: none;
     }
   }
+
   &:focus {
     outline: 4px solid var(--color-focus);
   }
+
   &__upgrade-container {
     display: flex;
     justify-content: space-between;
   }
+
   &__splash {
     flex-shrink: 0;
     min-height: 84px;
     position: relative;
+
     &__image {
       border-top-left-radius: 12px;
       border-top-right-radius: 12px;
     }
   }
+
   &__content-container {
     display: flex;
     flex-direction: column;
     height: 100%;
   }
+
   &__content {
     padding: 16px;
     display: flex;
     flex-direction: column;
     height: 100%;
+
     &__name {
       font-weight: 700;
       font-size: 20px;
       margin-bottom: 4px;
     }
+
     &__description {
       // font-weight: 800;
       flex: 1;
@@ -206,18 +223,21 @@ const handleDeleteOpening = async (id) => {
       margin: 8px 0;
       font-size: 18px;
     }
+
     &__education {
       // margin: 8px 0;
       font-size: 18px;
       flex: 1;
       color: var(--color-text-secondary);
     }
+
     &__location {
       margin: 8px 0;
       font-size: 18px;
       flex: 1;
       color: var(--color-text-secondary);
     }
+
     &__role {
       position: absolute;
       top: 6px;
@@ -225,25 +245,30 @@ const handleDeleteOpening = async (id) => {
       color: var(--color-accent-forground);
       border-color: var(--color-accent-forground);
     }
+
     &__badges {
       text-transform: capitalize;
       display: flex;
+
       &__badge {
         margin-right: 6px;
       }
     }
   }
+
   &__archived {
     display: flex;
     flex-direction: column;
     height: 100%;
   }
+
   &__archived-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 16px;
   }
+
   &__add-new {
     padding: 16px;
     flex: 1;
@@ -251,14 +276,15 @@ const handleDeleteOpening = async (id) => {
     position: relative;
     // flex-direction: column;
     box-shadow: rgba(123, 121, 121, 0.35) 0px 5px 15px;
-  // border: 2px solid grey;
-  
-  // border-radius: 10px;
-  // box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
-  // box-shadow: 1px 1px 1px #bebebe,
-  //            -1px -1px 3px #ffffff;
+    // border: 2px solid grey;
+
+    // border-radius: 10px;
+    // box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    // box-shadow: 1px 1px 1px #bebebe,
+    //            -1px -1px 3px #ffffff;
     // justify-content: space-between;
     height: 100%;
+
     &__icon-container {
       display: flex;
       justify-content: center;
@@ -270,13 +296,18 @@ const handleDeleteOpening = async (id) => {
       width: 40px;
       // border-radius: $border-radius-lg;
       margin-bottom: 16px;
-      &delete__icon{
 
-      }
+      &delete__icon {}
+
       &:hover {
         background: var(--color-panel);
       }
     }
   }
+}
+
+.project_title {
+  display: flex;
+  justify-content: space-between;
 }
 </style>
