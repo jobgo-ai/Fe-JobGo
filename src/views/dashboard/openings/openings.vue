@@ -1,25 +1,18 @@
 <template>
-  <div class="openings">
+  <div v-if="!loadingState" class="openings">
     <!-- <transition name="candidate-list-transition" mode="in-out" appear>
       <div v-if="isCandidateListOpen" class="candidate-list">
         <candidate-list :isCandidateDetailsOpen="isCandidateDetailsOpen" />
       </div>
     </transition> -->
     <div :class="`view`">
-      <transition
-        class="candidate-details"
-        name="candidate-details-transition"
-        appear
-      >
-        <candidate-details
-          v-if="isCandidateDetailsOpen"
-          :isCandidateDetailsOpen="isCandidateDetailsOpen"
-        ></candidate-details>
+
+      <transition class="candidate-details" name="candidate-details-transition" appear>
+        <candidate-details v-if="isCandidateDetailsOpen"
+          :isCandidateDetailsOpen="isCandidateDetailsOpen"></candidate-details>
       </transition>
-      <transition
-        :class="`openingslist ${!isCandidateListOpen && 'openingslist--empty'}`"
-        name="openings-list-transition"
-      >
+      <transition :class="`openingslist ${!isCandidateListOpen && 'openingslist--empty'}`"
+        name="openings-list-transition">
         <div v-if="!isCandidateDetailsOpen" class="opening-list">
           <div class="opening">
             <h2 class="openings__title">Openings</h2>
@@ -33,14 +26,10 @@
           <p class="openings__subtitle">
             Manage your openings or quickly create new ones
           </p>
-          <hp-tabs
-            class="openings__tabs"
-            :options="[
-              { label: 'Active', value: 'active' },
-              // { label: 'Archived', value: 'archived' },
-            ]"
-            v-model="state"
-          />
+          <hp-tabs class="openings__tabs" :options="[
+            { label: 'Active', value: 'active' },
+            // { label: 'Archived', value: 'archived' },
+          ]" v-model="state" />
           <div class="`hp-opening-card__add-new`">
             <!-- <div>
               <div class="hp-opening-card__add-new__icon-container1">
@@ -61,23 +50,11 @@
           </div>
 
           <ol ref="scrollContainer" class="opening-list__grid">
-               <hp-opening-card
-        
-              :isAddCard="true"
-            >
+            <hp-opening-card :isAddCard="true">
             </hp-opening-card>
-            <template
-              v-if="openings.length"
-              v-for="opening in openings"
-              :key="opening.id"
-            >
-              <hp-opening-card
-                v-if="openings"
-                :opening="opening"
-                @refreshOpenings="fetchProject()"
-                @handleNewOpening="handleNewOpening"
-                @unarchiveOpening="handleUnarchiveOpening"
-              ></hp-opening-card>
+            <template v-if="openings.length" v-for="opening in openings" :key="opening.id">
+              <hp-opening-card v-if="openings" :opening="opening" @refreshOpenings="fetchProject()"
+                @handleNewOpening="handleNewOpening" @unarchiveOpening="handleUnarchiveOpening"></hp-opening-card>
             </template>
             <!-- <h2 v-if="openings.length != 0">
               No archived openings
@@ -88,6 +65,9 @@
       </transition>
     </div>
   </div>
+  <div class="openings_spinner" v-else>
+    <hp-spinner class="hp-button__button__spinner" :size="50" mode="dark"></hp-spinner>
+  </div>
 </template>
 
 <script setup>
@@ -97,7 +77,7 @@ import { onMounted } from "vue";
 import { useWindowScroll } from "@vueuse/core";
 
 // Composables
-import { usePut, useDelete ,useGet} from "@/composables/useHttp";
+import { usePut, useDelete, useGet } from "@/composables/useHttp";
 import useToast from "@/composables/useToast";
 import useOpenings from "@/composables/useOpenings";
 import { useGettingStarted } from "@/composables/useGettingStarted";
@@ -118,6 +98,7 @@ import HpButton from "@/components/hp-button.vue";
 
 const route = useRoute();
 const router = useRouter();
+const loadingState = ref(true)
 const selectedOpening = ref({});
 const openingList = ref([]);
 const isCandidateDetailsOpen = ref(route.query.candidate);
@@ -159,7 +140,12 @@ const { y } = useWindowScroll();
 // );
 
 onMounted(async () => {
-await  fetchOpenings()
+  const { get, data, loading } = useGet(`self/profile`);
+  // await  fetchOpenings()
+  loadingState.value = true
+  await get();
+  loadingState.value = false
+  openings.value = data.value;
   // Checks for openingRef in route params
   if (route.params.openingRef) {
     // Sets selected opening to openingRef in route params
@@ -170,22 +156,10 @@ await  fetchOpenings()
   // Checks to see if candidate detail page is open
   isCandidateDetailsOpen.value = route.query.candidate;
 
-  await fetchProject();
+  // await fetchProject();
 });
 
 const fetchProject = async () => {
-  console.log("fetchProject api call:- ");
-
-  // const { position_name, candidate_experience, location_type, candidate_education, job_description_type, job_description } = chatObject;
-  // const payload = {
-  //   "jobPosition": position_name,
-  //   "experience": candidate_experience,
-  //   "location": location_type,
-  //   "education": candidate_education,
-  //   "job_description_type": job_description_type,
-  //   "salary": "$100,000 - $120,000",
-  //   "fullDescription": job_description
-  // }
 
   try {
     const res = await fetch(`${import.meta.env.VITE_API_URL}/opening`, {
@@ -456,5 +430,13 @@ const canCreateOpening = computed(() => {
 .openings-list-transition-leave-to {
   transform: translateX(-840px);
   opacity: 0;
+}
+
+.openings_spinner {
+  width: 100vw;
+  height: calc(100vh - 90px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 </style>

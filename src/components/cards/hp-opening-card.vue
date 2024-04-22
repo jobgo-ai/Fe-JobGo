@@ -21,16 +21,14 @@
         </p>
       </div>
     </div>
-    <div :class="`hp-opening-card__add-new`"
+    <router-link to="/chat" :class="`hp-opening-card__add-new`"
       style="display: flex;align-items: center;align-items: center;flex-direction: column;justify-content:center"
       v-else-if="isAddCard">
       <div>
-        <router-link to="/chat">
           <hp-icon :size="48" name="plus"></hp-icon>
-        </router-link>
       </div>
       <h3>Click to Create New opening</h3>
-    </div>
+    </router-link>
   </component>
 </template>
 
@@ -111,13 +109,6 @@ const containerClasses = computed(() => {
 
 const linkValue = computed(() => {
 
-  console.log("linkValue", `/job-presentation/${props.opening?.id}`);
-  // if (props.opening.permissions?.role === "member") {
-  //   return `/opening/${props.opening.reference}/edit`;
-  // }
-  // if (props.opening.reference === route.params.openingRef) {
-  //   return `/openings`;
-  // }
   return `/presentation?jobId=${props.opening?.id}`;
 });
 const handleDeleteOpening = async (id) => {

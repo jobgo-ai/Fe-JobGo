@@ -199,9 +199,7 @@ const routes = [
     path: "/presentation",
     name: "job_presentation",
     component: NewPresentation,
-    meta: {
-      public: true,
-    },
+
   },
  
   {

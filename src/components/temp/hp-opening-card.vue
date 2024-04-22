@@ -5,6 +5,7 @@
       :to="linkValue"
       :class="containerClasses"
     >
+    
       <div
         :class="`hp-opening-card__add-new`"
         v-if="isAddCard && !hasMaxOpenings"
@@ -194,6 +195,11 @@
   
   const linkValue = computed(() => {
     // if (props.opening.permissions?.role === "member") {
+    //   return `/opening/${props.opening.reference}/edit`;
+    // }
+    // if (props.opening.reference === route.params.openingRef) {
+    //   return `/openings`;
+    // }   // if (props.opening.permissions?.role === "member") {
     //   return `/opening/${props.opening.reference}/edit`;
     // }
     // if (props.opening.reference === route.params.openingRef) {

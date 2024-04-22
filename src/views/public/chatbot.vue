@@ -1,5 +1,5 @@
 <template>
-  <div class="chat-boat-container">
+  <div class="chat-boat-container" >
     <!-- <div class="chat-welcome">
       <div style="display: flex;justify-content:center;align-items: center;flex-direction:column">
 <h1 style="font-weight: 800;">Jobgo Profiling Tools</h1>
@@ -12,7 +12,7 @@
       <Chat />
     </div>
 
-    <div class="chat-container">
+    <div class="chat-container" >
 
       <!-- Heading -->
       <div class="header-container">
@@ -33,7 +33,7 @@
       </div>
 
       <!-- Chat Container -->
-      <div class="chat-box-container" ref="chatBoxRef">
+      <div class="chat-box-container"  ref="chatBoxRef">
 
         <div class="" v-for="(item, index) of  conversationMsg" :key="index">
           <!-- <span style="color: black;">{{ item.role }}</span> -->
@@ -123,33 +123,27 @@
 
     </div>
   </div>
-  <!-- <div class="spinner__div" v-else >
-  <hp-spinner
-        class="hp-button__button__spinner"
-        :size="25"
-        :mode="primary ? 'light' : 'dark'"
-      ></hp-spinner>
-</div> -->
-  <hp-modal class="invite-modal" style="width: 55%;" :isOpen="isShareReportOpen" @close="isShareReportOpen = false">
-    <generic-modal title="Invite" subtitle="Invite other people in conversation">
+
+  <hp-modal class="invite-modal invite" style="width: 55%;" :isOpen="isInviteModalVisible " @close="isInviteModalVisible  = false">
+    <generic-modal class="" title="Invite" subtitle="Invite other people in conversation">
       <div class="invite-modal__input" style="display: flex;justify-content:space-between;align-items: center;"
     
         v-for="(item, index) of users">
         <div style="display: flex;justify-content:space-between;align-items: center;">
-<div style="display: flex;flex-direction: column;height:60px">
-  <input ref="username" style=" outline: none !important;
+<div style="display: flex;flex-direction: column;height:60px" class="">
+  <input class="invite-input"  ref="username" style=" outline: none !important;
   
     border: 2px solid grey !important;padding:8px;border-radius: 10px;
-    background-color: transparent !important;color:white;margin-top: 10px;" :class="`username${index}`"
+    background-color: transparent !important;margin-top: 10px;" :class="`username${index}`"
             v-model="item.userName" name="username" placeholder="Enter your username" label="username" type="text" />
             <div v-if="item.userNameError" style="color: red;padding-top:2px;">{{item.userNameError}}</div>
           </div>
           <div style="display: flex;flex-direction: column;height:60px">
-            <input ref="email" style=" outline: none !important;
+            <input ref="email" class="invite-input" style=" outline: none !important;
     border: 2px solid grey !important;padding:8px;border-radius: 10px;
     margin-top: 10px;
     margin-left: 12px;
-    background-color: transparent !important;color:white;" name="username" placeholder="Enter your email" label="email"
+    background-color: transparent !important;" name="username" placeholder="Enter your email" label="email"
     :class="`email${index}`"
             type="text" v-model="item.email" />
             <div v-if="item.emailError" style="color: red;padding-left:15px;padding-top:2px;font-size:0.8rem">{{item.emailError}}</div>
@@ -181,6 +175,8 @@
 </template>
 
 <script setup>
+import InviteModal from "@/views/assistant/InviteModal.vue";
+
 import GenericModal from "@/components/modals/generic-modal.vue";
 import HpModal from "@/components/hp-modal.vue";
 import { ref, onMounted } from "vue";
@@ -297,7 +293,7 @@ user.emailError=null
     title: "Success!",
     message: "Invite Successfully",
   });
-  isShareReportOpen.value=false
+  isInviteModalVisible .value=false
   users.value = [{
     userName: "",
     email: "",
@@ -474,10 +470,7 @@ onMounted(async () => {
   webSocket = new WebSocket(import.meta.env.VITE_SOCKET_URL);
   if (webSocket) {
     webSocket.onopen = function (event) {
-
-
       if (!(route.query?.room && route.query?.thread && route.query?.user)) {
-
         webSocket.send(JSON.stringify(
           { event: "register", role: "hiring manager", userName: "uvesh"}));
       } else {
@@ -598,9 +591,9 @@ onMounted(async () => {
   //   scrollChatBottom();
   // });
 });
-const isShareReportOpen = ref(false)
+const isInviteModalVisible  = ref(false)
 const inviteMember = (() => {
-  isShareReportOpen.value = true
+  isInviteModalVisible .value = true
   //   {
   //   "room": "sdsddfsds",
   //   "thread": "threadid121212",
@@ -629,25 +622,31 @@ const extractMessage = (originalString) => {
 
 <style scoped>
 .create-json {
-  background: white;
+  background-color: var(--color-background);
+  /* background: white; */
   padding: 6px;
   border-radius: 20px;
   font-size: 12px;
   border: 1px solid #aeabab;
   cursor: pointer;
   margin-right: 10px;
-  color: black;
+  color: var(--color-text-primary);
+  /* color: black; */
 }
 
 .chat-boat-container {
+  background: var(--color-background) !important;
   height: 100vh;
   display: flex;
+  background-color: red;
 }
 
 .chat-welcome {
-  background: rgb(243, 239, 239);
+  /* background: rgb(243, 239, 239); */
+  background-color: var(--color-background);
   width: 35%;
-  color: black;
+  background-color: var(--color-background);
+  color: var(--color-text-primary);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -676,10 +675,22 @@ const extractMessage = (originalString) => {
   background-image: none;
   cursor: pointer;
   color: white;
+  background-color: var(--color-background);
+  color: var(--color-text-primary);
 }
-
+.invite{
+  background-color: var(--color-background);
+  color: var(--color-text-primary);
+  
+}
+.invite-input{
+    background-color: var(--color-background);
+  color: var(--color-text-primary);
+}
 .chatButton:hover {
   background-color: #374151;
+  background-color: var(--color-background);
+  color: var(--color-text-primary);
 }
 
 
@@ -701,6 +712,8 @@ const extractMessage = (originalString) => {
   border-color: #e5e7eb;
   width: 50%;
   height: 100%;
+  background-color: var(--color-background);
+  color: var(--color-text-primary);
 }
 
 @media (max-width: 768px) {
@@ -722,6 +735,8 @@ const extractMessage = (originalString) => {
   padding-bottom: 1rem;
   margin-top: 0.375rem;
   justify-content: space-between;
+  background-color: var(--color-background);
+  color: var(--color-text-primary);
   /* flex-direction: column; */
 }
 
@@ -731,6 +746,8 @@ const extractMessage = (originalString) => {
   font-weight: 600;
   letter-spacing: -0.025em;
   color: black;
+  background-color: var(--color-background);
+  color: var(--color-text-primary);
   margin-bottom: 10px;
 }
 
@@ -739,6 +756,8 @@ const extractMessage = (originalString) => {
   line-height: 1.25rem;
   line-height: .75rem;
   color: #6b7280;
+  background-color: var(--color-background);
+  color: var(--color-text-primary);
 }
 
 /* Header container end */
@@ -749,6 +768,8 @@ const extractMessage = (originalString) => {
   height: 78vh;
   overflow: auto;
   margin-bottom: 1rem;
+  background-color: var(--color-background);
+  color: var(--color-text-primary);
 }
 
 .chat-box-container::-webkit-scrollbar {
@@ -804,12 +825,16 @@ const extractMessage = (originalString) => {
   display: flex;
   flex-direction: column;
   align-items: end;
+  background-color: var(--color-background);
+  color: var(--color-text-primary);
 }
 
 .user-chat-container .message span {
   display: block;
   font-weight: 700;
   color: #374151;
+  background-color: var(--color-background);
+  color: var(--color-text-primary);
 }
 
 
@@ -823,7 +848,9 @@ const extractMessage = (originalString) => {
   height: 2rem;
   text-align: right;
   width: 100%;
-  justify-content: right
+  justify-content: right;
+  background-color: var(--color-background);
+  color: var(--color-text-primary);
 }
 
 /* user-chat-container End */
@@ -850,6 +877,8 @@ const extractMessage = (originalString) => {
   border-radius: 9999px;
   width: 2rem;
   height: 2rem;
+  background-color: var(--color-background);
+  color: var(--color-text-primary);
   /* text-align: center; */
 }
 
@@ -869,6 +898,8 @@ const extractMessage = (originalString) => {
   font-weight: 700;
   color: #374151;
   width: 100%;
+  background-color: var(--color-background);
+  color: var(--color-text-primary);
 }
 
 /* AI-chat-container end */
@@ -975,6 +1006,11 @@ const extractMessage = (originalString) => {
 }
 
 
+.invite{
+
+}
+
+
 .invite-modal {
   &__input {
     &__icon {
@@ -996,6 +1032,8 @@ const extractMessage = (originalString) => {
 
 .job-description {
   color: black;
+  background-color: var(--color-background);
+  color: var(--color-text-primary);
 }
 
 .job-description h1 {

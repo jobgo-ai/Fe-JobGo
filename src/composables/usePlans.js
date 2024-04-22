@@ -22,7 +22,7 @@ const getPlans = async () => {
   PLANS = getPlans.data.value.plans;
 };
 
-getPlans();
+// getPlans();
 
 const getPlanVariable = (feature) => {
   return quota.value[feature];

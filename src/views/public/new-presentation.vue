@@ -1,6 +1,6 @@
 <template>
 
-
+<template v-if="!presentationLoading">
   <div v-if="showReviewNote" class="alert" style="">
 
     <SmileEmoji class="alert__icon" style="margin-right: 1rem;" />Please review and edit your profiling page. Once
@@ -253,6 +253,12 @@
     </div>
   </div>
 </template>
+<template v-else>
+  <div class="openings_spinner" >
+    <hp-spinner class="hp-button__button__spinner" :size="50" mode="dark"></hp-spinner>
+  </div>
+</template>
+</template>
 <script setup>
 //vendor
 import { ref, onMounted } from "vue";
@@ -270,8 +276,10 @@ import LastEdit from "@/assets/icons/last-visited.svg";
 import Star from "@/assets/icons/star.svg";
 import Hyrbird from "@/assets/icons/hybrid.svg";
 import close from "@/assets/icons/close.svg";
+import HpSpinner from "@/components/hp-spinner.vue";
 
 //state
+const presentationLoading=ref(false)
 const contentEditable = ref({
   companyDescription: false,
   jobDescription: false,
@@ -444,7 +452,7 @@ const route = useRoute();
 //hooks
 onMounted(async () => {
   await getJobProfile()
-  await getCompanyInfo()
+  // await getCompanyInfo()
 
 });
 //methods
@@ -528,7 +536,8 @@ const editContent2 = async (event) => {
 const getJobProfile = (async () => {
   const id = route.query?.jobId;
   if (id) {
-    const { data, get } = useGet(`self/profile/${id}`);
+    const { data, get} = useGet(`self/profile/${id}`);
+    presentationLoading.value=true
     await get();
     dataVal.value.description = data.value?.fullDescription;
     dataVal.value.qualification = data.value?.qualification;
@@ -537,6 +546,7 @@ const getJobProfile = (async () => {
     dataVal.value.position = data.value?.jobPosition;
     dataVal.value.location = data.value?.location;
     dataVal.value.education = data.value?.education;
+    presentationLoading.value=false
   }
 })
 const editContent = async (section) => {
@@ -847,5 +857,14 @@ button {
   display: flex;
   align-items: center;
 
+}
+
+
+.openings_spinner{
+  width: 100vw;
+  height: calc(100vh - 90px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 </style>

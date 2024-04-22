@@ -8,7 +8,7 @@ const hasDarkModePreference =
 
 const currentTheme = localStorage.getItem("theme")
   ? localStorage.getItem("theme")
-  : null;
+  : "dark";
 
 currentTheme === "dark"
   ? (isDarkmode.value = true)

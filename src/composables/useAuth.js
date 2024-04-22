@@ -32,14 +32,11 @@ export const refreshToken = async () => {
     window.Intercom("boot", {
       app_id: import.meta.env.VITE_INTERCOM_ID,
     });
-    window.Intercom("update", { ...data.value.self });
-    state.organization = data.value.self.organization;
-    state.role = data.value.self.organization?.role;
+    // window.Intercom("update", { ...data.value.self });
+    // state.organization = data.value.self.organization;
+    // state.role = data.value.self.organization?.role;
 
-    const getQuota = useGet("self/quota");
-    await getQuota.get();
-    state.plan ="Free"
-    state.quota = '15';
+
     // const getQuota = useGet("self/quota");
     // await getQuota.get();
     // state.plan ="Free"
@@ -55,10 +52,10 @@ export default () => {
     document.cookie = "backofficeUser=true; SameSite=None; Secure";
     state.token = payload[AUTH_TOKEN];
     state.error = undefined;
-    const getQuota = useGet("self/quota");
-    await getQuota.get();
-    state.plan = getQuota.data.value.quota.tier;
-    state.quota = getQuota.data.value.quota;
+    // const getQuota = useGet("self/quota");
+    // await getQuota.get();
+    // state.plan = getQuota.data.value.quota.tier;
+    // state.quota = getQuota.data.value.quota;
   };
 
   const setUserDetails = (data) => {
