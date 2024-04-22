@@ -47,7 +47,7 @@ const uploadFile = async () => {
       }
     );
 
-    router.push(`/presentation?jobId=${jobId}`);
+    router.push(`/presentation?jobId=${response?.data?.jobId}`);
   } catch (error) {
     console.error('Error uploading file:', error);
   }
