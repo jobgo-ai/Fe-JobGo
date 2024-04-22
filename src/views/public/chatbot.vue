@@ -1,5 +1,5 @@
 <template>
-  <div class="chat-boat-container" >
+  <div class="chat-boat-container">
     <!-- <div class="chat-welcome">
       <div style="display: flex;justify-content:center;align-items: center;flex-direction:column">
 <h1 style="font-weight: 800;">Jobgo Profiling Tools</h1>
@@ -8,11 +8,9 @@
       </div>
     </div> -->
 
-    <div class="logo-container">
-      <Chat />
-    </div>
 
-    <div class="chat-container" >
+
+    <div class="chat-container">
 
       <!-- Heading -->
       <div class="header-container">
@@ -33,7 +31,7 @@
       </div>
 
       <!-- Chat Container -->
-      <div class="chat-box-container"  ref="chatBoxRef">
+      <div class="chat-box-container" ref="chatBoxRef">
 
         <div class="" v-for="(item, index) of  conversationMsg" :key="index">
           <!-- <span style="color: black;">{{ item.role }}</span> -->
@@ -82,7 +80,7 @@
                 Hiring-manager
               </span>
 
-            <!-- <p>{{ item.msg }}</p> -->
+              <!-- <p>{{ item.msg }}</p> -->
             <div class="job-description">
               <vue-markdown :source="item.msg" />
             </div>
@@ -124,19 +122,19 @@
     </div>
   </div>
 
-  <hp-modal class="invite-modal invite" style="width: 55%;" :isOpen="isInviteModalVisible " @close="isInviteModalVisible  = false">
+  <hp-modal class="invite-modal invite" style="width: 55%;" :isOpen="isInviteModalVisible"
+    @close="isInviteModalVisible = false">
     <generic-modal class="" title="Invite" subtitle="Invite other people in conversation">
       <div class="invite-modal__input" style="display: flex;justify-content:space-between;align-items: center;"
-    
         v-for="(item, index) of users">
         <div style="display: flex;justify-content:space-between;align-items: center;">
-<div style="display: flex;flex-direction: column;height:60px" class="">
-  <input class="invite-input"  ref="username" style=" outline: none !important;
+          <div style="display: flex;flex-direction: column;height:60px" class="">
+            <input class="invite-input" ref="username" style=" outline: none !important;
   
     border: 2px solid grey !important;padding:8px;border-radius: 10px;
-    background-color: transparent !important;margin-top: 10px;" :class="`username${index}`"
-            v-model="item.userName" name="username" placeholder="Enter your username" label="username" type="text" />
-            <div v-if="item.userNameError" style="color: red;padding-top:2px;">{{item.userNameError}}</div>
+    background-color: transparent !important;margin-top: 10px;" :class="`username${index}`" v-model="item.userName"
+              name="username" placeholder="Enter your username" label="username" type="text" />
+            <div v-if="item.userNameError" style="color: red;padding-top:2px;">{{ item.userNameError }}</div>
           </div>
           <div style="display: flex;flex-direction: column;height:60px">
             <input ref="email" class="invite-input" style=" outline: none !important;
@@ -144,19 +142,18 @@
     margin-top: 10px;
     margin-left: 12px;
     background-color: transparent !important;" name="username" placeholder="Enter your email" label="email"
-    :class="`email${index}`"
-            type="text" v-model="item.email" />
-            <div v-if="item.emailError" style="color: red;padding-left:15px;padding-top:2px;font-size:0.8rem">{{item.emailError}}</div>
+              :class="`email${index}`" type="text" v-model="item.email" />
+            <div v-if="item.emailError" style="color: red;padding-left:15px;padding-top:2px;font-size:0.8rem">
+              {{ item.emailError }}</div>
           </div>
         </div>
         <div>
-         
+
           <div style="display: flex;justify-content:space-between;align-items: center; margin-bottom: 15px;">
             <hp-icon v-if="index + 1 == users.length" @click="addRow" class="invite-modal__input__icon"
               style="display: cursor !important;" name="plus"></hp-icon>
             <hp-icon @click="deleteRow(index)" v-if="index != 0" class="invite-modal__input__icon"
-            style="display: cursor !important"
-              name="delete"></hp-icon>
+              style="display: cursor !important" name="delete"></hp-icon>
           </div>
         </div>
       </div>
@@ -216,6 +213,7 @@ const conversationMsg = ref([
     role: "assistant",
     msg: "Hello! I'm here to assist you in gathering information swiftly for the position you're looking to fill. How can I help you with the details of the job you have in mind?😊",
   },
+  
 ]);
 
 const showEndChat = ref(false);
@@ -245,45 +243,44 @@ const email = ref(null)
 // methods
 const sendInvite = async () => {
   users.value.forEach((user, index) => {
-    console.log("user",user);
-user.userNameError=null
-user.emailError=null
+    console.log("user", user);
+    user.userNameError = null
+    user.emailError = null
   })
   for (let index = 0; index < users.value.length; index++) {
     const user = users.value[index];
     console.log("user12")
     if (!user.userName) {
-      user.userNameError="User Name is required"
+      user.userNameError = "User Name is required"
       const inputElement = document.querySelector(`.username${index}`);
       inputElement.focus();
       return
     }
     if (!user.email) {
-      user.emailError="Email is required"
+      user.emailError = "Email is required"
       const inputElement = document.querySelector(`.email${index}`);
       inputElement.focus();
       return
     }
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    console.log("emailRegex.test(email)",emailRegex.test(user.email));
-    if(!emailRegex.test(user.email))
-    {
-      user.emailError="Email is invalid"
+    console.log("emailRegex.test(email)", emailRegex.test(user.email));
+    if (!emailRegex.test(user.email)) {
+      user.emailError = "Email is invalid"
       const inputElement = document.querySelector(`.email${index}`);
       inputElement.focus();
       return
     }
   }
-  const userNamesAndEmails =users.value.map(user => {
+  const userNamesAndEmails = users.value.map(user => {
     console.log(user)
-  return { userName: user.userName, email: user.email };
-});
+    return { userName: user.userName, email: user.email };
+  });
 
 
   const body = {
     room: roomId.value,
     thread: threadId.value,
-    users:userNamesAndEmails
+    users: userNamesAndEmails
   }
   const sendInvite = usePost("chat/invite");
   await sendInvite.post(body);
@@ -293,7 +290,7 @@ user.emailError=null
     title: "Success!",
     message: "Invite Successfully",
   });
-  isInviteModalVisible .value=false
+  isInviteModalVisible.value = false
   users.value = [{
     userName: "",
     email: "",
@@ -472,7 +469,7 @@ onMounted(async () => {
     webSocket.onopen = function (event) {
       if (!(route.query?.room && route.query?.thread && route.query?.user)) {
         webSocket.send(JSON.stringify(
-          { event: "register", role: "hiring manager", userName: "uvesh"}));
+          { event: "register", role: "hiring manager", userName: "uvesh" }));
       } else {
         webSocket.send(JSON.stringify(
           { event: "add-member", room: route.query?.room, thread: route.query?.thread, userName: "uvesh" }));
@@ -481,7 +478,7 @@ onMounted(async () => {
 
     webSocket.onmessage = function (event) {
       const data = JSON.parse(event.data);
-      console.log("data",data)
+      console.log("data", data)
       if (route.query?.room && route.query?.thread && route.query?.user) {
         roomId.value = route.query?.room
         threadId.value = route.query?.thread
@@ -522,7 +519,7 @@ onMounted(async () => {
         }
         scrollChatBottom();
       }
- 
+
 
       // else if (data.event === 'complete-chat') {
       //   isChatLoading.value = false;
@@ -591,9 +588,9 @@ onMounted(async () => {
   //   scrollChatBottom();
   // });
 });
-const isInviteModalVisible  = ref(false)
+const isInviteModalVisible = ref(false)
 const inviteMember = (() => {
-  isInviteModalVisible .value = true
+  isInviteModalVisible.value = true
   //   {
   //   "room": "sdsddfsds",
   //   "thread": "threadid121212",
@@ -638,7 +635,7 @@ const extractMessage = (originalString) => {
   background: var(--color-background) !important;
   height: 100vh;
   display: flex;
-  background-color: red;
+  margin: auto;
 }
 
 .chat-welcome {
@@ -678,15 +675,18 @@ const extractMessage = (originalString) => {
   background-color: var(--color-background);
   color: var(--color-text-primary);
 }
-.invite{
+
+.invite {
   background-color: var(--color-background);
   color: var(--color-text-primary);
-  
+
 }
-.invite-input{
-    background-color: var(--color-background);
+
+.invite-input {
+  background-color: var(--color-background);
   color: var(--color-text-primary);
 }
+
 .chatButton:hover {
   background-color: #374151;
   background-color: var(--color-background);
@@ -704,13 +704,14 @@ const extractMessage = (originalString) => {
 }
 
 .chat-container {
-  padding: 1.5rem;
+  padding: 0;
+  margin: auto;
   /* border-radius: 0.5rem; */
   border-width: 1px;
   background-color: #ffffff;
   bottom: calc(4rem+1.5rem);
   border-color: #e5e7eb;
-  width: 50%;
+  width: 70%;
   height: 100%;
   background-color: var(--color-background);
   color: var(--color-text-primary);
@@ -730,14 +731,20 @@ const extractMessage = (originalString) => {
 
 /* Header container start */
 .header-container {
-  padding: 10px 1rem 0 1rem;
-  display: flex;
   padding-bottom: 1rem;
-  margin-top: 0.375rem;
-  justify-content: space-between;
   background-color: var(--color-background);
   color: var(--color-text-primary);
   /* flex-direction: column; */
+
+z-index: 100;
+  padding: 10px 1rem 0 1rem;
+  display: flex;
+  padding-bottom: 1rem;
+  display: flex;
+  margin-top: 0.375rem;
+  justify-content: space-between;
+  position: sticky;
+  top: 00px;
 }
 
 .header-container h2 {
@@ -765,7 +772,7 @@ const extractMessage = (originalString) => {
 /* chat-box-container Start */
 .chat-box-container {
   padding: 0 1rem;
-  height: 78vh;
+  min-height: calc(100vh - 150px);
   overflow: auto;
   margin-bottom: 1rem;
   background-color: var(--color-background);
@@ -906,9 +913,13 @@ const extractMessage = (originalString) => {
 
 /* Input box container start */
 .inputbox-container {
+  background-color: var(--color-background);
   display: flex;
   padding-top: 0;
   align-items: center;
+  position: sticky;
+  bottom: 0px;
+  padding: 10px;
 }
 
 .inputbox-container .form {
@@ -1006,9 +1017,7 @@ const extractMessage = (originalString) => {
 }
 
 
-.invite{
-
-}
+.invite {}
 
 
 .invite-modal {

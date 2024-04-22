@@ -184,7 +184,7 @@ const flyoutClasses = computed(() => {
 });
 </script>
 
-<div lang="scss" scoped>
+<style lang="scss" scoped>
 .hp-form-dropdown {
   display: flex;
   flex-direction: column;
@@ -309,4 +309,4 @@ const flyoutClasses = computed(() => {
     right: 0;
   }
 }
-</div>
+</style>

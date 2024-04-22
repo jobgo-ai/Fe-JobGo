@@ -47,6 +47,7 @@ const routes = [
     path: "/",
     component: Layout,
     children: [
+   
       {
         path: "/openings/:openingRef?",
         name: "openings",
