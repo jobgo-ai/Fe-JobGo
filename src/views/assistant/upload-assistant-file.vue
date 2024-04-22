@@ -1,72 +1,60 @@
 <template>
   <div class="upload">
     <div class="upload__input">
-      <div class="upload__input__text">Upload File for Assistant</div>
-      <hp-dropzone style="background-color: rgba(128, 128, 128, 0.1)" :isLoading="isLoading" @change="uploadFile"
-        loadingLabel="File processing" label="Upload a file ">
+      <div class="upload__input__text">Upload Transcript File</div>
+      <hp-dropzone style="background-color: rgb(128, 128, 128, 0.1)" :isLoading="isLoading" @change="onFileSelected"
+        accept=".pdf,.docx" loadingLabel="File processing" :label="fileRef?.name || 'Upload a file'">
       </hp-dropzone>
     </div>
-
-    <div class="upload__input__text mt-5">Enter Propmt</div>
-    <input type="text" class="prompt-input" v-model="prompt">
-
-
-    <div v-if="summary">
-      <div class="upload__input__text mt-5">Summary</div>
-      <div class="meeting-summary">
-        <vue-markdown :source="summary" />
-      </div>
-    </div>
-
-    <button type="button" class="summary_button" @click="summarizeDiscussion">Get Summary</button>
+    <button type="button" class="summary_button" :isDisabled="isLoading" @click="uploadFile">Upload Transcript</button>
   </div>
 </template>
 
 <script setup>
 import { ref } from "vue";
 import axios from 'axios';
-import VueMarkdown from 'vue-markdown-render';
+import { useRoute, useRouter } from "vue-router";
 import HpDropzone from "@/components/hp-dropzone.vue";
 
-const summary = ref('');
-const resultText = ref('');
-const isLoading = ref(false);
-const prompt = ref('Summarize the discussion within the transcript and output the data in Markdown format.');
-const apiKey = import.meta.env.VITE_File
+const route = useRoute();
+const router = useRouter();
 
-const uploadFile = async (file) => {
+const isLoading = ref(false);
+const fileRef = ref(null);
+
+const onFileSelected = (file) => {
+  fileRef.value = file;
+};
+
+const uploadFile = async () => {
+  const file = fileRef.value;
   if (!file) {
     alert("Please select a file.");
     return;
   }
+  isLoading.value = true;
   const formData = new FormData();
   formData.append("pdfFile", file);
 
   try {
-    const response = await axios.post(`${import.meta.env.VITE_Upload_URL}/fileUpload`, formData);
-    resultText.value = response.data.trim();
+    const response = await axios.post(
+      `${import.meta.env.VITE_API_URL}/transcript/upload/${route?.query?.projectId}`,
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data"
+        }
+      }
+    );
+
+    router.push(`/presentation?jobId=${response?.data?.jobId}`);
   } catch (error) {
     console.error('Error uploading file:', error);
   }
+
+  isLoading.value = false;
 };
 
-const summarizeDiscussion = async () => {
-  try {
-    const response = await axios.post('https://api.openai.com/v1/chat/completions', {
-      model: 'gpt-3.5-turbo-0125',
-      messages: [{ role: 'system', content: 'User: ' + prompt.value + resultText.value }],
-      max_tokens: 150
-    }, {
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${apiKey}`
-      }
-    });
-    summary.value = response.data.choices[0].message.content.trim();
-  } catch (error) {
-    console.error('Error summarizing discussion:', error);
-  }
-};
 </script>
 
 <style lang="scss" scoped>
@@ -109,7 +97,7 @@ const summarizeDiscussion = async () => {
   margin-top: 15px;
   height: 44px;
   border: 1px solid #505094;
-  margin-top: 120px;
+  margin-top: 40px;
   cursor: pointer;
 }
 

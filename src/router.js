@@ -138,12 +138,9 @@ const routes = [
     }
   },
   {
-    path: "/upload",
+    path: "/openings/upload",
     name: "UploadFile",
     component: UploadFile,
-    meta: {
-      public: true,
-    },
   },
   {
     path: "/prompt",

@@ -8,8 +8,14 @@
       >
       <hp-icon class="delete__icon" style="width: 45px;display: flex;justify-content: end ;fill: gray" :size="24" name="delete" ></hp-icon>
       </div> -->
-      <div style="margin-top: 0.4rem;">
-        <p class="hp-opening-card__content__name">{{ opening?.jobPosition }}</p>
+      <div style="margin-top: 0.4rem; width: 100%;">
+        <p class="hp-opening-card__content__name project_title">{{ opening?.jobPosition }}
+          <span>
+            <router-link :to="`/openings/upload?projectId=${opening?.id}`">
+              <hp-icon :size="24" name="upload"></hp-icon>
+            </router-link>
+          </span>
+        </p>
         <p class="hp-opening-card__content__description">
           {{ opening?.experience }}
         </p>
@@ -151,26 +157,32 @@ const handleDeleteOpening = async (id) => {
   &--selected {
     background-color: var(--color-panel);
   }
+
   &:hover {
     box-shadow: inset 0px 0px 4px rgba(33, 44, 51, 0.01),
       inset 0px 0px 48px rgba(33, 44, 51, 0.03);
   }
+
   &--add-new {
     &:hover {
       box-shadow: none;
     }
   }
+
   &:focus {
     outline: 4px solid var(--color-focus);
   }
+
   &__upgrade-container {
     display: flex;
     justify-content: space-between;
   }
+
   &__splash {
     flex-shrink: 0;
     min-height: 84px;
     position: relative;
+
     &__image {
       border-top-left-radius: 12px;
       border-top-right-radius: 12px;
@@ -209,12 +221,14 @@ const handleDeleteOpening = async (id) => {
       flex: 1;
       color: var(--color-text-secondary);
     }
+
     &__location {
       margin: 8px 0;
       font-size: 18px;
       flex: 1;
       color: var(--color-text-secondary);
     }
+
     &__role {
       position: absolute;
       top: 6px;
@@ -273,10 +287,18 @@ const handleDeleteOpening = async (id) => {
       width: 40px;
       // border-radius: $border-radius-lg;
       margin-bottom: 16px;
+
+      &delete__icon {}
+
       &:hover {
         background: var(--color-panel);
       }
     }
   }
+}
+
+.project_title {
+  display: flex;
+  justify-content: space-between;
 }
 </style>
