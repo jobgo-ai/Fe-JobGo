@@ -8,7 +8,7 @@
       >
       <hp-icon class="delete__icon" style="width: 45px;display: flex;justify-content: end ;fill: gray" :size="24" name="delete" ></hp-icon>
       </div> -->
-      <div style="margin-top: 0.4rem;">
+      <div style="margin-top: 0.4rem; width: 100%;">
         <p class="hp-opening-card__content__name project_title">{{ opening?.jobPosition }}
           <span>
             <router-link :to="`/openings/upload?projectId=${opening?.id}`">
