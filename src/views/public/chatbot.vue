@@ -56,7 +56,7 @@
 
           <div v-else-if="item.role != userName" class="AI-chat-container">
             <span v-if="item.role == 'assistant' || item.role == 'Assistant' || item.role == 'assistent'">
-              <div class="ai-image">
+              <div class="ai-image" >
                 <img alt="logo" src="../../assets/sm-logo.png" width="20" height="20" />
 
               </div>
