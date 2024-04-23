@@ -266,7 +266,7 @@ import { useGet, usePut } from "@/composables/useHttp";
 import { useRoute } from "vue-router";
 import EditPencil from "@/assets/icons/edit-pencil.svg";
 import Save from "@/assets/icons/save.svg";
-import ArrowRight from "@/assets/icons/path.svg";
+import ArrowRight from "@/assets/icons/Path.svg";
 import SmileEmoji from "@/assets/icons/smile-emoji.svg";
 import PostionIcon from "@/assets/icons/postion-icon.svg";
 import StarIcon from "@/assets/icons/star1.svg";

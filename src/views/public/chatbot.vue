@@ -1,5 +1,5 @@
 <template>
-  <div class="chat-boat-container">
+  <div class="chat-boat-container text-base">
     <!-- <div class="chat-welcome">
       <div style="display: flex;justify-content:center;align-items: center;flex-direction:column">
 <h1 style="font-weight: 800;">Jobgo Profiling Tools</h1>
@@ -15,8 +15,10 @@
       <!-- Heading -->
       <div class="header-container">
         <div>
-          <h2>Job Go AI Profiling Tools </h2>
-          <p>Powered by JoboGo.com</p>
+          <h2>JobGo AI Profiling Tools
+
+
+          </h2>
         </div>
         <div>
           <!-- <button class="create-json" @click="createJson">Edit prompt</button> -->
@@ -31,14 +33,14 @@
       </div>
 
       <!-- Chat Container -->
-      <div class="chat-box-container" ref="chatBoxRef">
+      <div class="chat-box-container" ref="chatBoxRef" >
 
         <div class="" v-for="(item, index) of  conversationMsg" :key="index">
           <!-- <span style="color: black;">{{ item.role }}</span> -->
 
           <!-- <div v-if="item.role === 'user'" class="user-chat-container"> -->
           <div v-if="item.role == userName" class="user-chat-container">
-            <p class="message">
+            <p class="message text-base">
               <span>{{ item?.role?.charAt(0).toUpperCase() + item.role.slice(1) }} </span>
             <p>{{ item.msg }}</p>
             </p>
@@ -56,7 +58,7 @@
 
           <div v-else-if="item.role != userName" class="AI-chat-container">
             <span v-if="item.role == 'assistant' || item.role == 'Assistant' || item.role == 'assistent'">
-              <div class="ai-image" >
+              <div class="ai-image">
                 <img alt="logo" src="../../assets/sm-logo.png" width="20" height="20" />
 
               </div>
@@ -73,15 +75,15 @@
             </span>
             <p class="message">
               <span v-if="item.role == 'assistant' || item.role == 'Assistant'">Jobgo AI Copilot </span>
-              <span v-else-if="item.role == 'assistent'">
+              <span v-else-if="item.role == 'assistent'" class="text-base">
                 Jobgo AI Copilot
               </span>
-              <span v-else-if="item.role != 'assistent' || item.role == 'hiring-manager'">
+              <span v-else-if="item.role != 'assistent' || item.role == 'hiring-manager'" class="text-base">
                 Hiring-manager
               </span>
 
               <!-- <p>{{ item.msg }}</p> -->
-            <div class="job-description">
+            <div class="job-description  text-base">
               <vue-markdown :source="item.msg" />
             </div>
             <!-- copilot -->
@@ -102,7 +104,7 @@
 
             </div>
           </span>
-          <p class="message">
+          <p class="message  text-base">
             <span>Jobgo AI Copilot </span>
             <span class="loader"></span>
           </p>
@@ -172,7 +174,7 @@
 </template>
 
 <script setup>
-import InviteModal from "@/views/assistant/InviteModal.vue";
+// import InviteModal from "@/views/assistant/InviteModal.vue";
 
 import GenericModal from "@/components/modals/generic-modal.vue";
 import HpModal from "@/components/hp-modal.vue";
@@ -184,17 +186,11 @@ import useAssistant from "@/composables/useAssistant";
 import { useRouter, useRoute } from "vue-router";
 import HpSpinner from "@/components/hp-spinner.vue";
 import useToast from "@/composables/useToast";
-import io from 'socket.io-client';
 import Logo from "@/assets/logo.svg";
 import Chat from "@/assets/chat.svg";
 import { state } from "../../composables/useAuth";
 import useAuth from "@/composables/useAuth";
-// import HpInput from "@/components/form/hp-input.vue";
 import VueMarkdown from 'vue-markdown-render';
-
-import * as yup from "yup";
-import { useForm } from "vee-validate";
-import Email from '@/assets/icons/email-verification.svg';
 
 const { logout, organization, user } = useAuth();
 
@@ -213,7 +209,7 @@ const conversationMsg = ref([
     role: "assistant",
     msg: "Hello! I'm here to assist you in gathering information swiftly for the position you're looking to fill. How can I help you with the details of the job you have in mind?😊",
   },
-  
+
 ]);
 
 const showEndChat = ref(false);
@@ -230,7 +226,6 @@ const userIsEmployee = ref(false);
 let socket = null
 let webSocket = null
 
-const thirdPerson = ref(false)
 const users = ref([{
   userName: null,
   userNameError: null,
@@ -241,15 +236,20 @@ const users = ref([{
 const username = ref(null)
 const email = ref(null)
 // methods
+const closeWebSocket = () => {
+  webSocket.close();
+}
+const reconnectWebSocket = () => {
+  connectWebsocket();
+
+}
 const sendInvite = async () => {
   users.value.forEach((user, index) => {
-    console.log("user", user);
     user.userNameError = null
     user.emailError = null
   })
   for (let index = 0; index < users.value.length; index++) {
     const user = users.value[index];
-    console.log("user12")
     if (!user.userName) {
       user.userNameError = "User Name is required"
       const inputElement = document.querySelector(`.username${index}`);
@@ -263,7 +263,6 @@ const sendInvite = async () => {
       return
     }
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    console.log("emailRegex.test(email)", emailRegex.test(user.email));
     if (!emailRegex.test(user.email)) {
       user.emailError = "Email is invalid"
       const inputElement = document.querySelector(`.email${index}`);
@@ -272,7 +271,6 @@ const sendInvite = async () => {
     }
   }
   const userNamesAndEmails = users.value.map(user => {
-    console.log(user)
     return { userName: user.userName, email: user.email };
   });
 
@@ -348,10 +346,94 @@ const sendMsg = async () => {
 
   // scrollChatBottom();
 };
+const connectWebsocket = () => {
+  webSocket = new WebSocket(import.meta.env.VITE_SOCKET_URL);
+  // Establishing a WebSocket connection
+  // Check WebSocket state at intervals
+  webSocket.onopen = () => {
+    socektState.value = "Open"
+  };
+
+  if (!threadId.value && !roomId.value && webSocket) {
+    webSocket.onopen = function (event) {
+      if (!(route.query?.room && route.query?.thread && route.query?.user)) {
+        webSocket.send(JSON.stringify(
+          { event: "register", role: "hiring manager", userName: "uvesh" }));
+      } else {
+        webSocket.send(JSON.stringify(
+          { event: "add-member", room: route.query?.room, thread: route.query?.thread, userName: "uvesh" }));
+      }
+    };
+  }
+
+
+  // Event listener for incoming messages
+  webSocket.onmessage = (event) => {
+    // Handle incoming messages here
+    const data = JSON.parse(event.data);
+    if (route.query?.room && route.query?.thread && route.query?.user) {
+      roomId.value = route.query?.room
+      threadId.value = route.query?.thread
+    } else {
+      if (data.event === 'register') {
+        roomId.value = data.roomId
+        threadId.value = data.threadId
+      }
+    }
+
+    if (data.event === 'get-message') {
+      conversationMsg.value.push({
+        role: data.role,
+        msg: data.msg
+      });
+      scrollChatBottom();
+    }
+    else if (data.event === 'ai-response') {
+      isChatLoading.value = false;
+      conversationMsg.value.push({
+        role: data.role,
+        msg: data.msg
+      });
+      scrollChatBottom();
+    }
+    else if (data.event === 'complete-chat') {
+      const msg1 = JSON.parse(data.msg)
+      const data1 = msg1.data.reverse()
+      for (let index = 0; index < data1.length; index++) {
+        const element = data1[index];
+        conversationMsg.value.push({
+          role: element.role,
+          msg: element.content[0].text.value,
+        }
+        )
+      }
+      scrollChatBottom();
+    }
+  };
+
+  // Event listener for when the WebSocket connection is closed
+  webSocket.onclose = () => {
+    socektState.value = "close"
+
+    // Try to reconnect after a delay
+    setTimeout(connectWebsocket, 100); // Reconnect after 3 seconds
+  };
+
+  // Event listener for WebSocket errors
+  webSocket.onerror = (error) => {
+    socektState.value = "errro"
+
+    console.error('WebSocket error:', error);
+    // Handle WebSocket errors here
+  };
+}
+onMounted(async () => {
+  connectWebsocket()
+
+
+});
 
 const createParameterJSON = async () => {
-  console.log("conversationMsg.value", conversationMsg.value)
-  console.log("conversationMsg.value", JSON.stringify(conversationMsg.value))
   const res = await fetch(`${API_URL}/self/profile`, {
     method: "POST",
     headers: {
@@ -392,7 +474,7 @@ const createJson = async () => {
   // await createConversationSummary()
   isEndChat.value = false
 }
-
+const socektState = ref(null)
 const createAssistant = async () => {
   isChatThreadLoading.value = true
   const assistant = useGet(`create-assistant`);
@@ -413,206 +495,17 @@ const addRow = (() => {
   })
 })
 const deleteRow = ((index) => {
-  console.log("index", index)
-
   users.value.splice(index, 1)
 })
-const createThread = async () => {
-  isChatThreadLoading.value = true
-  const thread = useGet(`create-thread`);
-  await thread.get();
-  threadId.value = thread.data.value.threadId.id
-  socket.emit("create-room", { roomId: roomId.value, threadId: threadId.value })
-  isChatThreadLoading.value = false
-};
-
-const deleteThread = async () => {
-  const deleteFiles = useDelete(`delete-thread/${threadId}`);
-  await deleteFiles.remove();
-};
-const generateRandomAlphaNumeric = () => {
-  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  let result = '';
-  for (let i = 0; i < 6; i++) {
-    result += characters.charAt(Math.floor(Math.random() * characters.length));
-  }
-  return result;
-}
-const getMessageList = async (threadId) => {
-  console.log("threadId", threadId)
-  isChatThreadLoading.value = true
-  const thread = useGet(`get-messages?threadId=${threadId}`);
-  await thread.get();
-  // conversationMsg.value=thread.data.value.messages
-  console.log("thread.data.value.messages", thread.data.value.messages)
-  const messagesList = thread.data.value.messages && thread.data.value.messages.map((message) => {
-    console.log("message :- ", message)
-    console.log("message :- ", message?.userName)
-
-    return {
-      role: message?.metadata?.userName || message?.role,
-      msg: message.content[0].text.value,
-    }
-
-  })
-  conversationMsg.value = messagesList.reverse()
-  console.log("conversationMsg", conversationMsg.value);
-  messagesList.unshift({
-    role: "assistant",
-    msg: "Hello! I'm here to assist you in gathering information swiftly for the position you're looking to fill. How can I help you with the details of the job you have in mind?😊"
-  })
-  isChatThreadLoading.value = false
-}
-onMounted(async () => {
-  webSocket = new WebSocket(import.meta.env.VITE_SOCKET_URL);
-  if (webSocket) {
-    webSocket.onopen = function (event) {
-      if (!(route.query?.room && route.query?.thread && route.query?.user)) {
-        webSocket.send(JSON.stringify(
-          { event: "register", role: "hiring manager", userName: "uvesh" }));
-      } else {
-        webSocket.send(JSON.stringify(
-          { event: "add-member", room: route.query?.room, thread: route.query?.thread, userName: "uvesh" }));
-      }
-    };
-
-    webSocket.onmessage = function (event) {
-      const data = JSON.parse(event.data);
-      console.log("data", data)
-      if (route.query?.room && route.query?.thread && route.query?.user) {
-        roomId.value = route.query?.room
-        threadId.value = route.query?.thread
-      } else {
-        if (data.event === 'register') {
-          roomId.value = data.roomId
-          threadId.value = data.threadId
-        }
-      }
-
-      if (data.event === 'get-message') {
-        conversationMsg.value.push({
-          role: data.role,
-          msg: data.msg
-        });
-        scrollChatBottom();
-      }
-      else if (data.event === 'ai-response') {
-        isChatLoading.value = false;
-        conversationMsg.value.push({
-          role: data.role,
-          msg: data.msg
-        });
-        scrollChatBottom();
-      }
-      else if (data.event === 'complete-chat') {
-        // console.log("complete chat",JSON.parse(data.msg))
-        const msg1 = JSON.parse(data.msg)
-        console.log("complete chat", msg1.data);
-        const data1 = msg1.data.reverse()
-        for (let index = 0; index < data1.length; index++) {
-          const element = data1[index];
-          conversationMsg.value.push({
-            role: element.role,
-            msg: element.content[0].text.value,
-          }
-          )
-        }
-        scrollChatBottom();
-      }
 
 
-      // else if (data.event === 'complete-chat') {
-      //   isChatLoading.value = false;
-      //   // conversationMsg.value.push({
-      //   //   role: data.role,
-      //   //   msg: data.msg
-      //   // });
-      //   // scrollChatBottom();
-      //   console.log("all message form chat complete ",data.msg);
-      // }
 
-    };
 
-    // socket = io("http://localhost:3000");
-    // socket.on("connect", async () => {
-    //  console.log("connection is established")
-
-    //   userName.value = route.query?.user
-    //   console.log("route.query?.user", route.query?.user);
-    //   console.log("userName", userName);
-
-    //   if (route.query?.room && route.query?.thread) {
-    //     userIsEmployee.value = true
-    //     roomId.value = route.query?.room
-    //     threadId.value = route.query?.thread
-    //     // userName.value = route.query?.user
-    //     console.log("roomId", roomId);
-    //     console.log("threadId", threadId);
-    //     console.log("route.query?.user", route.query?.user);
-    //     // console.log("userName", userName);
-    //     await getMessageList(threadId.value)
-    //   }
-    //   else {
-    //     roomId.value = generateRandomAlphaNumeric()
-    //     await createAssistant();
-    //     setTimeout(async () => {
-    //       await createThread();
-    //     }, 1000)
-
-    //   }
-    // });
-    // webSocket.on("get-ai-message", (data) => {
-    //   console.log("get-ai-message", data);
-    //   conversationMsg.value.push({
-    //     role: "assistant",
-    //     msg: data
-    //   });
-    //   isChatLoading.value = false
-    //   scrollChatBottom();
-    // });
-    // ws.on("receive-message", ({ message, role }) => {
-    //   console.log("receive-message", { message, role });
-    //   conversationMsg.value.push({
-    //     role: role,
-    //     msg: message
-    //   });
-    //   scrollChatBottom();
-    // });
-  }
-  // socket.on("receive-member-message", ({ message, role }) => {
-  //   console.log("receive-message", { message, role });
-  //   conversationMsg.value.push({
-  //     role: role,
-  //     msg: message
-  //   });
-  //   scrollChatBottom();
-  // });
-});
 const isInviteModalVisible = ref(false)
 const inviteMember = (() => {
   isInviteModalVisible.value = true
-  //   {
-  //   "room": "sdsddfsds",
-  //   "thread": "threadid121212",
-  //   "users": [
-  //     {
-  //       "userName": "sdfsdfsd",
-  //       "email": "email"
-  //     }
-  //   ]
-  // }
+
 })
-const extractRole = (originalString) => {
-  let parts = originalString.split('role:');
-  let role = parts[1];
-  return role
-}
-const extractMessage = (originalString) => {
-  let parts = originalString.split('role:');
-  let msg = parts[0].substring('msg:'.length);
-  msg = msg.substring(0, msg.length - 1);
-  return msg
-}
 
 </script>
 
@@ -736,7 +629,7 @@ const extractMessage = (originalString) => {
   color: var(--color-text-primary);
   /* flex-direction: column; */
 
-z-index: 100;
+  z-index: 100;
   padding: 10px 1rem 0 1rem;
   display: flex;
   padding-bottom: 1rem;
@@ -943,9 +836,10 @@ z-index: 100;
   font-size: 0.875rem;
   line-height: 1.25rem;
   /* border-color: #e5e7eb; */
-  color: #030712;
+  background-color: var(--color-background);
+  color: var(--color-text-primary);
   margin-right: 15px;
-  border: 1px solid #b8b6b6;
+  border: 1px solid #898989;
 }
 
 .spinner__div {
@@ -964,11 +858,12 @@ z-index: 100;
   align-items: center;
   border-radius: 20px;
   height: 2.5rem;
+  outline: none;
   font-size: 0.875rem;
   line-height: 1.25rem;
   font-weight: 500;
-  background-color: #000000;
-  color: #f9fafb;
+  background-color: var(--color-background);
+  color: var(--color-text-primary);
 }
 
 
@@ -1098,5 +993,10 @@ z-index: 100;
   margin-bottom: 1em;
   margin-left: 0;
   margin-right: 0;
+}
+
+.text-base {
+  font-size: 1rem;
+  line-height: 1.5rem;
 }
 </style>
