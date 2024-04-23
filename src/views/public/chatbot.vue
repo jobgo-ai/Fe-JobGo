@@ -33,8 +33,7 @@
       </div>
 
       <!-- Chat Container -->
-      <div class="chat-box-container" ref="chatBoxRef" >
-
+      <div class="chat-box-container" ref="chatBoxRef">
         <div class="" v-for="(item, index) of  conversationMsg" :key="index">
           <!-- <span style="color: black;">{{ item.role }}</span> -->
 
@@ -114,10 +113,15 @@
       <!-- Input box -->
       <div class="inputbox-container">
         <form class="form" @submit.prevent="sendMsg">
-          <input :disabled="isChatLoading || isChatThreadLoading" v-model="userMsg"
+
+          <input @keyup.enter="sendMsg" autofocus class="text-base" :disabled="isChatLoading || isChatThreadLoading"
+            v-model="userMsg"
             :placeholder="(isChatLoading || isChatThreadLoading) ? 'Loading...' : 'Type your message'">
-          <button :disabled="isChatLoading || isChatThreadLoading" type="submit" class="sendbtn">{{ (isChatLoading ||
-            isChatThreadLoading) ? 'Loading...' : 'Send' }}</button>
+          <!-- <button :disabled="isChatLoading || isChatThreadLoading" type="submit" >{{ (isChatLoading ||
+            isChatThreadLoading) ? 'Loading...' : 'Send' }}</button> -->
+          <div class="sendbtn" :class="{ 'sendBtn-fade-right': sss }">
+            <hp-icon name="send-white" size="30" />
+          </div>
         </form>
       </div>
 
@@ -178,7 +182,7 @@
 
 import GenericModal from "@/components/modals/generic-modal.vue";
 import HpModal from "@/components/hp-modal.vue";
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue";
 import { usePost, useGet } from "@/composables/useHttp";
 import HpButton from "@/components/hp-button.vue";
 import HpIcon from "@/components/hp-icon.vue";
@@ -197,7 +201,9 @@ const { logout, organization, user } = useAuth();
 const { setToast } = useToast();
 const API_URL = import.meta.env.VITE_API_URL;
 
-
+const sss = computed(() => {
+  return userMsg.value ? true : false
+})
 //hooks
 const router = useRouter();
 const route = useRoute();
@@ -205,10 +211,7 @@ const route = useRoute();
 const { conversationSummary } = useAssistant();
 
 const conversationMsg = ref([
-  {
-    role: "assistant",
-    msg: "Hello! I'm here to assist you in gathering information swiftly for the position you're looking to fill. How can I help you with the details of the job you have in mind?😊",
-  },
+  { "role": "assistant", "msg": "Hello! I'm here to assist you in gathering information swiftly for the position you're looking to fill. How can I help you with the details of the job you have in mind?😊" }
 
 ]);
 
@@ -365,7 +368,7 @@ const connectWebsocket = () => {
       }
     };
   }
-
+  scrollChatBottom()
 
   // Event listener for incoming messages
   webSocket.onmessage = (event) => {
@@ -429,8 +432,6 @@ const connectWebsocket = () => {
 }
 onMounted(async () => {
   connectWebsocket()
-
-
 });
 
 const createParameterJSON = async () => {
@@ -449,6 +450,8 @@ const createParameterJSON = async () => {
 
 function scrollChatBottom() {
   setTimeout(() => {
+    console.log("chatBoxRef.value.scrollTop", chatBoxRef.value.scrollTop)
+    console.log(" chatBoxRef.value.scrollHeight", chatBoxRef.value.scrollHeight)
     chatBoxRef.value.scrollTop = chatBoxRef.value.scrollHeight
   }, 300)
 
@@ -510,25 +513,27 @@ const inviteMember = (() => {
 </script>
 
 
-<style scoped>
+<style scoped lang="scss">
 .create-json {
   background-color: var(--color-background);
   /* background: white; */
   padding: 6px;
+  
   border-radius: 20px;
   font-size: 12px;
   border: 1px solid #aeabab;
   cursor: pointer;
   margin-right: 10px;
   color: var(--color-text-primary);
-  /* color: black; */
 }
 
 .chat-boat-container {
   background: var(--color-background) !important;
   height: 100vh;
   display: flex;
+  overflow: hidden;
   margin: auto;
+  
 }
 
 .chat-welcome {
@@ -602,7 +607,7 @@ const inviteMember = (() => {
   /* border-radius: 0.5rem; */
   border-width: 1px;
   background-color: #ffffff;
-  bottom: calc(4rem+1.5rem);
+  bottom: calc(4rem + 1.5rem);
   border-color: #e5e7eb;
   width: 70%;
   height: 100%;
@@ -665,7 +670,9 @@ const inviteMember = (() => {
 /* chat-box-container Start */
 .chat-box-container {
   padding: 0 1rem;
-  min-height: calc(100vh - 150px);
+  /* min-height: calc(100vh - 150px); */
+  height: 78vh;
+  height: calc(100vh - 150px);
   overflow: auto;
   margin-bottom: 1rem;
   background-color: var(--color-background);
@@ -674,15 +681,16 @@ const inviteMember = (() => {
 
 .chat-box-container::-webkit-scrollbar {
   width: 5px;
+  height: 10px;
 }
 
 .chat-box-container::-webkit-scrollbar-thumb {
-  background-color: #a3a3a5;
+  background-color: #4c5255;
   border-radius: 8px;
 }
 
 .chat-box-container::-webkit-scrollbar-track {
-  background-color: #f3f4f6;
+  background-color: var(--color-background);
   border-radius: 8px;
 }
 
@@ -811,13 +819,14 @@ const inviteMember = (() => {
   padding-top: 0;
   align-items: center;
   position: sticky;
+  z-index: 1000;
   bottom: 0px;
   padding: 10px;
 }
 
 .inputbox-container .form {
   display: flex;
-  margin-left: 0.5rem;
+  /* margin-left: 0.5rem; */
   justify-content: center;
   align-items: center;
   width: 100%;
@@ -825,50 +834,58 @@ const inviteMember = (() => {
 
 .inputbox-container input {
   display: flex;
-  padding-top: 0.5rem;
+  /* padding-top: 0.5rem;
   padding-bottom: 0.5rem;
   padding-left: 0.75rem;
-  padding-right: 0.75rem;
+  padding-right: 0.75rem; */
+  padding: 1.3rem 1.3rem;
   border-radius: 16px;
   border-width: 1px;
   width: 100%;
-  height: 2.5rem;
-  font-size: 0.875rem;
+  /* height: 2.5rem; */
+  /* font-size: 0.875rem; */
   line-height: 1.25rem;
+  transition: all ease-in-out 500;
+  border: none;
   /* border-color: #e5e7eb; */
+  /* margin-right: 15px; */
+  border: 1px solid #898989;
   background-color: var(--color-background);
   color: var(--color-text-primary);
-  margin-right: 15px;
-  border: 1px solid #898989;
 }
 
-.spinner__div {
+.inputbox-container input:focus-visible {
+  outline: 1px solid #898989;
+}
+
+b .spinner__div {
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
 .inputbox-container .sendbtn {
-  display: inline-flex;
-  padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
-  padding-left: 1rem;
-  padding-right: 1rem;
-  justify-content: center;
-  align-items: center;
-  border-radius: 20px;
-  height: 2.5rem;
-  outline: none;
-  font-size: 0.875rem;
-  line-height: 1.25rem;
-  font-weight: 500;
-  background-color: var(--color-background);
-  color: var(--color-text-primary);
+  position: absolute;
+  right: -10px;
+  transition: all ease-in-out 500ms;
+  display: none;
+}
+
+.sendBtn-fade-right {
+  display: block !important;
+  right: 20px !important;
 }
 
 
-.inputbox-container .sendbtn:hover {
+/* .inputbox-container:hover .sendbtn {
+  visibility: visible;
+  right:20px;
   background: #111827E6;
+} */
+
+.inputbox-container .sendbtn:hover {
+  /* visibility: visible; */
+  /* background: #111827E6; */
 }
 
 .chat__assistant-text,
@@ -999,4 +1016,5 @@ const inviteMember = (() => {
   font-size: 1rem;
   line-height: 1.5rem;
 }
+
 </style>

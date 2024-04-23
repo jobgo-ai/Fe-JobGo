@@ -228,7 +228,7 @@ import HpToast from "@/components/hp-toast.vue";
 * {
   box-sizing: border-box;
   &::-webkit-scrollbar {
-    display: none;
+    // display: none;
   }
 }
 
