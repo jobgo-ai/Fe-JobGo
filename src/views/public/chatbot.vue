@@ -119,7 +119,7 @@
             :placeholder="(isChatLoading || isChatThreadLoading) ? 'Loading...' : 'Type your message'">
           <!-- <button :disabled="isChatLoading || isChatThreadLoading" type="submit" >{{ (isChatLoading ||
             isChatThreadLoading) ? 'Loading...' : 'Send' }}</button> -->
-          <div class="sendbtn" :class="{ 'sendBtn-fade-right': sss }">
+          <div @click="sendMsg" class="sendbtn" :class="{ 'sendBtn-fade-right': sss }">
             <hp-icon name="send-white" size="30" />
           </div>
         </form>
@@ -869,6 +869,7 @@ b .spinner__div {
   right: -10px;
   transition: all ease-in-out 500ms;
   display: none;
+  cursor: pointer;
 }
 
 .sendBtn-fade-right {
