@@ -1,211 +1,236 @@
 <template>
 
-<template v-if="!presentationLoading">
-  <div v-if="showReviewNote" class="alert" style="">
+  <template v-if="!presentationLoading">
+    <div v-if="showReviewNote" class="alert" style="">
 
-    <SmileEmoji class="alert__icon" style="margin-right: 1rem;" />Please review and edit your profiling page. Once
-    approved, you’ll
-    receive a link of the professional multimedia job page with the next steps for matching you with the best
-    candidates.
-    <close @click="showReviewNote = false" style="cursor: pointer;    cursor: pointer;
+      <SmileEmoji class="alert__icon" style="margin-right: 1rem;" />Please review and edit your profiling page. Once
+      approved, you’ll
+      receive a link of the professional multimedia job page with the next steps for matching you with the best
+      candidates.
+      <close @click="showReviewNote = false" style="cursor: pointer;    cursor: pointer;
     display: block;
     margin: auto;
 }" />
 
-  </div>
-  <div class="container" style="background-color: white">
-    <div class="presentation">
-      <div class="presentation_column">
-        <div class="presentation_container">
-          <!-- <div class="presentation_container_title" v-if="companyInfo">    {{companyInfo.name}}</div> -->
-          <div class="presentation_container_title_company">
-            {{ dataVal.position }}
+    </div>
+    <div class="container" style="background-color: white">
+      <div class="presentation">
+        <div class="presentation_column">
+          <div class="presentation_container">
+            <!-- <div class="presentation_container_title" v-if="companyInfo">    {{companyInfo.name}}</div> -->
+            <div class="presentation_container_title_company">
+              {{ dataVal.position }}
+            </div>
           </div>
-        </div>
 
-        <div v-if="false" class="company-description">
-          <div class="company-description_container">
-            <h4>who we are?</h4>
-            <div class="flex-center pointer" @click="editContent('company-description')">
-              <EditPencil v-if="!contentEditable.companyDescription" />
-              <Save v-else />
-              <span class="secondary-color">{{
-                !contentEditable.companyDescription ? "Edit" : "Save"
-              }}</span>
+          <div v-if="false" class="company-description">
+            <div class="company-description_container">
+              <h4>who we are?</h4>
+              <div class="flex-center pointer" @click="editContent('company-description')">
+                <EditPencil v-if="!contentEditable.companyDescription" />
+                <Save v-else />
+                <span class="secondary-color">{{
+                  !contentEditable.companyDescription ? "Edit" : "Save"
+                }}</span>
+              </div>
+            </div>
+            <div class="blue-line"></div>
+            <div :class="{ 'border-2': contentEditable.companyDescription }" v-if="companyInfo"
+              :contentEditable="contentEditable.companyDescription" class="grey-text">
+              {{ companyInfo.longDescription }}
             </div>
           </div>
-          <div class="blue-line"></div>
-          <div :class="{ 'border-2': contentEditable.companyDescription }"
-          v-if="companyInfo"
-            :contentEditable="contentEditable.companyDescription" class="grey-text">
-          {{companyInfo.longDescription}}
-          </div>
-        </div> 
-        <div class="company-description">
-          <div class="company-description_container">
-            <h4>Take your career into top gear</h4>
-            <div class="flex-center pointer" @click="editContent('job-description')">
-              <EditPencil v-if="!contentEditable.jobDescription" />
-              <Save v-else />
-              <span class="secondary-color description">{{
-                !contentEditable.jobDescription ? "Edit" : "Save"
-              }}</span>
+          <div class="company-description">
+            <div class="company-description_container">
+              <h4>Take your career into top gear</h4>
+              <div class="flex-center pointer" @click="editContent('job-description')">
+                <EditPencil v-if="!contentEditable.jobDescription" />
+                <Save v-else />
+                <span class="secondary-color description">{{
+                  !contentEditable.jobDescription ? "Edit" : "Save"
+                }}</span>
+              </div>
+            </div>
+            <div class="blue-line"></div>
+            <div :class="{ 'border-2': contentEditable.jobDescription }"
+              :contentEditable="contentEditable.jobDescription" class="grey-text job-description">
+              {{ dataVal.description }}
             </div>
           </div>
-          <div class="blue-line"></div>
-          <div :class="{ 'border-2': contentEditable.jobDescription }" :contentEditable="contentEditable.jobDescription"
-            class="grey-text job-description">
-            {{ dataVal.description }}
-          </div>
-        </div>
-        <div class="company-description">
-          <div class="company-description_container">
-            <h4>Key Responsibilites</h4>
-            <div class="flex-center pointer" @click="editContent('key-responsabilities')">
-              <EditPencil v-if="!contentEditable.keyResponsabilities" />
-              <Save v-else />
-              <span class="secondary-color ">{{
-                !contentEditable.keyResponsabilities ? "Edit" : "Save"
-              }}</span>
+          <div class="company-description">
+            <div class="company-description_container">
+              <h4>Key Responsibilites</h4>
+              <div class="flex-center pointer" @click="editContent('key-responsabilities')">
+                <EditPencil v-if="!contentEditable.keyResponsabilities" />
+                <Save v-else />
+                <span class="secondary-color ">{{
+                  !contentEditable.keyResponsabilities ? "Edit" : "Save"
+                }}</span>
+              </div>
+            </div>
+            <div class="blue-line"></div>
+            <div :class="{ 'border-2': contentEditable.keyResponsabilities }"
+              :contentEditable="contentEditable.keyResponsabilities" class="grey-text">
+              <ul class="responsibilities content_editable_true">
+                <li v-for="(item, index) of dataVal.key_responsibilities" :index="index"
+                  style="display: flex; margin-bottom: 10px">
+                  <div style="width: 16px">
+                    <ArrowRight />
+                  </div>
+                  {{ item }}
+                </li>
+              </ul>
             </div>
           </div>
-          <div class="blue-line"></div>
-          <div :class="{ 'border-2': contentEditable.keyResponsabilities }"
-            :contentEditable="contentEditable.keyResponsabilities" class="grey-text">
-            <ul class="responsibilities content_editable_true">
-              <li v-for="(item, index) of dataVal.key_responsibilities" :index="index"
-                style="display: flex; margin-bottom: 10px">
-                <div style="width: 16px">
-                  <ArrowRight />
-                </div>
-                {{ item }}
-              </li>
-            </ul>
-          </div>
-        </div>
-        <div class="company-description">
-          <div class="company-description_container">
-            <h4>Skill and Qualification</h4>
-            <div class="flex-center pointer" @click="editContent('skill-qualification')">
-              <EditPencil v-if="!contentEditable.skilQualification" />
-              <Save v-else />
-              <span class="secondary-color skill_qualification">{{
-                !contentEditable.skilQualification ? "Edit" : "Save"
-              }}</span>
+          <div class="company-description">
+            <div class="company-description_container">
+              <h4>Skill and Qualification</h4>
+              <div class="flex-center pointer" @click="editContent('skill-qualification')">
+                <EditPencil v-if="!contentEditable.skilQualification" />
+                <Save v-else />
+                <span class="secondary-color skill_qualification">{{
+                  !contentEditable.skilQualification ? "Edit" : "Save"
+                }}</span>
+              </div>
+            </div>
+            <div class="blue-line"></div>
+            <div :class="{ 'border-2': contentEditable.skilQualification }"
+              :contentEditable="contentEditable.skilQualification" class="grey-text">
+              <ul class="skill_qualification content_editable_true">
+                <li v-for="(skill, index) of dataVal.skill_qualifcation" :index="index"
+                  style="display: flex; margin-bottom: 10px">
+                  <div style="width: 16px">
+                    <ArrowRight />
+                  </div>
+                  {{ skill }}
+                </li>
+              </ul>
             </div>
           </div>
-          <div class="blue-line"></div>
-          <div :class="{ 'border-2': contentEditable.skilQualification }"
-            :contentEditable="contentEditable.skilQualification" class="grey-text">
-            <ul class="skill_qualification content_editable_true">
-              <li v-for="(skill, index) of dataVal.skill_qualifcation" :index="index"
-                style="display: flex; margin-bottom: 10px">
-                <div style="width: 16px">
-                  <ArrowRight />
-                </div>
-                {{ skill }}
-              </li>
-            </ul>
-          </div>
-        </div>
-        <div class="company-description">
-          <div class="company-description_container">
-            <h4>What we offer</h4>
-            <div class="flex-center pointer" @click="editContent('what-we-offer')">
-              <EditPencil v-if="!contentEditable.what_we_offer" />
-              <Save v-else />
-              <span class="secondary-color">{{
-                !contentEditable.what_we_offer ? "Edit" : "Save"
-              }}</span>
+          <div class="company-description">
+            <div class="company-description_container">
+              <h4>What we offer</h4>
+              <div class="flex-center pointer" @click="editContent('what-we-offer')">
+                <EditPencil v-if="!contentEditable.what_we_offer" />
+                <Save v-else />
+                <span class="secondary-color">{{
+                  !contentEditable.what_we_offer ? "Edit" : "Save"
+                }}</span>
+              </div>
+            </div>
+            <div class="blue-line"></div>
+            <div :class="{ 'border-2': contentEditable.what_we_offer }" :contentEditable="contentEditable.what_we_offer"
+              class="grey-text what_we_offer content_editable_true">
+              {{ dataVal.what_we_offer }}
             </div>
           </div>
-          <div class="blue-line"></div>
-          <div :class="{ 'border-2': contentEditable.what_we_offer }" :contentEditable="contentEditable.what_we_offer"
-            class="grey-text what_we_offer content_editable_true">
-            {{ dataVal.what_we_offer }}
-          </div>
-        </div>
           <div>
-        </div>
+          </div>
 
 
 
-        <div class="company-description">
-          <div class="company-description_container">
-            <h4>Pre screening questions</h4>
-            <div class="flex-center pointer" @click="editContent('pre-screening-question')">
-              <EditPencil v-if="!contentEditable.pre_screening_question" />
-              <Save v-else />
-              <span class="secondary-color">{{
-                !contentEditable.pre_screening_question ? "Edit" : "Save"
-              }}</span>
+          <div class="company-description">
+            <div class="company-description_container">
+              <h4>Pre screening questions</h4>
+              <div class="flex-center pointer" @click="editContent('pre-screening-question')">
+                <EditPencil v-if="!contentEditable.pre_screening_question" />
+                <Save v-else />
+                <span class="secondary-color">{{
+                  !contentEditable.pre_screening_question ? "Edit" : "Save"
+                }}</span>
+              </div>
+            </div>
+            <div class="blue-line"></div>
+            <div :class="{ 'border-2': contentEditable.pre_screening_question }" class="grey-text"
+              :contentEditable="contentEditable.pre_screening_question">
+              <ul class=" content_editable_true pre-screening-question">
+                <li v-for="(quesion, index) of dataVal.pre_screeing_question" :index="index"
+                  style="display: flex; margin-bottom: 10px">
+                  <div style="width: 16px">
+                    <ArrowRight />
+                  </div>
+                  {{ quesion }}
+                </li>
+              </ul>
             </div>
           </div>
-          <div class="blue-line"></div>
-          <div :class="{ 'border-2': contentEditable.pre_screening_question }" class="grey-text"
-            :contentEditable="contentEditable.pre_screening_question">
-            <ul class=" content_editable_true pre-screening-question">
-              <li v-for="(quesion, index) of dataVal.pre_screeing_question" :index="index"
-                style="display: flex; margin-bottom: 10px">
-                <div style="width: 16px">
-                  <ArrowRight />
-                </div>
-                {{ quesion }}
-              </li>
-            </ul>
+
+          <div class="company-description">
+            <div class="company-description_container">
+              <h4>Uploaded Transcript File Summary</h4>
+              <div class="flex-center pointer" @click="editContent('transmitFileSummary-question')">
+                <EditPencil v-if="!contentEditable.transmitFileSummary_question" />
+                <Save v-else />
+                <span class="secondary-color">{{
+                  !contentEditable.transmitFileSummary_question ? "Edit" : "Save"
+                }}</span>
+              </div>
+            </div>
+            <div class="blue-line"></div>
+            <div :class="{ 'border-2': contentEditable.transmitFileSummary_question }" class="grey-text transmitFileSummary-question"
+              :contentEditable="contentEditable.transmitFileSummary_question">
+              {{ fileSummaryItems }}
+              <!-- <ul class="content_editable_true transmitFileSummary-question">
+                <li v-for="item in fileSummaryItems" :key="item.id" style="display: flex; margin-bottom: 10px">
+                  <div style="width: 16px">
+                    <ArrowRight />
+                  </div>
+                  {{ item.text }}
+                </li>
+              </ul> -->
+            </div>
           </div>
+
+          <button @click="approveContent" class="job__container_button" style="width: 100%;">Approve</button>
         </div>
 
-        <button @click="approveContent" class="job__container_button" style="width: 100%;">Approve</button>
-      </div>
+        <div class="job">
+          <div class="job__overview">
+            <div>Job Overview</div>
+          </div>
+          <div class="job__container">
+            <img class="job_company_logo" v-if="false && companyInfo" :src="companyInfo.logos[0].formats[0].src"
+              alt="" />
+            <div class="job__container__details">
+              <div>
+                <div style="display: flex;margin:1.2rem 0">
+                  <div style="width:16;height: 16px;margin-right: 10px;">
+                    <PostionIcon />
 
-      <div class="job">
-        <div class="job__overview">
-          <div>Job Overview</div>
-        </div>
-        <div class="job__container">
-          <img class="job_company_logo"
-          v-if="false && companyInfo"
-            :src="companyInfo.logos[0].formats[0].src" alt="" />
-          <div class="job__container__details">
-            <div>
-              <div style="display: flex;margin:1.2rem 0">
-                <div style="width:16;height: 16px;margin-right: 10px;">
-                  <PostionIcon />
-
-                </div>
-                <div>
-                  <div class="job__container__details__title">Position </div>
-                  <div
-                    class="border-4 job__container__details__subtitle position" style="
+                  </div>
+                  <div>
+                    <div class="job__container__details__title">Position </div>
+                    <div class="border-4 job__container__details__subtitle position" style="
 ">{{ dataVal.position }}</div>
+                  </div>
                 </div>
-              </div>
-              <div style="display: flex;margin:1.2rem 0">
-                <div style="width:16;height: 16px;margin-right: 10px;">
-                  <Star />
+                <div style="display: flex;margin:1.2rem 0">
+                  <div style="width:16;height: 16px;margin-right: 10px;">
+                    <Star />
 
-                </div>
-                <div>
-                  <div class="job__container__details__title">Experience </div>
-                  <div :class="[contentEditable.jobOverview ? 'border-2' : '']"
-                    class="job__container__details__subtitle experience" :contentEditable="contentEditable.jobOverview" style="
+                  </div>
+                  <div>
+                    <div class="job__container__details__title">Experience </div>
+                    <div :class="[contentEditable.jobOverview ? 'border-2' : '']"
+                      class="job__container__details__subtitle experience"
+                      :contentEditable="contentEditable.jobOverview" style="
 ">{{ dataVal.experience }}</div>
+                  </div>
                 </div>
-              </div>
-              <div style="display: flex;margin:1.2rem 0">
-                <div style="width:16;height: 16px;margin-right: 10px;">
-                  <Salary />
+                <div style="display: flex;margin:1.2rem 0">
+                  <div style="width:16;height: 16px;margin-right: 10px;">
+                    <Salary />
 
-                </div>
-                <div>
-                  <div class="job__container__details__title">Salary </div>
-                  <div :class="[contentEditable.jobOverview ? 'border-2' : '']"
-                    class="job__container__details__subtitle salary" :contentEditable="contentEditable.jobOverview" style="
+                  </div>
+                  <div>
+                    <div class="job__container__details__title">Salary </div>
+                    <div :class="[contentEditable.jobOverview ? 'border-2' : '']"
+                      class="job__container__details__subtitle salary" :contentEditable="contentEditable.jobOverview"
+                      style="
 ">{{ dataVal.salary }}</div>
+                  </div>
                 </div>
-              </div>
-              <!-- <div style="display: flex;margin:1.2rem 0">
+                <!-- <div style="display: flex;margin:1.2rem 0">
                 <div style="width:16;height: 16px;margin-right: 10px;">
                   <Industry/>
 
@@ -217,47 +242,48 @@
 ">{{dataVal.company_industry}}</div>
                 </div>
               </div> -->
-              <div style="display: flex;margin:1.2rem 0">
-                <div style="width:16;height: 16px;margin-right: 10px;">
-                  <Hyrbird />
+                <div style="display: flex;margin:1.2rem 0">
+                  <div style="width:16;height: 16px;margin-right: 10px;">
+                    <Hyrbird />
 
-                </div>
-                <div>
-                  <div class="job__container__details__title">Location </div>
-                  <div :class="[contentEditable.jobOverview ? 'border-2' : '']"
-                    class="job__container__details__subtitle location"  :contentEditable="contentEditable.jobOverview" style="
+                  </div>
+                  <div>
+                    <div class="job__container__details__title">Location </div>
+                    <div :class="[contentEditable.jobOverview ? 'border-2' : '']"
+                      class="job__container__details__subtitle location" :contentEditable="contentEditable.jobOverview"
+                      style="
 ">{{ dataVal.location }}</div>
+                  </div>
                 </div>
-              </div>
-              <div style="display: flex;margin:1.2rem 0">
-                <div style="width:16;height: 16px;margin-right: 10px;">
-                  <LastEdit />
+                <div style="display: flex;margin:1.2rem 0">
+                  <div style="width:16;height: 16px;margin-right: 10px;">
+                    <LastEdit />
 
-                </div>
-                <div>
-                  <div class="job__container__details__title last-edit">Last Edit </div>
-                  <div :class="[contentEditable.jobOverview ? 'border-2' : '']"
-                    class="job__container__details__subtitle" :contentEditable="contentEditable.jobOverview" style="
+                  </div>
+                  <div>
+                    <div class="job__container__details__title last-edit">Last Edit </div>
+                    <div :class="[contentEditable.jobOverview ? 'border-2' : '']"
+                      class="job__container__details__subtitle" :contentEditable="contentEditable.jobOverview" style="
 ">{{ dataVal.last_edit }}</div>
+                  </div>
                 </div>
+
               </div>
 
             </div>
 
+            <button @click="editContent('job-overview')" class="job__container_button">{{ !contentEditable.jobOverview ?
+              "Edit" : "Save" }}</button>
           </div>
-
-          <button @click="editContent('job-overview')" class="job__container_button">{{ !contentEditable.jobOverview ?
-            "Edit" : "Save" }}</button>
         </div>
       </div>
     </div>
-  </div>
-</template>
-<template v-else>
-  <div class="openings_spinner" >
-    <hp-spinner class="hp-button__button__spinner" :size="50" mode="dark"></hp-spinner>
-  </div>
-</template>
+  </template>
+  <template v-else>
+    <div class="openings_spinner">
+      <hp-spinner class="hp-button__button__spinner" :size="50" mode="dark"></hp-spinner>
+    </div>
+  </template>
 </template>
 <script setup>
 //vendor
@@ -277,9 +303,10 @@ import Star from "@/assets/icons/star.svg";
 import Hyrbird from "@/assets/icons/hybrid.svg";
 import close from "@/assets/icons/close.svg";
 import HpSpinner from "@/components/hp-spinner.vue";
+import VueMarkdown from 'vue-markdown-render';
 
 //state
-const presentationLoading=ref(false)
+const presentationLoading = ref(false)
 const contentEditable = ref({
   companyDescription: false,
   jobDescription: false,
@@ -288,8 +315,10 @@ const contentEditable = ref({
   what_we_offer: false,
   pre_screening_question: false,
   jobOverview: false,
+  transmitFileSummary_question: false,
 });
-const companyInfo=ref(null)
+const fileSummaryItems = ref([]);
+const companyInfo = ref(null)
 const showReviewNote = ref(true)
 const jobOveriew = ref([{
   title: "Position",
@@ -453,9 +482,23 @@ const route = useRoute();
 onMounted(async () => {
   await getJobProfile()
   // await getCompanyInfo()
+  fetchFileSummary();
 
 });
 //methods
+
+const fetchFileSummary = () => {
+  // Fetch file summary items from localStorage or API
+  const fileSummary = window.localStorage.getItem('File_Summary');
+  console.log("fileSummary- ", fileSummary);
+  if (fileSummary) {
+    // fileSummaryItems.value ='ABCsd'
+    fileSummaryItems.value = fileSummary
+    // fileSummaryItems.value = fileSummary.split(',').map((text, index) => ({ id: index, text }));
+
+    console.log("fileSummaryItems:-aaaa", fileSummary);
+  }
+};
 
 const getCompanyInfo = async () => {
   try {
@@ -469,9 +512,9 @@ const getCompanyInfo = async () => {
 
     });
     const data = await response.json(); // or response.text() for non-JSON responses
-  // Work with the JSON data
-  companyInfo.value=data
-  console.log(data);
+    // Work with the JSON data
+    companyInfo.value = data
+    console.log(data);
   } catch (error) {
     console.log("error", error)
   }
@@ -482,12 +525,13 @@ const editContent1 = () => {
   let skill_qualifcation = []
   let what_we_offer = []
   let preScreeingQuestion = []
+  let transmiltFileQuestion = []
 
   var editableElements = document.querySelectorAll('.content_editable_true');
   editableElements.forEach(function (element, index) {
     // Access each editable element here
     // For example, you can get its text content
-  if (element.classList.contains('responsibilities')) {
+    if (element.classList.contains('responsibilities')) {
       const liElements = element.getElementsByTagName('li')
       for (let i = 0; i < liElements.length; i++) {
         // Push the text content of the current <li> element into the array
@@ -497,18 +541,27 @@ const editContent1 = () => {
       let liElements = element.getElementsByTagName('li')
       for (let i = 0; i < liElements.length; i++) {
         // Push the text content of the current <li> element into the array
-          skill_qualifcation.push(liElements[i].textContent);
+        skill_qualifcation.push(liElements[i].textContent);
       }
-    } 
+    }
     else if (element.classList.contains('pre-screening-question')) {
       let liElements = element.getElementsByTagName('li')
       for (let i = 0; i < liElements.length; i++) {
         // Push the text content of the current <li> element into the array
-          preScreeingQuestion.push(liElements[i].textContent);
+        preScreeingQuestion.push(liElements[i].textContent);
       }
-    } 
+    }
+    // else if (element.classList.contains('transmitFileSummary-question')) {
+    //   let liElements = element.getElementsByTagName('li')
+    //   for (let i = 0; i < liElements.length; i++) {
+    //     transmiltFileQuestion.push(liElements[i].textContent);
+    //   }
+    //   // window.localStorage.setItem('File_Summary', transmiltFileQuestion.join());
+    // }
+
+
   });
-  return {responsibiltes,skill_qualifcation,what_we_offer,preScreeingQuestion}
+  return { responsibiltes, skill_qualifcation, what_we_offer, preScreeingQuestion }
 }
 const editContent2 = async (event) => {
   const description1 = document.querySelector('.description').textContent;
@@ -521,14 +574,14 @@ const editContent2 = async (event) => {
   // const education1 =education.value.textContent;
   // const experience1 =experience.value.textContent;
   // const putOpening = usePut(`self/profile`);
-  const   {responsibiltes,skill_qualifcation,what_we_offer,preScreeingQuestion}=editContent1()
+  const { responsibiltes, skill_qualifcation, what_we_offer, preScreeingQuestion } = editContent1()
   await putOpening.put({
     id: route.query?.jobId,
-    jobPosition:position1,
+    jobPosition: position1,
     experience: experience1,
-    location:location1,
+    location: location1,
     salary: salary1,
-    education:education1,
+    education: education1,
     fullDescription: description1
   });
   // await getJobProfile()
@@ -536,8 +589,8 @@ const editContent2 = async (event) => {
 const getJobProfile = (async () => {
   const id = route.query?.jobId;
   if (id) {
-    const { data, get} = useGet(`self/profile/${id}`);
-    presentationLoading.value=true
+    const { data, get } = useGet(`self/profile/${id}`);
+    presentationLoading.value = true
     await get();
     dataVal.value.description = data.value?.fullDescription;
     dataVal.value.qualification = data.value?.qualification;
@@ -546,33 +599,42 @@ const getJobProfile = (async () => {
     dataVal.value.position = data.value?.jobPosition;
     dataVal.value.location = data.value?.location;
     dataVal.value.education = data.value?.education;
-    presentationLoading.value=false
+    presentationLoading.value = false
   }
 })
 const editContent = async (section) => {
-  const   {responsibiltes,skill_qualifcation,what_we_offer,preScreeingQuestion}=editContent1()
+  const { responsibiltes, skill_qualifcation, what_we_offer, preScreeingQuestion } = editContent1()
   const putOpening = usePut(`update/profile`);
   await putOpening.put({
     id: route.query?.jobId,
-    jobPosition:document.querySelector(".position").textContent,
+    jobPosition: document.querySelector(".position").textContent,
     experience: document.querySelector(".experience").textContent,
     location: document.querySelector(".location").textContent,
-    salary:  document.querySelector(".salary").textContent,
-    fullDescription:   document.querySelector(".job-description").textContent,
+    salary: document.querySelector(".salary").textContent,
+    fullDescription: document.querySelector(".job-description").textContent,
   });
+
   const sectionMap = {
-  "company-description": "companyDescription",
-  "job-description": "jobDescription",
-  "key-responsabilities": "keyResponsabilities",
-  "job-overview": "jobOverview",
-  "skill-qualification": "skilQualification",
-  "what-we-offer": "what_we_offer",
-  "pre-screening-question": "pre_screening_question"
-};
-console.log(section)
-if (sectionMap.hasOwnProperty(section)) {
-  contentEditable.value[sectionMap[section]] = !contentEditable.value[sectionMap[section]];
-}
+    "company-description": "companyDescription",
+    "job-description": "jobDescription",
+    "key-responsabilities": "keyResponsabilities",
+    "job-overview": "jobOverview",
+    "skill-qualification": "skilQualification",
+    "what-we-offer": "what_we_offer",
+    "pre-screening-question": "pre_screening_question",
+    "transmitFileSummary-question": "transmitFileSummary_question"
+  };
+  console.log(section)
+  if (sectionMap.hasOwnProperty(section)) {
+    contentEditable.value[sectionMap[section]] = !contentEditable.value[sectionMap[section]];
+  }
+ 
+  
+  console.log("section l0 ", section);
+  if(section == 'transmitFileSummary-question'){
+    console.log("aaa :- ", document.querySelector(".transmitFileSummary-question").textContent);
+    window.localStorage.setItem('File_Summary', document.querySelector(".transmitFileSummary-question").textContent);
+  }
 };
 const approveContent = () => {
   console.log("approveContent")
@@ -678,8 +740,9 @@ const approveContent = () => {
     // border: 0px solid #0000003B
   }
 }
+
 .border-4 {
-  
+
   font-family: Inter;
   font-size: 14px;
   font-weight: 500;
@@ -860,7 +923,7 @@ button {
 }
 
 
-.openings_spinner{
+.openings_spinner {
   width: 100vw;
   height: calc(100vh - 90px);
   display: flex;

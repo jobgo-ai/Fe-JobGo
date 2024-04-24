@@ -142,6 +142,9 @@ const routes = [
     path: "/openings/upload",
     name: "UploadFile",
     component: UploadFile,
+    meta: {
+      public: true
+    }
   },
   {
     path: "/prompt",
