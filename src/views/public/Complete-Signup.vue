@@ -95,10 +95,10 @@ const onSubmit = handleSubmit(async (values) => {
   };
 
 
-  await completeRegistration.post(payload);
-  console.log("completeRegistration",completeRegistration.data)
+  // await completeRegistration.post(payload);
+  // console.log("completeRegistration",completeRegistration.data)
   
-  // if (route.query?.token) {
+  // // if (route.query?.token) {
   //   payload = {
   //     ...payload,
   //     invitation: route.query.token,
