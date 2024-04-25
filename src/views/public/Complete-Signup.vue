@@ -11,6 +11,11 @@
             placeholder="Type your Company Name"
             label="Company Name"
           />
+          <hp-input
+            name="companyUrl"
+            placeholder="Type your Company Website"
+            label="Company Website"
+          />
           <!-- {{ phone?.selectedCountry?.phoneCode }} -->
           <hp-phone
             ref="phone"
@@ -53,10 +58,11 @@ import useAuth from "@/composables/useAuth";
 import Logo from "@/assets/logo.svg";
 
 //Hooks
-// import { usePost } from "@/composables/useHttp";
+import { usePost } from "@/composables/useHttp";
 const phone = ref("");
 const schema = yup.object().shape({
   company_name: yup.string().required().label("Company Name"),
+  companyUrl: yup.string().required().label("Company Website"),
   company_contact: yup.number().required().label("Company Contact"),
   company_location: yup.string().required().label("Company Location"),
 });
@@ -66,10 +72,11 @@ const route = useRoute();
 
 const isLoading = ref(false);
 const error = ref(null);
-
+const completeRegistration = usePost('company');
 const { handleSubmit, setFieldError, meta, values } = useForm({
   validationSchema: schema,
   initialValues: {
+    companyUrl: null,
     company_name: null,
     company_contact: null,
     company_location: null,
@@ -78,14 +85,18 @@ const { handleSubmit, setFieldError, meta, values } = useForm({
 
 const onSubmit = handleSubmit(async (values) => {
   isLoading.value = true;
-  const { company_name, company_contact, company_location } = values;
+  const { company_name, company_contact, company_location,companyUrl } = values;
   let payload = {
     userId: route.params?.userid,
+    companyUrl: companyUrl,
     company_name: company_name,
     company_contact: `${phone.value.selectedCountry?.phoneCode}${company_contact}`,
     company_location: company_location,
   };
-  console.log("payload", payload);
+
+
+  await completeRegistration.post(payload);
+  console.log("completeRegistration",completeRegistration.data)
   
   // if (route.query?.token) {
   //   payload = {
@@ -122,7 +133,6 @@ const onSubmit = handleSubmit(async (values) => {
     // } else {
     //   router.push("/");
     // }
-    router.push("/signin");
   } catch (error) {
     setFieldError("email", "Something went wrong");
     isLoading.value = false;
