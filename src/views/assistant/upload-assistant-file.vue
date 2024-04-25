@@ -10,8 +10,8 @@
       </hp-dropzone>
     </div>
 
-    <!-- <div class="upload__input__text mt-5">Enter Propmt</div>
-    <input type="text" class="prompt-input" v-model="prompt"> -->
+    <div class="upload__input__text mt-5">Enter Propmt</div>
+    <input type="text" class="prompt-input" v-model="prompt">
 
 
     <!-- <div v-if="summary">
