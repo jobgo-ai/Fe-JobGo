@@ -6,6 +6,7 @@
       <h3 class="signup__title">Sign up for Jobgo</h3>
       <div class="signup__section signup__section--border">
         <form @submit="onSubmit">
+          <hp-input name="fullName" placeholder="Type your full name" label="Full Name" />
           <hp-input name="email" placeholder="Type your email" label="Email" />
           <hp-input
             name="password"
@@ -94,6 +95,10 @@ const schema = yup.object().shape({
     .email("Must be a valid email address")
     .required()
     .label("Email"),
+    fullName: yup
+    .string()
+    .required()
+    .label("Full Name"),
   password: passwordSchema.label("Password"),
   confirmPassword: yup
     .string()
@@ -111,6 +116,7 @@ const { handleSubmit, setFieldError, meta, values } = useForm({
   // validateOnMount:true,
   initialValues: {
     name: "",
+    fullName:null,
     email: route.query.email,
     password: "",
     confirmPassword: "",
@@ -124,10 +130,11 @@ const postLogin = usePost("self/login");
 
 const onSubmit = handleSubmit(async (values) => {
   isLoading.value = true;
-  const { email, password } = values;
+  const { email, password,fullName } = values;
   let encryptPassword = useEncryption(password);
   let payload = {
     user: {
+      fullName,
       email,
       password: encryptPassword,
     },

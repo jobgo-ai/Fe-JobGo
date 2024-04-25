@@ -78,7 +78,7 @@
                 Jobgo AI Copilot
               </span>
               <span v-else-if="item.role != 'assistent' || item.role == 'hiring-manager'" class="text-base">
-                Hiring-manager
+                {{ item.userName }}
               </span>
 
               <!-- <p>{{ item.msg }}</p> -->
@@ -300,10 +300,10 @@ const sendInvite = async () => {
 const sendMsg = async () => {
   isChatLoading.value = true;
   webSocket.send(JSON.stringify(
-    { event: "send-message", role: "hiring-manager", userName: "Uvesh", msg: userMsg.value, room: roomId.value, threadId: threadId.value }));
+    { event: "send-message", role: "hiring-manager", userName: currentUser.value, msg: userMsg.value, room: roomId.value, threadId: threadId.value }));
 
   webSocket.send(JSON.stringify(
-    { event: "send-ai-message", role: "hiring-manager", userName: "Uvesh", msg: userMsg.value, room: roomId.value, threadId: threadId.value }));
+    { event: "send-ai-message", role: "hiring-manager", userName: currentUser.value, msg: userMsg.value, room: roomId.value, threadId: threadId.value }));
   userMsg.value = null
 
   // const obj = { message: userMsg.value, roomId: roomId.value, role: userName?.value }
@@ -350,6 +350,7 @@ const sendMsg = async () => {
   // scrollChatBottom();
 };
 const connectWebsocket = () => {
+  console.log("currentUser.value", currentUser.value)
   webSocket = new WebSocket(import.meta.env.VITE_SOCKET_URL);
   // Establishing a WebSocket connection
   // Check WebSocket state at intervals
@@ -361,10 +362,10 @@ const connectWebsocket = () => {
     webSocket.onopen = function (event) {
       if (!(route.query?.room && route.query?.thread && route.query?.user)) {
         webSocket.send(JSON.stringify(
-          { event: "register", role: "hiring manager", userName: "uvesh" }));
+          { event: "register", role: "hiring manager", userName: currentUser.value }));
       } else {
         webSocket.send(JSON.stringify(
-          { event: "add-member", room: route.query?.room, thread: route.query?.thread, userName: "uvesh" }));
+          { event: "add-member", room: route.query?.room, thread: route.query?.thread, userName: currentUser.value }));
       }
     };
   }
@@ -374,6 +375,7 @@ const connectWebsocket = () => {
   webSocket.onmessage = (event) => {
     // Handle incoming messages here
     const data = JSON.parse(event.data);
+    console.log("data", data)
     if (route.query?.room && route.query?.thread && route.query?.user) {
       roomId.value = route.query?.room
       threadId.value = route.query?.thread
@@ -387,7 +389,8 @@ const connectWebsocket = () => {
     if (data.event === 'get-message') {
       conversationMsg.value.push({
         role: data.role,
-        msg: data.msg
+        msg: data.msg,
+        userName: data.userName,
       });
       scrollChatBottom();
     }
@@ -404,9 +407,12 @@ const connectWebsocket = () => {
       const data1 = msg1.data.reverse()
       for (let index = 0; index < data1.length; index++) {
         const element = data1[index];
+        console.log("msg1", element)
         conversationMsg.value.push({
           role: element.role,
           msg: element.content[0].text.value,
+          msg: element.content[0].text.value,
+          userName: element.metadata.user
         }
         )
       }
@@ -430,7 +436,16 @@ const connectWebsocket = () => {
     // Handle WebSocket errors here
   };
 }
+
+const currentUser = ref(null)
 onMounted(async () => {
+  if (route.query?.room && route.query?.thread && route.query?.user) {
+    currentUser.value = route.query?.user
+
+  } else {
+    currentUser.value = user.value.name
+
+  }
   connectWebsocket()
 });
 
@@ -450,8 +465,6 @@ const createParameterJSON = async () => {
 
 function scrollChatBottom() {
   setTimeout(() => {
-    console.log("chatBoxRef.value.scrollTop", chatBoxRef.value.scrollTop)
-    console.log(" chatBoxRef.value.scrollHeight", chatBoxRef.value.scrollHeight)
     chatBoxRef.value.scrollTop = chatBoxRef.value.scrollHeight
   }, 300)
 
@@ -518,7 +531,7 @@ const inviteMember = (() => {
   background-color: var(--color-background);
   /* background: white; */
   padding: 6px;
-  
+
   border-radius: 20px;
   font-size: 12px;
   border: 1px solid #aeabab;
@@ -533,7 +546,7 @@ const inviteMember = (() => {
   display: flex;
   overflow: hidden;
   margin: auto;
-  
+
 }
 
 .chat-welcome {
@@ -1017,5 +1030,4 @@ b .spinner__div {
   font-size: 1rem;
   line-height: 1.5rem;
 }
-
 </style>
