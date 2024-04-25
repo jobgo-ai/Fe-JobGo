@@ -155,7 +155,7 @@
             </div>
           </div>
 
-          <div class="company-description">
+          <div class="company-description" v-if="fileSummaryItems">
             <div class="company-description_container">
               <h4>Uploaded Transcript File Summary</h4>
               <div class="flex-center pointer" @click="editContent('transmitFileSummary-question')">
@@ -317,7 +317,7 @@ const contentEditable = ref({
   jobOverview: false,
   transmitFileSummary_question: false,
 });
-const fileSummaryItems = ref([]);
+const fileSummaryItems = ref(null);
 const companyInfo = ref(null)
 const showReviewNote = ref(true)
 const jobOveriew = ref([{
@@ -489,6 +489,7 @@ onMounted(async () => {
 
 const fetchFileSummary = () => {
   // Fetch file summary items from localStorage or API
+  // const fileSummary = '';
   const fileSummary = window.localStorage.getItem('File_Summary');
   console.log("fileSummary- ", fileSummary);
   if (fileSummary) {
