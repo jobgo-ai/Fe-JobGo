@@ -126,6 +126,12 @@ const routes = [
         name: "upgraded",
         component: Upgraded,
       },
+      {
+        path: "/presentation",
+        name: "job_presentation",
+        component: NewPresentation,
+    
+      },
     ],
   },
   {
@@ -194,13 +200,6 @@ const routes = [
       public: true,
     },
   },
-  {
-    path: "/presentation",
-    name: "job_presentation",
-    component: NewPresentation,
-
-  },
- 
   {
     path: "/reports/:candidateKey",
     name: "report",
