@@ -8,14 +8,17 @@ import HpToast from "@/components/hp-toast.vue";
 </script>
 
 <style lang="scss">
+svg{
+  fill: var(--color-revert-background)!important;
+}
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap");
-
 :root {
   font-family: "Inter", sans-serif;
   font-weight: 400;
 
   // Colours
   --color-background: #ffffff;
+  --color-revert-background: #212c33;
   --color-card: #ffffff;
   --color-panel: #f9f9f9;
   --color-border-subtle: #f0f0f0;
@@ -174,6 +177,7 @@ import HpToast from "@/components/hp-toast.vue";
 
 [data-theme="dark"] {
   --color-background: #1d2429;
+  --color-revert-background: #ffffff;
   --color-card: #1d2429;
   --color-panel: #171f24;
   --color-border-subtle: #242b30;

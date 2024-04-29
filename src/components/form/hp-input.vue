@@ -1,8 +1,6 @@
 <template>
   <div 
-  
   :class="[containerClasses, {'hp-input__margin-bottom': marginBottom}]"
-  
   >
     <label v-if="label" class="hp-input__label" :htmlFor="name"
       >{{ label }}
@@ -223,11 +221,8 @@ const containerClasses = computed(() => {
     color: var(--color-error);
     font-weight: 500;
   }
-  &__label {
-    font-weight: 500;
-    margin-bottom: 8px;
-    color: var(--color-text-secondary);
-  }
+
+
   &__input {
     color: var(--color-text-primary);
     background-color: inherit;

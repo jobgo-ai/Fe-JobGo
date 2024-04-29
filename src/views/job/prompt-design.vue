@@ -1,8 +1,8 @@
 <template>
   <div class="signin">
-    <div class="signin__logo">
+    <!-- <div class="signin__logo">
       <Logo />
-    </div>
+    </div> -->
     <div class="signin__container signin__container_prompt">
       <div class="signin__section">
         <div class="signin__image-container"></div>

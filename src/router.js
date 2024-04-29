@@ -54,6 +54,12 @@ const routes = [
         component: Openings,
       },
       {
+        path: "/prompt",
+        name: "PromptDesign",
+        component: PromptDesign,
+      },
+    
+      {
         path: "/job-presentation/:id",
         name: "JobPresentation",
         component: JobPresentation,
@@ -146,15 +152,7 @@ const routes = [
       public: true
     }
   },
-  {
-    path: "/prompt",
-    name: "PromptDesign",
-    component: PromptDesign,
-    meta: {
-      public: true,
-    },
-  },
-
+ 
   {
     path: "/confirm",
     name: "Confirm",
