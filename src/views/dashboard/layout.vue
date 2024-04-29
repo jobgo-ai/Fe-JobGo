@@ -32,7 +32,7 @@ if (user.value.user && !user.value.user.verified) {
 <style lang="scss" scoped>
 .main {
   display: flex;
-  max-width: 1400px;
+  // max-width: 1400px;
   position: relative;
   margin: auto;
   padding-top: $header-height;
