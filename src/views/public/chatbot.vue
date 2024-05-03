@@ -884,7 +884,9 @@ b .spinner__div {
   // display: none;
   cursor: pointer;
 }
-
+.sendbtn-icon{
+    fill: var(--color-revert-background)!important;
+}
 
 
 .sendBtn-fade-right {

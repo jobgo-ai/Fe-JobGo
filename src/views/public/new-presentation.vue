@@ -17,27 +17,20 @@
       <div class="presentation">
         <div class="presentation_column">
           <div class="presentation_container">
-            <!-- <div class="presentation_container_title" v-if="companyInfo">    {{companyInfo.name}}</div> -->
+            <div class="presentation_container_title" v-if="state?.organization.name">    {{state?.organization.name}}</div>
             <div class="presentation_container_title_company">
               {{ dataVal.position }}
             </div>
           </div>
 
-          <div v-if="false" class="company-description">
+          <div class="company-description">
             <div class="company-description_container">
               <h4>who we are?</h4>
-              <div class="flex-center pointer" @click="editContent('company-description')">
-                <EditPencil v-if="!contentEditable.companyDescription" />
-                <Save v-else />
-                <span class="secondary-color">{{
-                  !contentEditable.companyDescription ? "Edit" : "Save"
-                }}</span>
-              </div>
             </div>
             <div class="blue-line"></div>
-            <div :class="{ 'border-2': contentEditable.companyDescription }" v-if="companyInfo"
+            <div :class="{ 'border-2': contentEditable.companyDescription }" v-if="state?.organization"
               :contentEditable="contentEditable.companyDescription" class="grey-text">
-              {{ companyInfo.longDescription }}
+              {{ JSON.parse(state?.organization.info).longDescription }}
             </div>
           </div>
           <div class="company-description">
@@ -181,7 +174,7 @@
             </div>
           </div>
 
-          <button @click="approveContent" class="job__container_button" style="width: 100%;">Approve</button>
+          <!-- <button @click="approveContent" class="job__container_button" style="width: 100%;">Approve</button> -->
         </div>
 
         <div class="job">
@@ -189,7 +182,7 @@
             <div>Job Overview</div>
           </div>
           <div class="job__container">
-            <img class="job_company_logo" v-if="false && companyInfo" :src="companyInfo.logos[0].formats[0].src"
+            <img class="job_company_logo" v-if="JSON.parse(state?.organization.info).logos[0].formats[0].src" :src="JSON.parse(state?.organization.info).logos[1].formats[0].src"
               alt="" />
             <div class="job__container__details">
               <div>
@@ -230,18 +223,17 @@
 ">{{ dataVal.salary }}</div>
                   </div>
                 </div>
-                <!-- <div style="display: flex;margin:1.2rem 0">
+                <div style="display: flex;margin:1.2rem 0">
                 <div style="width:16;height: 16px;margin-right: 10px;">
                   <Industry/>
 
                 </div>
-                <div>
-                  <div class="job__container__details__title">Industry </div>
+                <div v-if="JSONstate?.organization.info.company?.industries[0].name">                  <div class="job__container__details__title">Industry </div>
                    <div :class="[contentEditable.jobOverview  ? 'border-2' : '']" class="job__container__details__subtitle"
                     :contentEditable="contentEditable.jobOverview" style="
-">{{dataVal.company_industry}}</div>
+">{{JSON.parse(state?.organization.info).company?.industries[0].name}}</div>
                 </div>
-              </div> -->
+              </div>
                 <div style="display: flex;margin:1.2rem 0">
                   <div style="width:16;height: 16px;margin-right: 10px;">
                     <Hyrbird />
@@ -304,6 +296,7 @@ import Hyrbird from "@/assets/icons/hybrid.svg";
 import close from "@/assets/icons/close.svg";
 import HpSpinner from "@/components/hp-spinner.vue";
 import VueMarkdown from 'vue-markdown-render';
+import { state } from "@/composables/useAuth";
 
 //state
 const presentationLoading = ref(false)
@@ -645,7 +638,7 @@ const approveContent = () => {
 .presentation {
   color: black;
   background-color: white;
-  padding: 6rem 0 0 0;
+  padding: 2rem 0 0 0;
   margin: auto;
   width: 80%;
   display: flex;
@@ -863,9 +856,10 @@ button {
   width: 100vw;
   background-color: white;
   position: fixed;
-  top: 0;
+  top: 80px;
   display: flex;
   align-items: center;
+  z-index:1000;
 }
 
 @media screen and (max-width: 1280px) {

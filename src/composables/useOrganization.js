@@ -34,28 +34,9 @@ export default () => {
     members.value = getOrganization.data.value.users;
   };
 
-  const fetchCompanyInfo=async(companyInfo)=>{
-    try {
-
-      const response = await fetch(`https://api.brandfetch.io/v2/brands/dowjones.com`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + '2pDrAAJLOmYKWfnkhbzsBnW4f0wBZyK307ruOFiNb4Y=',
-        },
-  
-      });
-      const data = await response.json(); // or response.text() for non-JSON responses
-    // Work with the JSON data
-    companyInfo.value=data
-    console.log(data);
-    } catch (error) {
-      console.log("error", error)
-    }
-  }
+ 
   return {
     fetchMembers,
-    fetchCompanyInfo,
     members,
     COLLABORATORS,
   };

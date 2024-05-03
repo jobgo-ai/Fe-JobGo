@@ -28,12 +28,13 @@ export const refreshToken = async () => {
     state.token = null;
     window.localStorage.removeItem(AUTH_KEY);
   } else if (data.value) {
+ 
+    state.organization = data.value.self.organization;
     state.user = data.value.self;
     window.Intercom("boot", {
       app_id: import.meta.env.VITE_INTERCOM_ID,
     });
     // window.Intercom("update", { ...data.value.self });
-    // state.organization = data.value.self.organization;
     // state.role = data.value.self.organization?.role;
 
 
