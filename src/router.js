@@ -10,6 +10,7 @@ import ConfirmEmail from "@/views/public/confirm-email.vue";
 import CompleteSignup from "@/views/public/Complete-Signup.vue";
 import ChatbotTest from "@/views/public/chatbot-test.vue";
 import ChatbotTest1 from "@/views/public/chatbot.vue";
+import VoiceChatbot from "@/views/public/voicechatbot.vue";
 import Presentation from "@/views/public/presentation.vue";
 import NewPresentation from "@/views/public/new-presentation.vue";
 import UploadFile from "@/views/assistant/upload-assistant-file.vue";
@@ -196,6 +197,14 @@ const routes = [
     path: "/chat",
     name: "chatbot1",
     component: ChatbotTest1,
+    meta: {
+      public: true,
+    },
+  },
+  {
+    path: "/voicechat",
+    name: "voicechat",
+    component: VoiceChatbot,
     meta: {
       public: true,
     },
