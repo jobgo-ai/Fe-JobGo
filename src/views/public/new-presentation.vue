@@ -17,7 +17,8 @@
       <div class="presentation">
         <div class="presentation_column">
           <div class="presentation_container">
-            <div class="presentation_container_title" v-if="state?.organization.name">    {{state?.organization.name}}</div>
+            <div class="presentation_container_title" v-if="state?.organization.name"> {{ state?.organization.name }}
+            </div>
             <div class="presentation_container_title_company">
               {{ dataVal.position }}
             </div>
@@ -27,6 +28,7 @@
             <div class="company-description_container">
               <h4>who we are?</h4>
             </div>
+
             <div class="blue-line"></div>
             <div :class="{ 'border-2': contentEditable.companyDescription }" v-if="state?.organization"
               :contentEditable="contentEditable.companyDescription" class="grey-text">
@@ -89,8 +91,8 @@
             <div class="blue-line"></div>
             <div :class="{ 'border-2': contentEditable.skilQualification }"
               :contentEditable="contentEditable.skilQualification" class="grey-text">
-              <ul class="skill_qualification content_editable_true">
-                <li v-for="(skill, index) of dataVal.skill_qualifcation" :index="index"
+              <ul class="skill-qualification content_editable_true">
+                <li v-for="(skill, index) of dataVal.skill_qualification" :index="index"
                   style="display: flex; margin-bottom: 10px">
                   <div style="width: 16px">
                     <ArrowRight />
@@ -160,7 +162,8 @@
               </div>
             </div>
             <div class="blue-line"></div>
-            <div :class="{ 'border-2': contentEditable.transmitFileSummary_question }" class="grey-text transmitFileSummary-question"
+            <div :class="{ 'border-2': contentEditable.transmitFileSummary_question }"
+              class="grey-text transmitFileSummary-question"
               :contentEditable="contentEditable.transmitFileSummary_question">
               {{ fileSummaryItems }}
               <!-- <ul class="content_editable_true transmitFileSummary-question">
@@ -182,8 +185,9 @@
             <div>Job Overview</div>
           </div>
           <div class="job__container">
-            <img class="job_company_logo" v-if="JSON.parse(state?.organization.info).logos[0].formats[0].src" :src="JSON.parse(state?.organization.info).logos[1].formats[0].src"
-              alt="" />
+
+            <img class="job_company_logo" v-if="JSON.parse(state?.organization.info).logos[0].formats[0].src"
+              :src="JSON.parse(state?.organization.info).logos[0].formats[0].src" alt="" />
             <div class="job__container__details">
               <div>
                 <div style="display: flex;margin:1.2rem 0">
@@ -224,16 +228,20 @@
                   </div>
                 </div>
                 <div style="display: flex;margin:1.2rem 0">
-                <div style="width:16;height: 16px;margin-right: 10px;">
-                  <Industry/>
+                  <div style="width:16;height: 16px;margin-right: 10px;">
+                    <Industry />
 
+                  </div>
+                  <div v-if="JSON.parse(state?.organization.info).company?.industries[0].name">
+                    <div class="job__container__details__title">Industry </div>
+                    <div :class="[contentEditable.jobOverview ? 'border-2' : '']"
+                      class="job__container__details__subtitle" :contentEditable="contentEditable.jobOverview" style="
+">
+                      {{
+                        JSON.parse(state?.organization.info).company?.industries[0].name
+                      }}</div>
+                  </div>
                 </div>
-                <div v-if="JSONstate?.organization.info.company?.industries[0].name">                  <div class="job__container__details__title">Industry </div>
-                   <div :class="[contentEditable.jobOverview  ? 'border-2' : '']" class="job__container__details__subtitle"
-                    :contentEditable="contentEditable.jobOverview" style="
-">{{JSON.parse(state?.organization.info).company?.industries[0].name}}</div>
-                </div>
-              </div>
                 <div style="display: flex;margin:1.2rem 0">
                   <div style="width:16;height: 16px;margin-right: 10px;">
                     <Hyrbird />
@@ -454,7 +462,7 @@ const dataVal = ref({
     "Utilizing Vuex for managing application state, including data persistence, sharing state across components, and handling complex state transitions.",
     "Integrating Vue.js applications with backend APIs or services using technologies like Axios or Fetch for data retrieval and manipulation.",
     "Implementing client-side routing using Vue Router to create a seamless, single-page application (SPA) experience."],
-  skill_qualifcation: [
+  skill_qualification: [
     "Java",
     "Python",
     "C++",
@@ -515,10 +523,10 @@ const getCompanyInfo = async () => {
 }
 const editContent1 = () => {
 
-  let responsibiltes = []
-  let skill_qualifcation = []
+  let responsibilities = []
+  let skill_qualification = []
   let what_we_offer = []
-  let preScreeingQuestion = []
+  let preScreeningQuestion = []
   let transmiltFileQuestion = []
 
   var editableElements = document.querySelectorAll('.content_editable_true');
@@ -529,20 +537,20 @@ const editContent1 = () => {
       const liElements = element.getElementsByTagName('li')
       for (let i = 0; i < liElements.length; i++) {
         // Push the text content of the current <li> element into the array
-        responsibiltes.push(liElements[i].textContent);
+        responsibilities.push(liElements[i].textContent);
       }
-    } else if (element.classList.contains('skill_qualification')) {
+    } else if (element.classList.contains('skill-qualification')) {
       let liElements = element.getElementsByTagName('li')
       for (let i = 0; i < liElements.length; i++) {
         // Push the text content of the current <li> element into the array
-        skill_qualifcation.push(liElements[i].textContent);
+        skill_qualification.push(liElements[i].textContent);
       }
     }
     else if (element.classList.contains('pre-screening-question')) {
       let liElements = element.getElementsByTagName('li')
       for (let i = 0; i < liElements.length; i++) {
         // Push the text content of the current <li> element into the array
-        preScreeingQuestion.push(liElements[i].textContent);
+        preScreeningQuestion.push(liElements[i].textContent);
       }
     }
     // else if (element.classList.contains('transmitFileSummary-question')) {
@@ -555,31 +563,9 @@ const editContent1 = () => {
 
 
   });
-  return { responsibiltes, skill_qualifcation, what_we_offer, preScreeingQuestion }
+  return { responsibilities, skill_qualification, what_we_offer, preScreeningQuestion }
 }
-const editContent2 = async (event) => {
-  const description1 = document.querySelector('.description').textContent;
-  const responsibilities1 = document.querySelector('.responsibilities').textContent;
-  console.log("responsibilities1", document.querySelector('.responsibilities').textContent)
-  // const skill_qualification =document.querySelector('.skill_qualification').textContent;
-  // const location1 =location.value.textContent;
-  // const position1 =position.value.textContent;
-  // const salary1 =salary.value.textContent;
-  // const education1 =education.value.textContent;
-  // const experience1 =experience.value.textContent;
-  // const putOpening = usePut(`self/profile`);
-  const { responsibiltes, skill_qualifcation, what_we_offer, preScreeingQuestion } = editContent1()
-  await putOpening.put({
-    id: route.query?.jobId,
-    jobPosition: position1,
-    experience: experience1,
-    location: location1,
-    salary: salary1,
-    education: education1,
-    fullDescription: description1
-  });
-  // await getJobProfile()
-};
+
 const getJobProfile = (async () => {
   const id = route.query?.jobId;
   if (id) {
@@ -590,6 +576,10 @@ const getJobProfile = (async () => {
     dataVal.value.qualification = data.value?.qualification;
     dataVal.value.experience = data.value?.experience;
     dataVal.value.salary = data.value?.salary;
+    dataVal.value.pre_screeing_question = data.value?.preScreeningQuestion;
+    dataVal.value.what_we_offer = data.value?.whatWeOffer;
+    dataVal.value.skill_qualification = data.value?.skillAndQualification;
+    dataVal.value.key_responsibilities = data.value?.keyResponsibility;
     dataVal.value.position = data.value?.jobPosition;
     dataVal.value.location = data.value?.location;
     dataVal.value.education = data.value?.education;
@@ -597,15 +587,19 @@ const getJobProfile = (async () => {
   }
 })
 const editContent = async (section) => {
-  const { responsibiltes, skill_qualifcation, what_we_offer, preScreeingQuestion } = editContent1()
+  const { responsibilities, skill_qualification, what_we_offer, preScreeningQuestion } = editContent1()
   const putOpening = usePut(`update/profile`);
   await putOpening.put({
-    id: route.query?.jobId,
+    id: Number(route.query?.jobId),
     jobPosition: document.querySelector(".position").textContent,
     experience: document.querySelector(".experience").textContent,
     location: document.querySelector(".location").textContent,
     salary: document.querySelector(".salary").textContent,
     fullDescription: document.querySelector(".job-description").textContent,
+    keyResponsibility: responsibilities,
+    skillAndQualification: skill_qualification,
+    whatWeOffer: document.querySelector(".what_we_offer").textContent,
+    preScreeningQuestion: preScreeningQuestion
   });
 
   const sectionMap = {
@@ -622,10 +616,10 @@ const editContent = async (section) => {
   if (sectionMap.hasOwnProperty(section)) {
     contentEditable.value[sectionMap[section]] = !contentEditable.value[sectionMap[section]];
   }
- 
-  
+
+
   console.log("section l0 ", section);
-  if(section == 'transmitFileSummary-question'){
+  if (section == 'transmitFileSummary-question') {
     console.log("aaa :- ", document.querySelector(".transmitFileSummary-question").textContent);
     window.localStorage.setItem('File_Summary', document.querySelector(".transmitFileSummary-question").textContent);
   }
@@ -859,7 +853,7 @@ button {
   top: 80px;
   display: flex;
   align-items: center;
-  z-index:1000;
+  z-index: 1000;
 }
 
 @media screen and (max-width: 1280px) {
