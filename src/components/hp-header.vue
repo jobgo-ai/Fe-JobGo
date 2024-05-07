@@ -7,7 +7,7 @@
     <div class="hp-header__right">
       <div id="teleport-target-header" class="hp-header__save-container"></div>
       <div v-if="!isDismissed" class="hp-header__getting-started">
-        <hp-getting-started />
+        <!-- <hp-getting-started /> -->
       </div>
       <div
         class="hp-header__dropdown-container"
